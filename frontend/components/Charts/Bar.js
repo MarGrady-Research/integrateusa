@@ -12,39 +12,38 @@ ChartJS.register(
 
 const BarChart = () => {
 
+    const [state, setState] = useState("TX")
+
     const [chart, setChart] = useState([]);
 
-    let baseURL = "http://localhost:8000/api/state/?state_abb=NY&year=2020"
+
+    let baseURL = "http://localhost:8000/api/state/?year=2020&state_abb="
 
     useEffect(() => {
         async function getData() {
             try {
-                const response = await axios.get(baseURL);
+                const response = await axios.get(baseURL + state);
                 setChart(response.data)
             } catch (error) {
                 console.log(error)
             }
         }
         getData()
-    }, [baseURL])
+    }, [baseURL, state])
 
     const data = {
         labels: chart?.map(x => x.grade),
         datasets: [{
-          label: "Test",
+          label: "2020 Segregation index totals",
           data: chart?.map(x => x.seg_index_tot), 
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)'
-          ],
-          borderColor: [
-            'rgb(255, 99, 132)'
-          ],
+          backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+          borderColor: ['rgb(255, 99, 132)'],
           borderWidth: 1
         }]
     }
 
     const options = {
-        maintainAspectRatio: false,
+      responsive: true, 
         scales: {
           y: {
             beginAtZero: true
@@ -59,6 +58,8 @@ const BarChart = () => {
 
 return(
     <div>
+      <button onClick={() => {setState("TX")}}>Texas</button>
+      <button onClick={() => {setState("NY")}}>New York</button>
       <Bar 
         data = {data}
         options = {options} 
@@ -66,7 +67,7 @@ return(
         width = {500}
         />
     </div>
-)
+  )
 }
 
 export default BarChart

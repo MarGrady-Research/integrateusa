@@ -14,9 +14,9 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h2>Test Charts</h2>
+        
         <BarChart />
-        <LineChart />
+    
       </main> 
     </div>
   )
