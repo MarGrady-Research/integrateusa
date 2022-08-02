@@ -37,12 +37,14 @@ const BarChart = () => {
   // useEffect hook -- after page load, get data from API endpoint using values of state and year State variables
     useEffect(() => {
         async function getData() {
+          if (year !== undefined && state !== undefined) {
             try {
                 const response = await axios.get(baseURL + "year=" + year + "&state_abb=" + state);
                 setChart(response.data)
             } catch (error) {
                 console.log(error)
             }
+          }
         }
         getData()
     }, [baseURL, state, year])
