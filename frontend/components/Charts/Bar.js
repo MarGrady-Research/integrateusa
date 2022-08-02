@@ -16,24 +16,25 @@ const BarChart = () => {
 
   // Select Component
     
-    // mapping to 
+    // mapping State options array to another array in a format that react-select likes 
     const selectoptions = StateOption.map(d => ({
       "value": d.abbreviation,
       "label": d.name
     }) 
     )  
 
-    // Initializing state and year state variables
+  // Initializing state and year state variables
     const [state, setState] = useState();
 
     const [year, setYear] = useState();
  
 
-    // Initializing chart state variable
+  // Initializing chart state variable
     const [chart, setChart] = useState([]); 
 
     let baseURL = "http://localhost:8000/api/state/?"
 
+  // useEffect hook -- after page load, get data from API endpoint using values of state and year State variables
     useEffect(() => {
         async function getData() {
             try {
@@ -46,6 +47,7 @@ const BarChart = () => {
         getData()
     }, [baseURL, state, year])
 
+  // Defining data object as per chartJS convention
     const data = {
         labels: chart?.map(x => x.grade),
         datasets: [{
@@ -57,6 +59,7 @@ const BarChart = () => {
         }]
     }
 
+  // Defining options object as per chartJS convention
     const options = {
       responsive: true, 
         scales: {
@@ -71,6 +74,7 @@ const BarChart = () => {
         }
       } 
 
+// Returning JSX
 return(
     <div>
       <Select 
