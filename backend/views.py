@@ -1,8 +1,20 @@
 from django.shortcuts import render
-from backend.models import StateSeg, DistSeg, CountySeg
+from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames
 from rest_framework import generics
-from backend.serializers import StateSerializer, DistrictSerializer, CountySerializer
+from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer
 
+
+class schoolList(generics.ListAPIView):
+    queryset = Schools.objects.all()
+    serializer_class = SchoolsSerializer
+    filterset_fields = [
+        'year',
+        'grade',
+        'dist_id',
+        'county_id',
+        'state_abb',
+        'nces_id',
+    ]
 
 class districtList(generics.ListAPIView):
     queryset = DistSeg.objects.all()
@@ -13,13 +25,29 @@ class districtList(generics.ListAPIView):
         'dist_id',
     ]
 
+class districtNameList(generics.ListAPIView):
+    queryset = DistNames.objects.all()
+    serializer_class = DistNameSerializer
+    filterset_fields = [
+        'dist_id',
+        'dist_name'
+    ]
+
 class countyList(generics.ListAPIView):
-    queryset = CountySeg.objects.all()
-    serializer_class = CountySerializer
+    queryset = CountySegSchools.objects.all()
+    serializer_class = CountySchoolsSerializer
     filterset_fields = [
         'year',
         'grade',
-        'conum',
+        'county_id',
+    ]
+
+class countyNameList(generics.ListAPIView):
+    queryset = CountyNames.objects.all()
+    serializer_class = CountyNameSerializer
+    filterset_fields = [
+        'county_id',
+        'county_name'
     ]
 
 class stateList(generics.ListAPIView):
@@ -29,4 +57,12 @@ class stateList(generics.ListAPIView):
         'year',
         'grade',
         'state_abb',
+    ]
+
+class stateNameList(generics.ListAPIView):
+    queryset = StateNames.objects.all()
+    serializer_class = StateNameSerializer
+    filterset_fields = [
+        'state_abb',
+        'state_name'
     ]
