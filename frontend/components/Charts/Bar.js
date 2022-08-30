@@ -53,8 +53,8 @@ const BarChart = () => {
     const data = {
         labels: chart?.map(x => x.grade),
         datasets: [{
-          label: year + " Segregation index totals",
-          data: chart?.map(x => x.seg_index_tot), 
+          label: year + " Asian-White Normalized Exposure totals",
+          data: chart?.map(x => x.norm_exp_aw), 
           backgroundColor: ['rgba(255, 99, 132, 0.2)'],
           borderColor: ['rgb(255, 99, 132)'],
           borderWidth: 1

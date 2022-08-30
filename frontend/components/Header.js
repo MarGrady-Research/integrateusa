@@ -28,9 +28,9 @@ function Header() {
             </div> 
         </div>
         <div className="h-500 mt-10">
-            <div className="static flex justify-evenly text-2l">
+            <div className="static flex justify-evenly text-3l">
                 <Link href="/info">
-                    <a className="hover:underline">Info and Trends</a>
+                    <a className="hover:underline active:underline">Info and Trends</a>
                 </Link>
                 <Link href="/segregation">
                     <a className="hover:underline">Segregation Measures</a>
