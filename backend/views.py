@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames
-from rest_framework import generics
+from rest_framework import generics, filters
 from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer
 
 
@@ -28,7 +28,8 @@ class districtList(generics.ListAPIView):
 class districtNameList(generics.ListAPIView):
     queryset = DistNames.objects.all()
     serializer_class = DistNameSerializer
-    filterset_fields = [
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
         'dist_id',
         'dist_name'
     ]
@@ -45,7 +46,8 @@ class countyList(generics.ListAPIView):
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
     serializer_class = CountyNameSerializer
-    filterset_fields = [
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
         'county_id',
         'county_name'
     ]
@@ -62,7 +64,8 @@ class stateList(generics.ListAPIView):
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
     serializer_class = StateNameSerializer
-    filterset_fields = [
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
         'state_abb',
         'state_name'
     ]
