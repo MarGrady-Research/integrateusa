@@ -30,8 +30,8 @@ class districtNameList(generics.ListAPIView):
     serializer_class = DistNameSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        'dist_id',
-        'dist_name'
+        '^dist_id',
+        '^dist_name'
     ]
 
 class countyList(generics.ListAPIView):
@@ -66,6 +66,6 @@ class stateNameList(generics.ListAPIView):
     serializer_class = StateNameSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        'state_abb',
-        'state_name'
+        '^state_abb',
+        '^state_name'
     ]
