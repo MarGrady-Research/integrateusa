@@ -4,6 +4,7 @@ import AsyncSelect from 'react-select/async';
 import axios from 'axios';
 import {years, grades} from './SelectOptions';
 import { handleInputChange } from 'react-select';
+import Info from './Info/InfoTrends';
 
 function Selection() {
 
@@ -31,7 +32,6 @@ function Selection() {
   // Function to handle inputs into searchbox
   handleInputChange = (inputValue) => {
     setInput(inputValue);
-    console.log(inputValue)
   }
 
   // defining names state variable (array to hold name data)
@@ -57,6 +57,31 @@ function Selection() {
   }
 
 
+  // Defining ID, year and grade state
+
+  const [id, setID] = useState()
+
+  const [grade, setGrade] = useState()
+
+  const [year, setYear] = useState()
+
+  // Setting data state variable and get data promise
+
+  const [data, setData] = useState([])
+
+  const getData = async () => {
+    if (year != undefined && grade != undefined && id != undefined) {
+      try {
+        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&county_id=" + id);
+        setData(response.data);
+        console.log(data)
+      }
+      catch(error) {
+        console.log(error)
+      }
+    }
+  }
+
 // Returning JSX
   return (
     <div className='relative w-full'>
@@ -69,12 +94,13 @@ function Selection() {
         components={{IndicatorSeparator: () => null}}
         />
       </div>
-      <div className='flex flex-row ml-20 mt-5'>
+      <div className='relative flex flex-row ml-20 mt-5'>
       {levels > -1 &&
         <>
         <AsyncSelect 
         cacheOptions
         defaultOptions
+        onChange={e => setID(e.value)}
         loadOptions={nameOptions}
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
@@ -82,26 +108,30 @@ function Selection() {
         /> 
         <Select 
         options={years}
+        onChange={e => setYear(e.value)}
         placeholder="Select a year"
         name='years'
         className='ml-5'
         />
         <Select 
         options={grades}
+        onChange={e => setGrade(e.value)}
         placeholder="Select a grade"
-        isMulti
+        // isMulti
         name='grades'
         className='ml-5'
         />
+        <button onClick={getData} className='ml-5 bg-blue-500 p-2 rounded-md text-gray-50'>Search</button>
       </>
       }
       </div>
-      <div>
-        
+      {data.length > 0 &&
+      <div className='ml-20 mt-5'>
+      <Info InfoData={data} levels={levels} levelselect={levelselect}/>
       </div>
+      }
     </div>
   );
 };
-
 
 export default Selection
