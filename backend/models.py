@@ -4,13 +4,13 @@ from django.db.models import UniqueConstraint
 
 
 class Schools(models.Model):
-    school_key = models.CharField(max_length=18)
-    year = models.CharField(max_length=4)
-    grade = models.CharField(max_length=2)
-    nces_id = models.CharField(max_length=12)
-    dist_id = models.CharField(max_length=7)
-    county_id = models.CharField(max_length=6, null=True, blank=True)
-    state_abb = models.CharField(max_length=2)
+    school_key = models.TextField(primary_key=True)
+    year = models.TextField()
+    grade = models.TextField()
+    nces_id = models.TextField()
+    dist_id = models.TextField()
+    county_id = models.TextField()
+    state_abb = models.TextField()
     asian = models.IntegerField(blank=True, null=True)
     black = models.IntegerField(blank=True, null=True)
     hispanic = models.IntegerField(blank=True, null=True)
@@ -22,19 +22,19 @@ class Schools(models.Model):
         db_table = 'schools'
 
 class CountyNames(models.Model):
-    county_id = models.CharField(max_length=6, primary_key=True)
-    county_name = models.CharField(max_length=255)
+    county_id = models.TextField(primary_key=True)
+    county_name = models.TextField()
 
     class Meta:
         db_table = 'county_names'
 
 
 class CountySegSchools(models.Model):
-    county_key = models.CharField(max_length=13, primary_key=True)
-    year = models.IntegerField()
-    grade = models.CharField(max_length=3)
-    county_id = models.IntegerField()
-    county_name = models.CharField(max_length=255)
+    county_key = models.TextField(primary_key=True)
+    year = models.TextField()
+    grade = models.TextField()
+    county_id = models.TextField()
+    county_name = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     enr_prop_bl = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
@@ -86,8 +86,8 @@ class DistDirectory(models.Model):
 
 
 class DistNames(models.Model):
-    dist_id = models.IntegerField(primary_key=True)
-    dist_name = models.CharField(max_length=255, blank=True, null=True)
+    dist_id = models.TextField(primary_key=True)
+    dist_name = models.TextField()
 
     class Meta:
         db_table = 'district_names'
@@ -97,11 +97,11 @@ class DistNames(models.Model):
 
 
 class DistSeg(models.Model):
-    dist_key = models.CharField(max_length=14, primary_key=True)
-    year = models.CharField(max_length=4)
-    grade = models.CharField(max_length=2)
-    dist_id = models.IntegerField()
-    dist_name = models.CharField(max_length=255)
+    dist_key = models.TextField(primary_key=True)
+    year = models.TextField()
+    grade = models.TextField()
+    dist_id = models.TextField()
+    dist_name = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     enr_prop_bl = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
@@ -139,9 +139,9 @@ class DistSeg(models.Model):
 
 
 class StateNames(models.Model):
-    state_abb = models.CharField(max_length=2, blank=True, null=False, primary_key=True)
+    state_abb = models.TextField(primary_key=True)
     fips = models.IntegerField(blank=True, null=True)
-    state_name = models.CharField(max_length=50, blank=True, null=True)
+    state_name = models.TextField()
 
     class Meta:
         db_table = 'state_names'
@@ -151,10 +151,10 @@ class StateNames(models.Model):
 
 
 class StateSeg(models.Model):
-    state_key = models.CharField(max_length=9, primary_key=True)
-    year = models.CharField(max_length=4)
-    grade = models.CharField(max_length=3)
-    state_abb = models.CharField(max_length=2)
+    state_key = models.TextField(primary_key=True)
+    year = models.TextField()
+    grade = models.TextField()
+    state_abb = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     enr_prop_bl = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
