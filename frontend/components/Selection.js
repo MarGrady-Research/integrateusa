@@ -12,9 +12,9 @@ function Selection() {
   const [levels, setLevels] = useState(-1);
 
   const levelselect = [
-    {value: 0, label: "District", route: "api/districtnames/?search="},
-    {value: 1, label: "County", route: "api/countynames/?search="},
-    {value: 2, label: "State", route: "api/statenames/?search="}
+    {value: 0, label: "District", route: "api/districtnames/?search=", id: "dist_id", name: "dist_name"},
+    {value: 1, label: "County", route: "api/countynames/?search=", id: "county_id", name: "county_name"},
+    {value: 2, label: "State", route: "api/statenames/?search=", id: "state_abb", name: "state_name"}
   ]
 
   // Setting baseURL based on level
@@ -34,6 +34,26 @@ function Selection() {
     setInput(inputValue);
   }
 
+  // function to set id field based on selected level
+  const idfunction = () => {
+    if (levels > -1) {
+      return levelselect[levels].id
+    }
+  }
+
+  let idfield = idfunction();
+
+  // function to set name field based on selected level 
+  const namefunction = () => {
+    if (levels > 1) {
+      return levelselect[levels].name
+    }
+  }
+
+  let namefield = namefunction();
+
+  console.log(idfield)
+
   // defining names state variable (array to hold name data)
   const [names, setNames] = useState([])
 
@@ -43,7 +63,8 @@ function Selection() {
         try {
           const response = await axios.get(baseURL + input);
           setNames(response.data);
-          let nameOptions = names.map(d => ({
+          let nameOptions = names.map(d => (
+            {
               "value": d.county_id,
               "label": d.county_name
             }
@@ -56,6 +77,8 @@ function Selection() {
     }
   }
 
+  console.log(nameOptions)
+
 
   // Defining ID, year and grade state
 
@@ -63,7 +86,18 @@ function Selection() {
 
   const [grade, setGrade] = useState()
 
-  const [year, setYear] = useState()
+  const [year, setYear] = useState() 
+
+  // State to hole selected name from dropdown 
+
+  const [selectedname, setSelectedName] = useState() 
+  
+  //  function to set both ID and name on change
+  
+  const nameandid = e => {
+    setID(e.value)
+    setSelectedName(e.label)
+  }
 
   // Setting data state variable and get data promise
 
@@ -71,8 +105,18 @@ function Selection() {
 
   const getData = async () => {
     if (year != undefined && grade != undefined && id != undefined) {
+
+      let idlevel = ''
+      
+      if (levels === 0) {
+        idlevel = "dist_id"
+      } else if (levels === 1) {
+        idlevel = "county_id"
+      } else if (levels === 2) {
+        idlevel = "state_abb"
+      }
       try {
-        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&county_id=" + id);
+        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setData(response.data);
         console.log(data)
       }
@@ -100,7 +144,7 @@ function Selection() {
         <AsyncSelect 
         cacheOptions
         defaultOptions
-        onChange={e => setID(e.value)}
+        onChange={nameandid} 
         loadOptions={nameOptions}
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
@@ -125,9 +169,10 @@ function Selection() {
       </>
       }
       </div>
+      {/* Conditionally render the below div once the data array has been returned */}
       {data.length > 0 &&
       <div className='ml-20 mt-5'>
-      <Info InfoData={data} levels={levels} levelselect={levelselect}/>
+      <Info InfoData={data} selectedname = {selectedname}/>
       </div>
       }
     </div>
