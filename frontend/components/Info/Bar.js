@@ -1,11 +1,10 @@
-import React from "react";
-import { VictoryBar, VictoryStack } from "victory";
+import React, { useState } from "react";
+import { VictoryBar, VictoryStack, VictoryTooltip, VictoryBrushContainer, VictoryZoomContainer } from "victory";
+import Select from 'react-select';
 import Info from "./InfoTrends";
 
 
 export default function BarChart({InfoData}) {
-
-    // "pct_as" = "#FF5050", "pct_bl" = "#4472C4", "pct_hi" = "#FF9900","pct_or" =  "#FFC000", "pct_wh" = "#339933"
 
     const bar = (data, group) => {
         return data.map(e => {
@@ -20,31 +19,63 @@ export default function BarChart({InfoData}) {
     const blackData = bar(InfoData, "black");
     const hispanicData = bar(InfoData, "hispanic");
     const otherData = bar(InfoData, "other");
-    const whiteData = bar(InfoData, "white")
+    const whiteData = bar(InfoData, "white");
 
-    console.log()
+    let groupData = [{label: "asian", data: asianData, fill: "#FF5050"}, 
+                         {label: "black", data: blackData, fill: "#4472C4"}, 
+                         {label: "hispanic", data: hispanicData, fill: "#FF9900"},
+                         {label: "other", data: otherData, fill: "#FFC000"},
+                         {label: "white", data: whiteData, fill: "#339933"}];
+
+    const sortOptions = [
+        {value: 0, label: "% Asian"},
+        {value: 1, label: "% Black"},
+        {value: 2, label: "% Hispanic"},
+        {value: 3, label: "% Other"},
+        {value: 4, label: "% White"},
+    ]
+
+    // const [sort, setSort] = useState()
+
+    const sorting = () => {
+        // if(sort != undefined) {
+
+        // let data = groupData;
+
+        // if (sort > -1) {
+        // let obj = data[sort];
+        // data.splice(sort, 1);
+        // data.splice(0, 0, obj);
+        // }
+
+        // console.log(data);
+
+        return groupData.map(e => {
+            return (<VictoryBar 
+            // animate={{duration: 2000, easing: 'bounce'}}
+            style = {{ data: {fill: e.fill}}}
+            data = {e.data}
+            />
+            );
+            })
+        }
 
     return(
         <div className="w-full">
+        <div>
+        {/* <Select 
+        options={sortOptions}
+        defaultValue={0}
+        onChange={e => setSort(e.value)}
+        /> */}
+        </div>
+        <div>
         <VictoryStack
-        width={500}
+        width={600}
         height={200}>
-            <VictoryBar 
-                style={{ data: {fill: "#FF5050"} }}
-                data = {asianData}/>
-            <VictoryBar 
-                style={{ data: {fill: "#4472C4"} }}
-                data = {blackData}/>
-            <VictoryBar 
-                style={{ data: {fill: "#FF9900"} }}
-                data = {hispanicData}/>
-            <VictoryBar 
-                style={{ data: {fill: "#FFC000"} }}
-                data = {otherData}/>
-            <VictoryBar 
-                style={{ data: {fill: "#339933"} }}
-                data = {whiteData}/>
+            {sorting()}
         </VictoryStack>
+        </div>
         </div>
     )
 
