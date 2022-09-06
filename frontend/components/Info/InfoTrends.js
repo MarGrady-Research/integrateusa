@@ -4,9 +4,8 @@ import PieChart from "./Pie";
 import RaceTable from "./RaceTable";
 import Select from "react-select";
 
-export default function Info({InfoData, levels, levelselect}) {
+export default function Info({InfoData, selectedname}) {
 
-    const Level = levelselect[levels].label
 
     const groups = ["asian", "black", "hispanic", "other", "white"]
 
@@ -37,17 +36,16 @@ export default function Info({InfoData, levels, levelselect}) {
     return(
         <>
         <div className="flex flex-row">
-            <span className="text-4xl"><b>{Level} Name</b></span>
+            <span className="text-4xl"><b>{selectedname}</b></span>
             <Select 
             options={charterOptions}
             defaultInputValue = {"All Schools"}
             className = 'ml-5'/>
         </div>
         <div className="relative flex flex-row mt-5">
-            <p>There are {InfoData.length} Schools in this {Level}</p>
+            <p>There are {InfoData.length} Schools in {selectedname}</p>
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal}/>
             <PieChart enrGroups={enrGroups} enrTotal={enrTotal}/>
-            {/* <p>There are {enrSum(InfoData, "asian")} Asian Students in the {Level}</p> */}
         </div>
         <div>
             <BarChart InfoData={InfoData}/>
