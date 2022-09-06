@@ -15,17 +15,16 @@ export default function PieChart ({enrGroups, enrTotal}) {
 
     const pieData = pie(enrGroups, enrTotal);
 
-    console.log(pieData);
-
     return (
         <div>
-        <VictoryPie 
+        <VictoryPie
+        animate = {{duration: 2000, easing: 'bounce'}}
         colorScale={["#FF5050", "#4472C4", "#FF9900", "#FFC000", "#339933"]}
-        standalone={true}
-        width = {250}
+        // standalone={true}
+        width = {350}
         height={250}
         data={pieData}
-        labels={"centroid"}
+        labels={() => null}
         // style={{width: '50%', height: "auto"}}
         />
         </div>
