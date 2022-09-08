@@ -34,51 +34,45 @@ function Selection() {
     setInput(inputValue);
   }
 
-  // function to set id field based on selected level
-  const idfunction = () => {
-    if (levels > -1) {
-      return levelselect[levels].id
-    }
-  }
-
-  let idfield = idfunction();
-
-  // function to set name field based on selected level 
-  const namefunction = () => {
-    if (levels > 1) {
-      return levelselect[levels].name
-    }
-  }
-
-  let namefield = namefunction();
-
-  console.log(idfield)
-
   // defining names state variable (array to hold name data)
   const [names, setNames] = useState([])
 
   // async function returning a promise for name data
   const nameOptions = async () => {
+
       if (input != undefined && input != '') {
+
         try {
           const response = await axios.get(baseURL + input);
           setNames(response.data);
-          let nameOptions = names.map(d => (
-            {
+          let nameOptions = names.map(d => {
+            if (levels == 0) {
+              return {
+              "value": d.dist_id,
+              "label": d.dist_name
+              }
+            }
+            if(levels == 1) {
+              return {
               "value": d.county_id,
               "label": d.county_name
+              }
+            } if (levels == 2) {
+              return {
+              "value": d.state_abb,
+              "label": d.state_name
             }
-            ))
+          }
+           })
           return nameOptions
         }
+
         catch(error) {
           console.log(error)
         }
-    }
+
+      }
   }
-
-  console.log(nameOptions)
-
 
   // Defining ID, year and grade state
 
@@ -115,14 +109,17 @@ function Selection() {
       } else if (levels === 2) {
         idlevel = "state_abb"
       }
+
       try {
         const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setData(response.data);
         console.log(data)
       }
+
       catch(error) {
         console.log(error)
       }
+
     }
   }
 
