@@ -6,13 +6,28 @@ import Info from "./InfoTrends";
 
 export default function BarChart({InfoData}) {
 
+    function roundToTwo(num) {
+        return +num.toFixed(4);
+    }
+
     const bar = (data, group) => {
         return data.map(e => {
             return ({
-                x: e.nces_id,
-                y: Math.round((e[group]/e.tot_enr)*100)
+                x: String(e.nces_id),
+                y: roundToTwo(e[group]/e.tot_enr)*100
             })
         })
+    }
+
+
+    const [zoom, setZoom] = useState({})
+
+    function handleZoom(domain) {
+        setZoom({selectedDomain: domain})
+    }
+
+    function handleBrush(domain) {
+        setZoom({zoomDomain: domain})
     }
 
     const asianData = bar(InfoData, "asian");
@@ -20,6 +35,7 @@ export default function BarChart({InfoData}) {
     const hispanicData = bar(InfoData, "hispanic");
     const otherData = bar(InfoData, "other");
     const whiteData = bar(InfoData, "white");
+
 
     let groupData = [{label: "asian", data: asianData, fill: "#FF5050"}, 
                          {label: "black", data: blackData, fill: "#4472C4"}, 
@@ -52,7 +68,14 @@ export default function BarChart({InfoData}) {
 
         return groupData.map(e => {
             return (<VictoryBar 
-            // animate={{duration: 2000, easing: 'bounce'}}
+            key={e.label}
+            name = {e.label}
+            barRatio ={0.8}
+            labels = { ({datum}) => `NCES ID: ${datum.x}, %${datum.label}: ${datum.y}`}
+            labelComponent = {
+                <VictoryTooltip 
+                />
+            }
             style = {{ data: {fill: e.fill}}}
             data = {e.data}
             />
@@ -71,8 +94,32 @@ export default function BarChart({InfoData}) {
         </div>
         <div>
         <VictoryStack
-        width={600}
-        height={200}>
+        width={800}
+        height={200}
+        containerComponent = {
+            <VictoryZoomContainer
+            responsive = {true}
+            zoomDimension = "x"
+            zoomDomain = {zoom.zoomDomain}
+            onZoomDomainChange = {handleZoom}
+            />
+            }>
+            {sorting()}
+        </VictoryStack>
+
+        <VictoryStack
+        width={300}
+        height={150}
+        containerComponent = {
+            <VictoryBrushContainer
+            responsive = {true}
+            brushDimension = "x"
+            allowDraw={false}
+            brushDomain = {zoom.selectedDomain}
+            onBrushDomainChange = {handleBrush}
+            brushStyle={{fillOpacity: 0.5}}
+            />
+            }>
             {sorting()}
         </VictoryStack>
         </div>
