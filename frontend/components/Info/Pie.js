@@ -1,8 +1,27 @@
 import React from "react";
 import { VictoryPie } from "victory";
 
-export default function PieChart ({enrGroups, enrTotal}) {
+export default function PieChart ({InfoData}) {
 
+    const groups = ["asian", "black", "hispanic", "other", "white"]
+
+    const enrSum = (arr, group) => {
+        return arr.reduce(function(a,b) {
+            return a+b[group];
+        }, 0);
+    };
+
+    const enrData = (arr) => {
+        return  arr.map(item => {
+            return ({
+                group: item,
+                enr: enrSum(InfoData, item)
+            })
+        });
+    }
+
+    const enrGroups = enrData(groups)
+    const enrTotal = enrSum(InfoData, "tot_enr")
 
     const pie = (groups, total) => {
         return groups.map(e => {

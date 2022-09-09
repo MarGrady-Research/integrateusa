@@ -45,7 +45,7 @@ export default function Info({InfoData, selectedname}) {
         <div className="relative flex flex-row mt-5">
             <p>There are {InfoData.length} Schools in {selectedname}</p>
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal}/>
-            <PieChart enrGroups={enrGroups} enrTotal={enrTotal}/>
+            <PieChart InfoData={InfoData}/>
         </div>
         <div>
             <BarChart InfoData={InfoData}/>
