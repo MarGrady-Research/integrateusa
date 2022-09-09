@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import axios from 'axios';
 import {years, grades} from './SelectOptions';
 import { handleInputChange } from 'react-select';
 import Info from './Info/InfoTrends';
+import {useRouter} from 'next/router';
+import Segregation from './Segregation/SegregationMeasures';
 
 function Selection() {
+
+  // adding in NextJS router for conditionally rendering different pages
+  const router = useRouter()
+  const currentpath = router.pathname
 
   // Defining level state variable and levelselect array
   const [levels, setLevels] = useState(-1);
@@ -84,36 +90,42 @@ function Selection() {
 
   // State to hole selected name from dropdown 
 
-  const [selectedname, setSelectedName] = useState() 
-  
+  const [selectedname, setSelectedName] = useState(); 
+
   //  function to set both ID and name on change
   
   const nameandid = e => {
     setID(e.value)
     setSelectedName(e.label)
-  }
+  };
 
   // Setting data state variable and get data promise
 
   const [data, setData] = useState([])
 
+  // getData function to run on click of search button
+
   const getData = async () => {
     if (year != undefined && grade != undefined && id != undefined) {
 
-      let idlevel = ''
+      let idlevel = '';
+      let table = '';
       
       if (levels === 0) {
-        idlevel = "dist_id"
+        idlevel = "dist_id";
+        table = (currentpath == '/segregation' ? 'district' : 'schools');
       } else if (levels === 1) {
-        idlevel = "county_id"
+        idlevel = "county_id";
+        table = (currentpath == '/segregation' ? 'county' : 'schools');
       } else if (levels === 2) {
-        idlevel = "state_abb"
+        idlevel = "state_abb";
+        table = (currentpath == '/segregation' ? 'state' : 'schools');
       }
 
       try {
-        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+        const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setData(response.data);
-        console.log(data)
+        console.log(data);
       }
 
       catch(error) {
@@ -158,7 +170,6 @@ function Selection() {
         options={grades}
         onChange={e => setGrade(e.value)}
         placeholder="Select a grade"
-        // isMulti
         name='grades'
         className='ml-5'
         />
@@ -166,10 +177,16 @@ function Selection() {
       </>
       }
       </div>
-      {/* Conditionally render the below div once the data array has been returned */}
-      {data.length > 0 &&
+      {/* Conditionally render the Info div once the data array has been returned */}
+      {currentpath == '/info' && data.length > 0 &&
       <div className='ml-20 mt-5'>
       <Info InfoData={data} selectedname = {selectedname}/>
+      </div>
+      }
+      {/* Conditionally render the Segregation div once the data array has been returned */}
+      {currentpath == '/segregation' && data.length >0 &&
+      <div className='ml-20 mt-5'>
+      <Segregation SegData={data} selectedname = {selectedname}/>
       </div>
       }
     </div>
