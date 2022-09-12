@@ -137,7 +137,7 @@ function Selection() {
 
 // Returning JSX
   return (
-    <div className='relative w-full'>
+    <div className='container mx-auto'>
       <div className='flex flex-row ml-20 mt-10'>
         <p className='text-3xl mt-100 mr-5'>Select a </p>
         <Select 
@@ -169,6 +169,7 @@ function Selection() {
         <Select 
         options={grades}
         onChange={e => setGrade(e.value)}
+
         placeholder="Select a grade"
         name='grades'
         className='ml-5'
