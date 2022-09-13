@@ -19,7 +19,7 @@ function Selection() {
 
   const levelselect = [
     {value: 0, label: "District", route: "api/districtnames/?search=", id: "dist_id", name: "dist_name"},
-    {value: 1, label: "County", route: "api/countynames/?search=", id: "county_id", name: "county_name"},
+    {value: 1, label: "County", route: "api/countynames/?q=", id: "county_id", name: "county_name"},
     {value: 2, label: "State", route: "api/statenames/?search=", id: "state_abb", name: "state_name"}
   ]
 
@@ -46,7 +46,7 @@ function Selection() {
   // async function returning a promise for name data
   const nameOptions = async () => {
 
-      if (input != undefined && input != '') {
+      if (input != undefined) {
 
         try {
           const response = await axios.get(baseURL + input);
@@ -151,7 +151,7 @@ function Selection() {
       {levels > -1 &&
         <>
         <AsyncSelect 
-        cacheOptions
+        // cacheOptions
         defaultOptions
         onChange={nameandid} 
         loadOptions={nameOptions}
