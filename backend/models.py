@@ -1,6 +1,8 @@
 from dataclasses import field
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.contrib.postgres.search import SearchVector, SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
 
 
 class Schools(models.Model):
@@ -20,13 +22,22 @@ class Schools(models.Model):
 
     class Meta:
         db_table = 'schools'
+        indexes = [
+            models.Index(fields=['year'], name ='year_idx'),
+            models.Index(fields=['grade'], name='grade_idx'),
+            models.Index(fields=['dist_id'], name='dist_idx'),
+            models.Index(fields=['county_id'], name='county_idx'),
+            models.Index(fields=['state_abb'], name='state_idx')
+        ]
 
 class CountyNames(models.Model):
     county_id = models.IntegerField(primary_key=True)
     county_name = models.TextField()
+    vector_col = SearchVectorField(default='', null=False)
 
     class Meta:
         db_table = 'county_names'
+        indexes = [GinIndex(fields=['vector_col'], name='county_name_idx')]
 
 
 class CountySegSchools(models.Model):
@@ -66,10 +77,10 @@ class CountySegSchools(models.Model):
 
     class Meta:
         db_table = 'county_seg_schools'
-        constraints = [UniqueConstraint(fields=['conum', 'grade', 'year'], name='county_seg_unique')]
+        # constraints = [UniqueConstraint(fields=['county_id', 'grade', 'year'], name='county_seg_unique')]
 
     def __str__(self):
-        return self.year, self.conum, self.grade
+        return self.year, self.county_id, self.grade
 
 
 class DistDirectory(models.Model):
@@ -80,7 +91,7 @@ class DistDirectory(models.Model):
 
     class Meta:
         db_table = 'dist_directory'
-        constraints = [UniqueConstraint(fields=['year', 'dist_id'], name = 'dist_directory_unique')]
+        # constraints = [UniqueConstraint(fields=['year', 'dist_id'], name = 'dist_directory_unique')]
 
     def __str__(self):
         return self.dist_id, " (", self.year, ")"
@@ -133,7 +144,7 @@ class DistSeg(models.Model):
 
     class Meta:
         db_table = 'dist_seg'
-        constraints = [UniqueConstraint(fields=['dist_id', 'grade', 'year'], name='dist_seg_unique')]
+        # constraints = [UniqueConstraint(fields=['dist_id', 'grade', 'year'], name='dist_seg_unique')]
 
     def __str__(self):
         return self.year, self.dist_id, self.grade
@@ -186,7 +197,7 @@ class StateSeg(models.Model):
 
     class Meta:
         db_table = 'state_seg'
-        constraints = [UniqueConstraint(fields=['year', 'grade', 'state_abb'], name = 'state_seg_unique')]
+        # constraints = [UniqueConstraint(fields=['year', 'grade', 'state_abb'], name = 'state_seg_unique')]
 
     def __str__(self):
         return self.year, self.state_abb, self.grade
