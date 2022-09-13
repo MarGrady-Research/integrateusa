@@ -6,7 +6,7 @@ export default function RaceTable({enrGroups, enrTotal}) {
         return arr.map(e => {
          return(
                  <tr key={e.group}>
-                 <td>{e.group}</td>
+                 <td>{e.group.toUpperCase()}</td>
                  <td>{e.enr}</td>
                  <td>{Math.round((e.enr/enrTotal)*100)}</td>
                  </tr> 
