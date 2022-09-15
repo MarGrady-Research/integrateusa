@@ -37,7 +37,7 @@ export default function PieChart ({InfoData}) {
     return (
         <div>
         <VictoryPie
-        animate = {{duration: 2000, easing: 'bounce'}}
+        // animate = {{duration: 2000, easing: 'bounce'}}
         colorScale={["#FF5050", "#4472C4", "#FF9900", "#FFC000", "#339933"]}
         // standalone={true}
         width = {350}

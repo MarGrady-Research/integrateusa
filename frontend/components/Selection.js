@@ -117,15 +117,8 @@ function Selection() {
         table = (currentpath == '/segregation' ? 'state' : 'schools');
       }
 
-      try {
         const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setData(response.data);
-      }
-
-      catch(error) {
-        console.log(error)
-      }
-
       }
     };
 
@@ -133,7 +126,12 @@ function Selection() {
   // useEffect wrapper for getData and setTitle to run after click
 
   useEffect( () => {
+    let canceled = false
+    {clicked != canceled &&
     getData();
+    setClicked(false);
+    setInput('')
+    }
   }, [clicked])
 
   useEffect( () => {
