@@ -48,13 +48,13 @@ class countyList(generics.ListAPIView):
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
     serializer_class = CountyNameSerializer
-    context_object_name = "county_name"
+    # context_object_name = "county_name"
 
     def get_queryset(self):
         query = self.request.GET.get("q")
         # search_vector = search.SearchVector('county_name')
         # search_query = search.SearchQuery(query) #+ ':*', search_type='raw')
-        return CountyNames.objects.filter(county_name__istartswith = query)
+        return CountyNames.objects.annotate(similarity = search.TrigramSimilarity('county_name', query)).filter(county_name__istartswith = query).order_by('-similarity')
 
 class stateList(generics.ListAPIView):
     queryset = StateSeg.objects.all()
