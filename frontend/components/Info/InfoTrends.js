@@ -3,8 +3,9 @@ import BarChart from "./Bar";
 import PieChart from "./Pie";
 import RaceTable from "./RaceTable";
 import Select from "react-select";
+import { Data } from "victory";
 
-export default function Info({InfoData, selectedname}) {
+export default function Info({InfoData, title}) {
 
 
     const groups = ["asian", "black", "hispanic", "other", "white"]
@@ -35,15 +36,17 @@ export default function Info({InfoData, selectedname}) {
 
     return(
         <>
+        { InfoData.length > 0 &&
         <div className="flex flex-row">
-            <span className="text-4xl"><b>{selectedname}</b></span>
+            <span className="text-4xl"><b>{title}</b></span>
             <Select 
             options={charterOptions}
             defaultInputValue = {"All Schools"}
             className = 'ml-5'/>
         </div>
-        <div className="relative flex flex-row mt-5">
-            <p>There are {InfoData.length} Schools in {selectedname}</p>
+        }
+        <div className="relative flex flex-row justify-evenly mt-5">
+            <p>There are {InfoData.length} Schools in {title}</p>
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal}/>
             <PieChart InfoData={InfoData}/>
         </div>

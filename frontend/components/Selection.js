@@ -3,14 +3,13 @@ import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import axios from 'axios';
 import {years, grades} from './SelectOptions';
-import { handleInputChange } from 'react-select';
 import Info from './Info/InfoTrends';
 import {useRouter} from 'next/router';
 import Segregation from './Segregation/SegregationMeasures';
 
 function Selection() {
 
-  // adding in NextJS router for conditionally rendering different pages
+  // adding in NextJS router for conditionally rendering different pages in return statement
   const router = useRouter()
   const currentpath = router.pathname
 
@@ -30,56 +29,47 @@ function Selection() {
     }
   }
 
-  let baseURL = setURL()
+  let baseURL = setURL(); 
 
   // defining input state
   const [input, setInput] = useState('')
 
-  // Function to handle inputs into searchbox
-  handleInputChange = (inputValue) => {
+  // Function to handle inputs into state/county/district select
+ const handleInputChange = (inputValue) => {
     setInput(inputValue);
   }
 
-  // defining names state variable (array to hold name data)
-  const [names, setNames] = useState([])
-
   // async function returning a promise for name data
-  const nameOptions = async () => {
+  const loadOptions = async () => {
 
-      if (input != undefined) {
-
-        try {
-          const response = await axios.get(baseURL + input);
-          setNames(response.data);
-          let nameOptions = names.map(d => {
-            if (levels == 0) {
-              return {
-              "value": d.dist_id,
-              "label": d.dist_name
-              }
-            }
-            if(levels == 1) {
-              return {
-              "value": d.county_id,
-              "label": d.county_name
-              }
-            } if (levels == 2) {
-              return {
-              "value": d.state_abb,
-              "label": d.state_name
-            }
-          }
-           })
-          return nameOptions
-        }
-
-        catch(error) {
-          console.log(error)
-        }
-
+      if (input.length == 0) {
+        return null;
       }
-  }
 
+      const response =  await axios.get(baseURL + input);
+
+      const Options = await response.data.map(d => {
+        if (levels == 0) {
+          return {
+          "value": d.dist_id,
+          "label": d.dist_name
+          }
+        }
+        if(levels == 1) {
+          return {
+          "value": d.county_id,
+          "label": d.county_name
+          }
+        } if (levels == 2) {
+          return {
+          "value": d.state_abb,
+          "label": d.state_name
+          }
+        }
+        })
+      return Options;
+  }
+  
   // Defining ID, year and grade state
 
   const [id, setID] = useState()
@@ -88,7 +78,7 @@ function Selection() {
 
   const [year, setYear] = useState() 
 
-  // State to hole selected name from dropdown 
+  // State to hold selected name from dropdown 
 
   const [selectedname, setSelectedName] = useState(); 
 
@@ -99,13 +89,18 @@ function Selection() {
     setSelectedName(e.label)
   };
 
-  // Setting data state variable and get data promise
+  // Initializing click, data and title state variables
 
-  const [data, setData] = useState([])
+  const [clicked, setClicked] = useState(false);
+
+  const [data, setData] = useState([]);
+
+  const [title, setTitle] = useState();
 
   // getData function to run on click of search button
 
   const getData = async () => {
+
     if (year != undefined && grade != undefined && id != undefined) {
 
       let idlevel = '';
@@ -125,15 +120,25 @@ function Selection() {
       try {
         const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setData(response.data);
-        console.log(data);
       }
 
       catch(error) {
         console.log(error)
       }
 
-    }
-  }
+      }
+    };
+
+
+  // useEffect wrapper for getData and setTitle to run after click
+
+  useEffect( () => {
+    getData();
+  }, [clicked])
+
+  useEffect( () => {
+    setTitle(selectedname);
+  }, [data])
 
 // Returning JSX
   return (
@@ -151,10 +156,10 @@ function Selection() {
       {levels > -1 &&
         <>
         <AsyncSelect 
-        // cacheOptions
+        cacheOptions
         defaultOptions
         onChange={nameandid} 
-        loadOptions={nameOptions}
+        loadOptions={loadOptions}
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
         placeholder= {"Type a " + levelselect[levels].label + " name"}
@@ -162,6 +167,7 @@ function Selection() {
         <Select 
         options={years}
         onChange={e => setYear(e.value)}
+        isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
         placeholder="Select a year"
         name='years'
         className='ml-5'
@@ -174,14 +180,14 @@ function Selection() {
         name='grades'
         className='ml-5'
         />
-        <button onClick={getData} className='ml-5 bg-blue-500 p-2 rounded-md text-gray-50'>Search</button>
+        <button onClick={() => setClicked(!clicked)} className='ml-5 bg-blue-500 p-2 rounded-md text-gray-50'>Search</button>
       </>
       }
       </div>
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath == '/info' && data.length > 0 &&
       <div className='ml-20 mt-5'>
-      <Info InfoData={data} selectedname = {selectedname}/>
+      <Info InfoData={data} title = {title}/>
       </div>
       }
       {/* Conditionally render the Segregation div once the data array has been returned */}
