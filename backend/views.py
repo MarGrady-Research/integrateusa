@@ -30,11 +30,15 @@ class districtList(generics.ListAPIView):
 class districtNameList(generics.ListAPIView):
     queryset = DistNames.objects.all()
     serializer_class = DistNameSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = [
-        '^dist_id',
-        '^dist_name'
-    ]
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = [
+    #     '^dist_id',
+    #     '^dist_name'
+    # ]
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.2).filter(dist_name__istartswith = query).order_by('-similarity')
 
 class countyList(generics.ListAPIView):
     queryset = CountySegSchools.objects.all()
@@ -68,8 +72,12 @@ class stateList(generics.ListAPIView):
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
     serializer_class = StateNameSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = [
-        '^state_abb',
-        '^state_name'
-    ]
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = [
+    #     '^state_abb',
+    #     '^state_name'
+    # ]
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return StateNames.objects.filter(state_name__istartswith = query).order_by('state_name')
