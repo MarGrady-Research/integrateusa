@@ -1,16 +1,18 @@
 import React from "react";
+import SegTable from "./SegTable";
 
 
-export default function Segregation ({segData, selectedname}) {
+export default function Segregation({SegData, title}) {
 
-    console.log(selectedname);
-
-    let currentname = selectedname
+    console.log(SegData);
 
     return (
         <>
         <div className="flex flex-row">
-            <span className="text-4xl"><b>{currentname}</b></span>
+            <span className="text-4xl"><b>{title}</b></span>
+        </div>
+        <div className="pt-3">
+            <SegTable SegData={SegData}/>
         </div>
         </>
     )

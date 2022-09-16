@@ -17,9 +17,9 @@ function Selection() {
   const [levels, setLevels] = useState(-1);
 
   const levelselect = [
-    {value: 0, label: "District", route: "api/districtnames/?search=", id: "dist_id", name: "dist_name"},
+    {value: 0, label: "District", route: "api/districtnames/?q=", id: "dist_id", name: "dist_name"},
     {value: 1, label: "County", route: "api/countynames/?q=", id: "county_id", name: "county_name"},
-    {value: 2, label: "State", route: "api/statenames/?search=", id: "state_abb", name: "state_name"}
+    {value: 2, label: "State", route: "api/statenames/?q=", id: "state_abb", name: "state_name"}
   ]
 
   // Setting baseURL based on level
@@ -129,9 +129,10 @@ function Selection() {
     let canceled = false
     {clicked != canceled &&
     getData();
-    setClicked(false);
-    setInput('')
+    setInput('');
+    console.log(data)
     }
+    setClicked(false);
   }, [clicked])
 
   useEffect( () => {
@@ -140,20 +141,23 @@ function Selection() {
 
 // Returning JSX
   return (
-    <div className='container mx-auto'>
-      <div className='flex flex-row ml-20 mt-10'>
-        <p className='text-3xl mt-100 mr-5'>Select a </p>
+    <div className='container mx-auto p-5'>
+      <div className='flex flex-row mx-auto mt-10'>
+        <p className='text-3xl'>Select a </p>
         <Select 
         options = {levelselect}
         placeholder = "Geographic Level"
         onChange= {e => {setLevels(e.value)}} 
         components={{IndicatorSeparator: () => null}}
+        className="px-2"
         />
+        <p  className='text-3xl mt-100'>:</p>
       </div>
-      <div className='relative flex flex-row ml-20 mt-5'>
+      <div className='relative flex flex-row mx-auto mt-5'>
       {levels > -1 &&
         <>
         <AsyncSelect 
+        name='idselect'
         cacheOptions
         defaultOptions
         onChange={nameandid} 
@@ -168,30 +172,29 @@ function Selection() {
         isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
         placeholder="Select a year"
         name='years'
-        className='ml-5'
+        className='px-2'
         />
         <Select 
         options={grades}
         onChange={e => setGrade(e.value)}
-
         placeholder="Select a grade"
         name='grades'
-        className='ml-5'
+        className='pr-6'
         />
-        <button onClick={() => setClicked(!clicked)} className='ml-5 bg-blue-500 p-2 rounded-md text-gray-50'>Search</button>
+        <button onClick={() => setClicked(!clicked)} className='bg-blue-500 px-4 rounded-md text-gray-50'>Search</button>
       </>
       }
       </div>
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath == '/info' && data.length > 0 &&
-      <div className='ml-20 mt-5'>
-      <Info InfoData={data} title = {title}/>
+      <div className='mx-auto mt-5'>
+      <Info InfoData={data} title={title}/>
       </div>
       }
       {/* Conditionally render the Segregation div once the data array has been returned */}
       {currentpath == '/segregation' && data.length >0 &&
-      <div className='ml-20 mt-5'>
-      <Segregation SegData={data} selectedname = {selectedname}/>
+      <div className='mx-auto mt-5'>
+      <Segregation SegData={data} title={title}/>
       </div>
       }
     </div>

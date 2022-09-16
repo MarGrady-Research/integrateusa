@@ -41,7 +41,7 @@ export default function PieChart ({InfoData}) {
         colorScale={["#FF5050", "#4472C4", "#FF9900", "#FFC000", "#339933"]}
         // standalone={true}
         width = {350}
-        height={250}
+        height={300}
         data={pieData}
         labels={() => null}
         // style={{width: '50%', height: "auto"}}

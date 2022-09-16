@@ -20,13 +20,14 @@ export default function Info({InfoData, title}) {
         return  arr.map(item => {
             return ({
                 group: item,
-                enr: enrSum(InfoData, item)
+                enr: enrSum(InfoData, item),
+                pct: Math.round(enrSum(InfoData, item)/enrSum(InfoData, "tot_enr")*100)
             })
         });
     }
 
     const enrGroups = enrData(groups)
-    const enrTotal = enrSum(InfoData, "tot_enr")
+    const enrTotal = enrSum(InfoData, "tot_enr") 
 
 
     const charterOptions = [
@@ -36,18 +37,18 @@ export default function Info({InfoData, title}) {
 
     return(
         <>
-        { InfoData.length > 0 &&
-        <div className="flex flex-row">
+        { InfoData.length > 0 && title &&
+        <div className="flex flex-row mx-auto">
             <span className="text-4xl"><b>{title}</b></span>
-            <Select 
+            {/* <Select 
             options={charterOptions}
             defaultInputValue = {"All Schools"}
-            className = 'ml-5'/>
+            className = 'ml-5'/> */}
         </div>
         }
         <div className="relative flex flex-row justify-evenly mt-5">
-            <p>There are {InfoData.length} Schools in {title}</p>
-            <RaceTable enrGroups={enrGroups} enrTotal={enrTotal}/>
+            <p>There {InfoData.length == 1 ? 'is 1 School' : `are ${InfoData.length} Schools`} in {title}</p>
+            <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} className="border-r-2 border-r-black"/>
             <PieChart InfoData={InfoData}/>
         </div>
         <div>
