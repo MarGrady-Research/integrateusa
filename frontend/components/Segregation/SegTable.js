@@ -20,38 +20,28 @@ export default function SegTable({SegData}) {
          })
      }
 
-     console.log(SegData);
-
-
     return(
         <>
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
                     <div className="overflow-x-auto"> 
                         <table className="min-w-full">
+
                             <thead className="border-b bg-gray-200">
                                 <tr>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">District Name</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">County Name</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Asian</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Black</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Hispanic</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% White</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Other</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Noramlized Exposure</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Normalized Exposure</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {tableRows(SegData)}
                             </tbody>
-                            
-                            {/* <tfoot className="border-b">
-                                <tr>
-                                    <td scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Total</td>
-                                    <td scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">{enrTotal}</td>
-                                    <td scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">100</td>
-                                </tr>
-                            </tfoot> */}
 
                         </table>
                     </div>
