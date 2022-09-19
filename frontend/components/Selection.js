@@ -123,14 +123,39 @@ function Selection() {
     };
 
 
+  // For segregation page, functon to get the comparison data
+
+  const [compData, setCompData] = useState([]);
+
+    const getCompData = async () => {
+
+      if(currentpath == '/segregation' && year != undefined && grade != undefined) {
+
+        const selectedlevel = () => {
+          if(levels == 0) {
+              return "district"
+          } 
+          if (levels == 1) {
+              return "county"
+          }
+          if (levels == 2) {
+              return "state"
+          }
+        }
+
+        const response = await axios.get("http://localhost:8000/api/" + selectedlevel() + "/?year=" + year + "&grade=" + grade);
+        setCompData(response.data);
+      }
+    }
+
   // useEffect wrapper for getData and setTitle to run after click
 
   useEffect( () => {
     let canceled = false
     {clicked != canceled &&
     getData();
+    getCompData();
     setInput('');
-    console.log(data)
     }
     setClicked(false);
   }, [clicked])
@@ -194,7 +219,7 @@ function Selection() {
       {/* Conditionally render the Segregation div once the data array has been returned */}
       {currentpath == '/segregation' && data.length >0 &&
       <div className='mx-auto mt-5'>
-      <Segregation SegData={data} title={title}/>
+      <Segregation SegData={data} compData={compData} title={title}/>
       </div>
       }
     </div>
