@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import SegTable from "./SegTable";
 import Slider from "./Slider";
 import Comparison from "./ComparisonTable";
-import axios from "axios";
+import LineGraph from "./Line";
 
-export default function Segregation({SegData, title, compData}) {
+export default function Segregation({SegData, id, grade, title, compData}) {
 
 
     return (
@@ -22,16 +22,18 @@ export default function Segregation({SegData, title, compData}) {
         </div>
 
         <div>
-            <span>Use the sliders below to select up to 10 comparison districts and see their changes in exposure over time</span>
+            <span>Use the sliders below to filter the data or search for specific districts. Select up to 10 comparison districts and see their changes in exposure over time</span>
         </div>
         
-        <div className="flex flex-row justify-evenly py-3">
+        {/* <div className="flex flex-row justify-evenly py-3">
             <Slider />
+        </div> */}
+
+        <div  className="pt-3">
+            <Comparison SegData={SegData} id={id} grade ={grade} compData={compData} itemsPerPage={10}/>
         </div>
 
-        <div  className="py-3">
-            <Comparison compData={compData} itemsPerPage={10}/>
-        </div>
+       
         
         </>
     )

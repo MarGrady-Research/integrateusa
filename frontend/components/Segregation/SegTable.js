@@ -9,6 +9,7 @@ export default function SegTable({SegData}) {
          return(
                  <tr key={e.dist_id} className="border-b">
                  <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e.dist_name}</td>
+                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.num_schools}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_as}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_bl}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_hi}</td>
@@ -30,6 +31,7 @@ export default function SegTable({SegData}) {
                             <thead className="border-b bg-gray-200">
                                 <tr>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">County Name</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"># Schools</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Asian</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Black</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Hispanic</th>

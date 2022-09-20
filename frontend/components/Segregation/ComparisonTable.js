@@ -1,18 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactPaginate from 'react-paginate';
+import LineGraph from "./Line";
 
-export default function Comparison({compData, itemsPerPage}) {
+export default function Comparison({SegData, id, grade, compData, itemsPerPage}) {
 
-    
+    // Filtering
+    // const [filters, setFilters] = useState({})
 
+    // const filteredRows = filterRows(rows, filters)
+
+
+
+    // Sorting
+    const [sortedField, setSortedField] = useState(null)
+
+    const sortCol = () => {compData.sort((a, b) => {
+            if (sortedField !== null) { 
+                if (a[sortedField] < b[sortedField]) {
+                    return -1;
+                }
+                if (a[sortedField] > b[sortedField]) {
+                    return 1;
+                }
+                return 0;
+            }
+        })
+    }
+
+    useEffect(() => {
+        sortCol();
+    }, [sortedField])
+
+    // Pagination
     const [currentItems, setCurrentItems] = useState(null);
     const [itemOffset, setItemOffset] = useState(0);
     const [pageCount, setPageCount] = useState(0);
 
     useEffect( () => {
+        // if(compData.length >0 ) {
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(compData.slice(itemOffset, endOffset));
         setPageCount(Math.ceil(compData.length/itemsPerPage));
+        // }
     }, [itemOffset, itemsPerPage, compData]);
 
 
@@ -21,9 +50,24 @@ export default function Comparison({compData, itemsPerPage}) {
         setItemOffset(newOffset);
     };
 
-    console.log(currentItems)
+    // function for capturing selected objects in table
+    const currentObj = useRef(null);
+    let selectedIds = [id];
 
+    const getID = (e) => {
+        currentObj.current = e
+        if (selectedIds.includes(currentObj.current)) {
+            let index = selectedIds.indexOf(currentObj.current);
+            selectedIds.splice(index, 1);
+            console.log(selectedIds)
+        } else {
+        selectedIds.push(currentObj.current);
+        console.log(selectedIds);
+        console.log(currentObj.current)
+        }
+    } 
 
+    // Returning table rows
     const tableRows = () => {
         if(currentItems) {
         return currentItems.map((e) => {
@@ -34,7 +78,7 @@ export default function Comparison({compData, itemsPerPage}) {
                     type="checkbox"
                     className="form-check-input"
                     id={e.dist_id}
-                    onClick={(e) => console.log(e.target.id)}
+                    onClick={(e) => getID(e.target.id)}
                     //   checked={this.state.MasterChecked}
                     
                     //   onChange={(e) => this.onMasterCheck(e)}
@@ -64,8 +108,8 @@ export default function Comparison({compData, itemsPerPage}) {
                             <thead className="border-b bg-gray-200">
                                 <tr>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"></th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">County Name</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"># Schools</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"><button type = "button" onClick = {() => setSortedField('dist_name')} >County Name</button></th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"><button type = "button" onClick = {() => setSortedField('num_schools')} ># Schools</button></th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Asian</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Black</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Hispanic</th>
@@ -76,6 +120,68 @@ export default function Comparison({compData, itemsPerPage}) {
                             </thead>
 
                             <tbody>
+                            <tr>
+                                    <td></td>
+                                    <td><input
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            key={1}
+                                            type="search"
+                                            placeholder={`Search District Name`}
+                                            // value={filters[column.accessor]}
+                                            // onChange={event => handleSearch(event.target.value, column.accessor)}
+                                        />
+                                    </td>
+                                    <td> <input
+
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                    <td> <input
+                                            max={100}
+                                            type="range"
+                                            className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                            // id={`${e}Range`}
+                                        />
+                                    </td>
+                                </tr>
                                 {tableRows(currentItems)}
                             </tbody>
 
@@ -99,6 +205,10 @@ export default function Comparison({compData, itemsPerPage}) {
                 pageClassName="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
                 previousClassName="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 focus:shadow-none"
                 />
+        
+        <div className="w-full">
+          <LineGraph selectedIds={selectedIds} grade={grade}/>
+        </div>
         </>
     );
 }

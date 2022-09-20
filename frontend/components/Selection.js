@@ -219,7 +219,7 @@ function Selection() {
       {/* Conditionally render the Segregation div once the data array has been returned */}
       {currentpath == '/segregation' && data.length >0 &&
       <div className='mx-auto mt-5'>
-      <Segregation SegData={data} compData={compData} title={title}/>
+      <Segregation SegData={data} id={id} grade={grade} compData={compData} title={title}/>
       </div>
       }
     </div>
