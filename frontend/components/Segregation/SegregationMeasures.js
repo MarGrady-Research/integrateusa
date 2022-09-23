@@ -30,7 +30,7 @@ export default function Segregation({SegData, id, grade, title, compData}) {
         </div> */}
 
         <div  className="pt-3">
-            <Comparison SegData={SegData} id={id} grade ={grade} compData={compData} itemsPerPage={10}/>
+            <Comparison SegData={SegData} id={id} grade ={grade} compData={compData}/>
         </div>
 
        
