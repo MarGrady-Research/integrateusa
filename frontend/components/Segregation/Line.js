@@ -8,9 +8,8 @@ export default function LineGraph ({linedata}) {
 
     
     const makeLines = () => { 
-        { linedata.length >0 &&
-        linedata.map((e) => {
-                console.log(e);
+        // { linedata.length >0 &&
+        // linedata.map((e) => {
                 return (
                     <VictoryLine 
                     style={{
@@ -18,13 +17,14 @@ export default function LineGraph ({linedata}) {
                         parent: { border: "1px solid #ccc"},
                         labels: {display: "none"}
                     }}
-                    data={e.data}
+                    data={linedata.data}
                     />
-            )}
+            // )}
         )}
-    }
+    // }
 
-    console.log(linedata[0].data)
+    // console.log(linedata[0].data)
+    console.log(linedata);
 
     useEffect(() => {
          makeLines();
@@ -34,11 +34,12 @@ export default function LineGraph ({linedata}) {
     return(
 
         <div>
-            <VictoryChart 
+            <VictoryChart
+            domain={{x: [2000, 2021], y: [0, 1]}} 
             width={1000}
             height={400}>
 
-            {/* {makeLines()} */}
+            {makeLines()}
 
             </VictoryChart>
         </div>

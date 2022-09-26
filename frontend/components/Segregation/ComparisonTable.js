@@ -69,7 +69,6 @@ export default function Comparison({SegData, id, grade, compData}) {
     // function for capturing selected objects in table
 
     const [lines, setLines] = useState([id])
-    // const linedata = []
     const [linedata, setLineData] = useState([])
 
     class Line {
@@ -92,7 +91,7 @@ export default function Comparison({SegData, id, grade, compData}) {
             })
 
         const templine = new Line(id, finaldata)  
-        linedata.push(templine)  
+        setLineData(templine)  
 
         }
 
@@ -110,11 +109,17 @@ export default function Comparison({SegData, id, grade, compData}) {
 
     const updateID = (e) => {
        updateLineState(e);
-       lines.map((e) => {
-        getLineData(e);
-       })
+    //    lines.map((e) => {
+    //     getLineData(e);
+    //    })
        console.log(linedata)
     }
+
+    useEffect(() => {
+        lines.map((e) => {
+            getLineData(e);
+        })
+    }, [lines])
 
 
 
@@ -155,16 +160,17 @@ export default function Comparison({SegData, id, grade, compData}) {
                                 return <td></td>
                             }
                             if (column.accessor == "dist_name") {
-                                return <td>
-                                <input
-                                    className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
-                                    key={`${column.accessor}-search`}
-                                    type="search"
-                                    value={filters[column.accessor]}
-                                    placeholder={`Search District Name`}
-                                    onChange={event => handleSearch(event.target.value, column.accessor)}
-                                />
-                            </td>
+                                return (
+                                <td>
+                                    <input
+                                        className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                        key={`${column.accessor}-search`}
+                                        type="search"
+                                        value={filters[column.accessor]}
+                                        placeholder={`Search District Name`}
+                                        onChange={event => handleSearch(event.target.value, column.accessor)}
+                                    />  
+                                </td>)
                             }
                             else {
                                 return <td> <Slider min={0} max ={100} /> 
@@ -221,9 +227,9 @@ export default function Comparison({SegData, id, grade, compData}) {
             setActivePage={setActivePage}
             />
         
-        <div className="w-full">
-          <LineGraph linedata ={linedata}/>
-        </div>
+            <div className="w-full">
+            <LineGraph linedata ={linedata}/>
+            </div>
         </>
     );
 }
