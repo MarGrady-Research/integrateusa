@@ -86,24 +86,19 @@ export default function BarChart({InfoData}) {
     return(
         <div className="w-full">
         <div>
-        {/* <Select 
-        options={sortOptions}
-        defaultValue={0}
-        onChange={e => setSort(e.value)}
-        /> */}
-        </div>
-        <div>
         <VictoryStack
-        width={800}
-        height={200}
-        containerComponent = {
-            <VictoryZoomContainer
-            responsive = {true}
-            zoomDimension = "x"
-            zoomDomain = {zoom.zoomDomain}
-            onZoomDomainChange = {handleZoom}
-            />
-            }>
+        width={500}
+        height={600}
+        horizontal={true}
+        // containerComponent = {
+        //     <VictoryZoomContainer
+        //     responsive = {true}
+        //     zoomDimension = "x"
+        //     zoomDomain = {zoom.zoomDomain}
+        //     onZoomDomainChange = {handleZoom}
+        //     />
+        //     }>
+        >
             {sorting()}
         </VictoryStack>
 
