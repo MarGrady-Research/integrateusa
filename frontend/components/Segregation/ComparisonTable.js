@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import LineGraph from "./Line";
 import Pagination from "./Pagination";
-import Slider from "./Slider";
+// import Slider from "./Slider";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
 import axios from "axios";
+import Slider, { Range } from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 export default function Comparison({SegData, id, grade, compData}) {
 
@@ -70,6 +72,9 @@ export default function Comparison({SegData, id, grade, compData}) {
 
     const [lines, setLines] = useState([id])
     const [linedata, setLineData] = useState([])
+    const array = []
+
+    console.log(lines);
 
     class Line {
         constructor(id, data) {
@@ -91,7 +96,7 @@ export default function Comparison({SegData, id, grade, compData}) {
             })
 
         const templine = new Line(id, finaldata)  
-        setLineData(templine)  
+        setLineData(prevarray => [...prevarray, templine])  
 
         }
 
@@ -173,12 +178,25 @@ export default function Comparison({SegData, id, grade, compData}) {
                                 </td>)
                             }
                             else {
-                                return <td> <Slider min={0} max ={100} /> 
-                                            <div className="flex flex-row justify-evenly">
-                                            <p className="text-xs justify-start">0</p>
-                                            <p className="text-xs justify-end">100</p>
-                                            </div>
-                                            </td>
+                                return <td>
+                                        <div className="px-4">
+                                       <Slider 
+                                       range
+                                       className="px-5"
+                                       min={0}
+                                       max={100}
+                                       pushable={10}
+                                       allowCross={false}
+                                       defaultValue={[10, 60]}
+                                       />
+                                       </div>
+                    
+                                       {/* <Slider min={0} max ={100} /> 
+                                       <div className="flex flex-row justify-evenly">
+                                       <p className="text-xs justify-start">0</p>
+                                       <p className="text-xs justify-end">100</p>
+                                       </div> */}
+                                       </td>
                             }
                         })}
                     </tr>
