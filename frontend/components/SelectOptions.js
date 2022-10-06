@@ -26,6 +26,7 @@
 
   // defining grade options
   const grades = [
+    {value: "All", label: "All"},
     {value: "PK", label: "PK"},
     {value: "KG", label: "KG"},
     {value: "01", label: "01"},
