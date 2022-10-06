@@ -1,9 +1,13 @@
 import React from "react";
-import BarChart from "./Bar";
-import PieChart from "./Pie";
+import PieChart from "./Pie2";
 import RaceTable from "./RaceTable";
+import InsetMap from "./InsetMap";
+import dynamic from "next/dynamic";
 import Select from "react-select";
-import { Data } from "victory";
+
+const BarChart2 = dynamic(() => import('./Bar2'), {
+    ssr: false
+})
 
 export default function Info({InfoData, title}) {
 
@@ -40,19 +44,19 @@ export default function Info({InfoData, title}) {
         { InfoData.length > 0 && title &&
         <div className="flex flex-row mx-auto">
             <span className="text-4xl"><b>{title}</b></span>
-            {/* <Select 
-            options={charterOptions}
-            defaultInputValue = {"All Schools"}
-            className = 'ml-5'/> */}
         </div>
         }
-        <div className="relative flex flex-row justify-evenly mt-5">
-            <p>There {InfoData.length == 1 ? 'is 1 School' : `are ${InfoData.length} Schools`} in {title}</p>
+        <div className="relative flex flex-row justify-between py-5">
+            <InsetMap />
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} className="border-r-2 border-r-black"/>
+            <div>
             <PieChart InfoData={InfoData}/>
+            </div>
         </div>
-        <div>
-            <BarChart InfoData={InfoData}/>
+        <div className="py-4">
+            <div className="h-100 w-100 overflow-auto">
+                <BarChart2 InfoData={InfoData} className="py-4 left-0 top-0 absolute"/>
+            </div>
         </div>
         </>
     )
