@@ -7,9 +7,9 @@ export default function RaceTable({enrGroups, enrTotal}) {
         return arr.map(e => {
          return(
                  <tr key={e.group} className="border-b">
-                 <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e.group.toUpperCase()}</td>
-                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr}</td>
-                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{Math.round((e.enr/enrTotal)*100)}</td>
+                 <td className="text-sm text-gray-900 font-light px-6 py-2 ">{e.group.toUpperCase()}</td>
+                 <td className="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">{e.enr}</td>
+                 <td className="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">{Math.round((e.enr/enrTotal)*100)}</td>
                  </tr> 
          )
          })
