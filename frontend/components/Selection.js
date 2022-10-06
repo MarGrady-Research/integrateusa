@@ -41,7 +41,7 @@ function Selection() {
 
   // async function returning a promise for name data
   const loadOptions = async () => {
-
+ 
       if (input.length == 0) {
         return null;
       }
@@ -176,7 +176,7 @@ function Selection() {
         components={{IndicatorSeparator: () => null}}
         className="px-2"
         />
-        <p  className='text-3xl mt-100'>:</p>
+        <p  className='text-3xl pr-5'>:</p>
       </div>
       <div className='relative flex flex-row mx-auto mt-5'>
       {levels > -1 &&
