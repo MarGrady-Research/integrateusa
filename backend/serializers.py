@@ -36,3 +36,8 @@ class StateNameSerializer(serializers.ModelSerializer):
         model = StateNames
         fields = '__all__'
 
+# class MapSchoolsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MapSchools,
+#         fields = '__all__'
+

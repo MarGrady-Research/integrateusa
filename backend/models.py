@@ -3,12 +3,13 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.contrib.postgres.search import SearchVector, SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+# from django.contrib.gis.db import models as gismodels
 
 
 class Schools(models.Model):
     school_key = models.TextField(primary_key=True)
     year = models.IntegerField()
-    grade = models.CharField(max_length = 2)
+    grade = models.TextField()
     nces_id = models.BigIntegerField()
     dist_id = models.IntegerField()
     county_id = models.IntegerField()
@@ -19,6 +20,11 @@ class Schools(models.Model):
     other = models.IntegerField(blank=True, null=True)
     white = models.IntegerField(blank=True, null=True)
     tot_enr = models.IntegerField(blank=True, null=True)
+    prop_as = models.FloatField()
+    prop_bl = models.FloatField()
+    prop_hi = models.FloatField()
+    prop_or = models.FloatField()
+    prop_wh = models.FloatField()
 
     class Meta:
         db_table = 'schools'
@@ -201,3 +207,21 @@ class StateSeg(models.Model):
 
     def __str__(self):
         return self.year, self.state_abb, self.grade
+
+
+
+# Geographic Data
+
+# class MapSchools(models.Model):
+#     year = models.FloatField()
+#     nces_id = models.TextField()
+#     prop_as = models.FloatField()
+#     prop_bl = models.FloatField()
+#     prop_hi = models.FloatField()
+#     prop_or = models.FloatField()
+#     prop_wh = models.FloatField()
+#     charter = models.FloatField()
+#     geometry = gismodels.PointField()
+
+#     class Meta:
+#         db_table = 'map_schools'

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'django.contrib.postgres'
+    'django.contrib.postgres',
+    # 'django.contrib.gis',
 ]
 
 MIDDLEWARE = [

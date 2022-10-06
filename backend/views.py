@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames
 from rest_framework import generics, filters
+from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
 from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer
@@ -72,12 +73,17 @@ class stateList(generics.ListAPIView):
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
     serializer_class = StateNameSerializer
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = [
-    #     '^state_abb',
-    #     '^state_name'
-    # ]
 
     def get_queryset(self):
         query = self.request.GET.get("q")
         return StateNames.objects.filter(state_name__istartswith = query).order_by('state_name')
+
+
+# Serialize GeoJSON data for Map view
+# class mapSchoolsList(generics.ListAPIView):
+#     queryset = serialize('geojson', MapSchools.objects.all(), geometry_field='geometry')
+
+#     # serializer_class = MapSchoolsSerializer
+#     filterset_fields = [
+#         'year',
+#     ] 

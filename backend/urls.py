@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/districtnames/', views.districtNameList.as_view()),
     path('api/county/', views.countyList.as_view()),
     path('api/countynames/', views.countyNameList.as_view()),
+    # path('api/mapschools/', views.mapSchoolsList.as_view())
 ]
