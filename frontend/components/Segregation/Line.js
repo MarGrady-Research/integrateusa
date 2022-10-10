@@ -1,34 +1,62 @@
 import React, { useRef, useState, useEffect } from "react";
-import { VictoryChart, VictoryLine, VictoryTheme } from "victory";
+import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, } from 'chart.js';
+import {Line} from 'react-chartjs-2';
 import axios from "axios";
-import { years } from "../SelectOptions";
+
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+)
 
 
 export default function LineGraph ({linedata}) {
 
-    const test = [
-        {x: 2001, y: .5},
-        {x: 2002, y: .6}
-    ]
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                min:0,
+                max: 1
+            }
+        }
+    }
+
+    const labels = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+                    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
     
     const makeLines = () => { 
         // { linedata.length >0 &&
-        // linedata.map((e) => {
+        return linedata.map((e) => {
                 return (
-                    <VictoryLine 
-                    style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"},
-                        labels: {display: "none"}
-                    }}
-                    data={linedata.data}
-                    />
-            // )}
-        )}
-    // }
+                    {
+                    label: e.name,
+                    data: e.data,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    }  
+                )     
+        })
+    }
 
-    // console.log(linedata[0].data)
-    console.log(linedata);
+    const data = {
+        labels,
+        datasets: 
+            makeLines()
+        
+    }
+
+    console.log(data.datasets)
 
     useEffect(() => {
          makeLines();
@@ -38,31 +66,7 @@ export default function LineGraph ({linedata}) {
     return(
 
         <div>
-            <VictoryChart
-            domain={{x: [2000, 2021], y: [0, 1]}} 
-            width={1000}
-            height={400}>
-{/* 
-            {makeLines()} */}
-             <VictoryLine 
-                    style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"},
-                        labels: {display: "none"}
-                    }}
-                    data={linedata.data}
-                    />
-                
-                <VictoryLine 
-                    style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"},
-                        labels: {display: "none"}
-                    }}
-                    data={test}
-                    />
-
-            </VictoryChart>
+           <Line options={options} data={data} />
         </div>
 
     )

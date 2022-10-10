@@ -70,15 +70,14 @@ export default function Comparison({SegData, id, grade, compData}) {
 
     // function for capturing selected objects in table
 
-    const [lines, setLines] = useState([id])
-    const [linedata, setLineData] = useState([])
-    const array = []
-
-    console.log(lines);
+    const [lines, setLines] = useState([id]);
+    const [linedata, setLineData] = useState([]);
+    let linearray = [];
 
     class Line {
-        constructor(id, data) {
+        constructor(id, dist_name, data) {
             this.id = id;
+            this.name = dist_name;
             this.data = data;
         }
     }
@@ -87,15 +86,13 @@ export default function Comparison({SegData, id, grade, compData}) {
         const response = await axios.get("http://localhost:8000/api/district/?grade=" + grade + "&dist_id=" + id);
         let data = response.data;
 
-        const finaldata = data.map((e) => {
-                return {
-                    x: e.year,
-                    y: e.norm_exp_aw,
-                    label: e.dist_id
-                }
-            })
+        const finaldata = data.map((e) => 
+                   e.norm_exp_aw,
+            )
 
-        const templine = new Line(id, finaldata)  
+        const name = data[0].dist_name
+      
+        const templine = new Line(id, name, finaldata)  
         setLineData(prevarray => [...prevarray, templine])  
 
         }
@@ -114,19 +111,16 @@ export default function Comparison({SegData, id, grade, compData}) {
 
     const updateID = (e) => {
        updateLineState(e);
-    //    lines.map((e) => {
-    //     getLineData(e);
-    //    })
-       console.log(linedata)
     }
 
     useEffect(() => {
-        lines.map((e) => {
+        setLineData([]);
+        lines.forEach((e) => {
             getLineData(e);
         })
     }, [lines])
 
-
+console.log(linedata);
 
     // Returning table JSX
     const tableRows = (colunns, compData) => {
