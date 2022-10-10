@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {Chart as ChartJS, LinearScale, BarElement, CategoryScale, Tooltip, Legend}  from 'chart.js'
-import {Bar} from 'react-chartjs-2';
+import {Bar, getElementsAtEvent} from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import Select from 'react-select'
 import { indexOf, toLower } from "lodash";
@@ -35,41 +35,47 @@ export default function BarChart2({InfoData}) {
             id: "prop_as",
             data: asianData,
             backgroundColor: "#FF5050",
-            order: 1
+            // order: 0
         },
         {
             label: 'Black',
             id: "prop_bl",
             data: blackData,
             backgroundColor: "#4472C4",
-            order: 0
+            // order: 1
         },
         {
             label: 'Hispanic',
             id: "prop_hi",
             data: hispanicData,
             backgroundColor: "#FF9900",
-            order: 2
+            // order: 2
         },
         {
             label: 'Other',
             id: "prop_or",
             data: otherData,
             backgroundColor: "#FFC000",
-            order: 3
+            // order: 3
         },
         {
             label: 'White',
             id: "prop_wh",
             data: whiteData,
             backgroundColor: "#339933",
-            order: 4
+            // order: 0
         }
     ]
  
-    // const [finalData, setFinalData] = useState(barData);
-
     const sortData = (group) => {
+
+        barData.forEach(el => {
+            if (el.id === group) {
+                el.order = 0
+            } else {
+                el.order = 1
+            }
+        })
 
         let newdata = InfoData;
         newdata.sort((a, b) => {return ((a[group]) - (b[group]))});
@@ -82,15 +88,22 @@ export default function BarChart2({InfoData}) {
         setOtherData(newdata.map(e => e.prop_or));
         setWhiteData(newdata.map(e => e.prop_wh));
 
-        let obj = barData.find(el => toLower(el.value) === group);
-        const pos = barData.map(e => toLower(e.value)).indexOf(group);
-        barData.splice(pos, 1);
-        barData.splice(0, 0, obj);
+        // let obj = barData.find(el => toLower(el.value) === group);
+        // const pos = barData.map(e => toLower(e.value)).indexOf(group);
+        // barData.splice(pos, 1);
+        // barData.splice(0, 0, obj);
 
-        // barData.forEach((el) => console.log(el));
         console.log(barData)
 
         } 
+
+
+    const chartRef = useRef();
+
+    const handleClick = (event) => {
+        const {current: chart} = chartRef;
+        console.log(getElementsAtEvent(chart, event));
+      }
 
     const sortOptions = [
         {value: "prop_as", label: "Asian"},
@@ -158,8 +171,10 @@ export default function BarChart2({InfoData}) {
         onChange={e => sortData(e.value)}
         />
         <Bar  
+        ref={chartRef}
         data={data}
-        options={options}/>
+        options={options}
+        onClick={handleClick}/>
         </>
     )
 
