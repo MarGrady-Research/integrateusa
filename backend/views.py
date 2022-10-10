@@ -81,9 +81,9 @@ class stateNameList(generics.ListAPIView):
 
 # Serialize GeoJSON data for Map view
 # class mapSchoolsList(generics.ListAPIView):
-#     queryset = serialize('geojson', MapSchools.objects.all(), geometry_field='geometry')
+#     queryset = serialize('geojson', MapSchools.objects.using('map'), geometry_field='geometry')
 
-#     # serializer_class = MapSchoolsSerializer
-#     filterset_fields = [
-#         'year',
-#     ] 
+    # serializer_class = MapSchoolsSerializer
+    # filterset_fields = [ 
+    #     'year',
+    # ] 

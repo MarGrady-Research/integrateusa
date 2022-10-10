@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'django.contrib.postgres',
-    # 'django.contrib.gis',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +92,15 @@ DATABASES = {
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': os.environ.get('POSTGRES_HOST'),
         'PORT': 5432
-    }
+    }, 
+    'map': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': 5432
+    },
 }
 
 
