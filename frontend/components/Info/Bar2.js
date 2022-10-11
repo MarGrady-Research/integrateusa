@@ -29,41 +29,47 @@ export default function BarChart2({InfoData}) {
     const [otherData, setOtherData] = useState(bar(InfoData, "prop_or"));
     const [whiteData, setWhiteData] = useState(bar(InfoData, "prop_wh"));
 
+    const [asianOrder, setAsianOrder] = useState(0);
+    const [blackOrder, setBlackOrder] = useState(1);
+    const [hispanicOrder, setHispanicOrder] = useState(1);
+    const [otherOrder, setOtherOrder] = useState(1);
+    const [whiteOrder, setWhiteOrder] = useState(1);
+
     const barData = [
         {
             label: 'Asian',
             id: "prop_as",
             data: asianData,
             backgroundColor: "#FF5050",
-            // order: 0
+            order: asianOrder
         },
         {
             label: 'Black',
             id: "prop_bl",
             data: blackData,
             backgroundColor: "#4472C4",
-            // order: 1
+            order: blackOrder
         },
         {
             label: 'Hispanic',
             id: "prop_hi",
             data: hispanicData,
             backgroundColor: "#FF9900",
-            // order: 2
+            order: hispanicOrder
         },
         {
             label: 'Other',
             id: "prop_or",
             data: otherData,
             backgroundColor: "#FFC000",
-            // order: 3
+            order: otherOrder
         },
         {
             label: 'White',
             id: "prop_wh",
             data: whiteData,
             backgroundColor: "#339933",
-            // order: 0
+            order: whiteOrder
         }
     ]
  
@@ -87,6 +93,12 @@ export default function BarChart2({InfoData}) {
         setHispanicData(newdata.map(e => e.prop_hi));
         setOtherData(newdata.map(e => e.prop_or));
         setWhiteData(newdata.map(e => e.prop_wh));
+
+        group === 'prop_as' ? setAsianOrder(0) : setAsianOrder(1)
+        group === 'prop_bl' ? setBlackOrder(0) : setBlackOrder(1)
+        group === 'prop_hi' ? setHispanicOrder(0) : setHispanicOrder(1)
+        group === 'prop_or' ? setOtherOrder(0) : setOtherOrder(1)
+        group === 'prop_wh' ? setWhiteOrder(0) : setWhiteOrder(1)
 
         // let obj = barData.find(el => toLower(el.value) === group);
         // const pos = barData.map(e => toLower(e.value)).indexOf(group);
