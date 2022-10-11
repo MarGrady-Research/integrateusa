@@ -75,14 +75,6 @@ export default function BarChart2({InfoData}) {
  
     const sortData = (group) => {
 
-        barData.forEach(el => {
-            if (el.id === group) {
-                el.order = 0
-            } else {
-                el.order = 1
-            }
-        })
-
         let newdata = InfoData;
         newdata.sort((a, b) => {return ((a[group]) - (b[group]))});
 
@@ -99,13 +91,6 @@ export default function BarChart2({InfoData}) {
         group === 'prop_hi' ? setHispanicOrder(0) : setHispanicOrder(1)
         group === 'prop_or' ? setOtherOrder(0) : setOtherOrder(1)
         group === 'prop_wh' ? setWhiteOrder(0) : setWhiteOrder(1)
-
-        // let obj = barData.find(el => toLower(el.value) === group);
-        // const pos = barData.map(e => toLower(e.value)).indexOf(group);
-        // barData.splice(pos, 1);
-        // barData.splice(0, 0, obj);
-
-        console.log(barData)
 
         } 
 
