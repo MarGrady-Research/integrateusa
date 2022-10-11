@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import LineGraph from "./Line";
 import Pagination from "./Pagination";
-// import Slider from "./Slider";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
 import axios from "axios";
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-export default function Comparison({SegData, id, grade, compData}) {
+export default function Comparison({id, grade, filteredData}) {
 
     // Setting columns array
     const columns = [
@@ -56,7 +55,7 @@ export default function Comparison({SegData, id, grade, compData}) {
     }
 
     // Filter then sort, then paginate
-    const filteredRows = useMemo(() => filterRows(compData, filters), [compData, filters])
+    const filteredRows = useMemo(() => filterRows(filteredData, filters), [filteredData, filters])
     const sortedRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
 
     // Pagination
@@ -68,11 +67,9 @@ export default function Comparison({SegData, id, grade, compData}) {
     const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage)
 
 
-    // function for capturing selected objects in table
-
+    // Beginning of Line Data section
     const [lines, setLines] = useState([id]);
     const [linedata, setLineData] = useState([]);
-    let linearray = [];
 
     class Line {
         constructor(id, dist_name, data) {
@@ -109,6 +106,8 @@ export default function Comparison({SegData, id, grade, compData}) {
         }
     }
 
+    console.log(id)
+
     const updateID = (e) => {
        updateLineState(e);
     }
@@ -120,10 +119,8 @@ export default function Comparison({SegData, id, grade, compData}) {
         })
     }, [lines])
 
-console.log(linedata);
-
     // Returning table JSX
-    const tableRows = (colunns, compData) => {
+    const tableRows = (columns, filteredData) => {
         return(
 
             <table className="min-w-full">
@@ -220,7 +217,7 @@ console.log(linedata);
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
                     <div className="overflow-x-auto"> 
-                        {tableRows(columns, compData)}
+                        {tableRows(columns, filteredData)}
                     </div>
                 </div>
              </div>

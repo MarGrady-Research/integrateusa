@@ -1,10 +1,9 @@
 import React from "react";
 
 
-export default function SegTable({SegData}) {
+export default function SegTable({district}) {
 
-    const tableRows = (arr) => {
-        return arr.map(e => {
+    const tableRows = (e) => {
          return(
                  <tr key={e.dist_id} className="border-b">
                  <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e.dist_name}</td>
@@ -17,7 +16,6 @@ export default function SegTable({SegData}) {
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.norm_exp_aw}</td>
                  </tr> 
          )
-         })
      }
 
     return(
@@ -41,7 +39,7 @@ export default function SegTable({SegData}) {
                             </thead>
 
                             <tbody>
-                                {tableRows(SegData)}
+                                {tableRows(district)}
                             </tbody>
 
                         </table>
