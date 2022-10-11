@@ -184,12 +184,6 @@ console.log(linedata);
                                        defaultValue={[10, 60]}
                                        />
                                        </div>
-                    
-                                       {/* <Slider min={0} max ={100} /> 
-                                       <div className="flex flex-row justify-evenly">
-                                       <p className="text-xs justify-start">0</p>
-                                       <p className="text-xs justify-end">100</p>
-                                       </div> */}
                                        </td>
                             }
                         })}
