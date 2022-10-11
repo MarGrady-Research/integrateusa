@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import {useRouter} from 'next/router';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
-import axios from 'axios';
 import {years, grades} from './SelectOptions';
 import Info from './Info/InfoTrends';
-import {useRouter} from 'next/router';
 import Segregation from './Segregation/SegregationMeasures';
+import Trends from './Trends/trendpage';
 
-function Selection() {
+export default function Selection() {
 
   // adding in NextJS router for conditionally rendering different pages in return statement
   const router = useRouter()
@@ -70,36 +71,39 @@ function Selection() {
       return Options;
   }
   
-  // Defining ID, year and grade state
-
+  // Defining ID state
   const [id, setID] = useState()
 
+  // Defining grade state
   const [grade, setGrade] = useState()
 
+  // Defining year state 
   const [year, setYear] = useState() 
 
-  // State to hold selected name from dropdown 
+  // Set year and grade on pages that are not the info page
+  useEffect(() => {
+    currentpath !== '/info' && setYear(2021)
+  }, [])
 
+  // Defining state to hold selected name from dropdown 
   const [selectedname, setSelectedName] = useState(); 
 
   //  function to set both ID and name on change
-  
   const nameandid = e => {
     setID(e.value)
     setSelectedName(e.label)
   };
 
-  // Initializing click, data and title state variables
-
+  // Initializing click and title state variables
   const [clicked, setClicked] = useState(false);
-
-  const [data, setData] = useState([]);
 
   const [title, setTitle] = useState();
 
-  // getData function to run on click of search button
+  // For info page, state to hold data 
+  const [infoData, setInfoData] = useState([]);
 
-  const getData = async () => {
+  // For info page, function to get school data
+  const getInfoData = async () => {
 
     if (year != undefined && grade != undefined && id != undefined) {
 
@@ -118,51 +122,84 @@ function Selection() {
       }
 
         const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
-        setData(response.data);
+        setInfoData(response.data);
       }
     };
 
+  
+  // For trends page, state to hold data
+  const [trendData, setTrendData] = useState([]);
 
-  // For segregation page, functon to get the comparison data
+  // For trends page, function to get data
+  const getTrendData = async () => {
 
-  const [compData, setCompData] = useState([]);
+    if (year != undefined && grade != undefined && id != undefined) {
 
-    const getCompData = async () => {
-
-      if(currentpath == '/segregation' && year != undefined && grade != undefined) {
-
-        const selectedlevel = () => {
-          if(levels == 0) {
-              return "district"
-          } 
-          if (levels == 1) {
-              return "county"
-          }
-          if (levels == 2) {
-              return "state"
-          }
-        }
-
-        const response = await axios.get("http://localhost:8000/api/" + selectedlevel() + "/?year=" + year + "&grade=" + grade);
-        setCompData(response.data);
+      let idlevel = '';
+      let table = '';
+      
+      if (levels === 0) {
+        idlevel = "dist_id";
+        table = (currentpath == '/segregation' ? 'district' : 'schools');
+      } else if (levels === 1) {
+        idlevel = "county_id";
+        table = (currentpath == '/segregation' ? 'county' : 'schools');
+      } else if (levels === 2) {
+        idlevel = "state_abb";
+        table = (currentpath == '/segregation' ? 'state' : 'schools');
       }
+
+        const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+        setTrendData(response.data);
+      }
+    };
+
+  // For trends page, state to hold data
+  const [segData, setSegData] = useState([]);
+
+  // For segregation page, function to get the comparison data
+  const getSegData = async () => {
+
+    if (currentpath == '/segregation' && year != undefined && grade != undefined) {
+
+      const selectedlevel = () => {
+        if(levels == 0) {
+            return "district"
+        } 
+        if (levels == 1) {
+            return "county"
+        }
+        if (levels == 2) {
+            return "state"
+        }
+      }
+
+      const response = await axios.get("http://localhost:8000/api/" + selectedlevel() + "/?year=" + year + "&grade=" + grade);
+      setSegData(response.data);
+      console.log(segData)
     }
+  }
 
-  // useEffect wrapper for getData and setTitle to run after click
-
+  // useEffect wrapper for getData functions on different pages 
   useEffect( () => {
     let canceled = false
-    {clicked != canceled &&
-    getData();
-    getCompData();
-    setInput('');
+    if (clicked != canceled) {
+      if (currentpath === '/info') {
+        getInfoData();
+      } else if (currentpath === '/trends') {
+        getTrendData();
+      } else if (currentpath === '/segregation') { 
+        getSegData();
+      }
+      setInput('');
     }
     setClicked(false);
   }, [clicked])
 
+  // useEffect wrapper for setTitle to run after click
   useEffect( () => {
     setTitle(selectedname);
-  }, [data])
+  }, [segData, infoData])
 
 // Returning JSX
   return (
@@ -191,14 +228,16 @@ function Selection() {
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
         placeholder= {"Type a " + levelselect[levels].label + " name"}
         /> 
-        <Select 
-        options={years}
-        onChange={e => setYear(e.value)}
-        isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
-        placeholder="Select a year"
-        name='years'
-        className='px-2'
-        />
+        {currentpath === '/info' &&
+          <Select 
+          options={years}
+          onChange={e => setYear(e.value)}
+          isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
+          placeholder="Select a year"
+          name='years'
+          className='px-2'
+          />
+        }
         <Select 
         options={grades}
         onChange={e => setGrade(e.value)}
@@ -215,19 +254,23 @@ function Selection() {
       }
       </div>
       {/* Conditionally render the Info div once the data array has been returned */}
-      {currentpath == '/info' && data.length > 0 &&
+      {currentpath == '/info' && infoData.length > 0 &&
       <div className='mx-auto mt-5'>
-      <Info InfoData={data} title={title}/>
+      <Info InfoData={infoData} title={title}/>
+      </div>
+      }
+      {/* Conditionally render the Trends div once the data array has been returned */}
+      {currentpath == '/trends' && trendData.length >0 &&
+      <div className='mx-auto mt-5'>
+      <Trends TrendData={trendData} id={id} title={title}/>
       </div>
       }
       {/* Conditionally render the Segregation div once the data array has been returned */}
-      {currentpath == '/segregation' && data.length >0 &&
+      {currentpath == '/segregation' && segData.length >0 &&
       <div className='mx-auto mt-5'>
-      <Segregation SegData={data} id={id} grade={grade} compData={compData} title={title}/>
+      <Segregation SegData={segData} id={id} grade={grade} title={title}/>
       </div>
       }
     </div>
   );
 };
-
-export default Selection
