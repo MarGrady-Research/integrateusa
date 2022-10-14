@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames
+from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames, DistrictTrends, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer
+from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
+# Schools view 
 
 class schoolList(generics.ListAPIView):
     queryset = Schools.objects.all()
@@ -19,56 +20,24 @@ class schoolList(generics.ListAPIView):
         'nces_id',
     ]
 
-class districtList(generics.ListAPIView):
-    queryset = DistSeg.objects.all()
-    serializer_class = DistrictSerializer
-    filterset_fields = [
-        'year',
-        'grade',
-        'dist_id',
-    ]
+
+# Names Views
 
 class districtNameList(generics.ListAPIView):
     queryset = DistNames.objects.all()
     serializer_class = DistNameSerializer
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = [
-    #     '^dist_id',
-    #     '^dist_name'
-    # ]
 
     def get_queryset(self):
         query = self.request.GET.get("q")
         return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.2).filter(dist_name__istartswith = query).order_by('-similarity')
 
-class countyList(generics.ListAPIView):
-    queryset = CountySegSchools.objects.all()
-    serializer_class = CountySchoolsSerializer
-    filterset_fields = [
-        'year',
-        'grade',
-        'county_id',
-    ]
-
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
     serializer_class = CountyNameSerializer
-    # context_object_name = "county_name"
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        # search_vector = search.SearchVector('county_name')
-        # search_query = search.SearchQuery(query) #+ ':*', search_type='raw')
         return CountyNames.objects.annotate(similarity = search.TrigramSimilarity('county_name', query)).filter(county_name__istartswith = query).order_by('-similarity')
-
-class stateList(generics.ListAPIView):
-    queryset = StateSeg.objects.all()
-    serializer_class = StateSerializer
-    filterset_fields = [
-        'year',
-        'grade',
-        'state_abb',
-    ]
 
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
@@ -79,11 +48,59 @@ class stateNameList(generics.ListAPIView):
         return StateNames.objects.filter(state_name__istartswith = query).order_by('state_name')
 
 
-# Serialize GeoJSON data for Map view
-# class mapSchoolsList(generics.ListAPIView):
-#     queryset = serialize('geojson', MapSchools.objects.using('map'), geometry_field='geometry')
+# Trends Views
 
-    # serializer_class = MapSchoolsSerializer
-    # filterset_fields = [ 
-    #     'year',
-    # ] 
+class districtTrendsList(generics.ListAPIView):
+    queryset = DistrictTrends.objects.all()
+    serializer_class = DistrictTrendSerializer
+    filterset_fields = ['dist_id']
+
+class countyTrendsList(generics.ListAPIView):
+    queryset = CountyTrends.objects.all()
+    serializer_class = CountyTrendSerializer
+    filterset_fields = ['county_id']
+
+class stateTrendsList(generics.ListAPIView):
+    queryset = StateTrends.objects.all()
+    serializer_class = StateTrendSerializer
+    filterset_fields = ['state_abb']
+
+
+# Segregation Views
+
+class districtList(generics.ListAPIView):
+    queryset = DistSeg.objects.all()
+    serializer_class = DistrictSerializer
+    filterset_fields = [
+        'year',
+        'grade',
+        'dist_id',
+    ]
+
+class countyList(generics.ListAPIView):
+    queryset = CountySegSchools.objects.all()
+    serializer_class = CountySchoolsSerializer
+    filterset_fields = [
+        'year',
+        'grade',
+        'county_id',
+    ]
+
+class stateList(generics.ListAPIView):
+    queryset = StateSeg.objects.all()
+    serializer_class = StateSerializer
+    filterset_fields = [
+        'year',
+        'grade',
+        'state_abb',
+    ]
+
+
+# Serialize GeoJSON data for Map view
+class mapSchoolsList(generics.ListAPIView):
+    queryset = serialize('geojson', MapSchools.objects.using('map'), geometry_field='geometry')
+
+    serializer_class = MapSchoolsSerializer
+    filterset_fields = [ 
+        'year',
+    ]    

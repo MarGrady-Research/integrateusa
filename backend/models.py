@@ -6,6 +6,8 @@ from django.contrib.postgres.indexes import GinIndex
 from django.contrib.gis.db import models as gismodels
 
 
+# School Models
+
 class Schools(models.Model):
     school_key = models.TextField(primary_key=True)
     year = models.IntegerField()
@@ -20,11 +22,11 @@ class Schools(models.Model):
     other = models.IntegerField(blank=True, null=True)
     white = models.IntegerField(blank=True, null=True)
     tot_enr = models.IntegerField(blank=True, null=True)
-    prop_as = models.FloatField()
-    prop_bl = models.FloatField()
-    prop_hi = models.FloatField()
-    prop_or = models.FloatField()
-    prop_wh = models.FloatField()
+    prop_as = models.FloatField(null=True)
+    prop_bl = models.FloatField(null=True)
+    prop_hi = models.FloatField(null=True)
+    prop_or = models.FloatField(null=True)
+    prop_wh = models.FloatField(null=True)
 
     class Meta:
         db_table = 'schools'
@@ -36,6 +38,8 @@ class Schools(models.Model):
             models.Index(fields=['state_abb'], name='state_idx')
         ]
 
+# Name Models
+
 class CountyNames(models.Model):
     county_id = models.IntegerField(primary_key=True)
     county_name = models.TextField()
@@ -45,6 +49,74 @@ class CountyNames(models.Model):
         db_table = 'county_names'
         indexes = [GinIndex(fields=['vector_col'], name='county_name_idx')]
 
+class DistNames(models.Model):
+    dist_id = models.IntegerField(primary_key=True)
+    dist_name = models.TextField()
+
+    class Meta:
+        db_table = 'district_names'
+
+    def __str__(self):
+        return self.dist_name," (", self.dist_id, ")"
+
+class StateNames(models.Model):
+    state_abb = models.CharField(max_length = 2, primary_key=True)
+    fips = models.IntegerField(blank=True, null=True)
+    state_name = models.TextField()
+
+    class Meta:
+        db_table = 'state_names'
+
+    def __str__(self):
+        self.state_abb
+
+
+# Trend Models
+
+class DistrictTrends(models.Model):
+    dist_key = models.TextField(primary_key=True)
+    year = models.IntegerField()
+    dist_id = models.IntegerField()
+    dist_name = models.TextField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+
+    class Meta:
+        db_table = 'dist_trends'
+
+class CountyTrends(models.Model):
+    county_key = models.TextField(primary_key=True)
+    year = models.IntegerField()
+    county_id = models.IntegerField()
+    county_name = models.TextField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+
+    class Meta:
+        db_table = 'county_trends'
+
+
+class StateTrends(models.Model):
+    state_key = models.TextField(primary_key=True)
+    year = models.IntegerField()
+    state_abb = models.CharField(max_length=2)
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+
+    class Meta:
+        db_table = 'state_trends'
+
+
+# Segregation Models
 
 class CountySegSchools(models.Model):
     county_key = models.TextField(primary_key=True)
@@ -103,17 +175,6 @@ class DistDirectory(models.Model):
         return self.dist_id, " (", self.year, ")"
 
 
-class DistNames(models.Model):
-    dist_id = models.IntegerField(primary_key=True)
-    dist_name = models.TextField()
-
-    class Meta:
-        db_table = 'district_names'
-
-    def __str__(self):
-        return self.dist_name," (", self.dist_id, ")"
-
-
 class DistSeg(models.Model):
     dist_key = models.TextField(primary_key=True)
     year = models.IntegerField()
@@ -154,18 +215,6 @@ class DistSeg(models.Model):
 
     def __str__(self):
         return self.year, self.dist_id, self.grade
-
-
-class StateNames(models.Model):
-    state_abb = models.CharField(max_length = 2, primary_key=True)
-    fips = models.IntegerField(blank=True, null=True)
-    state_name = models.TextField()
-
-    class Meta:
-        db_table = 'state_names'
-
-    def __str__(self):
-        self.state_abb
 
 
 class StateSeg(models.Model):
@@ -212,16 +261,16 @@ class StateSeg(models.Model):
 
 # Geographic Data
 
-# class MapSchools(models.Model):
-#     year = models.FloatField()
-#     nces_id = models.TextField()
-#     prop_as = models.FloatField()
-#     prop_bl = models.FloatField()
-#     prop_hi = models.FloatField()
-#     prop_or = models.FloatField()
-#     prop_wh = models.FloatField()
-#     charter = models.FloatField()
-#     geometry = gismodels.PointField()
+class MapSchools(models.Model):
+    year = models.FloatField()
+    nces_id = models.TextField()
+    prop_as = models.FloatField()
+    prop_bl = models.FloatField()
+    prop_hi = models.FloatField()
+    prop_or = models.FloatField()
+    prop_wh = models.FloatField()
+    charter = models.FloatField()
+    geometry = gismodels.PointField()
 
-#     class Meta:
-#         db_table = 'map_schools'
+    class Meta:
+        db_table = 'map_schools' 
