@@ -16,7 +16,69 @@ ChartJS.register(
 
 export default function AreaChart({TrendData}) {
 
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                stacked: true
+            }
+        }
+    };
 
+    const labels = TrendData.map(e=>e.year)
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                fill: true,
+                label: 'Asian',
+                data: TrendData.map(e => e.asian),
+                borderColor: "#FF5050",
+                backgroundColor: "#FF5050",
+            },
+            {
+                fill: true,
+                label: 'Black',
+                data: TrendData.map(e => e.black),
+                borderColor: "#4472C4",
+                backgroundColor: "#4472C4",
+            },
+            {
+                fill: true,
+                label: 'Hispanic',
+                data: TrendData.map(e => e.hispanic),
+                borderColor: "#FF9900",
+                backgroundColor: "#FF9900",
+            },
+            {
+                fill: true,
+                label: 'Other',
+                data: TrendData.map(e => e.other),
+                borderColor: "#FFC000",
+                backgroundColor: "#FFC000",
+            },
+            {
+                fill: true,
+                label: 'White',
+                data: TrendData.map(e => e.white),
+                borderColor: "#339933",
+                backgroundColor: "#339933",
+            },
+            
+        ]
+    }
+
+    return(
+
+        <Line options={options} data={data}/>
+
+    )
 
 
 }
