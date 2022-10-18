@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import {Chart as ChartJS, LinearScale, BarElement, CategoryScale, Tooltip, Legend}  from 'chart.js'
 import {Bar, getElementsAtEvent} from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import Select from 'react-select'
-import { indexOf, toLower } from "lodash";
+import Select from 'react-select';
+// import { indexOf, toLower } from "lodash";
 
 ChartJS.register(
     LinearScale,
@@ -21,7 +21,7 @@ export default function BarChart2({InfoData}) {
         return data.map(e => (e[group]))
         }
 
-    const [labels, setLabels] = useState(InfoData.map(e => e.nces_id))
+    const [labels, setLabels] = useState(InfoData.map(e => e.sch_name))
 
     const [asianData, setAsianData] = useState(bar(InfoData, "prop_as"));
     const [blackData, setBlackData] = useState(bar(InfoData, "prop_bl"));
@@ -78,7 +78,7 @@ export default function BarChart2({InfoData}) {
         let newdata = InfoData;
         newdata.sort((a, b) => {return ((a[group]) - (b[group]))});
 
-        setLabels(newdata.map(e => e.nces_id))
+        setLabels(newdata.map(e => e.sch_name))
 
         setAsianData(newdata.map(e => e.prop_as));
         setBlackData(newdata.map(e => e.prop_bl));
