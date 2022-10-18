@@ -13,6 +13,7 @@ class Schools(models.Model):
     year = models.IntegerField()
     grade = models.TextField()
     nces_id = models.BigIntegerField()
+    sch_name = models.TextField()
     dist_id = models.IntegerField()
     county_id = models.IntegerField()
     state_abb = models.CharField(max_length = 2)
@@ -261,16 +262,8 @@ class StateSeg(models.Model):
 
 # Geographic Data
 
-class MapSchools(models.Model):
-    year = models.FloatField()
-    nces_id = models.TextField()
-    prop_as = models.FloatField()
-    prop_bl = models.FloatField()
-    prop_hi = models.FloatField()
-    prop_or = models.FloatField()
-    prop_wh = models.FloatField()
-    charter = models.FloatField()
-    geometry = gismodels.PointField()
+# class MapSchools(models.Model):
+#     map_data = models.TextField(primary_key=True)
 
-    class Meta:
-        db_table = 'map_schools' 
+#     class Meta:
+#         db_table = 'map_schools' 
