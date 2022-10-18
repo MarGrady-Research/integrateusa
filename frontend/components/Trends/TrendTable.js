@@ -45,23 +45,23 @@ export default function TrendTable({TrendData}) {
             <tbody>
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Asian</td>
-                    {data.map(e => {return (<td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.asian}</td>)})}
+                    {data.map(e => {return (<td key = 'asian' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.asian}</td>)})}
                 </tr>
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Black</td>
-                    {data.map(e => {return (<td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.black}</td>)})}
+                    {data.map(e => {return (<td key = 'black' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.black}</td>)})}
                 </tr>
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Hispanic</td>
-                    {data.map(e => {return (<td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.hispanic}</td>)})}
+                    {data.map(e => {return (<td key = 'hispanic' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.hispanic}</td>)})}
                 </tr>
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Other</td>
-                    {data.map(e => {return (<td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.other}</td>)})}
+                    {data.map(e => {return (<td key = 'other' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.other}</td>)})}
                 </tr>
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">White</td>
-                    {data.map(e => {return (<td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.white}</td>)})}
+                    {data.map(e => {return (<td key = 'white' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.white}</td>)})}
                 </tr>
             </tbody>
             </>
