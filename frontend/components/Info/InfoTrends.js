@@ -1,11 +1,11 @@
 import React from "react";
-import PieChart from "./Pie2";
+import PieChart from "./Pie";
 import RaceTable from "./RaceTable";
 import InsetMap from "./InsetMap";
 import dynamic from "next/dynamic";
 import Select from "react-select";
 
-const BarChart2 = dynamic(() => import('./Bar2'), {
+const BarChart2 = dynamic(() => import('./Bar'), {
     ssr: false
 })
 
