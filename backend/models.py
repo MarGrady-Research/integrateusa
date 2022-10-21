@@ -13,7 +13,7 @@ class Schools(models.Model):
     year = models.IntegerField()
     grade = models.TextField()
     nces_id = models.BigIntegerField()
-    sch_name = models.TextField()
+    sch_name = models.TextField(null=True)
     dist_id = models.IntegerField()
     county_id = models.IntegerField()
     state_abb = models.CharField(max_length = 2)
@@ -262,8 +262,8 @@ class StateSeg(models.Model):
 
 # Geographic Data
 
-# class MapSchools(models.Model):
-#     map_data = models.TextField(primary_key=True)
+class MapSchools(models.Model):
+    map_data = models.JSONField(primary_key=True)
 
-#     class Meta:
-#         db_table = 'map_schools' 
+    class Meta:
+        db_table = 'map_schools' 

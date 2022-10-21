@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames, DistrictTrends, CountyTrends, StateTrends#, MapSchools
+from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames, DistrictTrends, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, CountyTrendSerializer, StateTrendSerializer#, MapSchoolsSerializer
+from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
@@ -97,13 +97,10 @@ class stateList(generics.ListAPIView):
 
 
 # Serialize GeoJSON data for Map view
-# class mapSchoolsList(generics.ListAPIView):
-#     queryset = MapSchools.objects.all()
-#     serializer_class = MapSchoolsSerializer
+class mapSchoolsList(generics.ListAPIView):
+    queryset = MapSchools.objects.all()
+    serializer_class = MapSchoolsSerializer
 
-    # def get_queryset(self):
-    #     query = self.request.GET.get("q")
-    #     return MapSchools.objects.filter(map_data__properties__year = query)
-#     filterset_fields = [ 
-#         'year',
-#     ]    
+    def get_queryset(self):
+        # query = self.request.GET.get("q")
+        return MapSchools.objects.filter(map_data__properties__year = 2021) 
