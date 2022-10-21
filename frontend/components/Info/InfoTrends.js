@@ -9,7 +9,7 @@ const BarChart2 = dynamic(() => import('./Bar'), {
     ssr: false
 })
 
-export default function Info({InfoData, title}) {
+export default function Info({InfoData, title, id}) {
 
 
     const groups = ["asian", "black", "hispanic", "other", "white"]
@@ -47,7 +47,7 @@ export default function Info({InfoData, title}) {
         </div>
         }
         <div className="relative flex flex-row justify-between py-5">
-            <InsetMap />
+            <InsetMap id={id}/>
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} className="border-r-2 border-r-black"/>
             <div>
             <PieChart InfoData={InfoData}/>
