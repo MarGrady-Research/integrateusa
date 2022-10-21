@@ -259,7 +259,7 @@ export default function Selection() {
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath == '/info' && infoData.length > 0 &&
       <div className='mx-auto mt-5'>
-      <Info InfoData={infoData} title={title}/>
+      <Info InfoData={infoData} title={title} id={id}/>
       </div>
       }
       {/* Conditionally render the Trends div once the data array has been returned */}
