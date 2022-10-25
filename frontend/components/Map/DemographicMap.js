@@ -17,6 +17,18 @@ export default function DemographicMap() {
         getData();
     }, [])
 
+    const boundaryLayer = {
+        id: 'boundary',
+        type: 'fill',
+        source: 'boundary-source',
+        'source-layer': 'cb_2018_us_state_500k-8q06w5',
+        paint: {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.1)'
+        },
+        // filter: ['==', 'GEOID', stringID]
+    }
+
     const LayerProps = {
         id: 'schools',
         type: 'circle',
@@ -69,6 +81,9 @@ export default function DemographicMap() {
         <NavigationControl position = "top-left"/>
         <Source type='geojson' data={data}>
         <Layer {...LayerProps}/>
+        </Source>
+        <Source id='boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
+            <Layer {...boundaryLayer} />
         </Source>
         </Map>
         }
