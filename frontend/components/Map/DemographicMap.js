@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from 'axios';
-import Map, {Layer, Source, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
+import { Loader } from "../Loader";
+import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
 import mapbox_token from "../../Key";
+import MapPie from "./MapPies";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function DemographicMap() {
 
+    // Loading state variable
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Cursor state variable
+    const [cursor, setCursor] = useState('auto')
+
+    // Data state variable
     const [data, setData] = useState({});
 
     const getData = async () => {
-        const response = await axios.get("http://localhost:8000/api/mapschools/");
+        setIsLoading(true);
+        const response = await axios.get("http://localhost:8000/api/mapschools/?q=2021");
         setData({type: "FeatureCollection", features: response.data.map(e => e.map_data)});
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -26,14 +37,13 @@ export default function DemographicMap() {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
             'fill-color': 'rgba(0,0,0,0.1)'
         },
-        // filter: ['==', 'GEOID', stringID]
     }
 
     const LayerProps = {
         id: 'schools',
         type: 'circle',
         paint: {
-            'circle-radius': 4,
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 3.5, 1, 14, 9],
             'circle-color': [
                 'case', ['==', 
                             ['get', 'prop_as'], 
@@ -60,11 +70,31 @@ export default function DemographicMap() {
         }
     }
 
+    const [clickInfo, setClickInfo] = useState(null);
 
+    const handleClick = (event) => {
+        const school = event.features && event.features[0];
+        setClickInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          sch_name: school && school.properties.sch_name,
+          prop_as: school && school.properties.prop_as,
+          prop_bl: school && school.properties.prop_bl,
+          prop_hi: school && school.properties.prop_hi,
+          prop_or: school && school.properties.prop_or,
+          prop_wh: school && school.properties.prop_wh
+        });
+      }
+
+    const selectedSchool = clickInfo && clickInfo.sch_name || '';
+
+    // Set State on mouse enter
+    const onMouseEnter = useCallback(() => setCursor('pointer'), []);
+    const onMouseLeave = useCallback(() => setCursor('auto'), []);
 
     return (
         <>
-        {data !== undefined &&
+        {isLoading ? <Loader /> :
         <Map 
         initialViewState={{
             longitude: -100,
@@ -75,6 +105,11 @@ export default function DemographicMap() {
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         attributionControl={false}
+        interactiveLayerIds={['schools']}
+        onClick={handleClick}
+        cursor={cursor}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         >
         <GeolocateControl position="top-left"/>
         <FullscreenControl position="top-left"/>
@@ -85,6 +120,19 @@ export default function DemographicMap() {
         <Source id='boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
             <Layer {...boundaryLayer} />
         </Source>
+        {selectedSchool &&
+        <Popup 
+            anchor={'left'}
+            longitude={clickInfo.longitude}
+            latitude={clickInfo.latitude}
+            offset={[0,-10]}
+            closebutton={true}
+            closeOnClick={true}
+            onClose={() => setClickInfo(null)}>
+        <b>{selectedSchool}</b>
+        <MapPie clickInfo={clickInfo} />
+        </Popup>
+        }
         </Map>
         }
         </>

@@ -9,7 +9,7 @@ export default function Map(){
         <>
         <Header />
         <div className="flex flex-col min-h-screen">
-        <Selection />
+        {/* <Selection /> */}
         <div className="flex justify-center pt-5 pb-10">
         <DemographicMap/>
         </div>
