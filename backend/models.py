@@ -12,10 +12,10 @@ class Schools(models.Model):
     school_key = models.TextField(primary_key=True)
     year = models.IntegerField()
     grade = models.TextField()
-    nces_id = models.BigIntegerField()
+    nces_id = models.TextField()
     sch_name = models.TextField(null=True)
-    dist_id = models.IntegerField()
-    county_id = models.IntegerField()
+    dist_id = models.TextField()
+    county_id = models.TextField()
     state_abb = models.CharField(max_length = 2)
     asian = models.IntegerField(blank=True, null=True)
     black = models.IntegerField(blank=True, null=True)
@@ -42,16 +42,16 @@ class Schools(models.Model):
 # Name Models
 
 class CountyNames(models.Model):
-    county_id = models.IntegerField(primary_key=True)
+    county_id = models.TextField(primary_key=True)
     county_name = models.TextField()
-    vector_col = SearchVectorField(default='', null=False)
+    # vector_col = SearchVectorField(default='', null=False)
 
     class Meta:
         db_table = 'county_names'
-        indexes = [GinIndex(fields=['vector_col'], name='county_name_idx')]
+        # indexes = [GinIndex(fields=['vector_col'], name='county_name_idx')]
 
 class DistNames(models.Model):
-    dist_id = models.IntegerField(primary_key=True)
+    dist_id = models.TextField(primary_key=True)
     dist_name = models.TextField()
 
     class Meta:
@@ -77,7 +77,7 @@ class StateNames(models.Model):
 class DistrictTrends(models.Model):
     dist_key = models.TextField(primary_key=True)
     year = models.IntegerField()
-    dist_id = models.IntegerField()
+    dist_id = models.TextField()
     dist_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
@@ -91,7 +91,7 @@ class DistrictTrends(models.Model):
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
     year = models.IntegerField()
-    county_id = models.IntegerField()
+    county_id = models.TextField()
     county_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
@@ -123,7 +123,7 @@ class CountySegSchools(models.Model):
     county_key = models.TextField(primary_key=True)
     year = models.IntegerField()
     grade = models.CharField(max_length=2)
-    county_id = models.IntegerField()
+    county_id = models.TextField()
     county_name = models.TextField()
     state_abb = models.CharField(max_length=2)
     num_schools = models.IntegerField(blank=True, null=True)
@@ -180,7 +180,7 @@ class DistSeg(models.Model):
     dist_key = models.TextField(primary_key=True)
     year = models.IntegerField()
     grade = models.CharField(max_length=2)
-    dist_id = models.IntegerField()
+    dist_id = models.TextField()
     dist_name = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
