@@ -102,5 +102,5 @@ class mapSchoolsList(generics.ListAPIView):
     serializer_class = MapSchoolsSerializer
 
     def get_queryset(self):
-        # query = self.request.GET.get("q")
-        return MapSchools.objects.filter(map_data__properties__year = 2021) 
+        query = self.request.GET.get("q")
+        return MapSchools.objects.filter(map_data__properties__year = int(query)) 
