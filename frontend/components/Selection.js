@@ -7,6 +7,7 @@ import {years, grades} from './SelectOptions';
 import Info from './Info/InfoTrends';
 import Segregation from './Segregation/SegregationMeasures';
 import Trends from './Trends/trendpage';
+import { Loader } from './Loader';
 
 export default function Selection() {
 
@@ -32,8 +33,11 @@ export default function Selection() {
 
   let baseURL = setURL(); 
 
+  // Loading state variable
+  const [isLoading, setIsLoading] = useState(false);
+
   // defining input state
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState('');
 
   // Function to handle inputs into state/county/district select
  const handleInputChange = (inputValue) => {
@@ -107,6 +111,8 @@ export default function Selection() {
 
     if (year != undefined && grade != undefined && id != undefined) {
 
+      setIsLoading(true);
+
       let idlevel = '';
       let table = '';
       
@@ -123,6 +129,7 @@ export default function Selection() {
 
         const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setInfoData(response.data);
+        setIsLoading(false);
       }
     };
 
@@ -135,6 +142,7 @@ export default function Selection() {
 
     if (currentpath == '/trends' && id != undefined) {
 
+      setIsLoading(true);
       let idlevel;
       let table;
       
@@ -151,7 +159,7 @@ export default function Selection() {
 
         const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
         setTrendData(response.data);
-        console.log(trendData);
+        setIsLoading(false);
       }
     };
 
@@ -162,6 +170,8 @@ export default function Selection() {
   const getSegData = async () => {
 
     if (currentpath == '/segregation' && year != undefined && grade != undefined) {
+
+      setIsLoading(true);
 
       const selectedlevel = () => {
         if(levels == 0) {
@@ -177,7 +187,7 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/" + selectedlevel() + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
-      console.log(segData)
+      setIsLoading(false);
     }
   }
 
