@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from 'axios';
 import { Loader } from "../Loader";
-import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
+import Map, {Layer, useMap, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
 import mapbox_token from "../../Key";
+import Control from "./Control";
 import MapPie from "./MapPies";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -28,16 +29,56 @@ export default function DemographicMap() {
         getData();
     }, [])
 
-    const boundaryLayer = {
-        id: 'boundary',
+    // State variable to control the visibility of the boundary layer
+    const [stateVisible, setStateVisible] = useState('none')
+
+    const handleVisibility = (level) => {
+        if (level == "County") {
+            setStateVisible('none')
+            setCountyVisible('visible')
+        } else if (level == "State") {
+            setCountyVisible('none')
+            setStateVisible('visible')  
+        } else {
+            setCountyVisible('none')
+            setStateVisible('none')
+        }
+    }
+
+    // Layer object for state boundary layer
+    const stateLayer = {
+        id: 'state-boundary',
         type: 'fill',
-        source: 'boundary-source',
+        source: 'state-boundary-source',
         'source-layer': 'cb_2018_us_state_500k-8q06w5',
         paint: {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
             'fill-color': 'rgba(0,0,0,0.1)'
         },
+        layout: {
+            visibility: stateVisible
+        }
     }
+
+    // State variable to control the visibility of the county boundary layer
+    const [countyVisible, setCountyVisible] = useState('none')
+
+    // Layer object for the county boundary layer
+    const countyLayer = {
+        id: 'county-boundary',
+        type: 'fill',
+        source: 'county-boundary-source',
+        'source-layer': 'cb_2018_us_county_500k-6dd9y3',
+        paint: {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.1)'
+        },
+        layout: {
+            visibility: countyVisible
+        }
+    }
+
+    const prop_array = ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
 
     const LayerProps = {
         id: 'schools',
@@ -45,34 +86,24 @@ export default function DemographicMap() {
         paint: {
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 3.5, 1, 14, 9],
             'circle-color': [
-                'case', ['==', 
-                            ['get', 'prop_as'], 
-                            ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
-                        ], "#FF5050", 
-                        ['==', 
-                            ['get', 'prop_bl'], 
-                            ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
-                        ],  "#4472C4", 
-                        ['==', 
-                            ['get', 'prop_hi'], 
-                            ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
-                        ],  "#FF9900", 
-                        ['==', 
-                            ['get', 'prop_or'], 
-                            ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
-                        ],  "#FFC000", 
-                        ['==', 
-                            ['get', 'prop_wh'], 
-                            ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
-                        ],  "#339933", 
+                'case', ['==', ['get', 'prop_as'], prop_array],  "#FF5050", 
+                        ['==', ['get', 'prop_bl'], prop_array],  "#4472C4", 
+                        ['==', ['get', 'prop_hi'], prop_array],  "#FF9900", 
+                        ['==', ['get', 'prop_or'], prop_array],  "#FFC000", 
+                        ['==', ['get', 'prop_wh'], prop_array],  "#339933", 
                         "#808080"
                 ],
         }
     }
 
+    // Using the useMap hook to set up ease to functionality
+    const mapRef = useRef();
+
+    // Click info state variable, to hold relevant data from clicked school
     const [clickInfo, setClickInfo] = useState(null);
 
     const handleClick = (event) => {
+        setClickInfo({sch_name: undefined})
         const school = event.features && event.features[0];
         setClickInfo({
           longitude: event.lngLat.lng,
@@ -84,9 +115,14 @@ export default function DemographicMap() {
           prop_or: school && school.properties.prop_or,
           prop_wh: school && school.properties.prop_wh
         });
+        const center = [event.lngLat.lng, event.lngLat.lat];
+        school && mapRef.current.easeTo({center: center, duration: 500});
+      
       }
 
+      
     const selectedSchool = clickInfo && clickInfo.sch_name || '';
+    console.log(selectedSchool);
 
     // Set State on mouse enter
     const onMouseEnter = useCallback(() => setCursor('pointer'), []);
@@ -95,7 +131,9 @@ export default function DemographicMap() {
     return (
         <>
         {isLoading ? <Loader /> :
+        <>
         <Map 
+        ref={mapRef}
         initialViewState={{
             longitude: -100,
             latitude: 40,
@@ -104,7 +142,7 @@ export default function DemographicMap() {
         style={{width: 1200, height:700}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
-        attributionControl={false}
+        attributionControl={true}
         interactiveLayerIds={['schools']}
         onClick={handleClick}
         cursor={cursor}
@@ -117,15 +155,18 @@ export default function DemographicMap() {
         <Source type='geojson' data={data}>
         <Layer {...LayerProps}/>
         </Source>
-        <Source id='boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
-            <Layer {...boundaryLayer} />
+        <Source id='county-boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">
+            <Layer {...countyLayer} />
+        </Source>
+        <Source id='state-boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
+            <Layer {...stateLayer} />
         </Source>
         {selectedSchool &&
         <Popup 
             anchor={'left'}
             longitude={clickInfo.longitude}
             latitude={clickInfo.latitude}
-            offset={[0,-10]}
+            offset={[5,0]}
             closebutton={true}
             closeOnClick={true}
             onClose={() => setClickInfo(null)}>
@@ -134,6 +175,8 @@ export default function DemographicMap() {
         </Popup>
         }
         </Map>
+        <Control handleVisibility={handleVisibility}/>
+        </>
         }
         </>
     )

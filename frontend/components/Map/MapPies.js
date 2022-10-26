@@ -16,7 +16,11 @@ export default function MapPie({clickInfo}) {
 
     const options = {
         reponsive: true,
-        
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
     }
 
     const data = {
