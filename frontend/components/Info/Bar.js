@@ -95,13 +95,6 @@ export default function BarChart2({InfoData}) {
         } 
 
 
-    const chartRef = useRef();
-
-    const handleClick = (event) => {
-        const {current: chart} = chartRef;
-        console.log(getElementsAtEvent(chart, event));
-      }
-
     const sortOptions = [
         {value: "prop_as", label: "Asian"},
         {value: "prop_bl", label: "Black"},
@@ -167,11 +160,9 @@ export default function BarChart2({InfoData}) {
         options = {sortOptions}
         onChange={e => sortData(e.value)}
         />
-        <Bar  
-        ref={chartRef}
+        <Bar
         data={data}
-        options={options}
-        onClick={handleClick}/>
+        options={options}/>
         </>
     )
 
