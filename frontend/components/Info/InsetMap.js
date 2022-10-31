@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef} from "react";
 import Map, {Source, Layer, FillLayer} from 'react-map-gl';
 import mapbox_token from "../../Key";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-export default function InsetMap({id}) {
+export default function InsetMap({id, bounds}) {
+
+    // Using the useMap hook to set up ease to functionality
+    const mapRef = useRef();
+
+    const onLoad = () => {
+        mapRef.current.fitBounds(bounds, {padding: 25, duration:1000});
+    }
 
     let stringID = ''+id;
-    console.log(id)
-
 
     const boundaryLayer = {
         id: 'boundary',
@@ -24,6 +29,7 @@ export default function InsetMap({id}) {
     return(
         <>
         <Map 
+        ref={mapRef}
         initialViewState={{
             longitude: -100,
             latitude: 40,
@@ -34,6 +40,7 @@ export default function InsetMap({id}) {
         mapboxAccessToken={mapbox_token}
         attributionControl={false}
         className='overflow-x-auto'
+        onData={onLoad}
         >
         <Source id='boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">
             <Layer {...boundaryLayer} />

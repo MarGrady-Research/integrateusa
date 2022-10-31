@@ -11,7 +11,7 @@ export default function Comparison({id, grade, filteredData}) {
     // Setting columns array
     const columns = [
         {accessor: "checkbox", label: ""},
-        {accessor: "dist_name", label: "District Name"},
+        {accessor: "dist_name", label: "Name"},
         {accessor: "num_schools", label: "# Schools"},
         {accessor: "enr_prop_as", label: "% Asian"},
         {accessor: "enr_prop_bl", label: "% Black"},

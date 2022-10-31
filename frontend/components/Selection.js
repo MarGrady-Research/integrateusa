@@ -57,18 +57,30 @@ export default function Selection() {
         if (levels == 0) {
           return {
           "value": d.dist_id,
-          "label": d.dist_name
+          "label": d.dist_name,
+          "lngmin": d.lngmin,
+          "latmin":d.latmin,
+          "lngmax": d.lngmax,
+          "latmax":d.latmax,
           }
         }
         if(levels == 1) {
           return {
           "value": d.county_id,
-          "label": d.county_name
+          "label": d.county_name,
+          "lngmin": d.lngmin,
+          "latmin":d.latmin,
+          "lngmax": d.lngmax,
+          "latmax":d.latmax,
           }
         } if (levels == 2) {
           return {
           "value": d.state_abb,
-          "label": d.state_name
+          "label": d.state_name,
+          "lngmin": d.lngmin,
+          "latmin":d.latmin,
+          "lngmax": d.lngmax,
+          "latmax":d.latmax,
           }
         }
         })
@@ -92,10 +104,13 @@ export default function Selection() {
   // Defining state to hold selected name from dropdown 
   const [selectedname, setSelectedName] = useState(); 
 
+  const [bounds, setBounds] = useState([]);
+
   //  function to set both ID and name on change
   const nameandid = e => {
-    setID(e.value)
-    setSelectedName(e.label)
+    setID(e.value);
+    setSelectedName(e.label);
+    setBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]])
   };
 
   // Initializing click and title state variables
@@ -269,7 +284,7 @@ export default function Selection() {
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath == '/info' && infoData.length > 0 &&
       <div className='mx-auto mt-5'>
-      <Info InfoData={infoData} title={title} id={id}/>
+      <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
       </div>
       }
       {/* Conditionally render the Trends div once the data array has been returned */}
