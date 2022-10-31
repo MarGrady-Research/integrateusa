@@ -44,7 +44,10 @@ class Schools(models.Model):
 class CountyNames(models.Model):
     county_id = models.TextField(primary_key=True)
     county_name = models.TextField()
-    # vector_col = SearchVectorField(default='', null=False)
+    lngmin = models.FloatField()
+    latmin = models.FloatField()
+    lngmax = models.FloatField()
+    latmax = models.FloatField()
 
     class Meta:
         db_table = 'county_names'
@@ -53,6 +56,10 @@ class CountyNames(models.Model):
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
     dist_name = models.TextField()
+    lngmin = models.FloatField()
+    latmin = models.FloatField()
+    lngmax = models.FloatField()
+    latmax = models.FloatField()
 
     class Meta:
         db_table = 'district_names'
@@ -64,6 +71,10 @@ class StateNames(models.Model):
     state_abb = models.CharField(max_length = 2, primary_key=True)
     fips = models.IntegerField(blank=True, null=True)
     state_name = models.TextField()
+    lngmin = models.FloatField()
+    latmin = models.FloatField()
+    lngmax = models.FloatField()
+    latmax = models.FloatField()
 
     class Meta:
         db_table = 'state_names'
