@@ -25,7 +25,7 @@ export default function Control ({handleVisibility}) {
                     type="radio"
                     name="School"
                     value="School"
-                    checked={radio.level == "School"}
+                    checked={radio.level === "School"}
                     onChange={handleChange} 
                 />
             </label>
@@ -37,7 +37,7 @@ export default function Control ({handleVisibility}) {
                     type="radio"
                     name="District"
                     value="District"
-                    checked={radio.level == "District"}
+                    checked={radio.level === "District"}
                     onChange={handleChange} 
                 />
             </label>
@@ -49,7 +49,7 @@ export default function Control ({handleVisibility}) {
                 type="radio"
                 name="County"
                 value="County"
-                checked={radio.level == "County"}
+                checked={radio.level === "County"}
                 onChange={handleChange} 
             />
             </label>
@@ -61,12 +61,13 @@ export default function Control ({handleVisibility}) {
                 type="radio"
                 name="State"
                 value="State"
-                checked={radio.level == "State"}
+                checked={radio.level === "State"}
                 onChange={handleChange} 
             />
             </label>
             </div>
         </div>
+        
         </div>
     )
   
