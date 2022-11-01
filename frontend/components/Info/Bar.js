@@ -110,10 +110,10 @@ export default function BarChart2({InfoData}) {
 
     const options = {
             plugins: {
-                title: {
-                    display: true,
-                    text: "Race Breakdown by School"
-                },
+                // title: {
+                //     display: true,
+                //     text: "Race Breakdown by School"
+                // },
                 tooltip: {
                     enabled: true,
                     display: true,
