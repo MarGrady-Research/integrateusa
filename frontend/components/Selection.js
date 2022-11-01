@@ -16,7 +16,7 @@ export default function Selection() {
   const currentpath = router.pathname
 
   // Defining level state variable and levelselect array
-  const [levels, setLevels] = useState(-1);
+  const [levels, setLevels] = useState(0);
 
   const levelselect = [
     {value: 0, label: "District", route: "api/districtnames/?q=", id: "dist_id", name: "dist_name"},
@@ -32,9 +32,6 @@ export default function Selection() {
   }
 
   let baseURL = setURL(); 
-
-  // Loading state variable
-  const [isLoading, setIsLoading] = useState(false);
 
   // defining input state
   const [input, setInput] = useState('');
@@ -88,23 +85,23 @@ export default function Selection() {
   }
   
   // Defining ID state
-  const [id, setID] = useState()
+  const [id, setID] = useState(3620580)
 
   // Defining grade state
-  const [grade, setGrade] = useState()
+  const [grade, setGrade] = useState('All')
 
   // Defining year state 
-  const [year, setYear] = useState() 
+  const [year, setYear] = useState(2021) 
 
   // Set year and grade on pages that are not the info page
-  useEffect(() => {
-    currentpath !== '/info' && setYear(2021)
-  }, [])
+  // useEffect(() => {
+  //   currentpath !== '/info' && setYear(2021)
+  // }, [])
 
   // Defining state to hold selected name from dropdown 
   const [selectedname, setSelectedName] = useState(); 
 
-  const [bounds, setBounds] = useState([]);
+  const [bounds, setBounds] = useState([[-74.25609, 40.496094], [-73.70017, 40.915276]]);
 
   //  function to set both ID and name on change
   const nameandid = e => {
@@ -116,10 +113,11 @@ export default function Selection() {
   // Initializing click and title state variables
   const [clicked, setClicked] = useState(false);
 
-  const [title, setTitle] = useState();
+  const [title, setTitle] = useState("New York City Public Schools (NY)");
 
-  // For info page, state to hold data 
+  // For info page, state to hold data and loading state
   const [infoData, setInfoData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // For info page, function to get school data
   const getInfoData = async () => {
@@ -129,20 +127,17 @@ export default function Selection() {
       setIsLoading(true);
 
       let idlevel = '';
-      let table = '';
+      // let table = '';
       
       if (levels === 0) {
         idlevel = "dist_id";
-        table = (currentpath == '/segregation' ? 'district' : 'schools');
       } else if (levels === 1) {
         idlevel = "county_id";
-        table = (currentpath == '/segregation' ? 'county' : 'schools');
       } else if (levels === 2) {
         idlevel = "state_abb";
-        table = (currentpath == '/segregation' ? 'state' : 'schools');
       }
 
-        const response = await axios.get("http://localhost:8000/api/" + table + "/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
         setInfoData(response.data);
         setIsLoading(false);
       }
@@ -217,37 +212,54 @@ export default function Selection() {
       } else if (currentpath === '/segregation') { 
         getSegData();
       }
+      setTitle(selectedname);
       setInput('');
     }
     setClicked(false);
   }, [clicked])
 
+  useEffect(() => {
+    //  setGrade('All');
+    //  setYear(2021);
+    //  setID(3620580)
+    if (currentpath === '/info') {
+      getInfoData();
+    } else if (currentpath === '/trends') {
+      getTrendData();
+    } else if (currentpath === '/segregation') { 
+      getSegData();
+    }
+  }, [])
+  
+
   // useEffect wrapper for setTitle to run after click
-  useEffect( () => {
-    setTitle(selectedname);
-  }, [infoData, trendData, segData])
+  // useEffect( () => {
+  //   setTitle(selectedname);
+  // }, [infoData, trendData, segData])
 
 // Returning JSX
   return (
     <div className='container mx-auto p-5'>
-      <div className='flex flex-row mx-auto mt-10'>
-        <p className='text-3xl'>Select a </p>
+      <div className='flex flex-row flex-wrap mx-auto mt-10'>
+        {/* <p className='text-3xl'>Select a </p> */}
         <Select 
         options = {levelselect}
         placeholder = "Geographic Level"
+        defaultValue={{label: 'District', value: 0}}
         onChange= {e => {setLevels(e.value)}} 
         components={{IndicatorSeparator: () => null}}
         className="px-2"
         />
-        <p  className='text-3xl pr-5'>:</p>
-      </div>
-      <div className='relative flex flex-row mx-auto mt-5'>
-      {levels > -1 &&
+        {/* <p  className='text-3xl pr-5'>:</p> */}
+      {/* </div>
+      <div className='container relative flex flex-wrap mx-auto mt-5'> */}
+      {/* {levels > -1 && */}
         <>
         <AsyncSelect 
         name='idselect'
         cacheOptions
         defaultOptions
+        defaultValue={{label: "New York City Public Schools (NY)", value: 3620580}}
         onChange={nameandid} 
         loadOptions={loadOptions}
         onInputChange={handleInputChange}
@@ -258,19 +270,21 @@ export default function Selection() {
           <Select 
           options={years}
           onChange={e => setYear(e.value)}
+          defaultValue={{label: 2021, value: 2021}}
           isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
           placeholder="Select a year"
           name='years'
-          className='px-2'
+          className='flex px-2'
           />
         }
         {currentpath !== '/trends' &&
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
+          defaultValue={{label: 'All', value: 'All'}}
           placeholder="Select a grade"
           name='grades'
-          className='pr-6'
+          className='flex pr-6'
           />
         }
         <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
@@ -279,25 +293,26 @@ export default function Selection() {
         </svg>
         </button>
       </>
-      }
+      {/* } */}
       </div>
       {/* Conditionally render the Info div once the data array has been returned */}
-      {currentpath == '/info' && infoData.length > 0 &&
+      {currentpath=== '/info' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
-      </div>
+      </div>)
       }
       {/* Conditionally render the Trends div once the data array has been returned */}
-      {currentpath == '/trends' && trendData.length >0 &&
+      {currentpath === '/trends' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Trends TrendData={trendData} id={id} title={title}/>
-      </div>
+      </div>)
       }
       {/* Conditionally render the Segregation div once the data array has been returned */}
-      {currentpath == '/segregation' && segData.length >0 &&
+      {currentpath === '/segregation' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Segregation SegData={segData} id={id} grade={grade} title={title}/>
       </div>
+      )
       }
     </div>
   );
