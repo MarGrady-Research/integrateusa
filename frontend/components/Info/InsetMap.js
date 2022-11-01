@@ -35,11 +35,11 @@ export default function InsetMap({id, bounds}) {
             latitude: 40,
             zoom: 3.5
           }}
-        style={{width: 500, height: 250}}
+        style={{width: 500, height: 300}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         attributionControl={false}
-        className='overflow-x-auto'
+        className='overflow-x-auto w-500'
         onData={onLoad}
         >
         <Source id='boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">

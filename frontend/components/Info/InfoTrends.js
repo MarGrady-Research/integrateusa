@@ -46,14 +46,21 @@ export default function Info({InfoData, title, id, bounds}) {
             <span className="text-4xl"><b>{title}</b></span>
         </div>
         }
-        <div className="relative flex flex-row justify-between py-5">
+        <div className="relative flex flex-wrap justify-between py-5">
+            <div className="w-200 h-300">
             <InsetMap id={id} bounds = {bounds}/>
+            </div>
+            <div className="w-200 h-300">
             <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} className="border-r-2 border-r-black"/>
-            <div>
+            </div>
+            <div className="w-200 h-300">
             <PieChart InfoData={InfoData}/>
             </div>
         </div>
         <div className="py-4">
+            <div className="flex flex-row mx-auto">
+                <span className="text-2xl pb-2">Race Breakdown by School</span>
+            </div>
             <div className="h-100 w-100 overflow-auto">
                 <BarChart2 InfoData={InfoData} className="py-4 left-0 top-0 absolute"/>
             </div>
