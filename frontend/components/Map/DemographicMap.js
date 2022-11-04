@@ -33,13 +33,20 @@ export default function DemographicMap() {
     const [stateVisible, setStateVisible] = useState('none')
 
     const handleVisibility = (level) => {
-        if (level == "County") {
-            setStateVisible('none')
-            setCountyVisible('visible')
-        } else if (level == "State") {
+        if (level === "District") {
+            setDistrictVisible('visible');
+            setCountyVisible('none');
+            setStateVisible('none');
+        } else if (level === "County") {
+            setDistrictVisible('none');
+            setCountyVisible('visible');
+            setStateVisible('none');
+        } else if (level === "State") {
+            setDistrictVisible('none');
             setCountyVisible('none')
             setStateVisible('visible')  
         } else {
+            setDistrictVisible('none');
             setCountyVisible('none')
             setStateVisible('none')
         }
@@ -75,6 +82,23 @@ export default function DemographicMap() {
         },
         layout: {
             visibility: countyVisible
+        }
+    }
+
+    // State variable to control the visibility of the district boundary layer
+    const [districtVisible, setDistrictVisible] = useState('none')
+
+    // Layer object for the district boundary layer
+    const districtLayer = {
+        id: 'district-boundary',
+        type: 'fill',
+        'source-layer': '2021_sd_unified-4mqqrn',
+        paint: {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.1)'
+        },
+        layout: {
+            visibility: districtVisible
         }
     }
 
@@ -154,6 +178,9 @@ export default function DemographicMap() {
         <NavigationControl position = "top-left"/>
         <Source type='geojson' data={data}>
         <Layer {...LayerProps}/>
+        </Source>
+        <Source id='district-boundary-source' type="vector" url="mapbox://theokaufman.45uz283x">
+            <Layer {...districtLayer} />
         </Source>
         <Source id='county-boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">
             <Layer {...countyLayer} />

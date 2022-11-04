@@ -14,16 +14,40 @@ export default function InsetMap({id, bounds}) {
 
     let stringID = ''+id;
 
-    const boundaryLayer = {
+    const districtLayer = {
+        id: 'district-boundary',
+        type: 'fill',
+        // source: 'district-boundary-source',
+        'source-layer': '2021_sd_unified-4mqqrn',
+        paint: {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.1)'
+        },
+        filter: ['==', 'GEOID', stringID]
+    }
+
+    const countyLayer = {
         id: 'boundary',
         type: 'fill',
-        source: 'boundary-source',
+        // source: 'boundary-source',
         'source-layer': 'cb_2018_us_county_500k-6dd9y3',
         paint: {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
             'fill-color': 'rgba(0,0,0,0.1)'
         },
         filter: ['==', 'GEOID', stringID]
+    }
+
+    const stateLayer = {
+        id: 'state-boundary',
+        type: 'fill',
+        // source: 'state-boundary-source',
+        'source-layer': 'cb_2018_us_state_500k-8q06w5',
+        paint: {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.1)'
+        },
+        filter: ['==', 'STUSPS', stringID]
     }
 
     return(
@@ -42,8 +66,14 @@ export default function InsetMap({id, bounds}) {
         className='overflow-x-auto w-500'
         onData={onLoad}
         >
-        <Source id='boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">
-            <Layer {...boundaryLayer} />
+        <Source id='district-boundary-source' type="vector" url="mapbox://theokaufman.45uz283x">
+            <Layer {...districtLayer} />
+        </Source>
+        <Source id='county-boundary-source' type="vector" url="mapbox://theokaufman.6i9q4by5">
+            <Layer {...countyLayer} />
+        </Source>
+        <Source id='state-boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
+            <Layer {...stateLayer} />
         </Source>
         </Map>
         </>
