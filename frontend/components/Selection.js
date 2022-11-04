@@ -26,9 +26,7 @@ export default function Selection() {
 
   // Setting baseURL based on level
   const setURL = () => {
-  if (levels > -1) {
     return "http://localhost:8000/" + levelselect[levels].route
-    }
   }
 
   let baseURL = setURL(); 
@@ -93,11 +91,6 @@ export default function Selection() {
   // Defining year state 
   const [year, setYear] = useState(2021) 
 
-  // Set year and grade on pages that are not the info page
-  // useEffect(() => {
-  //   currentpath !== '/info' && setYear(2021)
-  // }, [])
-
   // Defining state to hold selected name from dropdown 
   const [selectedname, setSelectedName] = useState(); 
 
@@ -127,7 +120,6 @@ export default function Selection() {
       setIsLoading(true);
 
       let idlevel = '';
-      // let table = '';
       
       if (levels === 0) {
         idlevel = "dist_id";
@@ -150,7 +142,7 @@ export default function Selection() {
   // For trends page, function to get data
   const getTrendData = async () => {
 
-    if (currentpath == '/trends' && id != undefined) {
+    if (currentpath === '/trends' && id != undefined) {
 
       setIsLoading(true);
       let idlevel;
@@ -179,27 +171,29 @@ export default function Selection() {
   // For segregation page, function to get the comparison data
   const getSegData = async () => {
 
-    if (currentpath == '/segregation' && year != undefined && grade != undefined) {
+    if (currentpath === '/segregation' && year != undefined && grade != undefined) {
 
       setIsLoading(true);
 
-      const selectedlevel = () => {
-        if(levels == 0) {
-            return "district"
-        } 
-        if (levels == 1) {
-            return "county"
-        }
-        if (levels == 2) {
-            return "state"
-        }
+      grade ==='All' && setGrade('PK');
+      let idlevel;
+
+      if(levels === 0) {
+          idlevel = "district"
+      } 
+      if (levels === 1) {
+          idlevel = "county"
+      }
+      if (levels === 2) {
+          idlevel = "state"
       }
 
-      const response = await axios.get("http://localhost:8000/api/" + selectedlevel() + "/?year=" + year + "&grade=" + grade);
+      const response = await axios.get("http://localhost:8000/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
+      console.log(segData)
       setIsLoading(false);
     }
-  }
+  };
 
   // useEffect wrapper for getData functions on different pages 
   useEffect( () => {
@@ -219,9 +213,6 @@ export default function Selection() {
   }, [clicked])
 
   useEffect(() => {
-    //  setGrade('All');
-    //  setYear(2021);
-    //  setID(3620580)
     if (currentpath === '/info') {
       getInfoData();
     } else if (currentpath === '/trends') {
@@ -230,18 +221,11 @@ export default function Selection() {
       getSegData();
     }
   }, [])
-  
-
-  // useEffect wrapper for setTitle to run after click
-  // useEffect( () => {
-  //   setTitle(selectedname);
-  // }, [infoData, trendData, segData])
 
 // Returning JSX
   return (
     <div className='container mx-auto p-5'>
       <div className='flex flex-row flex-wrap mx-auto mt-10'>
-        {/* <p className='text-3xl'>Select a </p> */}
         <Select 
         options = {levelselect}
         placeholder = "Geographic Level"
@@ -250,10 +234,6 @@ export default function Selection() {
         components={{IndicatorSeparator: () => null}}
         className="px-2"
         />
-        {/* <p  className='text-3xl pr-5'>:</p> */}
-      {/* </div>
-      <div className='container relative flex flex-wrap mx-auto mt-5'> */}
-      {/* {levels > -1 && */}
         <>
         <AsyncSelect 
         name='idselect'
@@ -293,10 +273,10 @@ export default function Selection() {
         </svg>
         </button>
       </>
-      {/* } */}
       </div>
+
       {/* Conditionally render the Info div once the data array has been returned */}
-      {currentpath=== '/info' && (isLoading ? <Loader /> :
+      {currentpath === '/info' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
       </div>)
@@ -311,9 +291,9 @@ export default function Selection() {
       {currentpath === '/segregation' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Segregation SegData={segData} id={id} grade={grade} title={title}/>
-      </div>
-      )
+      </div>)
       }
+
     </div>
   );
 };
