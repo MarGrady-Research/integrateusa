@@ -30,7 +30,9 @@ export default function AreaChart({TrendData}) {
         }
     };
 
-    const labels = TrendData.map(e=>e.year)
+    let sortedData = TrendData.sort((a,b) => {return ((a['year']-b['year']))})
+
+    const labels = sortedData.map(e=>e.year)
 
     const data = {
         labels,
@@ -38,35 +40,35 @@ export default function AreaChart({TrendData}) {
             {
                 fill: true,
                 label: 'Asian',
-                data: TrendData.map(e => e.asian),
+                data: sortedData.map(e => e.asian),
                 borderColor: "#FF5050",
                 backgroundColor: "#FF5050",
             },
             {
                 fill: true,
                 label: 'Black',
-                data: TrendData.map(e => e.black),
+                data: sortedData.map(e => e.black),
                 borderColor: "#4472C4",
                 backgroundColor: "#4472C4",
             },
             {
                 fill: true,
                 label: 'Hispanic',
-                data: TrendData.map(e => e.hispanic),
+                data: sortedData.map(e => e.hispanic),
                 borderColor: "#FF9900",
                 backgroundColor: "#FF9900",
             },
             {
                 fill: true,
                 label: 'Other',
-                data: TrendData.map(e => e.other),
+                data: sortedData.map(e => e.other),
                 borderColor: "#FFC000",
                 backgroundColor: "#FFC000",
             },
             {
                 fill: true,
                 label: 'White',
-                data: TrendData.map(e => e.white),
+                data: sortedData.map(e => e.white),
                 borderColor: "#339933",
                 backgroundColor: "#339933",
             },

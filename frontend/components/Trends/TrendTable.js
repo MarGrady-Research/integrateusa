@@ -80,7 +80,7 @@ export default function TrendTable({TrendData}) {
                         <table className="min-w-full divide-y divide-gray-200">
                        {/* <table className="min-w-full"> */}
 
-                           {table(columns, TrendData)}
+                           {table(columns, sortedData)}
 
                        </table>
                    </div>
