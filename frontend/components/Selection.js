@@ -86,7 +86,12 @@ export default function Selection() {
   const [id, setID] = useState(3620580)
 
   // Defining grade state
-  const [grade, setGrade] = useState('All')
+  const gradelevel = () => {
+    if (currentpath === '/segregation') { 
+      return 'PK'}
+    else { return 'All'}
+  }
+  const [grade, setGrade] = useState(gradelevel)
 
   // Defining year state 
   const [year, setYear] = useState(2021) 
@@ -175,7 +180,6 @@ export default function Selection() {
 
       setIsLoading(true);
 
-      grade ==='All' && setGrade('PK');
       let idlevel;
 
       if(levels === 0) {
