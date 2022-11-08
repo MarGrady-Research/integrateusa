@@ -134,9 +134,10 @@ export default function Selection() {
         idlevel = "state_abb";
       }
 
-        const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
-        setInfoData(response.data);
-        setIsLoading(false);
+      const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+      setInfoData(response.data);
+      setIsLoading(false);
+
       }
     };
 
@@ -150,6 +151,7 @@ export default function Selection() {
     if (currentpath === '/trends' && id != undefined) {
 
       setIsLoading(true);
+
       let idlevel;
       let table;
       
@@ -164,9 +166,11 @@ export default function Selection() {
         table = 'statetrends';
       }
 
-        const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
-        setTrendData(response.data);
-        setIsLoading(false);
+      const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
+      setTrendData(response.data);
+      console.log(trendData);
+      setIsLoading(false);
+
       }
     };
 
@@ -194,8 +198,8 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
-      console.log(segData)
       setIsLoading(false);
+
     }
   };
 
