@@ -6,12 +6,12 @@ import axios from "axios";
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-export default function Comparison({id, grade, filteredData}) {
+export default function Comparison({id, grade, filteredData, namelevel, idlevel, table}) {
 
     // Setting columns array
     const columns = [
         {accessor: "checkbox", label: ""},
-        {accessor: "dist_name", label: "Name"},
+        {accessor: namelevel, label: "Name"},
         {accessor: "num_schools", label: "# Schools"},
         {accessor: "enr_prop_as", label: "% Asian"},
         {accessor: "enr_prop_bl", label: "% Black"},
@@ -44,7 +44,7 @@ export default function Comparison({id, grade, filteredData}) {
 
 
     // Sorting 
-    const [sort, setSort] = useState({order: 'asc', orderBy:'dist_name'})
+    const [sort, setSort] = useState({order: 'asc', orderBy: namelevel})
 
     const handleSort = accessor => {
         setActivePage(1);
@@ -71,23 +71,25 @@ export default function Comparison({id, grade, filteredData}) {
     const [lines, setLines] = useState([id]);
     const [linedata, setLineData] = useState([]);
 
+
     class Line {
-        constructor(id, dist_name, data) {
+        constructor(id, name, data) {
             this.id = id;
-            this.name = dist_name;
+            this.name = name;
             this.data = data;
         }
     }
 
+
     const getLineData =  async (id) => {
-        const response = await axios.get("http://localhost:8000/api/district/?grade=" + grade + "&dist_id=" + id);
+        const response = await axios.get("http://localhost:8000/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
         let data = response.data;
 
         const finaldata = data.map((e) => 
                    e.norm_exp_aw,
             )
 
-        const name = data[0].dist_name
+        const name = data[0][namelevel]
       
         const templine = new Line(id, name, finaldata)  
         setLineData(prevarray => [...prevarray, templine])  
@@ -105,8 +107,6 @@ export default function Comparison({id, grade, filteredData}) {
                 }))
         }
     }
-
-    console.log(id)
 
     const updateID = (e) => {
        updateLineState(e);
@@ -152,10 +152,10 @@ export default function Comparison({id, grade, filteredData}) {
                 <tbody>
                     <tr>
                         {columns.map(column => {
-                            if (column.accessor == "checkbox") {
+                            if (column.accessor === "checkbox") {
                                 return <td></td>
                             }
-                            if (column.accessor == "dist_name") {
+                            if (column.accessor === namelevel) {
                                 return (
                                 <td>
                                     <input
@@ -163,7 +163,7 @@ export default function Comparison({id, grade, filteredData}) {
                                         key={`${column.accessor}-search`}
                                         type="search"
                                         value={filters[column.accessor]}
-                                        placeholder={`Search District Name`}
+                                        placeholder={`Search Name`}
                                         onChange={event => handleSearch(event.target.value, column.accessor)}
                                     />  
                                 </td>)
@@ -187,14 +187,14 @@ export default function Comparison({id, grade, filteredData}) {
                     </tr>
                     {calculatedRows.map(row => {
                         return (
-                            <tr key={row.dist_id}>
+                            <tr key={row[idlevel]}>
                                 {columns.map(column => {
                                     if(column.accessor == "checkbox") {
                                         return (<th scope="row">
                                                    <input
                                                     type="checkbox"
                                                     className="form-check-input"
-                                                    id={row.dist_id}
+                                                    id={row[idlevel]}
                                                     onClick={(e) => updateID(e.target.id)}
                                                     />
                                                  </th>)
@@ -231,7 +231,7 @@ export default function Comparison({id, grade, filteredData}) {
             />
         
             <div className="w-full">
-            <LineGraph linedata ={linedata}/>
+            <LineGraph linedata={linedata} id={id}/>
             </div>
         </>
     );

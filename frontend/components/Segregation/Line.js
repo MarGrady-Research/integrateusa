@@ -15,7 +15,7 @@ ChartJS.register(
 )
 
 
-export default function LineGraph ({linedata}) {
+export default function LineGraph ({linedata, id}) {
 
     const options = {
         responsive: true,
@@ -41,8 +41,8 @@ export default function LineGraph ({linedata}) {
                     {
                     label: e.name,
                     data: e.data,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor:  e.id === id ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)',
+                    backgroundColor:  e.id === id ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)'
                     }  
                 )     
         })
@@ -54,8 +54,6 @@ export default function LineGraph ({linedata}) {
             makeLines()
         
     }
-
-    console.log(data.datasets)
 
     useEffect(() => {
          makeLines();

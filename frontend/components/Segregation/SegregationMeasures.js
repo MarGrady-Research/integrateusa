@@ -4,20 +4,43 @@ import Comparison from "./ComparisonTable";
 
 export default function Segregation({SegData, id, grade, title}) {
 
-    let strID = ''+id;
+    console.log(SegData)
+
+    let idlevel;
+    let namelevel;
+    let table;
 
     const name = () => {
+        let strID = ''+id; 
+
         if (strID.length === 7) {
-            return "dist_name"
+            idlevel = "dist_id"
+            namelevel = "dist_name";
+            table = "district";
         } else if (strID.length === 5) {
-            return "county_name"
+            idlevel = "county_id";
+            namelevel = "county_name";
+            table = "county";
         } else {
-            return "state_name"
+            idlevel = "state_abb";
+            namelevel = "state_abb";
+            table = "state";
+        }}
+
+    const level = () => {
+        let strID = ''+id; 
+        if (strID.length === 7) {
+            return "Districts"
+        } else if (strID.length === 5) {
+            return "Counties"
+        } else {
+            return "States"
         }}
     
     
     const findFocus = () => {
-        let pos = SegData.map(e => e.dist_id).indexOf(''+id);
+        name();
+        let pos = SegData.map(e => e[idlevel]).indexOf(''+id);
         return SegData[pos];
     }
  
@@ -26,7 +49,7 @@ export default function Segregation({SegData, id, grade, title}) {
 
     useEffect(() => {
         setFocus(findFocus);
-        let filter = SegData.filter(e => e.dist_id !== ''+id)
+        let filter = SegData.filter(e => e[idlevel] !== ''+id)
         setFilteredData(filter)
     }, [SegData])
 
@@ -38,20 +61,20 @@ export default function Segregation({SegData, id, grade, title}) {
 
         {focus &&
         <div className="pt-3">
-            <SegTable focus={focus} id ={id}/>
+            <SegTable focus={focus} idlevel={idlevel} namelevel={namelevel}/>
         </div>
         }
 
         <div className="flex flex-row py-3">
-            <span className="text-4xl">Comparison Districts for {title}</span>
+            <span className="text-4xl">Comparison {level()} for {title}</span>
         </div>
 
         <div>
-            <span>Use the sliders below to filter the data or search for specific districts. Select up to 10 comparison districts and see their changes in exposure over time</span>
+            <span>Use the sliders below to filter the data or search for specific {level()}. Select comparison {level()} to see their changes in exposure over time</span>
         </div>
 
         <div className="pt-3">
-            <Comparison id={id} grade={grade} filteredData={filteredData}/>
+            <Comparison id={id} grade={grade} filteredData={filteredData} idlevel={idlevel} namelevel={namelevel} table={table}/>
         </div>  
         </>
     )

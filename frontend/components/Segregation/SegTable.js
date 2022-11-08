@@ -1,24 +1,12 @@
 import React from "react";
 
 
-export default function SegTable({focus, id}) {
-
-
-    let strID = ''+id;
-
-    const name = () => {
-        if (strID.length === 7) {
-            return "dist_name"
-        } else if (strID.length === 5) {
-            return "county_name"
-        } else {
-            return "state_name"
-        }}
+export default function SegTable({focus, idlevel, namelevel}) {
 
     const tableRows = (e) => {
          return(
-                 <tr key={e.dist_id} className="border-b">
-                <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e[name()]}</td>
+                 <tr key={e[idlevel]} className="border-b">
+                <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e[namelevel]}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.num_schools}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_as}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_bl}</td>
