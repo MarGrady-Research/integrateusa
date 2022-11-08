@@ -1,12 +1,24 @@
 import React from "react";
 
 
-export default function SegTable({district}) {
+export default function SegTable({focus, id}) {
+
+
+    let strID = ''+id;
+
+    const name = () => {
+        if (strID.length === 7) {
+            return "dist_name"
+        } else if (strID.length === 5) {
+            return "county_name"
+        } else {
+            return "state_name"
+        }}
 
     const tableRows = (e) => {
          return(
                  <tr key={e.dist_id} className="border-b">
-                 <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e.dist_name}</td>
+                <td className="text-sm text-gray-900 font-light px-6 py-4 ">{e[name()]}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.num_schools}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_as}</td>
                  <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{e.enr_prop_bl}</td>
@@ -27,7 +39,7 @@ export default function SegTable({district}) {
 
                             <thead className="border-b bg-gray-200">
                                 <tr>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">County Name</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Name</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left"># Schools</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Asian</th>
                                     <th scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">% Black</th>
@@ -39,7 +51,7 @@ export default function SegTable({district}) {
                             </thead>
 
                             <tbody>
-                                {tableRows(district)}
+                                {tableRows(focus)}
                             </tbody>
 
                         </table>

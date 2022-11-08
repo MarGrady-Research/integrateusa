@@ -4,24 +4,31 @@ import Comparison from "./ComparisonTable";
 
 export default function Segregation({SegData, id, grade, title}) {
 
-    console.log(id)
+    let strID = ''+id;
 
-    const findDistrict = () => {
-        let pos = SegData.map(e => e.dist_id).indexOf(id);
+    const name = () => {
+        if (strID.length === 7) {
+            return "dist_name"
+        } else if (strID.length === 5) {
+            return "county_name"
+        } else {
+            return "state_name"
+        }}
+    
+    
+    const findFocus = () => {
+        let pos = SegData.map(e => e.dist_id).indexOf(''+id);
         return SegData[pos];
     }
-
-    const [district, setDistrict] = useState(findDistrict);
+ 
+    const [focus, setFocus] = useState(findFocus());
     const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
-        if (SegData.length >0 ){
-        setDistrict(findDistrict());
-        let filter = SegData.filter(e => e.dist_id !== id)
-        setFilteredData(filter)}
+        setFocus(findFocus);
+        let filter = SegData.filter(e => e.dist_id !== ''+id)
+        setFilteredData(filter)
     }, [SegData])
-
-    console.log(district)
 
     return (
         <>
@@ -29,9 +36,11 @@ export default function Segregation({SegData, id, grade, title}) {
             <span className="text-4xl"><b>{title}</b></span>
         </div>
 
+        {focus &&
         <div className="pt-3">
-            {/* <SegTable district={district}/> */}
+            <SegTable focus={focus} id ={id}/>
         </div>
+        }
 
         <div className="flex flex-row py-3">
             <span className="text-4xl">Comparison Districts for {title}</span>
