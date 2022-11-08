@@ -30,7 +30,7 @@ export default function AreaChart({TrendData}) {
         }
     };
 
-    let sortedData = TrendData.sort((a,b) => {return ((a['year']-b['year']))})
+    let sortedData = TrendData.filter(e => e.grade === "All").sort((a,b) => {return ((a['year']-b['year']))})
 
     const labels = sortedData.map(e=>e.year)
 

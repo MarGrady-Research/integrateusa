@@ -31,11 +31,29 @@ export default function TrendTable({TrendData}) {
     console.log(sortedData)
 
     const table = (cols, data) => {
+
+        let pkdata = data.filter(e => e.grade === "PK");
+        let kgdata = data.filter(e => e.grade === "KG");
+        let g01data = data.filter(e => e.grade === "01");
+        let g02data = data.filter(e => e.grade === "02");
+        let g03data = data.filter(e => e.grade === "03");
+        console.log(g01data)
+
+        const returnRows = (grade) => {
+            return (
+                <tr>
+                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{grade}</td>
+                    {data.filter(e => e.grade === grade).map(e => {return (<td key = {grade + e.year} className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.asian + e.black + e.hispanic + e.other + e.white}</td>)})}
+                </tr>
+            )
+        }
+
+
         return(
             <>
             <thead className="border-b bg-gray-200">
                 <tr>
-                    <th key='race' scope="col" className="text-sm border-2 font-medium text-gray-900 px-2 py-4 text-left">Race</th>
+                    <th key='grade' scope="col" className="text-sm border-2 font-medium text-gray-900 px-2 py-4 text-left">Grade</th>
                     {cols.map(column => {
                         return <th key= {column.accessor} scope="col" className="text-sm border-2 font-medium text-gray-900 px-2 py-4 text-left">{column.label}</th>
                     })}
@@ -43,26 +61,21 @@ export default function TrendTable({TrendData}) {
             </thead>
 
             <tbody>
-                <tr>
-                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Asian</td>
-                    {data.map(e => {return (<td key = 'asian' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.asian}</td>)})}
-                </tr>
-                <tr>
-                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Black</td>
-                    {data.map(e => {return (<td key = 'black' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.black}</td>)})}
-                </tr>
-                <tr>
-                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Hispanic</td>
-                    {data.map(e => {return (<td key = 'hispanic' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.hispanic}</td>)})}
-                </tr>
-                <tr>
-                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">Other</td>
-                    {data.map(e => {return (<td key = 'other' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.other}</td>)})}
-                </tr>
-                <tr>
-                    <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">White</td>
-                    {data.map(e => {return (<td key = 'white' className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.white}</td>)})}
-                </tr>
+                {returnRows("PK")}
+                {returnRows("KG")}
+                {returnRows("01")}
+                {returnRows("02")}
+                {returnRows("03")}
+                {returnRows("04")}
+                {returnRows("05")}
+                {returnRows("06")}
+                {returnRows("07")}
+                {returnRows("08")}
+                {returnRows("09")}
+                {returnRows("10")}
+                {returnRows("11")}
+                {returnRows("12")}
+               
             </tbody>
             </>
         )
