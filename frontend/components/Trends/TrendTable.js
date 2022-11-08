@@ -70,15 +70,11 @@ export default function TrendTable({TrendData}) {
 
    return(
        <>
-           {/* <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-               <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
-                   <div className="overflow-x-auto">  */}
             <div className="flex flex-col">
                 <div className="overflow-x-auto">
                     <div className="p-1.5 w-full inline-block align-middle">
                     <div className="overflow-x-auto border rounded-lg">
                         <table className="min-w-full divide-y divide-gray-200">
-                       {/* <table className="min-w-full"> */}
 
                            {table(columns, sortedData)}
 
