@@ -88,6 +88,7 @@ class StateNames(models.Model):
 class DistrictTrends(models.Model):
     dist_key = models.TextField(primary_key=True)
     year = models.IntegerField()
+    grade = models.TextField()
     dist_id = models.TextField()
     dist_name = models.TextField()
     asian = models.IntegerField()
@@ -102,6 +103,7 @@ class DistrictTrends(models.Model):
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
     year = models.IntegerField()
+    grade = models.TextField()
     county_id = models.TextField()
     county_name = models.TextField()
     asian = models.IntegerField()
@@ -117,6 +119,7 @@ class CountyTrends(models.Model):
 class StateTrends(models.Model):
     state_key = models.TextField(primary_key=True)
     year = models.IntegerField()
+    grade = models.TextField()
     state_abb = models.CharField(max_length=2)
     asian = models.IntegerField()
     black = models.IntegerField()
