@@ -73,7 +73,7 @@ import React from "react";
                     return toLower(value).includes(toLower(searchValue))
                 }
                 if (isNumber(value)) {
-                    return value <= searchValue | value >= searchValue
+                    return value <= searchValue[1] && value >= searchValue[0]
                 }
 
                 return false

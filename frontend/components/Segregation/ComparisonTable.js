@@ -3,7 +3,7 @@ import LineGraph from "./Line";
 import Pagination from "./Pagination";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
 import axios from "axios";
-import Slider, { Range } from 'rc-slider';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default function Comparison({id, grade, filteredData, namelevel, idlevel, table}) {
@@ -26,7 +26,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     const handleSearch = (value, accessor) => {
         setActivePage(1);
-
+        console.log(filters);
         if (value) {
             setFilters(prevFilters => ({
                 ...prevFilters,
@@ -173,12 +173,14 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                         <div className="px-4">
                                        <Slider 
                                        range
+                                       key={`${column.accessor}-search`}
                                        className="px-5"
                                        min={0}
                                        max={100}
                                        pushable={10}
                                        allowCross={false}
                                        defaultValue={[10, 60]}
+                                       onChange={e => handleSearch(e, column.accessor)}
                                        />
                                        </div>
                                        </td>
