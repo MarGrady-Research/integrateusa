@@ -12,6 +12,17 @@ const BarChart2 = dynamic(() => import('./Bar'), {
 export default function Info({InfoData, title, id, bounds}) {
 
 
+    const schoolLevel = {
+        ES: InfoData.filter(e => e.level === "ES").length,
+        ESMS: InfoData.filter(e => e.level === "ESMS").length,
+        MS: InfoData.filter(e => e.level === "MS").length,
+        MSHS: InfoData.filter(e => e.level === "MSHS").length,
+        HS: InfoData.filter(e => e.level === "HS").length,
+        K12: InfoData.filter(e => e.level === "K12").length,
+        Other: InfoData.filter(e => e.level === "Other").length,
+        Total: InfoData.length
+    }
+
     const groups = ["asian", "black", "hispanic", "other", "white"]
 
     const enrSum = (arr, group) => {
@@ -33,12 +44,6 @@ export default function Info({InfoData, title, id, bounds}) {
     const enrGroups = enrData(groups)
     const enrTotal = enrSum(InfoData, "tot_enr") 
 
-
-    const charterOptions = [
-        {label: "All Schools", value: 0},
-        {label: "Charter Schools", value: 1}
-    ]
-
     return(
         <>
         { InfoData.length > 0 && title &&
@@ -51,7 +56,7 @@ export default function Info({InfoData, title, id, bounds}) {
             <InsetMap id={id} bounds = {bounds}/>
             </div>
             <div className="w-200 h-300">
-            <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} className="border-r-2 border-r-black"/>
+            <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
             </div>
             <div className="w-200 h-300">
             <PieChart InfoData={InfoData}/>
