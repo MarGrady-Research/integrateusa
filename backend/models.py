@@ -14,6 +14,7 @@ class Schools(models.Model):
     grade = models.TextField()
     nces_id = models.TextField()
     sch_name = models.TextField(null=True)
+    level = models.TextField()
     dist_id = models.TextField()
     county_id = models.TextField()
     state_abb = models.CharField(max_length = 2)
