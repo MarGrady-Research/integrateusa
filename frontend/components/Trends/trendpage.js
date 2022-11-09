@@ -16,8 +16,12 @@ export default function Trends ({TrendData, id, title}) {
         <div className="pt-3">
             <AreaChart TrendData={TrendData}/>
         </div>
-        
+
         <div className="pt-3">
+            <span className="text-4xl">Enrollment Trends by Grade</span>
+        </div>
+        
+        <div className="py-3">
             <TrendTable TrendData={TrendData}/>
         </div>
 

@@ -32,13 +32,6 @@ export default function TrendTable({TrendData}) {
 
     const table = (cols, data) => {
 
-        let pkdata = data.filter(e => e.grade === "PK");
-        let kgdata = data.filter(e => e.grade === "KG");
-        let g01data = data.filter(e => e.grade === "01");
-        let g02data = data.filter(e => e.grade === "02");
-        let g03data = data.filter(e => e.grade === "03");
-        console.log(g01data)
-
         const returnRows = (grade) => {
             return (
                 <tr>
