@@ -24,9 +24,11 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     // Filtering
     const [filters, setFilters] = useState({})
 
+    // Add in a half second timeout in handleSearch
+
     const handleSearch = (value, accessor) => {
         setActivePage(1);
-        console.log(filters);
+
         if (value) {
             setFilters(prevFilters => ({
                 ...prevFilters,
@@ -167,8 +169,15 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                         onChange={event => handleSearch(event.target.value, column.accessor)}
                                     />  
                                 </td>)
-                            }
+                            } 
                             else {
+
+                                const maxval = () => {
+                                    let arr = filteredData.map(e => parseFloat(e[column.accessor]));
+                                    if (column.accessor === "num_schools") {
+                                        return Math.max(...arr)
+                                    } else { return 100}
+                                }
                                 return <td>
                                         <div className="px-4">
                                        <Slider 
@@ -176,10 +185,11 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                        key={`${column.accessor}-search`}
                                        className="px-5"
                                        min={0}
-                                       max={100}
+                                       max={maxval()}
                                        pushable={10}
+                                    //    ariaLabelForHandle = {5}
                                        allowCross={false}
-                                       defaultValue={[10, 60]}
+                                       defaultValue={[0, 60]}
                                        onChange={e => handleSearch(e, column.accessor)}
                                        />
                                        </div>
@@ -200,7 +210,9 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                     onClick={(e) => updateID(e.target.id)}
                                                     />
                                                  </th>)
-                                    }
+                                     } //else if (column.accessor != namelevel && column.accessor != "num_schools"){
+                                    //     return <td key={column.accessor} className="text-sm text-gray-900 font-light px-6 py-4">{Math.round((row[column.accessor])*100)}</td>
+                                    // }
                                     
                                     return <td key={column.accessor} className="text-sm text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
                                 })}
