@@ -40,7 +40,7 @@ export default function LineGraph ({linedata, id}) {
                 return (
                     {
                     label: e.name,
-                    data: e.data,
+                    data: e.data.map(e =>e.seg),
                     borderColor:  e.id === id ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)',
                     backgroundColor:  e.id === id ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)'
                     }  
@@ -52,7 +52,6 @@ export default function LineGraph ({linedata, id}) {
         labels,
         datasets: 
             makeLines()
-        
     }
 
     useEffect(() => {

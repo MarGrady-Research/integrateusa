@@ -53,10 +53,11 @@ export default function Segregation({SegData, id, grade, title}) {
             enr_prop_as: Math.round(e.enr_prop_as*100),
             enr_prop_bl: Math.round(e.enr_prop_bl*100),
             enr_prop_hi: Math.round(e.enr_prop_hi*100),
+            enr_prop_wh: Math.round(e.enr_prop_wh*100),
+            enr_prop_or: Math.round(e.enr_prop_or*100),
+            norm_exp_aw: Math.round(e.norm_exp_aw*100),
         })))
     }, [SegData])
-
-    console.log(filteredData)
 
     return (
         <>
