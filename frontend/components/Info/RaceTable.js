@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 
 
-export default function RaceTable({enrGroups, enrTotal, schoolLevel}) {
+export default function RaceTable({schoolLevel}) {
 
     const tableRows = (schooltype) => {
          return(

@@ -23,26 +23,26 @@ export default function Info({InfoData, title, id, bounds}) {
         Total: InfoData.length
     }
 
-    const groups = ["asian", "black", "hispanic", "other", "white"]
+    // const groups = ["asian", "black", "hispanic", "other", "white"]
 
-    const enrSum = (arr, group) => {
-        return arr.reduce(function(a,b) {
-            return a+b[group];
-        }, 0);
-    };
+    // const enrSum = (arr, group) => {
+    //     return arr.reduce(function(a,b) {
+    //         return a+b[group];
+    //     }, 0);
+    // };
 
-    const enrData = (arr) => {
-        return  arr.map(item => {
-            return ({
-                group: item,
-                enr: enrSum(InfoData, item),
-                pct: Math.round(enrSum(InfoData, item)/enrSum(InfoData, "tot_enr")*100)
-            })
-        });
-    }
+    // const enrData = (arr) => {
+    //     return  arr.map(item => {
+    //         return ({
+    //             group: item,
+    //             enr: enrSum(InfoData, item),
+    //             pct: Math.round(enrSum(InfoData, item)/enrSum(InfoData, "tot_enr")*100)
+    //         })
+    //     });
+    // }
 
-    const enrGroups = enrData(groups)
-    const enrTotal = enrSum(InfoData, "tot_enr") 
+    // const enrGroups = enrData(groups)
+    // const enrTotal = enrSum(InfoData, "tot_enr") 
 
     return(
         <>
@@ -52,11 +52,11 @@ export default function Info({InfoData, title, id, bounds}) {
         </div>
         }
         <div className="relative flex flex-wrap justify-between py-5">
-            <div className="w-200 h-300">
+            <div className=" w-200 h-300">
             <InsetMap id={id} bounds = {bounds}/>
             </div>
             <div className="w-200 h-300">
-            <RaceTable enrGroups={enrGroups} enrTotal={enrTotal} schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
+            <RaceTable schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
             </div>
             <div className="w-200 h-300">
             <PieChart InfoData={InfoData}/>
