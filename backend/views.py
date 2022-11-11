@@ -29,7 +29,7 @@ class districtNameList(generics.ListAPIView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.2).filter(dist_name__istartswith = query).order_by('-similarity')
+        return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
 
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
@@ -37,7 +37,7 @@ class countyNameList(generics.ListAPIView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        return CountyNames.objects.annotate(similarity = search.TrigramSimilarity('county_name', query)).filter(county_name__istartswith = query).order_by('-similarity')
+        return CountyNames.objects.annotate(similarity = search.TrigramSimilarity('county_name', query)).filter(similarity__gte = 0.10).filter(county_name__icontains = query).order_by('-similarity')
 
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
