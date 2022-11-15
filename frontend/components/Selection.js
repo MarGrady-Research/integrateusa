@@ -168,7 +168,6 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
       setTrendData(response.data);
-      console.log(trendData);
       setIsLoading(false);
 
       }

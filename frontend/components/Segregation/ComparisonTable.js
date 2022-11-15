@@ -24,7 +24,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     // Filtering
     const [filters, setFilters] = useState({})
 
-    // Add in a half second timeout in handleSearch
+    // TODO: Add in a half second timeout in handleSearch
 
     const handleSearch = (value, accessor) => {
         setActivePage(1);
