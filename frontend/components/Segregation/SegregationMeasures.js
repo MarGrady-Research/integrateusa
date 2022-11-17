@@ -48,12 +48,7 @@ export default function Segregation({SegData, id, grade, title}) {
     useEffect(() => {
         setFocus(findFocus);
         let filter = SegData.filter(e => e[idlevel] !== ''+id)
-        setFilteredData(filter.map(e => ({
-            ...e,
-            enr_prop_as: Math.round(e.enr_prop_as*100),
-            enr_prop_bl: Math.round(e.enr_prop_bl*100),
-            enr_prop_hi: Math.round(e.enr_prop_hi*100),
-        })))
+        setFilteredData(filter)
     }, [SegData])
 
     console.log(filteredData)
