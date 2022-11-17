@@ -113,6 +113,13 @@ export default function BarChart2({InfoData}) {
                 tooltip: {
                     enabled: true,
                     display: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label;
+                            if(label){label += '%'}
+                            return label
+                        }
+                    }
                 },
                 zoom: {
                     pan: {
@@ -143,7 +150,7 @@ export default function BarChart2({InfoData}) {
                 },
                 y: {
                     stacked: true,
-                    max: 1,
+                    max: 100,
                 }
             }
         }
