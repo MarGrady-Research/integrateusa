@@ -1,9 +1,8 @@
 import React from "react";
 import PieChart from "./Pie";
-import RaceTable from "./RaceTable";
 import InsetMap from "./InsetMap";
 import dynamic from "next/dynamic";
-import Select from "react-select";
+import SchoolLevelTable from "./SchoolLevelTable";
 
 const BarChart2 = dynamic(() => import('./Bar'), {
     ssr: false
@@ -56,7 +55,7 @@ export default function Info({InfoData, title, id, bounds}) {
             <InsetMap id={id} bounds = {bounds}/>
             </div>
             <div className="w-200 h-300">
-            <RaceTable schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
+            <SchoolLevelTable schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
             </div>
             <div className="w-200 h-300">
             <PieChart InfoData={InfoData}/>

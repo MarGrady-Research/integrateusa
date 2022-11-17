@@ -40,9 +40,9 @@ export default function Selection() {
   }
 
   // async function returning a promise for name data
-  const loadOptions = async () => {
+  const loadOptions = async (input) => {
  
-      if (input.length == 0) {
+      if (input.length === 0) {
         return null;
       }
 
@@ -59,16 +59,16 @@ export default function Selection() {
           "latmax":d.latmax,
           }
         }
-        if(levels == 1) {
+        if(levels === 1) {
           return {
           "value": d.county_id,
           "label": d.county_name,
           "lngmin": d.lngmin,
-          "latmin":d.latmin,
+          "latmin": d.latmin,
           "lngmax": d.lngmax,
           "latmax":d.latmax,
           }
-        } if (levels == 2) {
+        } if (levels === 2) {
           return {
           "value": d.state_abb,
           "label": d.state_name,
@@ -168,7 +168,6 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
       setTrendData(response.data);
-      console.log(trendData);
       setIsLoading(false);
 
       }
@@ -233,7 +232,7 @@ export default function Selection() {
 // Returning JSX
   return (
     <div className='container mx-auto p-5'>
-      <div className='flex flex-row flex-wrap mx-auto mt-10'>
+      <div className='flex flex-wrap mx-auto mt-10'>
         <Select 
         options = {levelselect}
         placeholder = "Geographic Level"

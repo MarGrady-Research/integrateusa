@@ -24,7 +24,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     // Filtering
     const [filters, setFilters] = useState({})
 
-    // Add in a half second timeout in handleSearch
+    // TODO: Add in a half second timeout in handleSearch
 
     const handleSearch = (value, accessor) => {
         setActivePage(1);
@@ -65,6 +65,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     const rowsPerPage = 10;
     const count = filteredRows.length;
     const totalPages = Math.ceil(count/rowsPerPage)
+
     // Paginate after sorting and filtering
     const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage)
 
@@ -84,16 +85,28 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
 
     const getLineData =  async (id) => {
+
+        const labels = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+            2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
+        
         const response = await axios.get("http://localhost:8000/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
         let data = response.data;
 
-        const finaldata = data.map((e) => 
-                   e.norm_exp_aw,
-            )
+        const finaldata = data.map((e) =>{ return ({
+                   seg: e.norm_exp_aw,
+                   year: e.year
+                })
+            })
 
-        const name = data[0][namelevel]
+        labels.forEach(e => {if (!finaldata?.map(e => e.year).includes(e)) {
+                                let tempdata = [...finaldata, {seg: null, year:e}];
+                                finaldata = tempdata.sort((a,b) => {return  ((a['year'] - b['year']))});
+                            } 
+                        })
+
+        const name = data[0][namelevel];
       
-        const templine = new Line(id, name, finaldata)  
+        const templine = new Line(id, name, finaldata);  
         setLineData(prevarray => [...prevarray, templine])  
 
         }
@@ -155,7 +168,14 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                     <tr>
                         {columns.map(column => {
                             if (column.accessor === "checkbox") {
-                                return <td></td>
+                                return (<td scope="row">
+                                    <input
+                                        type="checkbox"
+                                        className="form-check-input px-6 py-4"
+                                        id="master"
+                                        onClick={() => {calculatedRows.map(e => e[idlevel]).forEach(e => updateID(e))}}
+                                    />
+                                </td>)
                             }
                             if (column.accessor === namelevel) {
                                 return (
@@ -172,13 +192,33 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                             } 
                             else {
 
+                                
                                 const maxval = () => {
                                     let arr = filteredData.map(e => parseFloat(e[column.accessor]));
                                     if (column.accessor === "num_schools") {
                                         return Math.max(...arr)
                                     } else { return 100}
                                 }
+
+                                const [min, setMin] = useState({num_schools: 1,
+                                                                enr_prop_as: 0,
+                                                                enr_prop_bl: 0,
+                                                                enr_prop_hi: 0,
+                                                                enr_prop_or: 0,
+                                                                enr_prop_wh: 0});
+                                const [max, setMax] = useState({num_schools: maxval(),
+                                                                enr_prop_as: maxval(),
+                                                                enr_prop_bl: maxval(),
+                                                                enr_prop_hi: maxval(),
+                                                                enr_prop_or: maxval(),
+                                                                enr_prop_wh: maxval()});
+
                                 return <td>
+                                        <div className="w-full px-4 py-1 flex flex-row justify-evenly">
+                                        <input type="text" className="w-8 border border-black rounded-md" placeholder={min[column.accessor]} readOnly = {false} onChange={e => setMax({[column.accessor]: e.target.value})}/>
+                                        -
+                                        <input type="text" className="w-8 border border-black rounded-md" placeholder={max[column.accessor]} readOnly={false} onChange={e => setMax({[column.accessor]: e.target.value})}/> 
+                                        </div>
                                         <div className="px-4">
                                        <Slider 
                                        range
@@ -187,10 +227,13 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                        min={0}
                                        max={maxval()}
                                        pushable={10}
-                                    //    ariaLabelForHandle = {5}
                                        allowCross={false}
-                                       defaultValue={[0, 60]}
-                                       onChange={e => handleSearch(e, column.accessor)}
+                                       defaultValue={[min[column.accessor], max[column.accessor]]}
+                                       onChange={e => {
+                                                 handleSearch(e, column.accessor);
+                                                 setMax({[column.accessor]: e[1]});
+                                                 setMin({[column.accessor]: e[0]});
+                                                }}
                                        />
                                        </div>
                                        </td>
@@ -207,14 +250,16 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                     type="checkbox"
                                                     className="form-check-input"
                                                     id={row[idlevel]}
+                                                    // defaultChecked={true}
+                                                    checked={lines.includes(row[idlevel])}
+                                                    onChange={() => {}}
                                                     onClick={(e) => updateID(e.target.id)}
+                                                    readOnly={false}
                                                     />
                                                  </th>)
-                                     } //else if (column.accessor != namelevel && column.accessor != "num_schools"){
-                                    //     return <td key={column.accessor} className="text-sm text-gray-900 font-light px-6 py-4">{Math.round((row[column.accessor])*100)}</td>
-                                    // }
-                                    
-                                    return <td key={column.accessor} className="text-sm text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
+                                     }
+
+                                    return <td key={column.accessor} className="text-sm text-center text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
                                 })}
                             </tr>
                         )
@@ -228,6 +273,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     return(
         <>
+
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
                     <div className="overflow-x-auto"> 
@@ -247,6 +293,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
             <div className="w-full">
             <LineGraph linedata={linedata} id={id}/>
             </div>
+
         </>
     );
 }

@@ -8,8 +8,8 @@ export default function InsetMap({id, bounds}) {
     // Using the useMap hook to set up ease to functionality
     const mapRef = useRef();
 
-    const onLoad = () => {
-        mapRef.current.fitBounds(bounds, {padding: 25, duration:1000});
+    const onLoad = (stringID) => {
+        mapRef.current.fitBounds(bounds, {padding: 25, duration:800});
     }
 
     let stringID = ''+id;
@@ -17,7 +17,6 @@ export default function InsetMap({id, bounds}) {
     const districtLayer = {
         id: 'district-boundary',
         type: 'fill',
-        // source: 'district-boundary-source',
         'source-layer': '2021_sd_unified-4mqqrn',
         paint: {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
@@ -29,7 +28,6 @@ export default function InsetMap({id, bounds}) {
     const countyLayer = {
         id: 'boundary',
         type: 'fill',
-        // source: 'boundary-source',
         'source-layer': 'cb_2018_us_county_500k-6dd9y3',
         paint: {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
@@ -41,7 +39,6 @@ export default function InsetMap({id, bounds}) {
     const stateLayer = {
         id: 'state-boundary',
         type: 'fill',
-        // source: 'state-boundary-source',
         'source-layer': 'cb_2018_us_state_500k-8q06w5',
         paint: {
             'fill-outline-color': 'rgba(0,0,0,0.1)',
@@ -64,7 +61,7 @@ export default function InsetMap({id, bounds}) {
         mapboxAccessToken={mapbox_token}
         attributionControl={false}
         className='overflow-x-auto w-500'
-        onData={onLoad}
+        onSourceData={onLoad}
         >
         <Source id='district-boundary-source' type="vector" url="mapbox://theokaufman.45uz283x">
             <Layer {...districtLayer} />

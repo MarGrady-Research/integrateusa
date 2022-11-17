@@ -51,8 +51,6 @@ export default function Segregation({SegData, id, grade, title}) {
         setFilteredData(filter)
     }, [SegData])
 
-    console.log(filteredData)
-
     return (
         <>
         <div className="flex flex-row">
