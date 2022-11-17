@@ -56,10 +56,9 @@ export default function InsetMap({id, bounds}) {
             latitude: 40,
             zoom: 3.5
           }}
-        style={{width: 500, height: 300}}
+        style={{width: 400, height: 300}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
-        attributionControl={false}
         className='overflow-x-auto w-500'
         onSourceData={onLoad}
         >
