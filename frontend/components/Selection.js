@@ -113,9 +113,42 @@ export default function Selection() {
 
   const [title, setTitle] = useState("New York City Public Schools (NY)");
 
-  // For info page, state to hold data and loading state
-  const [infoData, setInfoData] = useState([]);
+  // For all pages: state to hold loading state
   const [isLoading, setIsLoading] = useState(false);
+
+  // For trends page: state to hold data
+  const [trendData, setTrendData] = useState([]);
+
+  // For trends page, function to get data
+  const getTrendData = async () => {
+
+    if (id != undefined) {
+
+      // setIsLoading(true);
+
+      let idlevel;
+      let table;
+      
+      if (levels === 0) {
+        idlevel = "dist_id";
+        table = 'districttrends';
+      } else if (levels === 1) {
+        idlevel = "county_id";
+        table = 'countytrends';
+      } else if (levels === 2) {
+        idlevel = "state_abb";
+        table = 'statetrends';
+      }
+
+      const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
+      setTrendData(response.data);
+      // setIsLoading(false);
+
+      }
+    };
+
+  // For info page: state to hold data 
+  const [infoData, setInfoData] = useState([]);
 
   // For info page, function to get school data
   const getInfoData = async () => {
@@ -136,42 +169,12 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
       setInfoData(response.data);
-      setIsLoading(false);
+      getTrendData();
+      trendData && setIsLoading(false);
 
       }
     };
 
-  
-  // For trends page, state to hold data
-  const [trendData, setTrendData] = useState([]);
-
-  // For trends page, function to get data
-  const getTrendData = async () => {
-
-    if (currentpath === '/trends' && id != undefined) {
-
-      setIsLoading(true);
-
-      let idlevel;
-      let table;
-      
-      if (levels === 0) {
-        idlevel = "dist_id";
-        table = 'districttrends';
-      } else if (levels === 1) {
-        idlevel = "county_id";
-        table = 'countytrends';
-      } else if (levels === 2) {
-        idlevel = "state_abb";
-        table = 'statetrends';
-      }
-
-      const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
-      setTrendData(response.data);
-      setIsLoading(false);
-
-      }
-    };
 
   // For trends page, state to hold data
   const [segData, setSegData] = useState([]);
@@ -286,6 +289,7 @@ export default function Selection() {
       {currentpath === '/info' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
+      <Trends TrendData={trendData} id={id} title={title}/>
       </div>)
       }
       {/* Conditionally render the Trends div once the data array has been returned */}
