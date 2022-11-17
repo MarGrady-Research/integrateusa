@@ -12,36 +12,16 @@ export default function Info({InfoData, title, id, bounds}) {
 
 
     const schoolLevel = {
-        ES: InfoData.filter(e => e.level === "ES").length,
-        ESMS: InfoData.filter(e => e.level === "ESMS").length,
-        MS: InfoData.filter(e => e.level === "MS").length,
-        MSHS: InfoData.filter(e => e.level === "MSHS").length,
-        HS: InfoData.filter(e => e.level === "HS").length,
-        K12: InfoData.filter(e => e.level === "K12").length,
-        Other: InfoData.filter(e => e.level === "Other").length,
-        Total: InfoData.length
-    }
-
-    // const groups = ["asian", "black", "hispanic", "other", "white"]
-
-    // const enrSum = (arr, group) => {
-    //     return arr.reduce(function(a,b) {
-    //         return a+b[group];
-    //     }, 0);
-    // };
-
-    // const enrData = (arr) => {
-    //     return  arr.map(item => {
-    //         return ({
-    //             group: item,
-    //             enr: enrSum(InfoData, item),
-    //             pct: Math.round(enrSum(InfoData, item)/enrSum(InfoData, "tot_enr")*100)
-    //         })
-    //     });
-    // }
-
-    // const enrGroups = enrData(groups)
-    // const enrTotal = enrSum(InfoData, "tot_enr") 
+        ES: InfoData.filter(e => e.level === "ES"),
+        ESMS: InfoData.filter(e => e.level === "ESMS"),
+        MS: InfoData.filter(e => e.level === "MS"),
+        MSHS: InfoData.filter(e => e.level === "MSHS"),
+        HS: InfoData.filter(e => e.level === "HS"),
+        K12: InfoData.filter(e => e.level === "K12"),
+        Other: InfoData.filter(e => e.level === "Other"),
+        Total: {all_schools: InfoData.length,
+                all_students: InfoData.map(e => e.tot_enr).reduce((a,b)=>a+b,0)}
+        }
 
     return(
         <>
@@ -51,13 +31,13 @@ export default function Info({InfoData, title, id, bounds}) {
         </div>
         }
         <div className="relative flex flex-wrap justify-between py-5">
-            <div className=" w-200 h-300">
+            <div className=" w-150 h-300">
             <InsetMap id={id} bounds = {bounds}/>
             </div>
-            <div className="w-200 h-300">
+            <div className="w-150 h-300">
             <SchoolLevelTable schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
             </div>
-            <div className="w-200 h-300">
+            <div className="w-150 h-300">
             <PieChart InfoData={InfoData}/>
             </div>
         </div>
