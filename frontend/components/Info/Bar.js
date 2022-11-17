@@ -115,9 +115,8 @@ export default function BarChart2({InfoData}) {
                     display: true,
                     callbacks: {
                         label: function(context) {
-                            let label = context.dataset.label;
-                            if(label){label += '%'}
-                            return label
+                            let label = context.dataset.data[context.dataIndex];
+                            return (context.dataset.label + ' ' + label + '%');
                         }
                     }
                 },
