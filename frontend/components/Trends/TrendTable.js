@@ -36,7 +36,7 @@ export default function TrendTable({TrendData}) {
             return (
                 <tr>
                     <td className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{grade}</td>
-                    {data.filter(e => e.grade === grade).map(e => {return (<td key = {grade + e.year} className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{e.asian + e.black + e.hispanic + e.other + e.white}</td>)})}
+                    {data.filter(e => e.grade === grade).map(e => {return (<td key = {grade + e.year} className="text-xs text-gray-900 border-2 font-light px-2 py-4 whitespace-nowrap">{(e.asian + e.black + e.hispanic + e.other + e.white).toLocaleString()}</td>)})}
                 </tr>
             )
         }
