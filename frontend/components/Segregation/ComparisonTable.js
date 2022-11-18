@@ -153,7 +153,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                 return '\u2195'
                             }
                         }
-                        return <th key={column.accessor} scope="col" className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                        return <th key={column.accessor} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 <div className="flex flex-row">
                                 <span className="px-1">{column.label}</span>
                                 { column.accessor !== "checkbox" && 
@@ -164,24 +164,24 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                     <tr>
                         {columns.map(column => {
                             if (column.accessor === "checkbox") {
-                                return (<td scope="row">
+                                return (<th scope="row" className="px-6 py-4 whitespace-nowrap">
                                     <input
                                         type="checkbox"
-                                        className="form-check-input px-6 py-4"
+                                        className="form-check-input items-center "
                                         id="master"
                                         onClick={() => {calculatedRows.map(e => e[idlevel]).forEach(e => updateID(e))}}
                                     />
-                                </td>)
+                                </th>)
                             }
                             if (column.accessor === namelevel) {
                                 return (
-                                <td>
+                                <td className="px-6 py-1">
                                     <input
-                                        className="text-sm font-medium text-gray-900 px-3 py-2 text-left"
+                                        className= "px-2 py-2 whitespace-wrap border border-gray-200 rounded-md" //"text-sm font-medium text-gray-900 px-3 py-2 text-left"
                                         key={`${column.accessor}-search`}
                                         type="search"
                                         value={filters[column.accessor]}
@@ -215,11 +215,10 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
                                 return <td>
                                         <div className="w-full px-4 py-1 flex flex-row justify-evenly">
-                                        <input type="text" className="w-8 border border-black rounded-md" placeholder={min[column.accessor]} readOnly = {false} onChange={e => setMax({[column.accessor]: e.target.value})}/>
-                                        -
-                                        <input type="text" className="w-8 border border-black rounded-md" placeholder={max[column.accessor]} readOnly={false} onChange={e => setMax({[column.accessor]: e.target.value})}/> 
+                                        <input type="text" className="w-8 bg-gray-200 border rounded-md text-center" placeholder={min[column.accessor]} readOnly = {false} onChange={e => setMax({[column.accessor]: e.target.value})}/>
+                                        <input type="text" className="w-8 bg-gray-200 border rounded-md text-center" placeholder={max[column.accessor]} readOnly={false} onChange={e => setMax({[column.accessor]: e.target.value})}/> 
                                         </div>
-                                        <div className="px-4">
+                                        {/* <div className="px-4">
                                        <Slider 
                                        range
                                        key={`${column.accessor}-search`}
@@ -235,7 +234,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                  setMin({[column.accessor]: e[0]});
                                                 }}
                                        />
-                                       </div>
+                                       </div> */}
                                        </td>
                             }
                         })}
@@ -257,9 +256,11 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                     readOnly={false}
                                                     />
                                                  </th>)
+                                     } else if (column.accessor === namelevel) {
+                                        return <td key={column.accessor} className="text-sm text-left text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
+                                     } else {
+                                        return <td key={column.accessor} className="text-sm text-center text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
                                      }
-
-                                    return <td key={column.accessor} className="text-sm text-center text-gray-900 font-light px-6 py-4">{row[column.accessor]}</td>
                                 })}
                             </tr>
                         )
@@ -274,10 +275,23 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     return(
         <>
 
-            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
+            {/* <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
                     <div className="overflow-x-auto"> 
                         {tableRows(columns, filteredData)}
+                    </div>
+                </div>
+             </div> */}
+        {/* <div className="relative flex flex-row justify-between"> */}
+            
+            <div className="mt-2 container flex flex-col">
+                <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
+                    <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <div className="overflow-x-auto"> 
+                                {tableRows(columns, filteredData)}
+                            </div>
+                        </div>
                     </div>
                 </div>
              </div>
@@ -290,9 +304,10 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
             setActivePage={setActivePage}
             />
         
-            <div className="w-full">
+            <div className="w-full h-full">
             <LineGraph linedata={linedata} id={id}/>
             </div>
+        {/* </div> */}
 
         </>
     );
