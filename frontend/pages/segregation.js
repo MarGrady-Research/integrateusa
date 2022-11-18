@@ -1,13 +1,17 @@
 import React from "react";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Selection from "../components/Selection";
 
 export default function Segregation() {
 
     return(
-        <div>
+        <>
         <Header />
+        <div className="flex flex-col min-h-screen">
         <Selection />
+        <Footer />
         </div>
+        </>
     )
 }

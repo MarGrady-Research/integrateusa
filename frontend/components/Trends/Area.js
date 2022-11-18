@@ -25,6 +25,7 @@ export default function AreaChart({TrendData}) {
         },
         scales: {
             y: {
+                min: 0,
                 stacked: true
             }
         }

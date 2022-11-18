@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer" ;
-import Selection from "../components/Selection";
 import DemographicMap from "../components/Map/DemographicMap";
 
 export default function Map(){
@@ -9,7 +8,6 @@ export default function Map(){
         <>
         <Header />
         <div className="flex flex-col min-h-screen">
-        {/* <Selection /> */}
         <div className="flex justify-center py-10">
         <DemographicMap/>
         </div>

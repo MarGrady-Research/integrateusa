@@ -28,7 +28,6 @@ export default function TrendTable({TrendData}) {
     ]
 
     let sortedData = TrendData.sort((a,b) => {return ((a['year']-b['year']))})
-    console.log(sortedData)
 
     const table = (cols, data) => {
 

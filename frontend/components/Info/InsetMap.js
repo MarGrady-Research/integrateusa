@@ -48,7 +48,7 @@ export default function InsetMap({id, bounds}) {
     }
 
     return(
-        <>
+        <>        
         <Map 
         ref={mapRef}
         initialViewState={{
@@ -56,7 +56,7 @@ export default function InsetMap({id, bounds}) {
             latitude: 40,
             zoom: 3.5
           }}
-        style={{width: 400, height: 300}}
+        style={{width: '100%', height: '100%'}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         className='overflow-x-auto w-500'
