@@ -30,18 +30,21 @@ export default function Info({InfoData, title, id, bounds}) {
             <span className="text-4xl"><b>{title}</b></span>
         </div>
         }
-        <div className="relative flex flex-wrap justify-between py-5">
-            <div className=" w-150 h-300">
+        <div className="flex flex-row mt-auto">
+        <span className="text-2xl pt-4 pb-2">Overview</span>
+        </div>
+        <div className="container relative flex flex-wrap justify-between pb-5">
+            <div className="w-1/3 h-300 border rounded-md ">
             <InsetMap id={id} bounds = {bounds}/>
             </div>
-            <div className="w-150 h-300">
-            <SchoolLevelTable schoolLevel={schoolLevel} className="border-r-2 border-r-black"/>
+            <div className="w-1/3 h-full">
+            <SchoolLevelTable schoolLevel={schoolLevel}/>
             </div>
-            <div className="w-150 h-300">
-            <PieChart InfoData={InfoData}/>
+            <div className="w-1/4 h-full">
+            <PieChart InfoData={InfoData} />
             </div>
         </div>
-        <div className="py-4">
+        <div className="pb-5">
             <div className="flex flex-row mx-auto">
                 <span className="text-2xl pb-2">Race Breakdown by School</span>
             </div>
