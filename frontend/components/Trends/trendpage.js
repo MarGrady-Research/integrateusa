@@ -4,9 +4,9 @@ import TrendTable from "./TrendTable";
 import GradeLines from "./GradeLine";
 
 
-export default function Trends ({TrendData, id, title}) {
+export default function Trends ({TrendData, id, grade, title}) {
 
-
+   
     return (
         <>
         <div className="flex flex-row">
@@ -16,7 +16,7 @@ export default function Trends ({TrendData, id, title}) {
 
         <div className="flex flex-wrap justify-apart h-full">
         <div className="w-1/2 h-full pt-3">
-            <AreaChart TrendData={TrendData}/>
+            <AreaChart TrendData={TrendData} grade={grade}/>
          </div>
 
         {/*
@@ -25,7 +25,7 @@ export default function Trends ({TrendData, id, title}) {
         </div>*/}
 
         <div className="w-1/2 h-full py-3"> 
-            <GradeLines TrendData={TrendData}/>
+            <GradeLines TrendData={TrendData} grade={grade}/>
         </div>
         </div>
         
