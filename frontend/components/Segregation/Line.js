@@ -18,6 +18,7 @@ export default function LineGraph ({linedata, id}) {
 
     const options = {
         responsive: true,
+        maintainAspectRatio:false,
         plugins: {
             legend: {
                 position: 'top',
@@ -25,6 +26,7 @@ export default function LineGraph ({linedata, id}) {
         },
         scales: {
             y: {
+                position: 'right',
                 min:0,
                 max: 1
             }
@@ -61,7 +63,7 @@ export default function LineGraph ({linedata, id}) {
     return(
 
         <div>
-           <Line options={options} data={data} />
+           <Line options={options} data={data} className='w-full h-full'/>
         </div>
 
     )
