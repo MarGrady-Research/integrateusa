@@ -13,11 +13,11 @@ ChartJS.register(
     Legend,
 )
 
-export default function GradeLines ({TrendData}) {
+export default function GradeLines ({TrendData, grade}) {
 
     const grades = ["PK", "KG", "01", "02", "03", "04", "05", "06", "07", "08" ,"09", "10", "11", "12"]
 
-
+    let sortedData = TrendData.sort((a,b) => {return ((a['year']-b['year']))})
 
     const options = {
         responsive: true,
@@ -40,9 +40,9 @@ export default function GradeLines ({TrendData}) {
     const makeLines = () => { 
                 return grades.map(el => {return ({
                     label: el,
-                    data:  TrendData.filter(e => e.grade === el).map((e) => e.asian + e.black + e.hispanic + e.other + e.white),
-                    borderColor:  'rgb(255, 99, 132)',
-                    backgroundColor:  'rgb(255, 99, 132)'})
+                    data:  sortedData.filter(e => e.grade === el).map((e) => e.asian + e.black + e.hispanic + e.other + e.white),
+                    borderColor:  el === grade ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)',
+                    backgroundColor:  el === grade ? 'rgb(255, 99, 132)' : 'rgb(169, 169, 169)'})
             } 
         )}
 

@@ -289,7 +289,7 @@ export default function Selection() {
       {currentpath === '/info' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
-      <Trends TrendData={trendData} id={id} title={title}/>
+      <Trends TrendData={trendData} id={id} grade={grade} title={title}/>
       </div>)
       }
       {/* Conditionally render the Trends div once the data array has been returned */}

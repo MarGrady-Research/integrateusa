@@ -14,7 +14,9 @@ ChartJS.register(
 );
 
 
-export default function AreaChart({TrendData}) {
+export default function AreaChart({TrendData, grade}) {
+
+    console.log(grade)
 
     const options = {
         responsive: true,
@@ -31,7 +33,7 @@ export default function AreaChart({TrendData}) {
         }
     };
 
-    let sortedData = TrendData.filter(e => e.grade === "All").sort((a,b) => {return ((a['year']-b['year']))})
+    let sortedData = TrendData.filter(e => e.grade === grade).sort((a,b) => {return ((a['year']-b['year']))})
 
     const labels = sortedData.map(e=>e.year)
 
