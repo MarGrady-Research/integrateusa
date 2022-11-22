@@ -17,6 +17,16 @@ export default function MapPie({clickInfo}) {
     const options = {
         reponsive: true,
         plugins: {
+            tooltip: {
+                enabled: true,
+                display: true,
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.data[context.dataIndex];
+                        return (data.labels[context.dataIndex] + ' ' + Math.round(label*100) + '%');
+                    }
+                }
+            },
             legend: {
                 display: false
             }
