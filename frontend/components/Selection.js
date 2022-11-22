@@ -235,14 +235,14 @@ export default function Selection() {
 // Returning JSX
   return (
     <div className='container mx-auto p-5'>
-      <div className='flex flex-wrap mx-auto mt-10'>
+      <div className='flex flex-wrap mx-auto'>
         <Select 
         options = {levelselect}
         placeholder = "Geographic Level"
         defaultValue={{label: 'District', value: 0}}
         onChange= {e => {setLevels(e.value)}} 
         components={{IndicatorSeparator: () => null}}
-        className="px-2"
+        className="pr-2"
         />
         <>
         <AsyncSelect 
@@ -255,6 +255,7 @@ export default function Selection() {
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
         placeholder= {"Type a " + levelselect[levels].label + " name"}
+        className='pr-2'
         /> 
         {currentpath === '/info' &&
           <Select 
@@ -264,17 +265,17 @@ export default function Selection() {
           isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
           placeholder="Select a year"
           name='years'
-          className='flex px-2'
+          className='flex pr-2'
           />
         }
         {currentpath !== '/trends' &&
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
-          defaultValue={{label: 'All', value: 'All'}}
+          defaultValue={() => { if (currentpath === '/segregation') {return {label: 'PK', value: 'PK'}} else { return {label: 'All', value: 'All'}}}}
           placeholder="Select a grade"
           name='grades'
-          className='flex pr-6'
+          className='flex pr-4'
           />
         }
         <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>

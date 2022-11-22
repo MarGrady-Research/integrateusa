@@ -133,6 +133,8 @@ export default function DemographicMap() {
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
           sch_name: school && school.properties.sch_name,
+          year: school && school.properties.year,
+          tot_enr: school && school.properties.tot_enr,
           prop_as: school && school.properties.prop_as,
           prop_bl: school && school.properties.prop_bl,
           prop_hi: school && school.properties.prop_hi,
@@ -146,7 +148,6 @@ export default function DemographicMap() {
 
       
     const selectedSchool = clickInfo && clickInfo.sch_name || '';
-    console.log(selectedSchool);
 
     // Set State on mouse enter
     const onMouseEnter = useCallback(() => setCursor('pointer'), []);
@@ -161,9 +162,9 @@ export default function DemographicMap() {
         initialViewState={{
             longitude: -100,
             latitude: 40,
-            zoom: 3.5
+            zoom: 4
           }}
-        style={{width: 1200, height:700}}
+        style={{position: 'relative', width: '100vw', height:'100vh'}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         attributionControl={true}
@@ -196,9 +197,14 @@ export default function DemographicMap() {
             offset={[5,0]}
             closebutton={true}
             closeOnClick={true}
-            onClose={() => setClickInfo(null)}>
-        <b>{selectedSchool}</b>
-        <MapPie clickInfo={clickInfo} />
+            onClose={() => setClickInfo(null)}
+            className='rounded-md'>
+        <div className="p-2 rounded-md text-left">
+        <span className="font-medium text-center"><b>{selectedSchool}</b></span>
+        <br></br>
+        <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> students enrolled at {selectedSchool}</span>
+        <MapPie clickInfo={clickInfo}/>
+        </div>
         </Popup>
         }
         </Map>
