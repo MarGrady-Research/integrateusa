@@ -1,4 +1,4 @@
-import React, { useEffect, useRef} from "react";
+import React, { useCallback, useEffect, useRef} from "react";
 import Map, {Source, Layer, FillLayer} from 'react-map-gl';
 import mapbox_token from "../../Key";
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -8,9 +8,9 @@ export default function InsetMap({id, bounds}) {
     // Using the useMap hook to set up ease to functionality
     const mapRef = useRef();
 
-    const onLoad = (stringID) => {
-        mapRef.current.fitBounds(bounds, {padding: 25, duration:800});
-    }
+    const onLoad = useCallback(() => {
+        mapRef.current.fitBounds(bounds, {padding: 25, duration:2000});
+    }, []);
 
     let stringID = ''+id;
 
@@ -54,13 +54,13 @@ export default function InsetMap({id, bounds}) {
         initialViewState={{
             longitude: -100,
             latitude: 40,
-            zoom: 3.5
+            zoom: 2.5
           }}
         style={{width: '100%', height: '100%'}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         className='overflow-x-auto w-500'
-        onSourceData={onLoad}
+        onLoad={onLoad}
         >
         <Source id='district-boundary-source' type="vector" url="mapbox://theokaufman.45uz283x">
             <Layer {...districtLayer} />
