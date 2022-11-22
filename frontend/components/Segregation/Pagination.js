@@ -7,13 +7,28 @@ export default function Pagination({ activePage, count, rowsPerPage, totalPages,
 
     return (
         <> 
-        <div className="pagination flex flex-row justify-end overflow-x-auto">
-            <button disabled={activePage == 1} onClick={() => setActivePage(1)} className="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none">First </button>
-            <button disabled={activePage == 1} onClick={() => setActivePage(activePage-1)} className="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none">&laquo;</button>
-            <p className="page-link relative block py-1.5 px-3">Page {activePage} of {totalPages}</p>
-            <button disabled={activePage == totalPages} onClick={() => setActivePage(activePage+1)} className="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none">&raquo;</button>
-            <button disabled={activePage == totalPages} onClick={() => setActivePage(totalPages)} className="page-link relative block py-1.5 pl-3 rounded border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none">Last</button>
-        
+        <div className="pt-3 flex items-center justify-between">
+
+            <div className="flex-1 flex justify-between sm:hidden">
+            <button onClick={() => setActivePage(activePage-1)} disabled={activePage === 1} className='relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50'>Previous</button>
+            <button onClick={() => setActivePage(activePage+1)} disabled={activePage === totalPages} className='relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50'>Next</button>
+            </div>
+
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div className="flex gap-x-2">
+                    <span className="text-sm text-gray-700"> Page <span className="font-medium">{activePage}</span> of <span className="font-medium">{totalPages}</span></span>
+                </div>
+            
+
+            <div>
+                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <button disabled={activePage === 1} onClick={() => setActivePage(1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-l-md">First</button>
+                    <button disabled={activePage === 1} onClick={() => setActivePage(activePage-1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">&laquo;</button>
+                    <button disabled={activePage === totalPages} onClick={() => setActivePage(activePage+1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">&raquo;</button>
+                    <button disabled={activePage === totalPages} onClick={() => setActivePage(totalPages)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-r-md">Last</button>
+                </nav>
+            </div>
+            </div>
         </div>
         </>
     )

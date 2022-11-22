@@ -12,7 +12,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     const columns = [
         {accessor: "checkbox", label: ""},
         {accessor: namelevel, label: "Name"},
-        {accessor: "num_schools", label: "# Schools"},
+        {accessor: "num_schools", label: "# of Schools"},
         {accessor: "enr_prop_as", label: "% Asian"},
         {accessor: "enr_prop_bl", label: "% Black"},
         {accessor: "enr_prop_hi", label: "% Hispanic"},
@@ -153,7 +153,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                 return '\u2195'
                             }
                         }
-                        return <th key={column.accessor} scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        return <th key={column.accessor} scope="col" className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 <div className="flex flex-row">
                                 <span className="px-1">{column.label}</span>
                                 { column.accessor !== "checkbox" && 
@@ -196,8 +196,13 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                 const maxval = () => {
                                     if (column.accessor === "num_schools") {
                                         let arr = filteredData.map(e => e[column.accessor]);
+                                        console.log(arr);
                                         return Math.max(...arr)
-                                    } else { return 100}
+                                    } else if (column.accessor === "norm_exp_aw") {
+                                        return 1
+                                    } else { 
+                                        return 100
+                                    }
                                 }
 
                                 const [min, setMin] = useState({num_schools: 1,
@@ -205,28 +210,32 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                                 enr_prop_bl: 0,
                                                                 enr_prop_hi: 0,
                                                                 enr_prop_or: 0,
-                                                                enr_prop_wh: 0});
+                                                                enr_prop_wh: 0,
+                                                                norm_exp_aw: 0});
                                 const [max, setMax] = useState({num_schools: maxval(),
                                                                 enr_prop_as: maxval(),
                                                                 enr_prop_bl: maxval(),
                                                                 enr_prop_hi: maxval(),
                                                                 enr_prop_or: maxval(),
-                                                                enr_prop_wh: maxval()});
+                                                                enr_prop_wh: maxval(),
+                                                                norm_exp_aw: maxval()});
 
                                 const minSearch = (e) => {
-                                    setMin({[column.accessor]: e.target.value}); 
-                                    handleSearch([e.target.value, max[column.accessor]], column.accessor)
+                                    e.target.value === '' ? setMin({[column.accessor]: 0}) : setMin({[column.accessor]: e.target.value}); 
+                                    let searchVal = e.target.value === '' ? 0 : e.target.value;
+                                    handleSearch([searchVal, max[column.accessor]], column.accessor);
                                 }
 
                                 const maxSearch = (e) => {
-                                    setMax({[column.accessor]: e.target.value}); 
-                                    handleSearch([min[column.accessor], e.target.value], column.accessor)
+                                    e.target.value === '' ? setMax({[column.accessor]: 100}) : setMax({[column.accessor]: e.target.value}); 
+                                    let searchVal = e.target.value === '' ? 100 : e.target.value;
+                                    handleSearch([min[column.accessor], searchVal], column.accessor);
                                 }
 
                                 return <td>
-                                        <div className="w-full px-4 py-1 flex flex-row justify-evenly">
-                                        <input type="text" className="w-8 bg-gray-200 border rounded-md text-center" placeholder={min[column.accessor]} readOnly = {false} onChange={e => minSearch(e)}/>
-                                        <input type="text" className="w-8 bg-gray-200 border rounded-md text-center" placeholder={max[column.accessor]} readOnly={false} onChange={e => maxSearch(e)}/> 
+                                        <div className="w-full px-2 py-1 flex flex-row justify-around">
+                                        <input type="text" className="w-7 bg-gray-200 border rounded-md text-xs text-center" placeholder={min[column.accessor]} readOnly = {false} onChange={e => minSearch(e)}/>
+                                        <input type="text" className="w-7 bg-gray-200 border rounded-md text-xs text-center" placeholder={max[column.accessor]} readOnly={false} onChange={e => maxSearch(e)}/> 
                                         </div>
                                         {/* <div className="px-4">
                                        <Slider 
@@ -285,27 +294,29 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         <>
 
         <div className="flex flex-row justify-between h-full">
-            <div className="w-2/3 mt-2 container flex flex-col">
-                <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
-                    <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                            <div className="overflow-x-auto"> 
-                                {tableRows(columns, filteredData)}
+            <div className="w-2/3">
+                <div className="w-full mt-2 container flex flex-col">
+                    <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
+                        <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
+                            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                                <div className="overflow-x-auto"> 
+                                    {tableRows(columns, filteredData)}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-             </div>
+            
+                <Pagination 
+                activePage={activePage}
+                count={count}
+                rowsPerPage={rowsPerPage}
+                totalPages={totalPages}
+                setActivePage={setActivePage}
+                />
+            </div>
         
-            {/* <Pagination 
-            activePage={activePage}
-            count={count}
-            rowsPerPage={rowsPerPage}
-            totalPages={totalPages}
-            setActivePage={setActivePage}
-            /> */}
-        
-            <div className="flex-1 relative w-1/3">
+            <div className=" flex-1 relative w-1/3">
             <LineGraph linedata={linedata} id={id}/>
             </div>
         </div>
