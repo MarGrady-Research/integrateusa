@@ -8,7 +8,7 @@ export default function Map(){
         <>
         <Header />
         <div className="flex flex-col min-h-screen">
-        <div className="flex justify-center py-10">
+        <div className="flex justify-center">
         <DemographicMap/>
         </div>
         <Footer />

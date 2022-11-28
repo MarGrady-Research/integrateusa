@@ -126,7 +126,7 @@ export default function DemographicMap() {
     // Click info state variable, to hold relevant data from clicked school
     const [clickInfo, setClickInfo] = useState(null);
 
-    const handleClick = (event) => {
+    const handleClick = useCallback((event) => {
         setClickInfo({sch_name: undefined})
         const school = event.features && event.features[0];
         setClickInfo({
@@ -143,8 +143,7 @@ export default function DemographicMap() {
         });
         const center = [event.lngLat.lng, event.lngLat.lat];
         school && mapRef.current.easeTo({center: center, duration: 500});
-      
-      }
+      }, [])
 
       
     const selectedSchool = clickInfo && clickInfo.sch_name || '';
@@ -202,7 +201,7 @@ export default function DemographicMap() {
         <div className="p-2 rounded-md text-left">
         <span className="font-medium text-center"><b>{selectedSchool}</b></span>
         <br></br>
-        <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> students enrolled at {selectedSchool}</span>
+        <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> total students enrolled</span>
         <MapPie clickInfo={clickInfo}/>
         </div>
         </Popup>

@@ -316,8 +316,10 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                 />
             </div>
         
-            <div className=" flex-1 relative w-1/3">
-            <LineGraph linedata={linedata} id={id}/>
+            <div className="flex-1 flex w-full">
+                <div className="flex flex-1">
+                <LineGraph linedata={linedata} id={id}/>
+                </div>
             </div>
         </div>
 
