@@ -114,7 +114,7 @@ export default function Selection() {
   const [title, setTitle] = useState("New York City Public Schools (NY)");
 
   // For all pages: state to hold loading state
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // For trends page: state to hold data
   const [trendData, setTrendData] = useState([]);
