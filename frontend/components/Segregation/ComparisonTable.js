@@ -192,12 +192,12 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                             } 
                             else {
 
-                                
+                                let maxschools = Math.max(...filteredData.map(e => e["num_schools"]));
+                                console.log(maxschools);
+
                                 const maxval = () => {
-                                    if (column.accessor === "num_schools") {
-                                        let arr = filteredData.map(e => e[column.accessor]);
-                                        console.log(arr);
-                                        return Math.max(...arr)
+                                    if (filteredData && column.accessor === "num_schools") {
+                                        return maxschools;
                                     } else if (column.accessor === "norm_exp_aw") {
                                         return 1
                                     } else { 
