@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Selection from "../components/Selection";
+import Selection from "../components/Select/Selection";
 
 export default function Segregation() {
 

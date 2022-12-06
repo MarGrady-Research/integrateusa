@@ -20,9 +20,6 @@ return(
     <Link href="/info">
     <a className="mr-5 hover:text-gray-900">Demographic Info</a>
     </Link>
-    <Link href="/trends">
-    <a className="mr-5 hover:text-gray-900">Demographic Trends</a>
-    </Link>
     <Link href="/segregation">
     <a className="mr-5 hover:text-gray-900">Segregation</a>
     </Link>

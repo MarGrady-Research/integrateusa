@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/router';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import {years, grades} from './SelectOptions';
-import Info from './Info/InfoTrends';
-import Segregation from './Segregation/SegregationMeasures';
-import Trends from './Trends/trendpage';
-import { Loader } from './Loader';
+import Info from '../Info/InfoTrends';
+import Segregation from '../Segregation/SegregationMeasures';
+import Trends from '../Trends/trendpage';
+import { Loader } from '../Loader';
 
 export default function Selection() {
 
@@ -116,15 +116,13 @@ export default function Selection() {
   // For all pages: state to hold loading state
   const [isLoading, setIsLoading] = useState(true);
 
-  // For trends page: state to hold data
+  // State to hold trends data
   const [trendData, setTrendData] = useState([]);
 
-  // For trends page, function to get data
+  //  
   const getTrendData = async () => {
 
     if (id != undefined) {
-
-      // setIsLoading(true);
 
       let idlevel;
       let table;
@@ -142,7 +140,6 @@ export default function Selection() {
 
       const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
       setTrendData(response.data);
-      // setIsLoading(false);
 
       }
     };
@@ -150,7 +147,7 @@ export default function Selection() {
   // For info page: state to hold data 
   const [infoData, setInfoData] = useState([]);
 
-  // For info page, function to get school data
+  // function to get data for info page (also calls trend data function)
   const getInfoData = async () => {
 
     if (year != undefined && grade != undefined && id != undefined) {
@@ -174,7 +171,6 @@ export default function Selection() {
 
       }
     };
-
 
   // For trends page, state to hold data
   const [segData, setSegData] = useState([]);
@@ -291,12 +287,6 @@ export default function Selection() {
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
       <Trends TrendData={trendData} id={id} grade={grade} title={title}/>
-      </div>)
-      }
-      {/* Conditionally render the Trends div once the data array has been returned */}
-      {currentpath === '/trends' && (isLoading ? <Loader /> :
-      <div className='mx-auto mt-5'>
-      <Trends TrendData={trendData} id={id} title={title}/>
       </div>)
       }
       {/* Conditionally render the Segregation div once the data array has been returned */}

@@ -19,21 +19,11 @@ export default function Trends ({TrendData, id, grade, title}) {
             <AreaChart TrendData={TrendData} grade={grade}/>
          </div>
 
-        {/*
-        <div className="pt-3">
-            <span className="text-4xl">Enrollment Trends by Grade</span>
-        </div>*/}
-
         <div className="w-1/2 h-full py-3"> 
             <GradeLines TrendData={TrendData} grade={grade}/>
         </div>
         </div>
-        
-        {/* <div className="py-3">
-            <TrendTable TrendData={TrendData}/>
-        </div> */}
-
-        
+      
         </>
     )
 
