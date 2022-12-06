@@ -134,6 +134,38 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         })
     }, [lines])
 
+
+    // Max and min
+
+    let maxschools = Math.max(...filteredData.map(e => e["num_schools"]));
+
+    const maxval = (e) => {
+        if (e === "num_schools") {
+            return maxschools;
+        } else if (e === "norm_exp_aw") {
+            return 1
+        } else { 
+            return 100
+        }
+    }
+
+    const [min, setMin] = useState({num_schools: 1,
+        enr_prop_as: 0,
+        enr_prop_bl: 0,
+        enr_prop_hi: 0,
+        enr_prop_or: 0,
+        enr_prop_wh: 0,
+        norm_exp_aw: 0});
+    const [max, setMax] = useState({num_schools: maxval("num_schools"),
+        enr_prop_as: maxval(),
+        enr_prop_bl: maxval(),
+        enr_prop_hi: maxval(),
+        enr_prop_or: maxval(),
+        enr_prop_wh: maxval(),
+        norm_exp_aw: maxval("norm_exp_aw")});
+
+
+
     // Returning table JSX
     const tableRows = (columns, filteredData) => {
         return(
@@ -190,35 +222,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                     />  
                                 </td>)
                             } 
-                            else {
-
-                                let maxschools = Math.max(...filteredData.map(e => e["num_schools"]));
-                                console.log(maxschools);
-
-                                const maxval = () => {
-                                    if (filteredData && column.accessor === "num_schools") {
-                                        return maxschools;
-                                    } else if (column.accessor === "norm_exp_aw") {
-                                        return 1
-                                    } else { 
-                                        return 100
-                                    }
-                                }
-
-                                const [min, setMin] = useState({num_schools: 1,
-                                                                enr_prop_as: 0,
-                                                                enr_prop_bl: 0,
-                                                                enr_prop_hi: 0,
-                                                                enr_prop_or: 0,
-                                                                enr_prop_wh: 0,
-                                                                norm_exp_aw: 0});
-                                const [max, setMax] = useState({num_schools: maxval(),
-                                                                enr_prop_as: maxval(),
-                                                                enr_prop_bl: maxval(),
-                                                                enr_prop_hi: maxval(),
-                                                                enr_prop_or: maxval(),
-                                                                enr_prop_wh: maxval(),
-                                                                norm_exp_aw: maxval()});
+                            else {                             
 
                                 const minSearch = (e) => {
                                     e.target.value === '' ? setMin({[column.accessor]: 0}) : setMin({[column.accessor]: e.target.value}); 

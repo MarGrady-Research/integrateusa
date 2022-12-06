@@ -57,7 +57,7 @@ export default function LineGraph ({linedata, id}) {
 
     useEffect(() => {
          makeLines();
-    }, [linedata])
+    }, [linedata, makeLines])
 
 
     return(

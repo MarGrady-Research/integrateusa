@@ -10,7 +10,7 @@ export default function InsetMap({id, bounds}) {
 
     const onLoad = useCallback(() => {
         mapRef.current.fitBounds(bounds, {padding: 25, duration:2000});
-    }, []);
+    }, [bounds]);
 
     let stringID = ''+id;
 
