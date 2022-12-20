@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef} from "react";
 import axios from 'axios';
 import { Loader } from "../Loader";
-import Map, {Layer, useMap, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
+import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
 import mapbox_token from "../../Key";
 import Control from "./Control";
 import MapPie from "./MapPies";
@@ -127,7 +127,7 @@ export default function DemographicMap() {
     const [clickInfo, setClickInfo] = useState(null);
 
     const handleClick = useCallback((event) => {
-        setClickInfo({sch_name: undefined})
+        setClickInfo(null);
         const school = event.features && event.features[0];
         setClickInfo({
           longitude: event.lngLat.lng,
@@ -147,6 +147,7 @@ export default function DemographicMap() {
 
       
     const selectedSchool = clickInfo && clickInfo.sch_name || '';
+
 
     // Set State on mouse enter
     const onMouseEnter = useCallback(() => setCursor('pointer'), []);
@@ -190,24 +191,26 @@ export default function DemographicMap() {
         </Source>
         {selectedSchool &&
         <Popup 
-            anchor={'left'}
+            anchor={'bottom-left'}
             longitude={clickInfo.longitude}
             latitude={clickInfo.latitude}
-            offset={[5,0]}
-            closebutton={true}
-            closeOnClick={true}
+            offset={5}
+            closebutton={false}
+            closeOnClick={false}
             onClose={() => setClickInfo(null)}
-            className='rounded-md'>
-        <div className="p-2 rounded-md text-left">
+            className='text-left'>
+        {/* <div className="text-left"> */}
         <span className="font-medium text-center"><b>{selectedSchool}</b></span>
         <br></br>
         <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> total students enrolled</span>
         <MapPie clickInfo={clickInfo}/>
-        </div>
+        {/* </div> */}
         </Popup>
         }
         </Map>
+        <div className="absolute top-32 right-10">
         <Control handleVisibility={handleVisibility}/>
+        </div>
         </>
         }
         </>
