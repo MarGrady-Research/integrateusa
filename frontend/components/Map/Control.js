@@ -4,7 +4,6 @@ import React, { useState } from "react";
 export default function Control ({handleVisibility}) {
 
     // Radio Elements and functions
-
     const [radio, setRadio] = useState({level: "School"})
 
     const handleRadio = (evt) => {
@@ -25,9 +24,9 @@ export default function Control ({handleVisibility}) {
 
     const legend = () => race.map(el => {
         return(
-            <div> 
-                <span className='w-3 h-3 rounded-sm inline-block mr-2 p-1' style={{'backgroundColor': el.color}}></span>
-                <span>{el.race}</span>
+            <div key={el.race}> 
+                <span className='w-3 h-3 rounded-sm inline-block mr-2 p-1' key={el.color} style={{'backgroundColor': el.color}}></span>
+                <span key={el.race}>{el.race}</span>
             </div>
         )
     })
