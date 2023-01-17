@@ -28,8 +28,6 @@ yarn-error.log*
 # local env files
 .env*.local
 
-# Mapbox info
-Key.js
 
 # vercel
 .vercel
