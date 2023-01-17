@@ -13,7 +13,7 @@ export default function Home() {
 
       <main className={styles.main}>
         
-        <BarChart />
+        <p>Testing</p>
     
       </main> 
     </div>
