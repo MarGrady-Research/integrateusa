@@ -89,7 +89,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         const labels = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
             2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
         
-        const response = await axios.get("http://localhost:8000/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
+        const response = await axios.get("http://localhost/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
         let data = response.data;
 
         const finaldata = data.map((e) =>{ return ({

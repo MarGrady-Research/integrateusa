@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Selection from "../components/Select/Selection";
 
 export default function Info(){
+
     return(
         <>
         <Header/>
