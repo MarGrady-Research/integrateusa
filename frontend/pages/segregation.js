@@ -1,4 +1,5 @@
 import React from "react";
+import Head from 'next/head';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Selection from "../components/Select/Selection";

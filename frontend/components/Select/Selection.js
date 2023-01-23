@@ -219,7 +219,6 @@ export default function Selection() {
   }, [clicked])
 
   useEffect(() => {
-    console.log(window.location.origin);
     if (currentpath === '/info') {
       getInfoData();
     } else if (currentpath === '/trends') {
