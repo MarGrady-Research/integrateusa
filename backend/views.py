@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, StateNames, DistrictTrends, CountyTrends, StateTrends, MapSchools
+from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
@@ -31,6 +31,14 @@ class districtNameList(generics.ListAPIView):
         query = self.request.GET.get("q")
         return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
 
+class districtNameAltList(generics.ListAPIView):
+    queryset = DistNamesAlt.objects.all()
+    serializer_class = DistNameAltSerializer
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return DistNamesAlt.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
+
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
     serializer_class = CountyNameSerializer
@@ -53,6 +61,11 @@ class stateNameList(generics.ListAPIView):
 class districtTrendsList(generics.ListAPIView):
     queryset = DistrictTrends.objects.all()
     serializer_class = DistrictTrendSerializer
+    filterset_fields = ['dist_id']
+
+class districtTrendsAltList(generics.ListAPIView):
+    queryset = DistrictTrendsAlt.objects.all()
+    serializer_class = DistrictTrendAltSerializer
     filterset_fields = ['dist_id']
 
 class countyTrendsList(generics.ListAPIView):

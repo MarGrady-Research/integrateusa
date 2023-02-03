@@ -67,10 +67,6 @@ export default function Segregation({SegData, id, grade, title}) {
             <span className="text-4xl">Comparison {level()} for {title}</span>
         </div>
 
-        <div>
-            <span>Use the sliders below to filter the data or search for specific {level().toLowerCase()}. Select comparison {level().toLowerCase()} to see their changes in exposure over time</span>
-        </div>
-
         <div className="pt-3 container">
             <Comparison id={id} grade={grade} filteredData={filteredData} idlevel={idlevel} namelevel={namelevel} table={table}/>
         </div>  
