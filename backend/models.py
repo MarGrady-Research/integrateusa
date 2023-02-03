@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.contrib.postgres.search import SearchVector, SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
-from django.contrib.gis.db import models as gismodels
 
 
 # School Models
