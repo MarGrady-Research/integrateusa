@@ -16,6 +16,7 @@ class Schools(models.Model):
     sch_name = models.TextField(null=True)
     level = models.TextField()
     dist_id = models.TextField()
+    dist_id_alt = models.TextField()
     county_id = models.TextField()
     state_abb = models.CharField(max_length = 2)
     asian = models.IntegerField(blank=True, null=True)
@@ -68,6 +69,20 @@ class DistNames(models.Model):
     def __str__(self):
         return self.dist_name," (", self.dist_id, ")"
 
+class DistNamesAlt(models.Model):
+    dist_id = models.TextField(primary_key=True)
+    dist_name = models.TextField()
+    lngmin = models.FloatField()
+    latmin = models.FloatField()
+    lngmax = models.FloatField()
+    latmax = models.FloatField()
+
+    class Meta:
+        db_table = 'district_names_alt'
+
+    def __str__(self):
+        return self.dist_name," (", self.dist_id, ")"
+
 class StateNames(models.Model):
     state_abb = models.CharField(max_length = 2, primary_key=True)
     fips = models.IntegerField(blank=True, null=True)
@@ -100,6 +115,21 @@ class DistrictTrends(models.Model):
 
     class Meta:
         db_table = 'dist_trends'
+
+class DistrictTrendsAlt(models.Model):
+    dist_key = models.TextField(primary_key=True)
+    year = models.IntegerField()
+    grade = models.TextField()
+    dist_id = models.TextField()
+    dist_name = models.TextField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+
+    class Meta:
+        db_table = 'dist_trends_alt'
 
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
