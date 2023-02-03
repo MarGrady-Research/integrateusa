@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import LineGraph from "./Line";
 import Pagination from "./Pagination";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
 import axios from "axios";
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
 
 export default function Comparison({id, grade, filteredData, namelevel, idlevel, table}) {
 
@@ -23,8 +21,6 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     // Filtering
     const [filters, setFilters] = useState({})
-
-    // TODO: Add in a half second timeout in handleSearch
 
     const handleSearch = (value, accessor) => {
         setActivePage(1);
@@ -165,6 +161,38 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         norm_exp_aw: maxval("norm_exp_aw")});
 
 
+    // Control display
+
+    const [display, setDisplay] = useState({
+        table: 'w-2/3',
+        graph: 'w-1/3',
+        tablecontrols: true
+    })
+
+    const showTable = useCallback(() => {
+            setDisplay({
+                table: 'w-full',
+                graph: 'w-0',
+                tablecontrols: true
+            })
+        }, [])
+
+    const showGraph = useCallback(() => {
+            setDisplay({
+                table: 'hidden',
+                graph: 'w-full',
+                tablecontrols: false
+            })
+        }, [])
+
+    const showBoth = useCallback(() => {
+            setDisplay({
+                table: 'w-2/3',
+                graph: 'w-1/3',
+                tablecontrols: true
+            })
+        }, [])
+
 
     // Returning table JSX
     const tableRows = (columns, filteredData) => {
@@ -185,7 +213,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                 return '\u2195'
                             }
                         }
-                        return <th key={column.accessor} scope="col" className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        return <th key={column.accessor} scope="col" className="px-2 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider">
                                 <div className="flex flex-row">
                                 <span className="px-1">{column.label}</span>
                                 { column.accessor !== "checkbox" && 
@@ -213,7 +241,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                 return (
                                 <td className="px-2 py-1">
                                     <input
-                                        className= "px-2 py-2 whitespace-wrap border border-gray-200 rounded-md" 
+                                        className= "px-2 py-2 whitespace-wrap border border-gray-700 rounded-md" 
                                         key={`${column.accessor}-search`}
                                         type="search"
                                         value={filters[column.accessor]}
@@ -241,23 +269,6 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                         <input type="text" className="w-7 bg-gray-200 border rounded-md text-xs text-center" placeholder={min[column.accessor]} readOnly = {false} onChange={e => minSearch(e)}/>
                                         <input type="text" className="w-7 bg-gray-200 border rounded-md text-xs text-center" placeholder={max[column.accessor]} readOnly={false} onChange={e => maxSearch(e)}/> 
                                         </div>
-                                        {/* <div className="px-4">
-                                       <Slider 
-                                       range
-                                       key={`${column.accessor}-search`}
-                                       className="px-5"
-                                       min={0}
-                                       max={maxval()}
-                                       pushable={10}
-                                       allowCross={false}
-                                       defaultValue={[min[column.accessor], max[column.accessor]]}
-                                       onChange={e => {
-                                                 handleSearch(e, column.accessor);
-                                                 setMax({[column.accessor]: e[1]});
-                                                 setMin({[column.accessor]: e[0]});
-                                                }}
-                                       />
-                                       </div> */}
                                        </td>
                             }
                         })}
@@ -296,13 +307,34 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     return(
         <>
+        <div className="align-center inline-flex font-raleway">
+        <button onClick={showBoth} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+        <span className="text-gray-900">Table + Graph</span>       
+        </button>
+        <button onClick={showTable} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+            <span className="text-gray-900">Table</span>       
+        </button>
+        <button onClick={showGraph} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+            <span className="text-gray-900">Graph</span>       
+        </button>
+        </div>
 
-        <div className="flex flex-row justify-between h-full">
-            <div className="w-2/3">
+        {display.tablecontrols &&
+            <div className="pt-2">
+                <div className="align-center inline-flex font-raleway">
+                    <button className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+                    <span className="text-gray-900">Clear Filters</span>       
+                    </button>
+                </div>
+            </div>
+        } 
+
+        <div className="flex justify-between">
+            <div className={`${display.table} transition-width transition-duration-500 ease-in`}>
                 <div className="w-full mt-2 container flex flex-col">
                     <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
                         <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
-                            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <div className="shadow overflow-hidden border border-gray-700 sm:rounded-lg">
                                 <div className="overflow-x-auto"> 
                                     {tableRows(columns, filteredData)}
                                 </div>
@@ -310,7 +342,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                         </div>
                     </div>
                 </div>
-            
+               
                 <Pagination 
                 activePage={activePage}
                 count={count}
@@ -319,14 +351,15 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                 setActivePage={setActivePage}
                 />
             </div>
-        
-            <div className="flex-1 flex w-full">
-                <div className="flex flex-1">
-                <LineGraph linedata={linedata} id={id}/>
-                </div>
+         
+            <div className={`${display.graph}  flex flex-1 h-full transition-width transition-duration-500 ease-in`}>
+            <div className="w-full">
+            <LineGraph linedata={linedata} id={id}/>
             </div>
+            </div>
+           
+        
         </div>
-
         </>
     );
 }

@@ -20,18 +20,18 @@ export default function SchoolLevelTable({schoolLevel}) {
         //     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
         //         <div className="overflow-x-auto">
         <div className="mt-2 container flex flex-col">
-            <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-2 lg:-mx-4">
+                <div className="py-2 align -middle inline-block min-w-full sm:px-2 lg:px-4">
+                    <div className="shadow overflow-hidden border border-gray-700 sm:rounded-lg">
                         <div className="overflow-x-auto">  
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-200">
                                     <tr>
-                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">School Type</th>
-                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"># of Schools</th>
-                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">% of Schools</th>
-                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"># of Students</th>
-                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">% of Students</th>
+                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider">School Type</th>
+                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider"># of Schools</th>
+                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider">% of Schools</th>
+                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider"># of Students</th>
+                                        <th scope="col" className="px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider">% of Students</th>
                                     </tr>
                                 </thead>
 

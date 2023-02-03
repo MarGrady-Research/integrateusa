@@ -18,7 +18,7 @@ export default function LineGraph ({linedata, id}) {
 
     const options = {
         responsive: true,
-        maintainAspectRatio:false,
+        maintainAspectRatio: true,
         plugins: {
             legend: {
                 position: 'top',

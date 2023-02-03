@@ -11,7 +11,6 @@ export default function Map(){
         <div className="flex justify-center">
         <DemographicMap/>
         </div>
-        <Footer />
         </div>
         
         </>

@@ -16,8 +16,6 @@ ChartJS.register(
 
 export default function AreaChart({TrendData, grade}) {
 
-    console.log(grade)
-
     const options = {
         responsive: true,
         plugins: {

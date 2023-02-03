@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/router';
 import Select from 'react-select';
@@ -8,6 +8,7 @@ import Info from '../Info/InfoTrends';
 import Segregation from '../Segregation/SegregationMeasures';
 import Trends from '../Trends/trendpage';
 import { Loader } from '../Loader';
+import Accordion from './Accordion';
 
 export default function Selection() {
 
@@ -19,14 +20,29 @@ export default function Selection() {
   const [levels, setLevels] = useState(0);
 
   const levelselect = [
-    {value: 0, label: "District", route: "api/districtnames/?q=", id: "dist_id", name: "dist_name"},
+    {value: 0, label: "District", route:  "api/districtnames/?q=", id: "dist_id", name: "dist_name"},
     {value: 1, label: "County", route: "api/countynames/?q=", id: "county_id", name: "county_name"},
     {value: 2, label: "State", route: "api/statenames/?q=", id: "state_abb", name: "state_name"}
   ]
 
+   // Alt district variable
+   const [alt, setAlt] = useState(false);
+
+   const Alt = useCallback(async () => {
+    setAlt(!alt)
+   }, [])
+
+   useEffect(() => {
+     setURL()
+   }, [alt])
+
   // Setting baseURL based on level
   const setURL = () => {
-    return "http://localhost:8000/" + levelselect[levels].route
+    if (alt === true && levels === 0) {
+      return "http://localhost:8000/" + "api/districtnamesalt/?q="
+    } else {
+      return "http://localhost:8000/" + levelselect[levels].route
+    }
   }
 
   let baseURL = setURL(); 
@@ -129,7 +145,7 @@ export default function Selection() {
       
       if (levels === 0) {
         idlevel = "dist_id";
-        table = 'districttrends';
+        table = Alt ? 'districttrendsalt' : 'districttrends';
       } else if (levels === 1) {
         idlevel = "county_id";
         table = 'countytrends';
@@ -239,6 +255,7 @@ export default function Selection() {
         onChange= {e => {setLevels(e.value)}} 
         components={{IndicatorSeparator: () => null}}
         className="pr-2"
+        isSearchable={false}
         />
         <>
         <AsyncSelect 
@@ -272,6 +289,7 @@ export default function Selection() {
           placeholder="Select a grade"
           name='grades'
           className='flex pr-4'
+          isSearchable={false}
           />
         }
         <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
@@ -281,6 +299,8 @@ export default function Selection() {
         </button>
       </>
       </div>
+
+      <Accordion />
 
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath === '/info' && (isLoading ? <Loader /> :
