@@ -59,7 +59,7 @@ export default function Scroller() {
     return (
         <div>
              <div style={{ position: 'sticky', top: 0, border: '1px solid orchid' }}>
-             I'm sticky. The current triggered step index is:
+             I am sticky. The current triggered step index is:
              </div>
                 <Scrollama offset={0.5} onStepEnter={onStepEnter} >
                 <Step>
@@ -105,7 +105,7 @@ export default function Scroller() {
                     }}
                     >
                     <div className="w-1/2">
-                        <span>In 2019, New York City's School District 15 was a racially diverse district</span>
+                        <span>In 2019, New York City`&lsquo`s School District 15 was a racially diverse district</span>
                     </div>
                     <div className="w-1/2">
                     <ScrollerPie rawdata={pie}/>

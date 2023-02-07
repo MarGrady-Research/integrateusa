@@ -160,7 +160,7 @@ export default function Selection() {
         table = 'statetrends';
       }
 
-      const response = await axios.get("http://localhost/api/" + table + "/?" + idlevel + "=" + id);
+      const response = await axios.get("http://localhost:8000/api/" + table + "/?" + idlevel + "=" + id);
       setTrendData(response.data);
 
       }
@@ -186,7 +186,7 @@ export default function Selection() {
         idlevel = "state_abb";
       }
 
-      const response = await axios.get("http://localhost/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+      const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
       setInfoData(response.data);
       getTrendData();
       trendData && setIsLoading(false);
@@ -216,7 +216,7 @@ export default function Selection() {
           idlevel = "state"
       }
 
-      const response = await axios.get("http://localhost/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
+      const response = await axios.get("http://localhost:8000/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
       setIsLoading(false);
 
