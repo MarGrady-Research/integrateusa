@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import SegTable from "./SegTable";
 import Comparison from "./ComparisonTable";
 
-export default function Segregation({SegData, id, grade, title}) {
+export default function Segregation({SegData, id, grade, title, measure}) {
 
     let idlevel;
     let namelevel;
     let table;
+
+    let maxschools = Math.max(...SegData.map(e => e["num_schools"]));
 
     const name = () => {
         let strID = ''+id; 
@@ -46,9 +48,9 @@ export default function Segregation({SegData, id, grade, title}) {
     const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
-        setFocus(findFocus);
+        // setFocus(findFocus);
         let filter = SegData.filter(e => e[idlevel] !== ''+id)
-        setFilteredData(filter)
+        setFilteredData(SegData)
     }, [SegData])
 
     return (
@@ -57,18 +59,18 @@ export default function Segregation({SegData, id, grade, title}) {
             <span className="text-4xl"><b>{title}</b></span>
         </div>
 
-        {focus &&
+        {/* {focus &&
         <div className="pt-3">
             <SegTable focus={focus} idlevel={idlevel} namelevel={namelevel}/>
         </div>
-        }
+        } */}
 
-        <div className="flex flex-row py-3">
+        {/* <div className="flex flex-row py-3">
             <span className="text-4xl">Comparison {level()} for {title}</span>
-        </div>
+        </div> */}
 
         <div className="pt-3 container">
-            <Comparison id={id} grade={grade} filteredData={filteredData} idlevel={idlevel} namelevel={namelevel} table={table}/>
+            <Comparison id={id} grade={grade} filteredData={filteredData} idlevel={idlevel} namelevel={namelevel} table={table} measure={measure} maxschools={maxschools}/>
         </div>  
         </>
     )
