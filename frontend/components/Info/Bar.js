@@ -3,7 +3,6 @@ import {Chart as ChartJS, LinearScale, BarElement, CategoryScale, Tooltip, Legen
 import {Bar, getElementsAtEvent} from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import Select from 'react-select';
-// import { indexOf, toLower } from "lodash";
 
 ChartJS.register(
     LinearScale,
