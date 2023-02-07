@@ -14,7 +14,7 @@ ChartJS.register(
 )
 
 
-export default function LineGraph ({linedata, id}) {
+export default function LineGraph ({linedata, id, measure}) {
 
     const options = {
         responsive: true,

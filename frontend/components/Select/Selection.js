@@ -36,6 +36,12 @@ export default function Selection() {
      setURL()
    }, [alt])
 
+  // Measure state variable
+  
+  const [measure, setMeasure] = useState({name: '', accessor: ''})
+
+  const handleMeasure = (e) => setMeasure(e)
+
   // Setting baseURL based on level
   const setURL = () => {
     if (alt === true && levels === 0) {
@@ -300,7 +306,7 @@ export default function Selection() {
       </>
       </div>
 
-      <Accordion />
+      <Accordion handleMeasure={handleMeasure}/>
 
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath === '/info' && (isLoading ? <Loader /> :
@@ -312,7 +318,7 @@ export default function Selection() {
       {/* Conditionally render the Segregation div once the data array has been returned */}
       {currentpath === '/segregation' && (isLoading ? <Loader /> :
       <div className='mx-auto mt-5'>
-      <Segregation SegData={segData} id={id} grade={grade} title={title}/>
+      <Segregation SegData={segData} id={id} grade={grade} title={title} measure={measure}/>
       </div>)
       }
 

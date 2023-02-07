@@ -4,7 +4,7 @@ import Pagination from "./Pagination";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
 import axios from "axios";
 
-export default function Comparison({id, grade, filteredData, namelevel, idlevel, table}) {
+export default function Comparison({id, grade, filteredData, namelevel, idlevel, table, measure, maxschools}) {
 
     // Setting columns array
     const columns = [
@@ -16,7 +16,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         {accessor: "enr_prop_hi", label: "% Hispanic"},
         {accessor: "enr_prop_wh", label: "% White"},
         {accessor: "enr_prop_or", label: "% Other"},
-        {accessor: "norm_exp_aw", label: "Normalized Exposure"},
+        {accessor: measure.accessor, label: measure.name},
     ]
 
     // Filtering
@@ -89,7 +89,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         let data = response.data;
 
         const finaldata = data.map((e) =>{ return ({
-                   seg: e.norm_exp_aw,
+                   seg: e[measure.accessor],
                    year: e.year
                 })
             })
@@ -128,22 +128,10 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         lines.forEach((e) => {
             getLineData(e);
         })
-    }, [lines])
+    }, [lines, measure])
 
 
     // Max and min
-
-    let maxschools = Math.max(...filteredData.map(e => e["num_schools"]));
-
-    const maxval = (e) => {
-        if (e === "num_schools") {
-            return maxschools;
-        } else if (e === "norm_exp_aw") {
-            return 1
-        } else { 
-            return 100
-        }
-    }
 
     const [min, setMin] = useState({num_schools: 1,
         enr_prop_as: 0,
@@ -151,16 +139,16 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         enr_prop_hi: 0,
         enr_prop_or: 0,
         enr_prop_wh: 0,
-        norm_exp_aw: 0});
-    const [max, setMax] = useState({num_schools: maxval("num_schools"),
-        enr_prop_as: maxval(),
-        enr_prop_bl: maxval(),
-        enr_prop_hi: maxval(),
-        enr_prop_or: maxval(),
-        enr_prop_wh: maxval(),
-        norm_exp_aw: maxval("norm_exp_aw")});
+        [measure.accessor]: 0});
+    const [max, setMax] = useState({num_schools: maxschools,
+        enr_prop_as: 100,
+        enr_prop_bl: 100,
+        enr_prop_hi: 100,
+        enr_prop_or: 100,
+        enr_prop_wh: 100,
+        norm_exp: 1});
 
-
+        console.log(min)
     // Control display
 
     const [display, setDisplay] = useState({
@@ -271,7 +259,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                         </div>
                                        </td>
                             }
-                        })}
+                        })} 
                     </tr>
                     {calculatedRows.map(row => {
                         return (
@@ -281,18 +269,19 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                         return (<th scope="row">
                                                    <input
                                                     type="checkbox"
-                                                    className="form-check-input"
+                                                    className='form-check-input'
                                                     id={row[idlevel]}
-                                                    checked={lines.includes(row[idlevel])}
+                                                    checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
+                                                    disabled={row[idlevel] === ''+id ? true: false}
                                                     onChange={() => {}}
                                                     onClick={(e) => updateID(e.target.id)}
                                                     readOnly={false}
                                                     />
                                                  </th>)
                                      } else if (column.accessor === namelevel) {
-                                        return <td key={column.accessor} className="text-sm text-left text-gray-900 font-light px-2 py-4">{row[column.accessor]}</td>
+                                        return <td key={column.accessor} className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      } else {
-                                        return <td key={column.accessor} className="text-sm text-center text-gray-900 font-light px-2 py-4">{row[column.accessor]}</td>
+                                        return <td key={column.accessor} className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      }
                                 })}
                             </tr>
@@ -354,7 +343,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
          
             <div className={`${display.graph}  flex flex-1 h-full transition-width transition-duration-500 ease-in`}>
             <div className="w-full">
-            <LineGraph linedata={linedata} id={id}/>
+            <LineGraph linedata={linedata} id={id} measure={measure}/>
             </div>
             </div>
            
