@@ -12,49 +12,49 @@ ChartJS.register(
 );
 
 
-export default function ScrollerBar({schooldata}) {
+export default function ScrollerBar2({exposureData}) {
+
+    const labels = ['Avg White Student', 'Avg Non-White Student'];
 
     const bar = (data, group) => {
         return data.map(e => (e[group]))
         }
 
-    const labels = schooldata.map(e => e.sch_name)
-
     const barData = [
         {
             label: 'White',
             id: "prop_wh",
-            data: bar(schooldata, 'prop_wh'),
+            data: bar(exposureData, 'white'),
             backgroundColor: "#339933",
         },
         {
             label: 'Asian',
             id: "prop_as",
-            data: bar(schooldata, 'prop_as'),
+            data: bar(exposureData, 'asian'),
             backgroundColor: "#FF5050",
         },
         {
             label: 'Black',
             id: "prop_bl",
-            data: bar(schooldata, 'prop_bl'),
+            data: bar(exposureData, 'black'),
             backgroundColor: "#4472C4",
         },
         {
             label: 'Hispanic',
             id: "prop_hi",
-            data: bar(schooldata, 'prop_hi'),
+            data: bar(exposureData, 'hispanic'),
             backgroundColor: "#FF9900",
         },
         {
             label: 'Other',
             id: "prop_or",
-            data: bar(schooldata, 'prop_or'),
+            data: bar(exposureData, 'other'),
             backgroundColor: "#FFC000",
         },
     ]
 
     const data = {
-        labels: labels,
+        labels: ['Avg White Student', 'Avg Non-White Student'],
         datasets: barData
     }
 
@@ -73,25 +73,21 @@ export default function ScrollerBar({schooldata}) {
                         }
                     }
                 },
-                // annotation: {
-                //     annotations: {
-                //         box1: {
-                //             type: 'box',
-                //             xMin: 10.5,
-                //             xMax: 15.5,
-                //             yMin: 0,
-                //             yMax: 60,
-                //             backgroundColor: 'rgba(255, 99, 132, 0.25)',
-                //             drawTime: 'afterDraw'
-                //         }
-                //     }
-                // }
             },
             responsive: true,
             scales: {
                 x: {
-                    ticks: false,
-                    display: false,
+                    // ticks: {
+                    //     maxRotation: 50,
+                    //     minRotation: 30,
+                    //     padding: 10,
+                    //     autoSkip: false,
+                    //     fontSize: 10
+                    //   },
+                    grid: {
+                        display: false
+                    },
+                    display: true,
                     stacked: true,
                     barPercentage: 1
                 },
@@ -110,7 +106,8 @@ export default function ScrollerBar({schooldata}) {
 
         <Bar
         data={data}
-        options={options}/>
+        options={options}
+        />
 
     )
 

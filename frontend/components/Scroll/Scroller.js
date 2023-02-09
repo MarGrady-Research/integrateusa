@@ -2,12 +2,44 @@ import React, {useState} from "react";
 import {Scrollama, Step} from 'react-scrollama';
 import ScrollerPie from "./Graph1";
 import ScrollerBar from "./Graph2";
+import ScrollerBar2 from "./Graph3";
 import Link from "next/link";
 import Image from 'next/image';
 import {ChevronDoubleRightIcon, ChevronDoubleDownIcon} from '@heroicons/react/20/solid';
 
 
 export default function Scroller() {
+
+     const stepStyle = {
+        margin: '0 auto 3rem auto',
+        padding: '180px 0',
+        // border: '1px solid #333',
+        '& p': {
+          textAlign: 'center',
+          padding: '1rem',
+          fontSize: '1.8rem',
+          margin: 0,
+        },
+        '&:lastChild': {
+          marginBottom: 0,
+        },
+      }
+
+      const graphicStyle = {
+        flexBasis: '60%',
+        position: 'sticky',
+        width: '100%',
+        height: '60vh',
+        top: '20vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& p': {
+        fontSize: '5rem',
+        fontWeight: 700,
+        textAlign: 'center',
+        color: '#fff',
+        }}
 
      const rawdata = {
         year:2019,
@@ -40,96 +72,152 @@ export default function Scroller() {
         {"sch_name":"New Voices School of Academic and Creative Arts","prop_as":9.3,"prop_bl":9.3,"prop_hi":20.5,"prop_or":4.9,"prop_wh":56.1},
     ];
 
-    const [pie, setPie] = useState({});
-    const [bar, setBar] = useState([]);
+    const exposureData = [
+        {
+            name: 'Avg White Student',
+            asian: 8.99,
+            black: 14.85,
+            hispanic: 28.86,
+            other:	5.30,
+            white: 41.99
+        },
+        {
+            name: 'Avg Non-White Student',
+            asian: 8.79,
+            black: 17.11,
+            hispanic: 46.64,
+            other: 3.38,
+            white: 24.08
+        }
+    ]
+
+    // const [pie, setPie] = useState({});
+    // const [bar, setBar] = useState([]);
     const [currentStepIndex, setCurrentStepIndex] = useState(null);
 
     const onStepEnter = ({data}) => {
         setCurrentStepIndex(data);
-        if (data === 0 ) {
-            setPie(rawdata);
-            setBar([]);
-        };
-        if (data === 1) {
-            setPie({});
-            setBar(schooldata);
-        }
     };
 
+    const charts = () => {
+        if (currentStepIndex === 0 ) {
+            return (    
+            <ScrollerPie rawdata={rawdata}/>
+            )
+        };
+        if (currentStepIndex === 1) {
+            return (
+            <ScrollerBar schooldata={schooldata}/>
+            )
+        };
+        if (currentStepIndex === 2) {
+            return (
+            <ScrollerBar2 exposureData={exposureData}/>
+            )
+        }
+    }
+
     return (
-        <div>
-             <div style={{ position: 'sticky', top: 0, border: '1px solid orchid' }}>
-             I'm sticky. The current triggered step index is:
-             </div>
+
+        <div>            
+            <div className='w-screen h-screen flex flex-col py-5 items-center justify-between'>
+                
+                <div className='inline-flex items-center'>
+                    <Image src="/IntegrateUSALogo.png" 
+                                    alt="IntegrateUSA Logo"
+                                    width = {300}
+                                    height={80}/>
+                </div>
+            
+                <Link href='/info'>
+              
+                <div className='flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center'>
+                <span className='font-raleway inline-flex items-center text-xl'>Explore the dashboard <ChevronDoubleRightIcon className='h-6 w-6'/></span> 
+                
+               
+                </div>
+               
+                </Link>
+                
+                <div className='flex flex-col items-center'>
+                    <div><span className='font-raleway text-xl'>Explore the story </span></div>
+                    <div>
+                    <ChevronDoubleDownIcon className='w-7 h-7 pt-2 animate-bounce'/>
+                    </div>
+                </div>
+            
+            </div>
+    
+
+             <div style ={{
+                        padding: '40vh 2vw 20vh',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
+                <div style={{flexBasis: "35%"}}>
                 <Scrollama offset={0.5} onStepEnter={onStepEnter} >
-                <Step>
-                    <div
-                        style={{
-                            margin: '50vh 0',
-                            border: '1px solid gray',
-                            display: 'flex flex-row'
-                            // opacity: currentStepIndex === stepIndex ? 1 : 0.2,
-                        }}
-                        >
-                        <div className='flex flex-col items-center mx-auto'>
-                        
-                        <div className='inline-flex items-center'>
-                        <Image src="/mg_logo_cropped.png" 
-                                        alt="margrady logo"
-                                        width = {100}
-                                        height={80}/>
-                        <span className="ml-3 text-3xl font-raleway">IntegrateUSA</span>
-                        </div>
-                
-                        <Link href='/info'>
-                        <span className='inline-flex items-center hover:text-gray-500 hover:cursor-pointer font-raleway py-5'>Explore the dashboard <ChevronDoubleRightIcon className='h-5 w-5'/></span> 
-                        </Link>
-                    
-                        <div className='py-5 flex items-center'>
-                        <span className='font-raleway'>Or scroll through the story </span>
-                        <div>
-                        <ChevronDoubleDownIcon className='w-5 h-5'/>
-                        </div>
-                        </div>
-                
-                        </div>
-                    </div>
-                </Step> 
-                <Step data={0}>
-                    <div
-                    style={{
-                        margin: '50vh 0',
-                        border: '1px solid gray',
-                        display: 'flex flex-row'
-                        // opacity: currentStepIndex === stepIndex ? 1 : 0.2,
-                    }}
-                    >
-                    <div className="w-1/2">
-                        <span>In 2019, New York City's School District 15 was a racially diverse district</span>
-                    </div>
-                    <div className="w-1/2">
-                    <ScrollerPie rawdata={pie}/>
-                    </div>
+                <Step style={stepStyle} data={0}>
+                    <div style={stepStyle} >
+                    <div className="text-center text-xl">
+                        <span>In 2019, New York City&#39;s School District 15 was a racially diverse district:
+                        <br/>
+                        <br/>
+                        <b>
+                        <span className="text-red-500">13% Asian</span> <br/>
+                        <span className="text-blue-500">13% Black</span> <br/>
+                        <span className="text-orange-500">41% Hispanic</span> <br/>
+                        <span className="text-yellow-500">4% Other Races</span> <br/>
+                        <span className="text-green-500">30% White</span> <br/>
+                        </b> 
+                        </span>
+                    </div>  
                     </div>
                 </Step>
                 <Step data={1}>
-                    <div
-                    style={{
-                        margin: '50vh 0',
-                        border: '1px solid gray',
-                        display: 'flex flex-row'
-                        // opacity: currentStepIndex === stepIndex ? 1 : 0.2,
-                    }}
-                    >
-                    <div className="w-1/2">
-                        <span>But, when we look at District 15 on a school level, we see that the district was highly segregated</span>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>But when we look at District 15 on a school level, White students appear to be highly segregated from non-White students 
+                        <br/>
+                        <br/>
+                        <span className="text-green-500"><b>2/3 of White students</b></span> in the district attend just <b>5</b> of its <b>16</b> schools
+                        </span>
                     </div>
-                    <div className="w-1/2">
-                    <ScrollerBar schooldata={bar}/>
+                    </div>
+                </Step>
+                <Step data={2}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>One way to measure segregation is using <b>Normalized Exposure</b> rates
+                        <br/>
+                        <br/>
+                        We compare the share of White students in the average White student's school to the share of White students in the average non-White student's school
+                        </span>
+                    </div>
+                    </div>
+                </Step>
+                <Step data={3}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>In District 15 in 2019, the average White student's school had <b>42%</b> white students
+                        <br/>
+                        <br/>
+                        The average non-White student's school had <b>24%</b> White students
+                        <br/>
+                        <br/>
+                        The difference of these shares is our <b>Normalized Exposure</b> rate: <b>18%</b> 
+                        </span>
                     </div>
                     </div>
                 </Step>
                 </Scrollama>
-            </div>
+                </div>
+                <div style ={graphicStyle}>
+                    <div className="w-2/3">
+                        {charts()}
+                    </div>
+                
+                </div>
+                </div>
+        </div>
     );
 }
