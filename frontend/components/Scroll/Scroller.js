@@ -3,6 +3,7 @@ import {Scrollama, Step} from 'react-scrollama';
 import ScrollerPie from "./Graph1";
 import ScrollerBar from "./Graph2";
 import ScrollerBar2 from "./Graph3";
+import ScrollerBar3 from "./Graph4";
 import Link from "next/link";
 import Image from 'next/image';
 import {ChevronDoubleRightIcon, ChevronDoubleDownIcon} from '@heroicons/react/20/solid';
@@ -91,8 +92,8 @@ export default function Scroller() {
         }
     ]
 
-    // const [pie, setPie] = useState({});
-    // const [bar, setBar] = useState([]);
+    const comparisonData = [42, 24, 18];
+
     const [currentStepIndex, setCurrentStepIndex] = useState(null);
 
     const onStepEnter = ({data}) => {
@@ -114,6 +115,27 @@ export default function Scroller() {
             return (
             <ScrollerBar2 exposureData={exposureData}/>
             )
+        };
+        if (currentStepIndex === 3) {
+            return (
+            <ScrollerBar3 comparisonData={comparisonData}/>
+            )
+        };
+        if (currentStepIndex === 4) {
+            return (
+            <Image src = '/D15 Headline.png'
+                   alt="District 15 headline"
+                   width = {500}
+                   height={300}
+                   placeholder='blur'
+                   priority
+                   blurDataURL="/D15 Headline.png"
+                   style={{transition: '0.5s'}}
+                   className='w-full h-full transition-opacity ease-in transition-duration-500'/>
+            )
+        };
+        if (currentStepIndex === 5) {
+
         }
     }
 
@@ -163,11 +185,11 @@ export default function Scroller() {
                         <br/>
                         <br/>
                         <b>
-                        <span className="text-red-500">13% Asian</span> <br/>
-                        <span className="text-blue-500">13% Black</span> <br/>
-                        <span className="text-orange-500">41% Hispanic</span> <br/>
-                        <span className="text-yellow-500">4% Other Races</span> <br/>
-                        <span className="text-green-500">30% White</span> <br/>
+                        <span className="text-asian">13% Asian</span> <br/>
+                        <span className="text-blackstudents">13% Black</span> <br/>
+                        <span className="text-hispanic">41% Hispanic</span> <br/>
+                        <span className="text-other">4% Other Races</span> <br/>
+                        <span className="text-whitestudents">30% White</span> <br/>
                         </b> 
                         </span>
                     </div>  
@@ -179,7 +201,7 @@ export default function Scroller() {
                         <span>But when we look at District 15 on a school level, White students appear to be highly segregated from non-White students 
                         <br/>
                         <br/>
-                        <span className="text-green-500"><b>2/3 of White students</b></span> in the district attend just <b>5</b> of its <b>16</b> schools
+                        <span className="text-whitestudents"><b>2/3 of White students</b></span> in the district attend just <b>5</b> of its <b>16</b> schools
                         </span>
                     </div>
                     </div>
@@ -209,10 +231,32 @@ export default function Scroller() {
                     </div>
                     </div>
                 </Step>
+                <Step data={4}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>In 2019, District 15 implemented an integration plan for 6th graders
+                        <br/>
+                        <br/>
+                        One of the ways we can track the progress of this plan is by tracking Normalized Exposure rates in the District over time
+                        </span>
+                    </div>
+                    </div>
+                </Step>
+                <Step data={5}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>When we look at Normalized exposure rates in the District, we see a dropoff after time
+                        <br/>
+                        <br/>
+                        
+                        </span>
+                    </div>
+                    </div>
+                </Step>
                 </Scrollama>
                 </div>
                 <div style ={graphicStyle}>
-                    <div className="w-2/3">
+                    <div className="w-3/4">
                         {charts()}
                     </div>
                 
