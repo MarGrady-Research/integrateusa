@@ -14,7 +14,7 @@ ChartJS.register(
 
 export default function ScrollerBar3({comparisonData}) {
 
-    const labels = ['Avg White Student', 'Avg Non-White Student', 'Normalized Exposure'];
+    const labels = ['Avg White Student', 'Avg Non-White Student'];
 
     const data = {
         labels: labels,
@@ -63,11 +63,9 @@ export default function ScrollerBar3({comparisonData}) {
                         display: false
                     },
                     display: true,
-                    // stacked: true,
                     barPercentage: 1
                 },
                 y: {
-                    // stacked: true,
                     max: 100,
                     grid: {
                         display: false

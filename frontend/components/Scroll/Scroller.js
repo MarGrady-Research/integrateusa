@@ -4,6 +4,10 @@ import ScrollerPie from "./Graph1";
 import ScrollerBar from "./Graph2";
 import ScrollerBar2 from "./Graph3";
 import ScrollerBar3 from "./Graph4";
+import ScrollerLine from "./Graph5";
+import ScrollerLine2 from "./Graph6";
+import ScrollerLine3 from "./Graph7";
+import { fullCompData } from "./Data";
 import Link from "next/link";
 import Image from 'next/image';
 import {ChevronDoubleRightIcon, ChevronDoubleDownIcon} from '@heroicons/react/20/solid';
@@ -13,8 +17,8 @@ export default function Scroller() {
 
      const stepStyle = {
         margin: '0 auto 3rem auto',
-        padding: '180px 0',
-        // border: '1px solid #333',
+        paddingTop: '50%',
+        paddingBottom: '50%',
         '& p': {
           textAlign: 'center',
           padding: '1rem',
@@ -90,15 +94,27 @@ export default function Scroller() {
             other: 3.38,
             white: 24.08
         }
-    ]
+    ];
 
-    const comparisonData = [42, 24, 18];
+    const comparisonData = [42, 24];
+
+    const d15ExposureWhite = [0.1294, 0.1959, 0.1918, 0.2288, 0.2513, 0.2875, 0.1608, 0.1951, 0.1848, 0.1916, 0.0801, 0.0988];
+
+    // State
 
     const [currentStepIndex, setCurrentStepIndex] = useState(null);
+
+    // Step Functions
 
     const onStepEnter = ({data}) => {
         setCurrentStepIndex(data);
     };
+
+    const onStepExit = ({data, direction}) => {
+        data === 0 && direction === 'up' ? setCurrentStepIndex(-1) : null;
+    };
+
+    //  Return charts based on active Step
 
     const charts = () => {
         if (currentStepIndex === 0 ) {
@@ -123,25 +139,25 @@ export default function Scroller() {
         };
         if (currentStepIndex === 4) {
             return (
-            <Image src = '/D15 Headline.png'
-                   alt="District 15 headline"
-                   width = {500}
-                   height={300}
-                   placeholder='blur'
-                   priority
-                   blurDataURL="/D15 Headline.png"
-                   style={{transition: '0.5s'}}
-                   className='w-full h-full transition-opacity ease-in transition-duration-500'/>
+                <ScrollerLine d15ExposureWhite={d15ExposureWhite}/>
             )
         };
         if (currentStepIndex === 5) {
-
+            return (
+                <ScrollerLine2 d15ExposureWhite={d15ExposureWhite}/>
+            )
+        };
+        if (currentStepIndex === 6) {
+            return (
+                <ScrollerLine3 fullCompData={fullCompData}/>
+            )
         }
     }
 
     return (
 
         <div>            
+            {/* Opening Screen, navigate to Dashboard or scroll down for story */}
             <div className='w-screen h-screen flex flex-col py-5 items-center justify-between'>
                 
                 <div className='inline-flex items-center'>
@@ -152,13 +168,9 @@ export default function Scroller() {
                 </div>
             
                 <Link href='/info'>
-              
                 <div className='flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center'>
                 <span className='font-raleway inline-flex items-center text-xl'>Explore the dashboard <ChevronDoubleRightIcon className='h-6 w-6'/></span> 
-                
-               
                 </div>
-               
                 </Link>
                 
                 <div className='flex flex-col items-center'>
@@ -171,13 +183,14 @@ export default function Scroller() {
             </div>
     
 
-             <div style ={{
+            <div style ={{
                         padding: '40vh 2vw 20vh',
                         display: 'flex',
                         justifyContent: 'space-between',
                     }}>
+                
                 <div style={{flexBasis: "35%"}}>
-                <Scrollama offset={0.5} onStepEnter={onStepEnter} >
+                <Scrollama offset={0.5} onStepEnter={onStepEnter} onStepExit={onStepExit}>
                 <Step style={stepStyle} data={0}>
                     <div style={stepStyle} >
                     <div className="text-center text-xl">
@@ -212,7 +225,7 @@ export default function Scroller() {
                         <span>One way to measure segregation is using <b>Normalized Exposure</b> rates
                         <br/>
                         <br/>
-                        We compare the share of White students in the average White student's school to the share of White students in the average non-White student's school
+                        We compare the share of White students in the average White student&#39;s school to the share of White students in the average non-White student&#39;s school
                         </span>
                     </div>
                     </div>
@@ -220,10 +233,10 @@ export default function Scroller() {
                 <Step data={3}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>In District 15 in 2019, the average White student's school had <b>42%</b> white students
+                        <span>In District 15 in 2019, the average White student&#39;s school had <b>42%</b> white students
                         <br/>
                         <br/>
-                        The average non-White student's school had <b>24%</b> White students
+                        The average non-White student&#39;s school had <b>24%</b> White students
                         <br/>
                         <br/>
                         The difference of these shares is our <b>Normalized Exposure</b> rate: <b>18%</b> 
@@ -234,10 +247,10 @@ export default function Scroller() {
                 <Step data={4}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>In 2019, District 15 implemented an integration plan for 6th graders
+                        <span>Normalized Exposure rates can help us to understand segregation in the District over time
                         <br/>
                         <br/>
-                        One of the ways we can track the progress of this plan is by tracking Normalized Exposure rates in the District over time
+                        
                         </span>
                     </div>
                     </div>
@@ -245,10 +258,21 @@ export default function Scroller() {
                 <Step data={5}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>When we look at Normalized exposure rates in the District, we see a dropoff after time
+                        <span>In 2019, District 15 implemented an integration plan
                         <br/>
                         <br/>
-                        
+                        After the plan&#39;s implementation, we see a dropoff in Normalized Exposure rates for White students in the District
+                        </span>
+                    </div>
+                    </div>
+                </Step>
+                <Step data={6}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>We can compare District 15 to demographically similar districts without integration plans
+                        <br/>
+                        <br/>
+                        The Normalized Exposure for White students in District 15 shows a steep drop compared to other districts
                         </span>
                     </div>
                     </div>
@@ -259,9 +283,35 @@ export default function Scroller() {
                     <div className="w-3/4">
                         {charts()}
                     </div>
-                
                 </div>
-                </div>
+            </div>
+
+            <div className='sticky w-screen h-screen flex flex-col py-10 items-center justify-between'>
+                    
+                    <div className='flex flex-col items-center'>
+                    <span className='font-raleway inline-flex items-center text-center text-xl'>
+                    IntegrateUSA was built to explore Districts, Counties and States nationwide
+                    <br/>
+                    <br/>
+                    Use the dashboard to visualize demographics and understand Segregation levels in different areas over time
+                    </span> 
+                    </div>
+
+                    <Link href='/info'>
+                    <div className='flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center'>
+                    <span className='font-raleway inline-flex items-center text-xl'>Explore the dashboard <ChevronDoubleRightIcon className='h-6 w-6'/></span> 
+                    </div>
+                    </Link>
+
+                    <div className='inline-flex items-center hover:cursor-pointer'>
+                    <Link href='http://www.margrady.com/'>
+                    <Image src="/mg-logo.png" 
+                           alt="MarGrady Logo"
+                           width = {300}
+                            height={80}/>
+                    </Link>
+                    </div>
+            </div>
         </div>
     );
 }
