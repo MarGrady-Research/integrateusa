@@ -73,19 +73,6 @@ export default function ScrollerBar({schooldata}) {
                         }
                     }
                 },
-                // annotation: {
-                //     annotations: {
-                //         box1: {
-                //             type: 'box',
-                //             xMin: 10.5,
-                //             xMax: 15.5,
-                //             yMin: 0,
-                //             yMax: 60,
-                //             backgroundColor: 'rgba(255, 99, 132, 0.25)',
-                //             drawTime: 'afterDraw'
-                //         }
-                //     }
-                // }
             },
             responsive: true,
             scales: {
@@ -103,7 +90,7 @@ export default function ScrollerBar({schooldata}) {
                     },
                     position: 'right'
                 }
-            }
+            },
         }
 
     return(
