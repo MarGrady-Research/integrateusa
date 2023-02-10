@@ -32,15 +32,15 @@ return(
     <a className="mr-5 hover:text-gray-500">About</a>
     </Link>
     </nav>
-    <Link href='https://www.carnegie.org/'>
-    <span className="inline-flex items-center sm:ml-auto sm:mt-0 mt-4 md:justify-center">
-        <a>
-        <Image src = "/ccny_logo.svg"
-        alt="CCNY logo"
-        width={100}
-        height ={50}
-        />
-        </a>
+    <Link href='http://www.margrady.com/'>
+    <span className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+        {/* <a> */}
+        <Image src="/mg-logo.png" 
+               alt="MarGrady Logo"
+               width = {250}
+               height={60}/>
+        {/* /> */}
+        {/* </a> */}
       </span>
     </Link>
   </div>

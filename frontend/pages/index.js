@@ -7,7 +7,7 @@ import styles from '../styles/Home.module.css';
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div >
       <Head>
         <title>Integrate USA</title>
         <meta name="description" content="Exploring school segregation" />
