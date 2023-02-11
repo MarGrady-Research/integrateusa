@@ -7,7 +7,8 @@ import ScrollerBar3 from "./Graph4";
 import ScrollerLine from "./Graph5";
 import ScrollerLine2 from "./Graph6";
 import ScrollerLine3 from "./Graph7";
-import { fullCompData } from "./Data";
+import ScrollerLine4 from "./Graph8";
+import { fullCompData, compDataNormalized } from "./Data";
 import Link from "next/link";
 import Image from 'next/image';
 import {ChevronDoubleRightIcon, ChevronDoubleDownIcon} from '@heroicons/react/20/solid';
@@ -151,7 +152,12 @@ export default function Scroller() {
             return (
                 <ScrollerLine3 fullCompData={fullCompData}/>
             )
-        }
+        };
+        if (currentStepIndex === 7) {
+            return (
+                <ScrollerLine4 compDataNormalized={compDataNormalized}/>
+            )
+        };
     }
 
     return (
@@ -258,7 +264,7 @@ export default function Scroller() {
                 <Step data={5}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>In 2019, District 15 implemented an integration plan
+                        <span>In 2019, <span className="text-line-red">District 15</span> implemented an integration plan
                         <br/>
                         <br/>
                         After the plan&#39;s implementation, we see a dropoff in Normalized Exposure rates for White students in the District
@@ -269,10 +275,21 @@ export default function Scroller() {
                 <Step data={6}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>We can compare District 15 to demographically similar districts without integration plans
+                        <span>We can compare <span className="text-line-red">District 15</span> to demographically similar districts without integration plans
                         <br/>
                         <br/>
-                        The Normalized Exposure for White students in District 15 shows a steep drop compared to other districts
+                        The Normalized Exposure for White students in <span className="text-line-red">District 15</span> shows a steep drop compared to other districts
+                        </span>
+                    </div>
+                    </div>
+                </Step>
+                <Step data={7}>
+                    <div style={stepStyle}>
+                    <div className="text-center text-xl">
+                        <span>We can also normalize these rates using the 2019 values for each district
+                        <br/>
+                        <br/>
+                        <span className="text-line-red">District 15</span> has the largest drop in White exposure rates of any comparable district after 2019
                         </span>
                     </div>
                     </div>
@@ -288,7 +305,7 @@ export default function Scroller() {
 
             <div className='sticky w-screen h-screen flex flex-col py-10 items-center justify-between'>
                     
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col px-4 items-center'>
                     <span className='font-raleway inline-flex items-center text-center text-xl'>
                     IntegrateUSA was built to explore Districts, Counties and States nationwide
                     <br/>
