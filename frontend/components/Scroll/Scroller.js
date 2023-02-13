@@ -185,7 +185,7 @@ export default function Scroller() {
                 </Link>
                 
                 <div className='flex flex-col items-center'>
-                    <div><span className='font-raleway text-xl'>Scroll down for a case study of New York City's District 15 </span></div>
+                    <div><span className='font-raleway text-xl'>Scroll down for a case study of New York City&#39;s District 15 </span></div>
                     <div>
                     <ChevronDoubleDownIcon className='w-7 h-7 pt-2 animate-bounce'/>
                     </div>
