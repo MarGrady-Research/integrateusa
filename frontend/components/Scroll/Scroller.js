@@ -99,7 +99,9 @@ export default function Scroller() {
 
     const comparisonData = [42, 24];
 
-    const d15ExposureWhite = [0.1294, 0.1959, 0.1918, 0.2288, 0.2513, 0.2875, 0.1608, 0.1951, 0.1848, 0.1916, 0.0801, 0.0988];
+    const d15ExposureWhiteV1 = [0.1294, 0.1959, 0.1918, 0.2288, 0.2513, 0.2875, 0.1608, 0.1951, 0.1848, 0.1916];
+
+    const d15ExposureWhiteV2 = [0.1294, 0.1959, 0.1918, 0.2288, 0.2513, 0.2875, 0.1608, 0.1951, 0.1848, 0.1916, 0.0801, 0.0988];
 
     // State
 
@@ -140,12 +142,12 @@ export default function Scroller() {
         };
         if (currentStepIndex === 4) {
             return (
-                <ScrollerLine d15ExposureWhite={d15ExposureWhite}/>
+                <ScrollerLine d15ExposureWhite={d15ExposureWhiteV1}/>
             )
         };
         if (currentStepIndex === 5) {
             return (
-                <ScrollerLine2 d15ExposureWhite={d15ExposureWhite}/>
+                <ScrollerLine2 d15ExposureWhite={d15ExposureWhiteV2}/>
             )
         };
         if (currentStepIndex === 6) {
@@ -164,13 +166,16 @@ export default function Scroller() {
 
         <div>            
             {/* Opening Screen, navigate to Dashboard or scroll down for story */}
-            <div className='w-screen h-screen flex flex-col py-5 items-center justify-between'>
+            <div className='w-screen h-screen flex flex-col space-y-20 items-center justify-center'>
                 
                 <div className='inline-flex items-center'>
+                    <Link href='/info'>
                     <Image src="/IntegrateUSALogo.png" 
                                     alt="IntegrateUSA Logo"
                                     width = {300}
-                                    height={80}/>
+                                    height={80}
+                                    className='hover:cursor-pointer'/>
+                    </Link>
                 </div>
             
                 <Link href='/info'>
@@ -180,7 +185,7 @@ export default function Scroller() {
                 </Link>
                 
                 <div className='flex flex-col items-center'>
-                    <div><span className='font-raleway text-xl'>Explore the story </span></div>
+                    <div><span className='font-raleway text-xl'>Scroll down for a case study of New York City's District 15 </span></div>
                     <div>
                     <ChevronDoubleDownIcon className='w-7 h-7 pt-2 animate-bounce'/>
                     </div>
@@ -200,15 +205,18 @@ export default function Scroller() {
                 <Step style={stepStyle} data={0}>
                     <div style={stepStyle} >
                     <div className="text-center text-xl">
-                        <span>In 2019, New York City&#39;s School District 15 was a racially diverse district:
+                        <span>In 2019, New York City&#39;s School District 15 was a racially diverse district
+                        <br/>
+                        <br/>
+                        The 6th graders in the district were:
                         <br/>
                         <br/>
                         <b>
+                        <span className="text-hispanic">41% Hispanic</span> <br/>
+                        <span className="text-whitestudents">30% White</span> <br/>
                         <span className="text-asian">13% Asian</span> <br/>
                         <span className="text-blackstudents">13% Black</span> <br/>
-                        <span className="text-hispanic">41% Hispanic</span> <br/>
                         <span className="text-other">4% Other Races</span> <br/>
-                        <span className="text-whitestudents">30% White</span> <br/>
                         </b> 
                         </span>
                     </div>  
@@ -217,10 +225,10 @@ export default function Scroller() {
                 <Step data={1}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>But when we look at District 15 on a school level, White students appear to be highly segregated from non-White students 
+                        <span>But when we look at District 15 on a school level, White students appear to be segregated from non-White students 
                         <br/>
                         <br/>
-                        <span className="text-whitestudents"><b>2/3 of White students</b></span> in the district attend just <b>5</b> of its <b>16</b> schools
+                        In 2019, <span className="text-whitestudents"><b>2/3 of White students</b></span> in the district attend just <b>5</b> of the district&#39;s <b>16</b> middle schools
                         </span>
                     </div>
                     </div>
@@ -231,7 +239,7 @@ export default function Scroller() {
                         <span>One way to measure segregation is using <b>Normalized Exposure</b> rates
                         <br/>
                         <br/>
-                        We compare the share of White students in the average White student&#39;s school to the share of White students in the average non-White student&#39;s school
+                        For example, we can compare the share of <span className="text-whitestudents">White</span> students in the average <span className="text-whitestudents">White</span> student&#39;s school to the share of <span className="text-whitestudents">White</span> students in the average non-<span className="text-whitestudents">White</span> student&#39;s school
                         </span>
                     </div>
                     </div>
@@ -239,13 +247,13 @@ export default function Scroller() {
                 <Step data={3}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>In District 15 in 2019, the average White student&#39;s school had <b>42%</b> white students
+                        <span>In District 15 in 2019, the average White student&#39;s school had <b>42%</b> White students
                         <br/>
                         <br/>
                         The average non-White student&#39;s school had <b>24%</b> White students
                         <br/>
                         <br/>
-                        The difference of these shares is our <b>Normalized Exposure</b> rate: <b>18%</b> 
+                        The difference of these shares is the <b>Normalized Exposure</b> rate: <b>18%</b> 
                         </span>
                     </div>
                     </div>
@@ -253,18 +261,14 @@ export default function Scroller() {
                 <Step data={4}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>Normalized Exposure rates can help us to understand segregation in the District over time
-                        <br/>
-                        <br/>
-                        
-                        </span>
+                        <span>Normalized Exposure rates can help us to understand segregation in the district over time</span>
                     </div>
                     </div>
                 </Step>
                 <Step data={5}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>In 2019, <span className="text-line-red">District 15</span> implemented an integration plan
+                        <span>In 2019, <span className="text-line-red"><b>District 15</b></span> implemented an integration plan
                         <br/>
                         <br/>
                         After the plan&#39;s implementation, we see a dropoff in Normalized Exposure rates for White students in the District
@@ -275,10 +279,10 @@ export default function Scroller() {
                 <Step data={6}>
                     <div style={stepStyle}>
                     <div className="text-center text-xl">
-                        <span>We can compare <span className="text-line-red">District 15</span> to demographically similar districts without integration plans
+                        <span>We can compare <span className="text-line-red"><b>District 15</b></span> to demographically similar districts without integration plans
                         <br/>
                         <br/>
-                        The Normalized Exposure for White students in <span className="text-line-red">District 15</span> shows a steep drop compared to other districts
+                        The Normalized Exposure for White students in <span className="text-line-red"><b>District 15</b></span> shows a steep drop compared to other districts
                         </span>
                     </div>
                     </div>
@@ -289,7 +293,7 @@ export default function Scroller() {
                         <span>We can also normalize these rates using the 2019 values for each district
                         <br/>
                         <br/>
-                        <span className="text-line-red">District 15</span> has the largest drop in White exposure rates of any comparable district after 2019
+                        <span className="text-line-red"><b>District 15</b></span> has the largest drop in White Normalized Exposure rates of any comparable district after 2019
                         </span>
                     </div>
                     </div>
@@ -307,10 +311,10 @@ export default function Scroller() {
                     
                     <div className='flex flex-col px-4 items-center'>
                     <span className='font-raleway inline-flex items-center text-center text-xl'>
-                    IntegrateUSA was built to explore Districts, Counties and States nationwide
+                    IntegrateUSA was built to explore segregation in Districts, Counties and States nationwide
                     <br/>
                     <br/>
-                    Use the dashboard to visualize demographics and understand Segregation levels in different areas over time
+                    Use the dashboard to visualize demographics and understand segregation levels in different areas over time
                     </span> 
                     </div>
 
@@ -324,7 +328,7 @@ export default function Scroller() {
                     <Link href='http://www.margrady.com/'>
                     <Image src="/mg-logo.png" 
                            alt="MarGrady Logo"
-                           width = {300}
+                           width = {350}
                             height={80}/>
                     </Link>
                     </div>

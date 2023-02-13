@@ -15,7 +15,7 @@ ChartJS.register(
 
 export default function GradeLines ({TrendData, grade}) {
 
-    const grades = ["PK", "KG", "01", "02", "03", "04", "05", "06", "07", "08" ,"09", "10", "11", "12"]
+    const grades = ["PK", "KG", "01", "02", "03", "04", "05", "06", "07", "08" ,"09", "10", "11", "12", "UG"]
 
     let sortedData = TrendData.sort((a,b) => {return ((a['year']-b['year']))})
 

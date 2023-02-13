@@ -2,7 +2,7 @@ import { Disclosure, Transition, RadioGroup } from '@headlessui/react';
 import {ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 
-export default function Accordion({handleMeasure}) {
+export default function Accordion({handleMeasure, currentpath}) {
 
     const exposure = [
         {
@@ -39,13 +39,20 @@ export default function Accordion({handleMeasure}) {
 
     const measures = [
         {
+            name: 'Exposure Rate',
+            desc: 'The share of students of one racial group enrolled in the average school attended by students of another (or the same) racial group'
+        },
+        {
             name: 'Normalized Exposure',
+            desc: 'Calculates the difference in the exposure rates for two groups of students to the same group of students'
         },
         {
             name: 'Segregation Index',
+            desc: "The average percentage point difference between the proportion of a group of students in a school and that same proportion in the school's district (or county, etc.)"
         },
         {
-            name: 'Diversity Index',
+            name: 'Dissimilarity Index',
+            desc: 'The share of students of one group who would have to switch schools to have an even balance of students across a district (or county, etc.)'
         }
     ]
 
@@ -65,20 +72,20 @@ export default function Accordion({handleMeasure}) {
       }
 
     function ExposureRadio() {
-        const [selected, setSelected] = useState(exposure[0])
+        const [selected, setSelected] = useState(exposure[4])
       
         return (
           <div className="w-full px-4 py-3">
             <div className="w-full">
-              <RadioGroup value={selected} onChange={setSelected}>
+              <RadioGroup value={selected.name} onChange={setSelected}>
                 <RadioGroup.Label className="sr-only">Normalized Exposure</RadioGroup.Label>
                 <div className="grid grid-cols-4 w-full gap-2 mx-auto overflow-x-hidden ">
                   {exposure.map((exposure) => (
                     <RadioGroup.Option
                       key={exposure.accessor}
-                      id={exposure.accessor}
-                      onClick={() => handleMeasure(exposure)}
+                      // id={exposure.accessor}
                       value={exposure.name}
+                      onClick={() => handleMeasure(exposure)}
                       className={({ active, checked }) =>
                         `${
                           active
@@ -134,12 +141,12 @@ export default function Accordion({handleMeasure}) {
       }
 
     function MeasureRadio() {
-        const [selected, setSelected] = useState(measures[0])
+        const [selected, setSelected] = useState(measures[1])
         
         return (
             <div className="w-full px-4 py-3">
             <div className="w-full">
-                <RadioGroup value={selected} onChange={setSelected}>
+                <RadioGroup value={selected.name} onChange={setSelected}>
                 <RadioGroup.Label className="sr-only">Segregation Measures</RadioGroup.Label>
                 <div className="grid grid-cols-3 w-full gap-2">
                     {measures.map((measure) => (
@@ -178,7 +185,7 @@ export default function Accordion({handleMeasure}) {
                                     }`}
                                 >
                                     <span>
-                                    Examine segregation using {measure.name}
+                                    {measure.desc}
                                     </span>
                                 </RadioGroup.Description>
                                 </div>
@@ -223,13 +230,17 @@ export default function Accordion({handleMeasure}) {
         leaveTo="transform scale-95 opacity-0"
         >
         <Disclosure.Panel className="text-black font-raleway pt-2">
-        <div className='pt-2 bg-gray-100 rounded-md'>
+        <div className='space-y-2 bg-gray-100 rounded-md'>
             <div className='text-xl font-semibold px-4'><span>District</span></div>
             <span className='px-4'><input type="checkbox" disabled={true}/>NYC as 32 School Districts</span>
+            {currentpath === '/segregation' && 
+            <>
             <div><span className='text-xl font-semibold px-4'>Segregation Measures</span></div>
             {MeasureRadio()}
             <div><span className='text-xl font-semibold px-4'>Groups</span></div>
             {ExposureRadio()}
+            </>
+            }
         </div>
         </Disclosure.Panel>
         </Transition>

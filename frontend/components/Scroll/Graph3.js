@@ -14,7 +14,7 @@ ChartJS.register(
 
 export default function ScrollerBar2({exposureData}) {
 
-    const labels = ['Avg White Student', 'Avg Non-White Student'];
+    const labels = ['Demographics of Avg White Student\'s School', 'Demograpics of Avg Non-White Student\'s school'];
 
     const bar = (data, group) => {
         return data.map(e => (e[group]))
@@ -54,7 +54,7 @@ export default function ScrollerBar2({exposureData}) {
     ]
 
     const data = {
-        labels: ['Avg White Student', 'Avg Non-White Student'],
+        labels: labels,
         datasets: barData
     }
 
