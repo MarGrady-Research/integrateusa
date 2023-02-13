@@ -20,7 +20,7 @@ export default function DemographicMap() {
 
     const getData = async () => {
         setIsLoading(true);
-        const response = await axios.get("http://localhost/api/mapschools/?q=2021");
+        const response = await axios.get("http://localhost:8000/api/mapschools/?q=2021");
         setData({type: "FeatureCollection", features: response.data.map(e => e.map_data)});
         setIsLoading(false);
     }
