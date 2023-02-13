@@ -7,14 +7,14 @@ ChartJS.register(
     LinearScale,
     BarElement,
     CategoryScale,
-    Tooltip,
+    // Tooltip,
     annotationPlugin
 );
 
 
 export default function ScrollerBar3({comparisonData}) {
 
-    const labels = ['Avg White Student', 'Avg Non-White Student'];
+    const labels = ['Demographics of Avg White Student\'s School', 'Demograpics of Avg Non-White Student\'s school'];
 
     const data = {
         labels: labels,
@@ -39,8 +39,8 @@ export default function ScrollerBar3({comparisonData}) {
                     display: false
                 },
                 tooltip: {
-                    enabled: true,
-                    display: true,
+                    enabled: false,
+                    display: false,
                     callbacks: {
                         label: function(context) {
                             let label = context.dataset.data[context.dataIndex];

@@ -42,7 +42,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
 
     // Sorting 
-    const [sort, setSort] = useState({order: 'asc', orderBy: namelevel})
+    const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
 
     const handleSort = accessor => {
         setActivePage(1);
@@ -147,13 +147,13 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         enr_prop_hi: 100,
         enr_prop_or: 100,
         enr_prop_wh: 100,
-        norm_exp: 1});
+        [measure.accessor]: 1});
 
     // Control display
 
     const [display, setDisplay] = useState({
-        table: 'w-2/3',
-        graph: 'w-1/3',
+        table: 'w-full',
+        graph: 'w-0',
         tablecontrols: true
     })
 
@@ -241,13 +241,23 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                             else {                             
 
                                 const minSearch = (e) => {
-                                    e.target.value === '' ? setMin({[column.accessor]: 0}) : setMin({[column.accessor]: e.target.value}); 
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 1})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 0})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    }
                                     let searchVal = e.target.value === '' ? 0 : e.target.value;
                                     handleSearch([searchVal, max[column.accessor]], column.accessor);
                                 }
 
                                 const maxSearch = (e) => {
-                                    e.target.value === '' ? setMax({[column.accessor]: 100}) : setMax({[column.accessor]: e.target.value}); 
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: maxschools})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else if (column.accessor === measure.accessor) {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 1})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 100})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    };
                                     let searchVal = e.target.value === '' ? 100 : e.target.value;
                                     handleSearch([min[column.accessor], searchVal], column.accessor);
                                 }
@@ -297,7 +307,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     return(
         <>
         <div className="align-center inline-flex font-raleway">
-        <button onClick={showBoth} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+        <button onClick={showBoth} disabled={true} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
         <span className="text-gray-900">Table + Graph</span>       
         </button>
         <button onClick={showTable} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
@@ -311,8 +321,8 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         {display.tablecontrols &&
             <div className="pt-2">
                 <div className="align-center inline-flex font-raleway">
-                    <button className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
-                    <span className="text-gray-900">Clear Filters</span>       
+                    <button onClick={() => setLines([id])} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
+                    <span className="text-gray-900">Clear Selected</span>       
                     </button>
                 </div>
             </div>

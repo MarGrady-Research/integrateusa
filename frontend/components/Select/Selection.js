@@ -38,7 +38,7 @@ export default function Selection() {
 
   // Measure state variable
   
-  const [measure, setMeasure] = useState({name: '', accessor: ''})
+  const [measure, setMeasure] = useState({name: 'White Normalized Exposure', accessor: 'norm_exp_wh'})
 
   const handleMeasure = (e) => setMeasure(e)
 
@@ -110,7 +110,7 @@ export default function Selection() {
   // Defining grade state
   const gradelevel = () => {
     if (currentpath === '/segregation') { 
-      return 'PK'}
+      return '01'}
     else { return 'All'}
   }
   const [grade, setGrade] = useState(gradelevel)
@@ -151,7 +151,7 @@ export default function Selection() {
       
       if (levels === 0) {
         idlevel = "dist_id";
-        table = Alt ? 'districttrendsalt' : 'districttrends';
+        table = 'districttrends';
       } else if (levels === 1) {
         idlevel = "county_id";
         table = 'countytrends';
@@ -291,7 +291,8 @@ export default function Selection() {
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
-          defaultValue={() => { if (currentpath === '/segregation') {return {label: 'PK', value: 'PK'}} else { return {label: 'All', value: 'All'}}}}
+          defaultValue={() => { if (currentpath === '/segregation') {return {label: '01', value: '01'}} else { return {label: 'All', value: 'All'}}}}
+          isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
           placeholder="Select a grade"
           name='grades'
           className='flex pr-4'
@@ -306,7 +307,7 @@ export default function Selection() {
       </>
       </div>
 
-      <Accordion handleMeasure={handleMeasure}/>
+      <Accordion handleMeasure={handleMeasure} currentpath={currentpath}/>
 
       {/* Conditionally render the Info div once the data array has been returned */}
       {currentpath === '/info' && (isLoading ? <Loader /> :
