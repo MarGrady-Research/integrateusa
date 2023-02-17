@@ -14,7 +14,7 @@ ChartJS.register(
 );
 
 
-export default function BarChart2({InfoData}) {
+export default function BarChart({InfoData}) {
 
     const bar = (data, group) => {
         return data.map(e => (e[group]))

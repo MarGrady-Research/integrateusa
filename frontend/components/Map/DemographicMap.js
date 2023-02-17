@@ -5,6 +5,7 @@ import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, Fullscre
 import mapbox_token from "../../Key";
 import Control from "./Control";
 import MapPie from "./MapPies";
+import Slideover from "./SLideover";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function DemographicMap() {
@@ -210,6 +211,7 @@ export default function DemographicMap() {
         </Map>
         <div className="absolute top-32 right-10">
         <Control handleVisibility={handleVisibility}/>
+        {/* <Slideover /> */}
         </div>
         </>
         }

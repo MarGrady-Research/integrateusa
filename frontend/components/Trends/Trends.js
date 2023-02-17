@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import AreaChart from "./Area";
-import TrendTable from "./TrendTable";
 import GradeLines from "./GradeLine";
 
 

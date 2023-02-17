@@ -305,7 +305,9 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
 
     return(
+
         <>
+
         <div className="align-center inline-flex font-raleway">
         <button onClick={showBoth} disabled={true} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
         <span className="text-gray-900">Table + Graph</span>       
@@ -329,6 +331,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         } 
 
         <div className="flex justify-between">
+            
             <div className={`${display.table} transition-width transition-duration-500 ease-in`}>
                 <div className="w-full mt-2 container flex flex-col">
                     <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
@@ -352,13 +355,13 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
             </div>
          
             <div className={`${display.graph}  flex flex-1 h-full transition-width transition-duration-500 ease-in`}>
-            <div className="w-full">
-            <LineGraph linedata={linedata} id={id} measure={measure}/>
+                <div className="w-full">
+                <LineGraph linedata={linedata} id={id} measure={measure}/>
+                </div>
             </div>
-            </div>
-           
-        
+
         </div>
+
         </>
     );
 }

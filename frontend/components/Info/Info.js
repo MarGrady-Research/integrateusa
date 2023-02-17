@@ -4,12 +4,11 @@ import InsetMap from "./InsetMap";
 import dynamic from "next/dynamic";
 import SchoolLevelTable from "./SchoolLevelTable";
 
-const BarChart2 = dynamic(() => import('./Bar'), {
+const BarChart = dynamic(() => import('./Bar'), {
     ssr: false
 })
 
 export default function Info({InfoData, title, id, bounds}) {
-
 
     const schoolLevel = {
         ES: InfoData.filter(e => e.level === "ES"),
@@ -24,6 +23,7 @@ export default function Info({InfoData, title, id, bounds}) {
         }
 
     return(
+        
         <>
         { InfoData.length > 0 && title &&
         <div className="flex flex-row mx-auto">
@@ -49,10 +49,11 @@ export default function Info({InfoData, title, id, bounds}) {
                 <span className="text-2xl pb-2">Race Breakdown by School</span>
             </div>
             <div className="h-100 w-100 overflow-auto">
-                <BarChart2 InfoData={InfoData} className="py-4 left-0 top-0 absolute"/>
+                <BarChart InfoData={InfoData} className="py-4 left-0 top-0 absolute"/>
             </div>
         </div>
         </>
+
     )
 
 }
