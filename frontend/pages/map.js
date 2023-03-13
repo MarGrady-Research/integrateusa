@@ -8,15 +8,15 @@ export default function Map(){
     return(
         <>
         <Head>
-        <title>Info</title>
+        <title>Map</title>
         <meta name="description" content="Mapping segregation" />
         <link rel="icon" href="/mg_logo_cropped.png" />
         </Head>
         <Header />
-        <div className="flex flex-col min-h-screen">
-        <div className="flex justify-center">
+        <div className="absolute flex flex-col min-h-screen">
+        {/* <div className="flex"> */}
         <DemographicMap/>
-        </div>
+        {/* </div> */}
         </div>
         
         </>

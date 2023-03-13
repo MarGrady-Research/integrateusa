@@ -5,7 +5,7 @@ import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, Fullscre
 import mapbox_token from "../../Key";
 import Control from "./Control";
 import MapPie from "./MapPies";
-import Slideover from "./SLideover";
+import Slideover from "./Slideover";
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function DemographicMap() {
@@ -121,8 +121,21 @@ export default function DemographicMap() {
         }
     }
 
-    // Using the useMap hook to set up ease to functionality
+   
+
+    // Using the useMap hook to access additional map methods
     const mapRef = useRef();
+
+    // Bounds for map
+    const [bounds, setBounds] = useState([]);
+    const handleBounds = (e) => setBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]]);
+
+    console.log(bounds)
+
+    // Update bounds
+    useCallback(() => {
+        mapRef.current.fitBounds(bounds, {padding: 25, duration:2000});
+    }, [bounds]);
 
     // Click info state variable, to hold relevant data from clicked school
     const [clickInfo, setClickInfo] = useState(null);
@@ -158,6 +171,7 @@ export default function DemographicMap() {
         <>
         {isLoading ? <Loader /> :
         <>
+        <div className="relative h-screen w-screen">
         <Map 
         ref={mapRef}
         initialViewState={{
@@ -209,10 +223,12 @@ export default function DemographicMap() {
         </Popup>
         }
         </Map>
-        <div className="absolute top-32 right-10">
-        <Control handleVisibility={handleVisibility}/>
-        {/* <Slideover /> */}
+        {/* <div > */}
+        {/* <Control handleVisibility={handleVisibility}/> */}
+        <Slideover handleVisibility={handleVisibility} handleBounds={handleBounds}/>
+        {/* </div> */}
         </div>
+        
         </>
         }
         </>

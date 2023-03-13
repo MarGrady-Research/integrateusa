@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Search from "./Search";
 
 
 export default function Control ({handleVisibility}) {
@@ -32,9 +33,9 @@ export default function Control ({handleVisibility}) {
     })
 
     return(
-        <div className="border border-gray-500 rounded-md bg-white p-2">
-        <p>Toggle Boundaries:</p>
-        <div className="flex flex-col ">
+        <div>
+        <p className="text-lg text-gray-900">Toggle Boundaries</p>
+        <div className="flex flex-col pt-2">
             <div>
             <label>
                 <input
@@ -86,8 +87,11 @@ export default function Control ({handleVisibility}) {
         </div>
 
         <div className="flex flex-col pt-4 w-full">
+        <p className="text-lg text-gray-900 pb-2">Legend</p>
             {legend()}
         </div>
+
+        <Search radio={radio}/>
         
         </div>
     )
