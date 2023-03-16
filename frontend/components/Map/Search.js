@@ -71,7 +71,7 @@ export default function Search({radio, handleBounds}) {
         name='idselect'
         cacheOptions
         defaultOptions
-        onChange={() => handleBounds} 
+        onChange={(e) => handleBounds(e)} 
         loadOptions={loadOptions}
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}

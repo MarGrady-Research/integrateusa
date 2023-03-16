@@ -13,10 +13,8 @@ export default function Map(){
         <link rel="icon" href="/mg_logo_cropped.png" />
         </Head>
         <Header />
-        <div className="absolute flex flex-col min-h-screen">
-        {/* <div className="flex"> */}
+        <div className="absolute flex flex-col h-[calc(100vh-83px)] w-full">
         <DemographicMap/>
-        {/* </div> */}
         </div>
         
         </>

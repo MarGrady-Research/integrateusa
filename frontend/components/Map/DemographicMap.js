@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Loader } from "../Loader";
 import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
 import mapbox_token from "../../Key";
-import Control from "./Control";
 import MapPie from "./MapPies";
 import Slideover from "./Slideover";
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -126,16 +125,14 @@ export default function DemographicMap() {
     // Using the useMap hook to access additional map methods
     const mapRef = useRef();
 
-    // Bounds for map
-    const [bounds, setBounds] = useState([]);
-    const handleBounds = (e) => setBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]]);
+    const updateBounds = useCallback((e) => {
+        mapRef.current.fitBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]], {padding: 25, duration:2000});
+    }, []);
 
-    console.log(bounds)
-
-    // Update bounds
-    useCallback(() => {
-        mapRef.current.fitBounds(bounds, {padding: 25, duration:2000});
-    }, [bounds]);
+    // Handle bounds change
+    const handleBounds = (e) => {
+       updateBounds(e);
+    }
 
     // Click info state variable, to hold relevant data from clicked school
     const [clickInfo, setClickInfo] = useState(null);
@@ -156,7 +153,7 @@ export default function DemographicMap() {
           prop_wh: school && school.properties.prop_wh
         });
         const center = [event.lngLat.lng, event.lngLat.lat];
-        school && mapRef.current.easeTo({center: center, duration: 500});
+        // school && mapRef.current.easeTo({center: center, duration: 500});
       }, [])
 
       
@@ -171,7 +168,7 @@ export default function DemographicMap() {
         <>
         {isLoading ? <Loader /> :
         <>
-        <div className="relative h-screen w-screen">
+        <div className="relative w-full h-[calc(100vh-66px)]">
         <Map 
         ref={mapRef}
         initialViewState={{
@@ -179,12 +176,12 @@ export default function DemographicMap() {
             latitude: 40,
             zoom: 4
           }}
-        style={{position: 'relative', width: '100vw', height:'100vh'}}
+        style={{position: 'relative', width: '100%', height:'100%'}}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         attributionControl={true}
         interactiveLayerIds={['schools']}
-        onClick={handleClick}
+        onMouseMove={handleClick}
         cursor={cursor}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -206,7 +203,7 @@ export default function DemographicMap() {
         </Source>
         {selectedSchool &&
         <Popup 
-            anchor={'bottom-left'}
+            anchor={'right'}
             longitude={clickInfo.longitude}
             latitude={clickInfo.latitude}
             offset={5}
@@ -214,19 +211,14 @@ export default function DemographicMap() {
             closeOnClick={false}
             onClose={() => setClickInfo(null)}
             className='text-left'>
-        {/* <div className="text-left"> */}
         <span className="font-medium text-center"><b>{selectedSchool}</b></span>
         <br></br>
         <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> total students enrolled</span>
         <MapPie clickInfo={clickInfo}/>
-        {/* </div> */}
         </Popup>
         }
         </Map>
-        {/* <div > */}
-        {/* <Control handleVisibility={handleVisibility}/> */}
         <Slideover handleVisibility={handleVisibility} handleBounds={handleBounds}/>
-        {/* </div> */}
         </div>
         
         </>

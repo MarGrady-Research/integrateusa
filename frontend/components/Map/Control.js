@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Search from "./Search";
 
 
-export default function Control ({handleVisibility}) {
+export default function Control ({handleVisibility, handleBounds}) {
 
     // Radio Elements and functions
     const [radio, setRadio] = useState({level: "School"})
@@ -34,7 +34,13 @@ export default function Control ({handleVisibility}) {
 
     return(
         <div>
-        <p className="text-lg text-gray-900">Toggle Boundaries</p>
+
+        <div className="flex flex-col w-full">
+            <p className="text-lg text-gray-900 pb-2">Legend</p>
+                {legend()}
+        </div>
+
+        <p className="text-lg pt-4 text-gray-900">Toggle Boundaries</p>
         <div className="flex flex-col pt-2">
             <div>
             <label>
@@ -86,12 +92,7 @@ export default function Control ({handleVisibility}) {
             </div>
         </div>
 
-        <div className="flex flex-col pt-4 w-full">
-        <p className="text-lg text-gray-900 pb-2">Legend</p>
-            {legend()}
-        </div>
-
-        <Search radio={radio}/>
+        <Search radio={radio} handleBounds={handleBounds}/>
         
         </div>
     )
