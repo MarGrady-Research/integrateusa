@@ -16,7 +16,6 @@ export default function Map(){
         <div className="absolute flex flex-col h-[calc(100vh-83px)] w-full">
         <DemographicMap/>
         </div>
-        
         </>
         
     )

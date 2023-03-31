@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {Chart as ChartJS, LinearScale, BarElement, CategoryScale, Tooltip, Legend}  from 'chart.js'
-import {Bar, getElementsAtEvent} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import Select from 'react-select';
 

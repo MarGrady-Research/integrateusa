@@ -34,7 +34,7 @@ export default function Info({InfoData, title, id, bounds}) {
         <span className="text-2xl pt-4 pb-2">Overview</span>
         </div>
         <div className="container relative flex flex-wrap justify-between pb-5">
-            <div className="w-1/3 h-300 border rounded-md ">
+            <div className="w-1/3 h-300">
             <InsetMap id={id} bounds = {bounds}/>
             </div>
             <div className="w-1/3 h-full">

@@ -9,6 +9,7 @@ import Segregation from '../Segregation/Segregation';
 import Trends from '../Trends/Trends';
 import { Loader } from '../Loader';
 import Accordion from './Accordion';
+import SelectSlideover from './SelectSlideover';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 export default function Selection() {
@@ -29,7 +30,7 @@ export default function Selection() {
   ]
 
   // Measure state variable and handleMeasure function to pass to Accordion
-  const [measure, setMeasure] = useState({name: 'White Normalized Exposure', accessor: 'norm_exp_wh'})
+  const [measure, setMeasure] = useState({})
   const handleMeasure = (e) => setMeasure(e)
 
   // Input state and function to handle inputs into state/county/district select
@@ -37,7 +38,10 @@ export default function Selection() {
   const handleInputChange = (inputValue) => setInput(inputValue)
 
   // ID state
-  const [id, setID] = useState(3620580)
+  const [id, setID] = useState(3620580);
+
+  // Initialize variable to hold ID before click
+  const [tempID, setTempID] = useState();
 
   // Grade state
   const gradelevel = () => currentpath === '/segregation' ? '01': 'All'
@@ -142,11 +146,11 @@ export default function Selection() {
       return Options;
   
     }
-  
 
-  //  function to set both ID and name on change
-  const nameandid = e => {
-    setID(e.value);
+
+  //  function to set name, ID, and bounds on district/county/state change
+  const nameIdBounds = e => {
+    setTempID(e.value);
     setSelectedName(e.label);
     setBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]])
   };
@@ -224,6 +228,7 @@ export default function Selection() {
   useEffect( () => {
     let canceled = false
     if (clicked != canceled) {
+      setID(tempID);
       if (currentpath === '/info') {
         getInfoData();
       } else if (currentpath === '/segregation') { 
@@ -236,32 +241,36 @@ export default function Selection() {
   }, [clicked])
 
   return (
-    <div className='container mx-auto p-5'>
-      <div className='flex flex-wrap mx-auto justify-between'>
+    <div className='absolute w-full h-full'>
+    <div className='relative container mx-auto p-5 h-full'>
+      <div className='relative flex flex-row mx-auto justify-between w-full'>
+       
         <div className='flex flex-row'>
-        <Select 
-        options = {levelselect}
-        placeholder = "Geographic Level"
-        defaultValue={{label: 'District', value: 0}}
-        onChange= {e => {setLevels(e.value)}} 
-        components={{IndicatorSeparator: () => null}}
-        className="pr-2"
-        isSearchable={false}
-        />
-        <>
-        <AsyncSelect 
-        name='idselect'
-        cacheOptions
-        defaultOptions
-        defaultValue={{label: "New York City Public Schools (NY)", value: 3620580}}
-        onChange={nameandid} 
-        loadOptions={loadOptions}
-        onInputChange={handleInputChange}
-        components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-        placeholder= {"Type a " + levelselect[levels].label + " name"}
-        className='pr-2'
-        /> 
-        {currentpath === '/info' &&
+
+          <Select 
+          options = {levelselect}
+          placeholder = "Geographic Level"
+          defaultValue={{label: 'District', value: 0}}
+          onChange= {e => {setLevels(e.value)}} 
+          components={{IndicatorSeparator: () => null}}
+          className="pr-2"
+          isSearchable={false}
+          />
+
+          <AsyncSelect 
+          name='idselect'
+          cacheOptions
+          defaultOptions
+          defaultValue={{label: "New York City Public Schools (NY)", value: 3620580}}
+          onChange={nameIdBounds} 
+          loadOptions={loadOptions}
+          onInputChange={handleInputChange}
+          components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+          placeholder= {"Type a " + levelselect[levels].label + " name"}
+          className='pr-2 flex-none w-72'
+          /> 
+
+          {currentpath === '/info' &&
           <Select 
           options={years}
           onChange={e => setYear(e.value)}
@@ -269,10 +278,11 @@ export default function Selection() {
           isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
           placeholder="Select a year"
           name='years'
-          className='flex pr-2'
+          className='pr-2'
           isSearchable={false}
           />
-        }
+          }
+
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
@@ -280,34 +290,41 @@ export default function Selection() {
           isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
           placeholder="Select a grade"
           name='grades'
-          className='flex pr-4'
+          className='pr-4'
           />
 
-        <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
-          <MagnifyingGlassIcon className='h-4 w-4'/>
-        </button>
+          <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
+            <MagnifyingGlassIcon className='h-4 w-4'/>
+          </button>
+          
+          
+          
+        </div> 
         
-        </>
-        
+        <div className=''>
+        <SelectSlideover/>
         </div>
+
       </div>
 
-      <Accordion handleMeasure={handleMeasure} currentpath={currentpath}/>
-
       {/* Conditionally render the Info page once the data has been returned */}
-      {currentpath === '/info' && (isLoading ? <Loader /> :
+
+      {currentpath === '/info' && (isLoading ? <div className='pt-5'><Loader /></div> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
       <Trends TrendData={trendData} id={id} grade={grade} title={title}/>
       </div>)
       }
+
       {/* Conditionally render the Segregation page once the data has been returned */}
-      {currentpath === '/segregation' && (isLoading ? <Loader /> :
+
+      {currentpath === '/segregation' && (isLoading ? <div className='pt-5'><Loader /></div> :
       <div className='mx-auto mt-5'>
-      <Segregation SegData={segData} id={id} grade={grade} title={title} measure={measure}/>
+      <Segregation SegData={segData} id={id} grade={grade} title={title} measure={measure} handleMeasure={handleMeasure}/>
       </div>)
       }
 
+    </div>
     </div>
   );
 };

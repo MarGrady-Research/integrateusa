@@ -12,7 +12,11 @@ ChartJS.register(
 export default function MapPie({clickInfo}) {
 
 
-    const pieData = [clickInfo.prop_as, clickInfo.prop_bl, clickInfo.prop_hi, clickInfo.prop_or, clickInfo.prop_wh]
+    const pieData = [clickInfo.feature.properties.prop_as, 
+                     clickInfo.feature.properties.prop_bl, 
+                     clickInfo.feature.properties.prop_hi, 
+                     clickInfo.feature.properties.prop_or, 
+                     clickInfo.feature.properties.prop_wh]
 
     const options = {
         reponsive: true,

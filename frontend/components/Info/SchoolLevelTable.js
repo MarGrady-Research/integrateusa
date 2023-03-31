@@ -18,8 +18,8 @@ export default function SchoolLevelTable({schoolLevel}) {
     return(
         <div className="mt-2 container flex flex-col">
             <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-2 lg:-mx-4">
-                <div className="py-2 align -middle inline-block min-w-full sm:px-2 lg:px-4">
-                    <div className="shadow overflow-hidden border border-gray-200 sm:rounded-lg">
+                <div className="py-2 align -middle inline-block min-w-full">
+                    <div className="shadow overflow-hidden border border-gray-200">
                         <div className="overflow-x-auto">  
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-200">

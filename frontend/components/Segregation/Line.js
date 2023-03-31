@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, } from 'chart.js';
 import {Line} from 'react-chartjs-2';
+import { years } from "../Select/SelectOptions";
 
 
 ChartJS.register(
@@ -33,8 +34,7 @@ export default function LineGraph ({linedata, id}) {
         }
     }
 
-    const labels = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-                    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
+    const labels = years.map(e=>e.value).sort((a,b) => {return (a - b)})
     
     const makeLines = () => { 
         return linedata.map((e) => {

@@ -20,7 +20,7 @@ export default function DemographicMap() {
 
     const getData = async () => {
         setIsLoading(true);
-        const response = await axios.get("http://localhost:8000/api/mapschools/?q=2021");
+        const response = await axios.get("http://localhost:8000/api/mapschools/?q=2022");
         setData({type: "FeatureCollection", features: response.data.map(e => e.map_data)});
         setIsLoading(false);
     }
@@ -77,7 +77,12 @@ export default function DemographicMap() {
         source: 'county-boundary-source',
         'source-layer': 'cb_2018_us_county_500k-6dd9y3',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-outline-color': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], true],
+                'rgba(0,0,0,0.1)',
+                'rgba(255,255,255,0.1)'
+            ],
             'fill-color': 'rgba(0,0,0,0.1)'
         },
         layout: {
@@ -102,7 +107,7 @@ export default function DemographicMap() {
         }
     }
 
-    const prop_array = ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']]
+    const prop_array = ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']];
 
     const LayerProps = {
         id: 'schools',
@@ -114,13 +119,11 @@ export default function DemographicMap() {
                         ['==', ['get', 'prop_bl'], prop_array],  "#4472C4", 
                         ['==', ['get', 'prop_hi'], prop_array],  "#FF9900", 
                         ['==', ['get', 'prop_or'], prop_array],  "#FFC000", 
-                        ['==', ['get', 'prop_wh'], prop_array],  "#339933", 
+                        ['==', ['get', 'prop_wh'], prop_array],  "#339933",
                         "#808080"
                 ],
         }
     }
-
-   
 
     // Using the useMap hook to access additional map methods
     const mapRef = useRef();
@@ -139,25 +142,20 @@ export default function DemographicMap() {
 
     const handleClick = useCallback((event) => {
         setClickInfo(null);
-        const school = event.features && event.features[0];
-        setClickInfo({
-          longitude: event.lngLat.lng,
-          latitude: event.lngLat.lat,
-          sch_name: school && school.properties.sch_name,
-          year: school && school.properties.year,
-          tot_enr: school && school.properties.tot_enr,
-          prop_as: school && school.properties.prop_as,
-          prop_bl: school && school.properties.prop_bl,
-          prop_hi: school && school.properties.prop_hi,
-          prop_or: school && school.properties.prop_or,
-          prop_wh: school && school.properties.prop_wh
-        });
-        const center = [event.lngLat.lng, event.lngLat.lat];
-        // school && mapRef.current.easeTo({center: center, duration: 500});
+        const {
+            features,
+            point: {x,y},
+        } = event;
+        const hoveredFeature = event.features && event.features[0];
+        setClickInfo(hoveredFeature && {feature: hoveredFeature, x, y});
+        clickInfo && mapRef.current.setFeatureState({source: 'county-boundary-source', sourceLayer: 'cb_2018_us_county_500k-6dd9y3', id: 'county-boundary'}, {hover: true})
+        // const center = [event.lngLat.lng, event.lngLat.lat];
+        // hoveredFeature && mapRef.current.easeTo({center: center, duration: 500});
       }, [])
 
       
-    const selectedSchool = clickInfo && clickInfo.sch_name || '';
+    const selectedSchool = clickInfo && clickInfo.feature.properties.sch_name || '';
+    const selectedArea = clickInfo && clickInfo.feature.properties.NAME || ''
 
 
     // Set State on mouse enter
@@ -166,7 +164,7 @@ export default function DemographicMap() {
 
     return (
         <>
-        {isLoading ? <Loader /> :
+        {isLoading ? <div className="pt-5"><Loader /></div> :
         <>
         <div className="relative w-full h-[calc(100vh-66px)]">
         <Map 
@@ -180,7 +178,7 @@ export default function DemographicMap() {
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
         attributionControl={true}
-        interactiveLayerIds={['schools']}
+        interactiveLayerIds={['schools', 'district-boundary', 'county-boundary', 'state-boundary']}
         onMouseMove={handleClick}
         cursor={cursor}
         onMouseEnter={onMouseEnter}
@@ -189,9 +187,6 @@ export default function DemographicMap() {
         <GeolocateControl position="top-left"/>
         <FullscreenControl position="top-left"/>
         <NavigationControl position = "top-left"/>
-        <Source type='geojson' data={data}>
-        <Layer {...LayerProps}/>
-        </Source>
         <Source id='district-boundary-source' type="vector" url="mapbox://theokaufman.45uz283x">
             <Layer {...districtLayer} />
         </Source>
@@ -201,21 +196,47 @@ export default function DemographicMap() {
         <Source id='state-boundary-source' type="vector" url="mapbox://theokaufman.a7l31auu">
             <Layer {...stateLayer} />
         </Source>
-        {selectedSchool &&
-        <Popup 
-            anchor={'right'}
-            longitude={clickInfo.longitude}
-            latitude={clickInfo.latitude}
-            offset={5}
-            closebutton={false}
-            closeOnClick={false}
-            onClose={() => setClickInfo(null)}
-            className='text-left'>
-        <span className="font-medium text-center"><b>{selectedSchool}</b></span>
-        <br></br>
-        <span>In <b>{clickInfo.year}</b>, there were <b>{clickInfo.tot_enr}</b> total students enrolled</span>
-        <MapPie clickInfo={clickInfo}/>
-        </Popup>
+        <Source type='geojson' data={data}>
+        <Layer {...LayerProps}/>
+        </Source>
+        {(selectedSchool || selectedArea) && (
+            <div style={{left: clickInfo.x + 20, top: clickInfo.y + 20, zIndex: 10, position: 'absolute', fontSize: '10px', maxWidth: '300px'}} className="bg-gray-900 text-white text-center font-raleway w-60 h-300 rounded-md">
+
+            {selectedSchool && (
+                <div className="p-3">
+                <span className="overflow-ellipsis"><b>{selectedSchool}</b></span>
+                <br/>
+                <span><b>District: </b>{clickInfo.feature.properties.dist_name}</span>
+                <br/>
+                <span><b>County: </b>{clickInfo.feature.properties.county_name}</span>
+                <br/>
+                <span><b>{clickInfo.feature.properties.year} Enrollment: </b> {clickInfo.feature.properties.tot_enr}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{(clickInfo.feature.properties.prop_as*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{(clickInfo.feature.properties.prop_bl*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{(clickInfo.feature.properties.prop_hi*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{(clickInfo.feature.properties.prop_or*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{(clickInfo.feature.properties.prop_wh*100).toFixed(1)}%</span></span>
+                <br/>
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                <MapPie clickInfo={clickInfo}/>
+                </div>
+                
+                </div>
+            )}
+
+            {selectedArea && 
+                <div className="p-3">
+                <span><b>{selectedArea}</b></span>
+                </div>
+            }
+
+            </div>  
+            )  
         }
         </Map>
         <Slideover handleVisibility={handleVisibility} handleBounds={handleBounds}/>

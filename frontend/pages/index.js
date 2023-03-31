@@ -9,14 +9,13 @@ export default function Home() {
   return (
     <div >
       <Head>
-        <title>Integrate USA</title>
+        <title>IntegrateUSA</title>
         <meta name="description" content="Exploring school segregation" />
         <link rel="icon" href="/Image Only.png" />
       </Head>
 
-      {/* <main className={styles.main}> */}
-        <Scroller />
-      {/* </main>  */}
+      <Scroller />
+     
     </div>
   )
 }
