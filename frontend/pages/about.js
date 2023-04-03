@@ -36,6 +36,8 @@ export default function About(){
                     IntegrateUSA is a project by <a href="http://margrady.com" className="text-blue-800">MarGrady Research</a>, a mission-driven consulting firm specializing in education projects.
                     The project collects, standardizes and visualizes publicly available enrollment data across the US from 2000 to present,
                     providing a demographic overview of School Districts, Counties and States, as well as measures of segregation at each level.
+
+                    It's a really good project.
                 </span> 
             </div>
             </div>
