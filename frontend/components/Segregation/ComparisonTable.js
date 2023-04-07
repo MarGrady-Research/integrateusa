@@ -18,6 +18,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
         {accessor: "enr_prop_wh", label: "% White"},
         {accessor: "enr_prop_or", label: "% Other"},
         {accessor: measure.accessor, label: measure.name},
+        {accessor: measure.accessor, label: measure.name},
     ]
 
     // Filtering
@@ -43,6 +44,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
 
 
     // Sorting 
+    const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
     const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
 
     const handleSort = accessor => {
@@ -90,6 +92,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
 
         const finaldata = data.map((e) =>{ return ({
                    seg: e[measure.accessor],
+                   seg: e[measure.accessor],
                    year: e.year
                 })
             })
@@ -128,6 +131,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
         lines.forEach((e) => {
             getLineData(e);
         })
+    }, [lines, measure])
     }, [lines, measure])
 
 
@@ -214,11 +218,23 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                     } else {
                                         e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 0})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
                                     }
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 1})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 0})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    }
                                     let searchVal = e.target.value === '' ? 0 : e.target.value;
                                     handleSearch([searchVal, max[column.accessor]], column.accessor);
                                 }
 
                                 const maxSearch = (e) => {
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: maxschools})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else if (column.accessor === measure.accessor) {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 1})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 100})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    };
                                     if (column.accessor === 'num_schools') {
                                         e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: maxschools})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
                                     } else if (column.accessor === measure.accessor) {
@@ -238,6 +254,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                        </td>
                             }
                         })} 
+                        })} 
                     </tr>
                     {calculatedRows.map(row => {
                         return (
@@ -248,7 +265,10 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                                    <input
                                                     type="checkbox"
                                                     className='form-check-input'
+                                                    className='form-check-input'
                                                     id={row[idlevel]}
+                                                    checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
+                                                    disabled={row[idlevel] === ''+id ? true: false}
                                                     checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
                                                     disabled={row[idlevel] === ''+id ? true: false}
                                                     onChange={() => {}}
@@ -258,7 +278,9 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                                  </th>)
                                      } else if (column.accessor === namelevel) {
                                         return <td key={column.accessor} className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
+                                        return <td key={column.accessor} className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      } else {
+                                        return <td key={column.accessor} className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                         return <td key={column.accessor} className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      }
                                 })}

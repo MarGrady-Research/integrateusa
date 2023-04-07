@@ -288,6 +288,8 @@ export default function Selection() {
           onChange={e => setGrade(e.value)}
           defaultValue={() => { if (currentpath === '/segregation') {return {label: '01', value: '01'}} else { return {label: 'All', value: 'All'}}}}
           isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
+          defaultValue={() => { if (currentpath === '/segregation') {return {label: '01', value: '01'}} else { return {label: 'All', value: 'All'}}}}
+          isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
           placeholder="Select a grade"
           name='grades'
           className='pr-4'

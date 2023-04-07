@@ -40,6 +40,15 @@ return(
                height={60}/>
         {/* /> */}
         {/* </a> */}
+    <Link href='http://www.margrady.com/'>
+    <span className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+        {/* <a> */}
+        <Image src="/mg-logo-text.png" 
+               alt="MarGrady Logo"
+               width = {250}
+               height={60}/>
+        {/* /> */}
+        {/* </a> */}
       </span>
     </Link>
   </div>
