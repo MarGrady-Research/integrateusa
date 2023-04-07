@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import Search from "./Search";
 
 
-export default function Control ({handleVisibility}) {
+export default function Control ({handleVisibility, handleBounds}) {
 
     // Radio Elements and functions
     const [radio, setRadio] = useState({level: "School"})
@@ -32,10 +33,19 @@ export default function Control ({handleVisibility}) {
     })
 
     return(
-        <div className="border border-gray-500 rounded-md bg-white p-2">
-        <p>Toggle Boundaries:</p>
-        <div className="flex flex-col ">
-            <div>
+        <div>
+
+        <div className="flex flex-col w-full">
+            <p className="text-lg text-gray-900 pb-2">Legend</p>
+                <div className="text-left mx-auto">
+                {legend()}
+                </div>
+        </div>
+
+        <p className="text-lg pt-4 text-gray-900">Toggle Boundaries</p>
+        <div className="flex flex-col pt-2">
+            <div className="mx-auto">
+            <div className="p-1">
             <label>
                 <input
                     type="radio"
@@ -47,7 +57,7 @@ export default function Control ({handleVisibility}) {
                 No Boundary
             </label>
             </div>
-            <div>
+            <div className="p-1">
             <label>
                 <input
                     type="radio"
@@ -59,7 +69,7 @@ export default function Control ({handleVisibility}) {
                 District
             </label>
             </div>
-            <div>
+            <div className="p-1">
             <label>
                 <input
                     type="radio"
@@ -71,7 +81,7 @@ export default function Control ({handleVisibility}) {
                 County
             </label>
             </div>
-            <div>
+            <div className="p-1">
             <label>
                 <input
                     type="radio"
@@ -83,10 +93,11 @@ export default function Control ({handleVisibility}) {
                 State
             </label>
             </div>
+            </div>
         </div>
 
-        <div className="flex flex-col pt-4 w-full">
-            {legend()}
+        <div className="pt-5">
+        <Search radio={radio} handleBounds={handleBounds}/>
         </div>
         
         </div>

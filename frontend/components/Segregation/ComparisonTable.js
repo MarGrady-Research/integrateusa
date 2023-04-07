@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from "react"
 import LineGraph from "./Line";
 import Pagination from "./Pagination";
 import {sortRows, filterRows, paginateRows} from "./Helpers";
+import { years } from "../Select/SelectOptions";
 import axios from "axios";
 
-export default function Comparison({id, grade, filteredData, namelevel, idlevel, table, measure, maxschools}) {
+export default function Comparison({id, grade, segData, namelevel, idlevel, table, measure, maxschools}) {
 
     // Setting columns array
     const columns = [
@@ -16,6 +17,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         {accessor: "enr_prop_hi", label: "% Hispanic"},
         {accessor: "enr_prop_wh", label: "% White"},
         {accessor: "enr_prop_or", label: "% Other"},
+        {accessor: measure.accessor, label: measure.name},
         {accessor: measure.accessor, label: measure.name},
     ]
 
@@ -43,6 +45,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     // Sorting 
     const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
+    const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
 
     const handleSort = accessor => {
         setActivePage(1);
@@ -53,7 +56,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
     }
 
     // Filter then sort, then paginate
-    const filteredRows = useMemo(() => filterRows(filteredData, filters), [filteredData, filters])
+    const filteredRows = useMemo(() => filterRows(segData, filters), [segData, filters])
     const sortedRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
 
     // Pagination
@@ -82,13 +85,13 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
     const getLineData =  async (id) => {
 
-        const labels = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-            2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
+        const labels = years.map(e=>e.value).sort((a,b) => {return (a - b)})
         
-        const response = await axios.get("http://localhost/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
+        const response = await axios.get("http://localhost:8000/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
         let data = response.data;
 
         const finaldata = data.map((e) =>{ return ({
+                   seg: e[measure.accessor],
                    seg: e[measure.accessor],
                    year: e.year
                 })
@@ -129,6 +132,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
             getLineData(e);
         })
     }, [lines, measure])
+    }, [lines, measure])
 
 
     // Max and min
@@ -140,6 +144,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         enr_prop_or: 0,
         enr_prop_wh: 0,
         [measure.accessor]: 0});
+
     const [max, setMax] = useState({num_schools: maxschools,
         enr_prop_as: 100,
         enr_prop_bl: 100,
@@ -148,42 +153,9 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
         enr_prop_wh: 100,
         [measure.accessor]: 1});
 
-        console.log(min)
-    // Control display
 
-    const [display, setDisplay] = useState({
-        table: 'w-full',
-        graph: 'w-0',
-        tablecontrols: true
-    })
-
-    const showTable = useCallback(() => {
-            setDisplay({
-                table: 'w-full',
-                graph: 'w-0',
-                tablecontrols: true
-            })
-        }, [])
-
-    const showGraph = useCallback(() => {
-            setDisplay({
-                table: 'hidden',
-                graph: 'w-full',
-                tablecontrols: false
-            })
-        }, [])
-
-    const showBoth = useCallback(() => {
-            setDisplay({
-                table: 'w-2/3',
-                graph: 'w-1/3',
-                tablecontrols: true
-            })
-        }, [])
-
-
-    // Returning table JSX
-    const tableRows = (columns, filteredData) => {
+    // function to return table JSX
+    const tableRows = (columns, segData) => {
         return(
 
             <table className="min-w-full">
@@ -246,11 +218,23 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                     } else {
                                         e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 0})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
                                     }
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 1})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMin(oldmin => ({...oldmin, [column.accessor]: 0})) : setMin(oldmin => ({...oldmin, [column.accessor]: e.target.value})); 
+                                    }
                                     let searchVal = e.target.value === '' ? 0 : e.target.value;
                                     handleSearch([searchVal, max[column.accessor]], column.accessor);
                                 }
 
                                 const maxSearch = (e) => {
+                                    if (column.accessor === 'num_schools') {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: maxschools})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else if (column.accessor === measure.accessor) {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 1})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    } else {
+                                        e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: 100})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
+                                    };
                                     if (column.accessor === 'num_schools') {
                                         e.target.value === '' || e.target.value === undefined ? setMax(oldmax => ({...oldmax, [column.accessor]: maxschools})) : setMax(oldmax => ({...oldmax, [column.accessor]: e.target.value})); 
                                     } else if (column.accessor === measure.accessor) {
@@ -270,6 +254,7 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                        </td>
                             }
                         })} 
+                        })} 
                     </tr>
                     {calculatedRows.map(row => {
                         return (
@@ -280,7 +265,10 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                    <input
                                                     type="checkbox"
                                                     className='form-check-input'
+                                                    className='form-check-input'
                                                     id={row[idlevel]}
+                                                    checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
+                                                    disabled={row[idlevel] === ''+id ? true: false}
                                                     checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
                                                     disabled={row[idlevel] === ''+id ? true: false}
                                                     onChange={() => {}}
@@ -290,7 +278,9 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                                                  </th>)
                                      } else if (column.accessor === namelevel) {
                                         return <td key={column.accessor} className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
+                                        return <td key={column.accessor} className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      } else {
+                                        return <td key={column.accessor} className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                         return <td key={column.accessor} className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${row[idlevel] === ''+id ? 'text-line-red font-semibold font-raleway' : ''}`}>{row[column.accessor]}</td>
                                      }
                                 })}
@@ -305,37 +295,16 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
 
 
     return(
+
         <>
-        <div className="align-center inline-flex font-raleway">
-        <button onClick={showBoth} disabled={true} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
-        <span className="text-gray-900">Table + Graph</span>       
-        </button>
-        <button onClick={showTable} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
-            <span className="text-gray-900">Table</span>       
-        </button>
-        <button onClick={showGraph} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
-            <span className="text-gray-900">Graph</span>       
-        </button>
-        </div>
-
-        {display.tablecontrols &&
-            <div className="pt-2">
-                <div className="align-center inline-flex font-raleway">
-                    <button onClick={() => setLines([id])} className='border-gray-700 hover:bg-gray-200 focus:bg-gray-200 border inline-flex rounded-md p-1 mr-2'>
-                    <span className="text-gray-900">Clear Selected</span>       
-                    </button>
-                </div>
-            </div>
-        } 
-
-        <div className="flex justify-between">
-            <div className={`${display.table} transition-width transition-duration-500 ease-in`}>
+            
+            <div className={`w-full transition-width transition-duration-500 ease-in`}>
                 <div className="w-full mt-2 container flex flex-col">
                     <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
                         <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
-                            <div className="shadow overflow-hidden border border-gray-700 sm:rounded-lg">
+                            <div className="shadow overflow-hidden border border-gray-200 sm:rounded-lg">
                                 <div className="overflow-x-auto"> 
-                                    {tableRows(columns, filteredData)}
+                                    {tableRows(columns, segData)}
                                 </div>
                             </div>
                         </div>
@@ -351,14 +320,12 @@ export default function Comparison({id, grade, filteredData, namelevel, idlevel,
                 />
             </div>
          
-            <div className={`${display.graph}  flex flex-1 h-full transition-width transition-duration-500 ease-in`}>
-            <div className="w-full">
-            <LineGraph linedata={linedata} id={id} measure={measure}/>
+            <div className={`w-full  flex flex-1 h-full transition-width transition-duration-500 ease-in`}>
+                <div className="w-full">
+                <LineGraph linedata={linedata} id={id} measure={measure}/>
+                </div>
             </div>
-            </div>
-           
-        
-        </div>
+
         </>
     );
 }

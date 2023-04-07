@@ -15,7 +15,6 @@ return(
                        alt="IntegrateUSA logo"
                        width = {200}
                        height={60}/>
-      {/* <span className="ml-3 text-xl">IntegrateUSA</span> */}
     </a>
     </Link>
     <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
@@ -32,6 +31,15 @@ return(
     <a className="mr-5 hover:text-gray-500">About</a>
     </Link>
     </nav>
+    <Link href='http://www.margrady.com/'>
+    <span className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+        {/* <a> */}
+        <Image src="/mg-logo-text.png" 
+               alt="MarGrady Logo"
+               width = {250}
+               height={60}/>
+        {/* /> */}
+        {/* </a> */}
     <Link href='http://www.margrady.com/'>
     <span className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
         {/* <a> */}

@@ -16,21 +16,6 @@ ChartJS.register(
 
 export default function AreaChart({TrendData, grade}) {
 
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            }
-        },
-        scales: {
-            y: {
-                min: 0,
-                stacked: true
-            }
-        }
-    };
-
     let sortedData = TrendData.filter(e => e.grade === grade).sort((a,b) => {return ((a['year']-b['year']))})
 
     const labels = sortedData.map(e=>e.year)
@@ -76,6 +61,21 @@ export default function AreaChart({TrendData, grade}) {
             
         ]
     }
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                min: 0,
+                stacked: true
+            }
+        }
+    };
 
     return(
 

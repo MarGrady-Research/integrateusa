@@ -4,17 +4,21 @@ import {useRouter} from 'next/router';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import {years, grades} from './SelectOptions';
-import Info from '../Info/InfoTrends';
-import Segregation from '../Segregation/SegregationMeasures';
-import Trends from '../Trends/trendpage';
+import Info from '../Info/Info';
+import Segregation from '../Segregation/Segregation';
+import Trends from '../Trends/Trends';
 import { Loader } from '../Loader';
 import Accordion from './Accordion';
+import SelectSlideover from './SelectSlideover';
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 export default function Selection() {
 
   // adding in NextJS router for conditionally rendering different pages in return statement
   const router = useRouter()
   const currentpath = router.pathname
+
+  // ***** Section below sets State variables to manage API queries and data for both the Info and Segregation pages *****
 
   // Defining level state variable and levelselect array
   const [levels, setLevels] = useState(0);
@@ -25,8 +29,60 @@ export default function Selection() {
     {value: 2, label: "State", route: "api/statenames/?q=", id: "state_abb", name: "state_name"}
   ]
 
-   // Alt district variable
-   const [alt, setAlt] = useState(false);
+  // Measure state variable and handleMeasure function to pass to Accordion
+  const [measure, setMeasure] = useState({})
+  const handleMeasure = (e) => setMeasure(e)
+
+  // Input state and function to handle inputs into state/county/district select
+  const [input, setInput] = useState('');
+  const handleInputChange = (inputValue) => setInput(inputValue)
+
+  // ID state
+  const [id, setID] = useState(3620580);
+
+  // Initialize variable to hold ID before click
+  const [tempID, setTempID] = useState();
+
+  // Grade state
+  const gradelevel = () => currentpath === '/segregation' ? '01': 'All'
+  const [grade, setGrade] = useState(gradelevel)
+
+  // Year state 
+
+  // Get max year from array
+  let currentYear = Math.max(...years.map(e=>e.value));
+
+  // Set state
+  const [year, setYear] = useState(currentYear);
+
+  // Selected Name state
+  const [selectedname, setSelectedName] = useState(); 
+
+  // Bounds for map
+  const [bounds, setBounds] = useState([[-74.25609, 40.496094], [-73.70017, 40.915276]]);
+
+  // Alt district variable
+  const [alt, setAlt] = useState(false);
+
+  // Click state
+  const [clicked, setClicked] = useState(false);
+
+  // Title State
+  const [title, setTitle] = useState("New York City Public Schools (NY)");
+
+  // For all pages: state to hold loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Info data state 
+  const [infoData, setInfoData] = useState([]);
+
+  // Trend data state
+  const [trendData, setTrendData] = useState([]);
+
+  // Segregation state data
+  const [segData, setSegData] = useState([]);
+
+  // ***** End of State variables ******
 
    const Alt = useCallback(async () => {
     setAlt(!alt)
@@ -36,29 +92,14 @@ export default function Selection() {
      setURL()
    }, [alt])
 
-  // Measure state variable
   
-  const [measure, setMeasure] = useState({name: 'White Normalized Exposure', accessor: 'norm_exp_wh'})
-
-  const handleMeasure = (e) => setMeasure(e)
-
-  // Setting baseURL based on level
+  // Setting URL based on level
   const setURL = () => {
     if (alt === true && levels === 0) {
       return "http://localhost:8000/" + "api/districtnamesalt/?q="
     } else {
       return "http://localhost:8000/" + levelselect[levels].route
     }
-  }
-
-  let baseURL = setURL(); 
-
-  // defining input state
-  const [input, setInput] = useState('');
-
-  // Function to handle inputs into state/county/district select
- const handleInputChange = (inputValue) => {
-    setInput(inputValue);
   }
 
   // async function returning a promise for name data
@@ -68,7 +109,7 @@ export default function Selection() {
         return null;
       }
 
-      const response =  await axios.get(baseURL + input);
+      const response = await axios.get(setURL() + input);
 
       const Options = await response.data.map(d => {
         if (levels == 0) {
@@ -101,101 +142,51 @@ export default function Selection() {
           }
         }
         })
+
       return Options;
-  }
   
-  // Defining ID state
-  const [id, setID] = useState(3620580)
+    }
 
-  // Defining grade state
-  const gradelevel = () => {
-    if (currentpath === '/segregation') { 
-      return '01'}
-    else { return 'All'}
-  }
-  const [grade, setGrade] = useState(gradelevel)
 
-  // Defining year state 
-  const [year, setYear] = useState(2021) 
-
-  // Defining state to hold selected name from dropdown 
-  const [selectedname, setSelectedName] = useState(); 
-
-  const [bounds, setBounds] = useState([[-74.25609, 40.496094], [-73.70017, 40.915276]]);
-
-  //  function to set both ID and name on change
-  const nameandid = e => {
-    setID(e.value);
+  //  function to set name, ID, and bounds on district/county/state change
+  const nameIdBounds = e => {
+    setTempID(e.value);
     setSelectedName(e.label);
     setBounds([[e.lngmin, e.latmin], [e.lngmax, e.latmax]])
   };
 
-  // Initializing click and title state variables
-  const [clicked, setClicked] = useState(false);
-
-  const [title, setTitle] = useState("New York City Public Schools (NY)");
-
-  // For all pages: state to hold loading state
-  const [isLoading, setIsLoading] = useState(true);
-
-  // State to hold trends data
-  const [trendData, setTrendData] = useState([]);
-
-  //  
   const getTrendData = async () => {
 
     if (id != undefined) {
 
-      let idlevel;
       let table;
       
       if (levels === 0) {
-        idlevel = "dist_id";
         table = 'districttrends';
       } else if (levels === 1) {
-        idlevel = "county_id";
         table = 'countytrends';
       } else if (levels === 2) {
-        idlevel = "state_abb";
         table = 'statetrends';
       }
 
-      const response = await axios.get("http://localhost/api/" + table + "/?" + idlevel + "=" + id);
+      const response = await axios.get("http://localhost:8000/api/" + table + "/?" + levelselect[levels].id + "=" + id);
       setTrendData(response.data);
 
       }
     };
 
-  // For info page: state to hold data 
-  const [infoData, setInfoData] = useState([]);
-
   // function to get data for info page (also calls trend data function)
   const getInfoData = async () => {
 
     if (year != undefined && grade != undefined && id != undefined) {
-
       setIsLoading(true);
-
-      let idlevel = '';
-      
-      if (levels === 0) {
-        idlevel = "dist_id";
-      } else if (levels === 1) {
-        idlevel = "county_id";
-      } else if (levels === 2) {
-        idlevel = "state_abb";
-      }
-
-      const response = await axios.get("http://localhost/api/schools/?year=" + year + "&grade=" + grade + "&" + idlevel + "=" + id);
+      const response = await axios.get("http://localhost:8000/api/schools/?year=" + year + "&grade=" + grade + "&" + levelselect[levels].id + "=" + id);
       setInfoData(response.data);
       getTrendData();
       trendData && setIsLoading(false);
+    }
 
-      }
     };
-
-  // For trends page, state to hold data
-  const [segData, setSegData] = useState([]);
 
   // For segregation page, function to get the comparison data
   const getSegData = async () => {
@@ -216,21 +207,30 @@ export default function Selection() {
           idlevel = "state"
       }
 
-      const response = await axios.get("http://localhost/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
+      const response = await axios.get("http://localhost:8000/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
       setIsLoading(false);
-
     }
   };
+
+  // useEffect on load
+  useEffect(() => {
+    if (currentpath === '/info') {
+      // let data = getInfoData(year, grade, id, levels);
+      getInfoData();
+      // setIsLoading(false);
+    } else if (currentpath === '/segregation') { 
+      getSegData();
+    }
+  }, [])
 
   // useEffect wrapper for getData functions on different pages 
   useEffect( () => {
     let canceled = false
     if (clicked != canceled) {
+      setID(tempID);
       if (currentpath === '/info') {
         getInfoData();
-      } else if (currentpath === '/trends') {
-        getTrendData();
       } else if (currentpath === '/segregation') { 
         getSegData();
       }
@@ -240,89 +240,93 @@ export default function Selection() {
     setClicked(false);
   }, [clicked])
 
-  useEffect(() => {
-    if (currentpath === '/info') {
-      getInfoData();
-    } else if (currentpath === '/trends') {
-      getTrendData();
-    } else if (currentpath === '/segregation') { 
-      getSegData();
-    }
-  }, [])
-
-// Returning JSX
   return (
-    <div className='container mx-auto p-5'>
-      <div className='flex flex-wrap mx-auto'>
-        <Select 
-        options = {levelselect}
-        placeholder = "Geographic Level"
-        defaultValue={{label: 'District', value: 0}}
-        onChange= {e => {setLevels(e.value)}} 
-        components={{IndicatorSeparator: () => null}}
-        className="pr-2"
-        isSearchable={false}
-        />
-        <>
-        <AsyncSelect 
-        name='idselect'
-        cacheOptions
-        defaultOptions
-        defaultValue={{label: "New York City Public Schools (NY)", value: 3620580}}
-        onChange={nameandid} 
-        loadOptions={loadOptions}
-        onInputChange={handleInputChange}
-        components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-        placeholder= {"Type a " + levelselect[levels].label + " name"}
-        className='pr-2'
-        /> 
-        {currentpath === '/info' &&
+    <div className='absolute w-full h-full'>
+    <div className='relative container mx-auto p-5 h-full'>
+      <div className='relative flex flex-row mx-auto justify-between w-full'>
+       
+        <div className='flex flex-row'>
+
+          <Select 
+          options = {levelselect}
+          placeholder = "Geographic Level"
+          defaultValue={{label: 'District', value: 0}}
+          onChange= {e => {setLevels(e.value)}} 
+          components={{IndicatorSeparator: () => null}}
+          className="pr-2"
+          isSearchable={false}
+          />
+
+          <AsyncSelect 
+          name='idselect'
+          cacheOptions
+          defaultOptions
+          defaultValue={{label: "New York City Public Schools (NY)", value: 3620580}}
+          onChange={nameIdBounds} 
+          loadOptions={loadOptions}
+          onInputChange={handleInputChange}
+          components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+          placeholder= {"Type a " + levelselect[levels].label + " name"}
+          className='pr-2 flex-none w-72'
+          /> 
+
+          {currentpath === '/info' &&
           <Select 
           options={years}
           onChange={e => setYear(e.value)}
-          defaultValue={{label: 2021, value: 2021}}
+          defaultValue={{label: currentYear, value: currentYear}}
           isOptionDisabled={(e) => levels == 1 ? e.value >= 2000 && e.value <= 2002 : null}
           placeholder="Select a year"
           name='years'
-          className='flex pr-2'
+          className='pr-2'
+          isSearchable={false}
           />
-        }
-        {currentpath !== '/trends' &&
+          }
+
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
           defaultValue={() => { if (currentpath === '/segregation') {return {label: '01', value: '01'}} else { return {label: 'All', value: 'All'}}}}
           isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
+          defaultValue={() => { if (currentpath === '/segregation') {return {label: '01', value: '01'}} else { return {label: 'All', value: 'All'}}}}
+          isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
           placeholder="Select a grade"
           name='grades'
-          className='flex pr-4'
-          isSearchable={false}
+          className='pr-4'
           />
-        }
-        <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" className="w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
-        </svg>
-        </button>
-      </>
+
+          <button onClick={() => setClicked(!clicked)} className='btn  px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center'>
+            <MagnifyingGlassIcon className='h-4 w-4'/>
+          </button>
+          
+          
+          
+        </div> 
+        
+        <div className=''>
+        <SelectSlideover/>
+        </div>
+
       </div>
 
-      <Accordion handleMeasure={handleMeasure} currentpath={currentpath}/>
+      {/* Conditionally render the Info page once the data has been returned */}
 
-      {/* Conditionally render the Info div once the data array has been returned */}
-      {currentpath === '/info' && (isLoading ? <Loader /> :
+      {currentpath === '/info' && (isLoading ? <div className='pt-5'><Loader /></div> :
       <div className='mx-auto mt-5'>
       <Info InfoData={infoData} title={title} id={id} bounds={bounds}/>
       <Trends TrendData={trendData} id={id} grade={grade} title={title}/>
       </div>)
       }
-      {/* Conditionally render the Segregation div once the data array has been returned */}
-      {currentpath === '/segregation' && (isLoading ? <Loader /> :
+
+      {/* Conditionally render the Segregation page once the data has been returned */}
+
+      {currentpath === '/segregation' && (isLoading ? <div className='pt-5'><Loader /></div> :
       <div className='mx-auto mt-5'>
-      <Segregation SegData={segData} id={id} grade={grade} title={title} measure={measure}/>
+      <Segregation SegData={segData} id={id} grade={grade} title={title} measure={measure} handleMeasure={handleMeasure}/>
       </div>)
       }
 
+    </div>
     </div>
   );
 };
