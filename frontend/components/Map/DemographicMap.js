@@ -61,7 +61,7 @@ export default function DemographicMap() {
         source: 'state-boundary-source',
         'source-layer': 'cb_2018_us_state_500k-8q06w5',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
             'fill-color': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -84,7 +84,7 @@ export default function DemographicMap() {
         source: 'county-boundary-source',
         'source-layer': 'cb_2018_us_county_500k-6dd9y3',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
             'fill-color': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -106,7 +106,7 @@ export default function DemographicMap() {
         type: 'fill',
         'source-layer': '2021_sd_unified-4mqqrn',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
             'fill-color': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -156,6 +156,7 @@ export default function DemographicMap() {
     let hoverSource;
     let hoverSourceLayer;
 
+    // Hover function gets data from hovered areas and sets styles
     const handleHover = useCallback((event) => {
         setClickInfo(null);
         const {
@@ -172,8 +173,9 @@ export default function DemographicMap() {
         hoveredFeature && mapRef.current.setFeatureState({source: hoveredFeature.source, sourceLayer: hoveredFeature.sourceLayer, id: hoveredFeature.id}, {hover: true});
     }, [])
 
-      
+    // True if a school is under the mouse
     const selectedSchool = clickInfo && clickInfo.feature.properties.sch_name || '';
+    // True if an area is under the mouse
     const selectedArea = clickInfo && clickInfo.feature.properties.NAME || ''
 
     // Set State on mouse enter
@@ -191,8 +193,10 @@ export default function DemographicMap() {
         setClickInfo(null);
     }, []);
 
+    // State variable for currently rendered source
     const [renderedFeatures, setRenderedFeatures] = useState([]);
 
+    // return an array of the schools currently rendered
     const querySchools = useCallback(() => {
         setRenderedFeatures(mapRef.current.queryRenderedFeatures({layers: ['schools']}))
     }, []);
@@ -270,9 +274,66 @@ export default function DemographicMap() {
                 </div>
             )}
 
-            {selectedArea && 
+            {(selectedArea && clickInfo.feature.properties.GEOID.length === 5) &&
                 <div className="p-3">
                 <span><b>{selectedArea}</b></span>
+                <br/>
+                <span>Total Schools: {data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).length.toLocaleString()}</span>
+                <br/>
+                <span>Students Enrolled: {data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.as).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.bl).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.hi).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.or).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.wh).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.county_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                </div>
+            }
+
+            {(selectedArea && clickInfo.feature.properties.GEOID.length === 7) &&
+                <div className="p-3">
+                <span><b>{selectedArea}</b></span>
+                <br/>
+                <span>Total Schools: {data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).length.toLocaleString()}</span>
+                <br/>
+                <span>Students Enrolled: {data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.as).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.bl).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.hi).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.or).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.wh).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.dist_id === clickInfo.feature.properties.GEOID).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                </div>
+            }
+
+            {(selectedArea && clickInfo.feature.properties.STUSPS) &&
+                <div className="p-3">
+                <span><b>{selectedArea}</b></span>
+                <br/>
+                <span>Total Schools: {data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).length.toLocaleString()}</span>
+                <br/>
+                <span>Students Enrolled: {data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.as).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.bl).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.hi).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.or).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.wh).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties.state_abb === clickInfo.feature.properties.STUSPS).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
                 </div>
             }
 
@@ -287,7 +348,7 @@ export default function DemographicMap() {
                 <>
                 <span><b>Schools in View: </b>{renderedFeatures ? (renderedFeatures.length).toLocaleString() : 0}</span>
                 <br/>
-                <span>Students Enrolled: {renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <span><b>Students Enrolled: </b>{renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
                 <br/>
                 <span className="text-asian"><b>Asian:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.as).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
                 <br/>
