@@ -45,7 +45,6 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
 
     // Sorting 
     const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
-    const [sort, setSort] = useState({order: 'desc', orderBy: 'num_schools'})
 
     const handleSort = accessor => {
         setActivePage(1);
@@ -131,7 +130,6 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
         lines.forEach((e) => {
             getLineData(e);
         })
-    }, [lines, measure])
     }, [lines, measure])
 
 
@@ -254,7 +252,6 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                        </td>
                             }
                         })} 
-                        })} 
                     </tr>
                     {calculatedRows.map(row => {
                         return (
@@ -265,10 +262,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
                                                    <input
                                                     type="checkbox"
                                                     className='form-check-input'
-                                                    className='form-check-input'
                                                     id={row[idlevel]}
-                                                    checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
-                                                    disabled={row[idlevel] === ''+id ? true: false}
                                                     checked={row[idlevel] === ''+id ? true : lines.includes(row[idlevel])}
                                                     disabled={row[idlevel] === ''+id ? true: false}
                                                     onChange={() => {}}
