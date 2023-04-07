@@ -14,7 +14,7 @@ export default function Segregation() {
         <link rel="icon" href="/mg_logo_cropped.png" />
         </Head>
         <Header />
-        <div className="relative flex flex-col font-raleway">
+        <div className="flex flex-col min-h-screen font-raleway">
         <Selection />
         </div>
         </>

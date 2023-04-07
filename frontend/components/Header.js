@@ -15,6 +15,7 @@ return(
                        alt="IntegrateUSA logo"
                        width = {200}
                        height={60}/>
+      {/* <span className="ml-3 text-xl">IntegrateUSA</span> */}
     </a>
     </Link>
     <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">

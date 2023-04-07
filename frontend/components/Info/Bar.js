@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {Chart as ChartJS, LinearScale, BarElement, CategoryScale, Tooltip, Legend}  from 'chart.js'
-import {Bar} from 'react-chartjs-2';
+import {Bar, getElementsAtEvent} from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import Select from 'react-select';
 
@@ -14,7 +14,7 @@ ChartJS.register(
 );
 
 
-export default function BarChart({InfoData}) {
+export default function BarChart2({InfoData}) {
 
     const bar = (data, group) => {
         return data.map(e => (e[group]))

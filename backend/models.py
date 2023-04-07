@@ -52,6 +52,7 @@ class CountyNames(models.Model):
 
     class Meta:
         db_table = 'county_names'
+        # indexes = [GinIndex(fields=['vector_col'], name='county_name_idx')]
 
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
@@ -176,38 +177,18 @@ class CountySegSchools(models.Model):
     enr_prop_or = models.FloatField(blank=True, null=True)
     enr_prop_wh = models.FloatField(blank=True, null=True)
     exp_as_as = models.FloatField(blank=True, null=True)
-    exp_as_bl = models.FloatField(blank=True, null=True)
-    exp_as_hi = models.FloatField(blank=True, null=True)
-    exp_as_or = models.FloatField(blank=True, null=True)
-    exp_as_wh = models.FloatField(blank=True, null=True)
     exp_non_as_as = models.FloatField(blank=True, null=True)
     norm_exp_as = models.FloatField(blank=True, null=True)
     exp_bl_bl = models.FloatField(blank=True, null=True)
-    exp_bl_as = models.FloatField(blank=True, null=True)
-    exp_bl_hi = models.FloatField(blank=True, null=True)
-    exp_bl_or = models.FloatField(blank=True, null=True)
-    exp_bl_wh = models.FloatField(blank=True, null=True)
     exp_non_bl_bl = models.FloatField(blank=True, null=True)
     norm_exp_bl = models.FloatField(blank=True, null=True)
     exp_hi_hi = models.FloatField(blank=True, null=True)
-    exp_hi_as = models.FloatField(blank=True, null=True)
-    exp_hi_bl = models.FloatField(blank=True, null=True)
-    exp_hi_or = models.FloatField(blank=True, null=True)
-    exp_hi_wh = models.FloatField(blank=True, null=True)
     exp_non_hi_hi = models.FloatField(blank=True, null=True)
     norm_exp_hi = models.FloatField(blank=True, null=True)
     exp_or_or = models.FloatField(blank=True, null=True)
-    exp_or_as = models.FloatField(blank=True, null=True)
-    exp_or_bl = models.FloatField(blank=True, null=True)
-    exp_or_hi = models.FloatField(blank=True, null=True)
-    exp_or_wh = models.FloatField(blank=True, null=True)
     exp_non_or_or = models.FloatField(blank=True, null=True)
     norm_exp_or = models.FloatField(blank=True, null=True)
     exp_wh_wh = models.FloatField(blank=True, null=True)
-    exp_wh_as = models.FloatField(blank=True, null=True)
-    exp_wh_bl = models.FloatField(blank=True, null=True)
-    exp_wh_hi = models.FloatField(blank=True, null=True)
-    exp_wh_or = models.FloatField(blank=True, null=True)
     exp_non_wh_wh = models.FloatField(blank=True, null=True)
     norm_exp_wh = models.FloatField(blank=True, null=True)
     exp_aw_aw = models.FloatField(blank=True, null=True)
@@ -219,6 +200,7 @@ class CountySegSchools(models.Model):
 
     class Meta:
         db_table = 'county_seg_schools'
+        # constraints = [UniqueConstraint(fields=['county_id', 'grade', 'year'], name='county_seg_unique')]
 
     def __str__(self):
         return self.year, self.county_id, self.grade
@@ -232,6 +214,7 @@ class DistDirectory(models.Model):
 
     class Meta:
         db_table = 'dist_directory'
+        # constraints = [UniqueConstraint(fields=['year', 'dist_id'], name = 'dist_directory_unique')]
 
     def __str__(self):
         return self.dist_id, " (", self.year, ")"
@@ -250,38 +233,18 @@ class DistSeg(models.Model):
     enr_prop_or = models.FloatField(blank=True, null=True)
     enr_prop_wh = models.FloatField(blank=True, null=True)
     exp_as_as = models.FloatField(blank=True, null=True)
-    exp_as_bl = models.FloatField(blank=True, null=True)
-    exp_as_hi = models.FloatField(blank=True, null=True)
-    exp_as_or = models.FloatField(blank=True, null=True)
-    exp_as_wh = models.FloatField(blank=True, null=True)
     exp_non_as_as = models.FloatField(blank=True, null=True)
     norm_exp_as = models.FloatField(blank=True, null=True)
     exp_bl_bl = models.FloatField(blank=True, null=True)
-    exp_bl_as = models.FloatField(blank=True, null=True)
-    exp_bl_hi = models.FloatField(blank=True, null=True)
-    exp_bl_or = models.FloatField(blank=True, null=True)
-    exp_bl_wh = models.FloatField(blank=True, null=True)
     exp_non_bl_bl = models.FloatField(blank=True, null=True)
     norm_exp_bl = models.FloatField(blank=True, null=True)
     exp_hi_hi = models.FloatField(blank=True, null=True)
-    exp_hi_as = models.FloatField(blank=True, null=True)
-    exp_hi_bl = models.FloatField(blank=True, null=True)
-    exp_hi_or = models.FloatField(blank=True, null=True)
-    exp_hi_wh = models.FloatField(blank=True, null=True)
     exp_non_hi_hi = models.FloatField(blank=True, null=True)
     norm_exp_hi = models.FloatField(blank=True, null=True)
     exp_or_or = models.FloatField(blank=True, null=True)
-    exp_or_as = models.FloatField(blank=True, null=True)
-    exp_or_bl = models.FloatField(blank=True, null=True)
-    exp_or_hi = models.FloatField(blank=True, null=True)
-    exp_or_wh = models.FloatField(blank=True, null=True)
     exp_non_or_or = models.FloatField(blank=True, null=True)
     norm_exp_or = models.FloatField(blank=True, null=True)
     exp_wh_wh = models.FloatField(blank=True, null=True)
-    exp_wh_as = models.FloatField(blank=True, null=True)
-    exp_wh_bl = models.FloatField(blank=True, null=True)
-    exp_wh_hi = models.FloatField(blank=True, null=True)
-    exp_wh_or = models.FloatField(blank=True, null=True)
     exp_non_wh_wh = models.FloatField(blank=True, null=True)
     norm_exp_wh = models.FloatField(blank=True, null=True)
     exp_aw_aw = models.FloatField(blank=True, null=True)
@@ -293,6 +256,7 @@ class DistSeg(models.Model):
 
     class Meta:
         db_table = 'dist_seg'
+        # constraints = [UniqueConstraint(fields=['dist_id', 'grade', 'year'], name='dist_seg_unique')]
 
     def __str__(self):
         return self.year, self.dist_id, self.grade
@@ -310,38 +274,18 @@ class StateSeg(models.Model):
     enr_prop_or = models.FloatField(blank=True, null=True)
     enr_prop_wh = models.FloatField(blank=True, null=True)
     exp_as_as = models.FloatField(blank=True, null=True)
-    exp_as_bl = models.FloatField(blank=True, null=True)
-    exp_as_hi = models.FloatField(blank=True, null=True)
-    exp_as_or = models.FloatField(blank=True, null=True)
-    exp_as_wh = models.FloatField(blank=True, null=True)
     exp_non_as_as = models.FloatField(blank=True, null=True)
     norm_exp_as = models.FloatField(blank=True, null=True)
     exp_bl_bl = models.FloatField(blank=True, null=True)
-    exp_bl_as = models.FloatField(blank=True, null=True)
-    exp_bl_hi = models.FloatField(blank=True, null=True)
-    exp_bl_or = models.FloatField(blank=True, null=True)
-    exp_bl_wh = models.FloatField(blank=True, null=True)
     exp_non_bl_bl = models.FloatField(blank=True, null=True)
     norm_exp_bl = models.FloatField(blank=True, null=True)
     exp_hi_hi = models.FloatField(blank=True, null=True)
-    exp_hi_as = models.FloatField(blank=True, null=True)
-    exp_hi_bl = models.FloatField(blank=True, null=True)
-    exp_hi_or = models.FloatField(blank=True, null=True)
-    exp_hi_wh = models.FloatField(blank=True, null=True)
     exp_non_hi_hi = models.FloatField(blank=True, null=True)
     norm_exp_hi = models.FloatField(blank=True, null=True)
     exp_or_or = models.FloatField(blank=True, null=True)
-    exp_or_as = models.FloatField(blank=True, null=True)
-    exp_or_bl = models.FloatField(blank=True, null=True)
-    exp_or_hi = models.FloatField(blank=True, null=True)
-    exp_or_wh = models.FloatField(blank=True, null=True)
     exp_non_or_or = models.FloatField(blank=True, null=True)
     norm_exp_or = models.FloatField(blank=True, null=True)
     exp_wh_wh = models.FloatField(blank=True, null=True)
-    exp_wh_as = models.FloatField(blank=True, null=True)
-    exp_wh_bl = models.FloatField(blank=True, null=True)
-    exp_wh_hi = models.FloatField(blank=True, null=True)
-    exp_wh_or = models.FloatField(blank=True, null=True)
     exp_non_wh_wh = models.FloatField(blank=True, null=True)
     norm_exp_wh = models.FloatField(blank=True, null=True)
     exp_aw_aw = models.FloatField(blank=True, null=True)
@@ -353,6 +297,7 @@ class StateSeg(models.Model):
 
     class Meta:
         db_table = 'state_seg'
+        # constraints = [UniqueConstraint(fields=['year', 'grade', 'state_abb'], name = 'state_seg_unique')]
 
     def __str__(self):
         return self.year, self.state_abb, self.grade

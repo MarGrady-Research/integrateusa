@@ -22,10 +22,10 @@ export default function Pagination({ activePage, count, rowsPerPage, totalPages,
 
             <div>
                 <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <button disabled={activePage === 1} onClick={() => setActivePage(1)} className="paginate-btn rounded-l-md">First</button>
-                    <button disabled={activePage === 1} onClick={() => setActivePage(activePage-1)} className="paginate-btn">&laquo;</button>
-                    <button disabled={activePage === totalPages} onClick={() => setActivePage(activePage+1)} className="paginate-btn">&raquo;</button>
-                    <button disabled={activePage === totalPages} onClick={() => setActivePage(totalPages)} className="paginate-btn rounded-r-md">Last</button>
+                    <button disabled={activePage === 1} onClick={() => setActivePage(1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-l-md">First</button>
+                    <button disabled={activePage === 1} onClick={() => setActivePage(activePage-1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">&laquo;</button>
+                    <button disabled={activePage === totalPages} onClick={() => setActivePage(activePage+1)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">&raquo;</button>
+                    <button disabled={activePage === totalPages} onClick={() => setActivePage(totalPages)} className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-r-md">Last</button>
                 </nav>
             </div>
             </div>
