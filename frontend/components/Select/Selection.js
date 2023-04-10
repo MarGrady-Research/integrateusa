@@ -96,9 +96,9 @@ export default function Selection() {
   // Setting URL based on level
   const setURL = () => {
     if (alt === true && levels === 0) {
-      return "http://integrateusa.org/" + "api/districtnamesalt/?q="
+      return "https://integrateusa.org/" + "api/districtnamesalt/?q="
     } else {
-      return "http://integrateusa.org/" + levelselect[levels].route
+      return "https://integrateusa.org/" + levelselect[levels].route
     }
   }
 
@@ -169,7 +169,7 @@ export default function Selection() {
         table = 'statetrends';
       }
 
-      const response = await axios.get("http://integrateusa.org/api/" + table + "/?" + levelselect[levels].id + "=" + id);
+      const response = await axios.get("https://integrateusa.org/api/" + table + "/?" + levelselect[levels].id + "=" + id);
       setTrendData(response.data);
 
       }
@@ -180,7 +180,7 @@ export default function Selection() {
 
     if (year != undefined && grade != undefined && id != undefined) {
       setIsLoading(true);
-      const response = await axios.get("http://integrateusa.org/api/schools/?year=" + year + "&grade=" + grade + "&" + levelselect[levels].id + "=" + id);
+      const response = await axios.get("https://integrateusa.org/api/schools/?year=" + year + "&grade=" + grade + "&" + levelselect[levels].id + "=" + id);
       setInfoData(response.data);
       getTrendData();
       trendData && setIsLoading(false);
@@ -207,7 +207,7 @@ export default function Selection() {
           idlevel = "state"
       }
 
-      const response = await axios.get("http://integrateusa.org/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
+      const response = await axios.get("https://integrateusa.org/api/" + idlevel + "/?year=" + year + "&grade=" + grade);
       setSegData(response.data);
       setIsLoading(false);
     }
