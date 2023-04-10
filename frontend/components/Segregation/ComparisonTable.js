@@ -86,7 +86,7 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
 
         const labels = years.map(e=>e.value).sort((a,b) => {return (a - b)})
         
-        const response = await axios.get("http://localhost:8000/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
+        const response = await axios.get("http://integrateusa.org/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id);
         let data = response.data;
 
         const finaldata = data.map((e) =>{ return ({
