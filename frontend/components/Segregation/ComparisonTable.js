@@ -18,7 +18,6 @@ export default function Comparison({id, grade, segData, namelevel, idlevel, tabl
         {accessor: "enr_prop_wh", label: "% White"},
         {accessor: "enr_prop_or", label: "% Other"},
         {accessor: measure.accessor, label: measure.name},
-        {accessor: measure.accessor, label: measure.name},
     ]
 
     // Filtering
