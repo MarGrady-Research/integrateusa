@@ -73,9 +73,10 @@ export default function Search({radio, handleBounds}) {
         defaultOptions
         onChange={(e) => handleBounds(e)} 
         loadOptions={loadOptions}
+        isDisabled={radio.level === "School"}
         onInputChange={handleInputChange}
         components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-        placeholder= {"Type a " + radio.level + " name"}
+        placeholder= {radio.level === "School" ? "Select District, County or State to search" : "Type a " + radio.level + " name"}
         className='pt-2'
         />
 

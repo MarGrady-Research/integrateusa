@@ -4,7 +4,16 @@ import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import Control from './Control'
 
 export default function Slideover({handleVisibility, handleBounds}) {
+
+  // state for panel open/close
   const [open, setOpen] = useState(false)
+
+  // radio state
+  const [radio, setRadio] = useState({level: "School"})
+
+  const handleRadio = (evt) => {
+      setRadio({level: evt.target.value})
+  }
 
   return (
     <>
@@ -64,12 +73,9 @@ export default function Slideover({handleVisibility, handleBounds}) {
                       <Dialog.Title className="text-xl font-medium text-gray-900">Map Options</Dialog.Title>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Replace with your content */}
                       <div className="absolute inset-0 px-4 sm:px-6">
-                        {/* <div className="h-full border-2 border-dashed border-gray-200" aria-hidden="true" /> */}
-                        <Control handleVisibility={handleVisibility} handleBounds={handleBounds}/>
+                        <Control radio={radio} handleRadio={handleRadio} handleVisibility={handleVisibility} handleBounds={handleBounds}/>
                       </div>
-                      {/* /End replace */}
                     </div>
                   </div>
                 </Dialog.Panel>
