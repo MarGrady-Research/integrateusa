@@ -9,14 +9,16 @@ ChartJS.register(
 )
 
 
-export default function MapPie({clickInfo}) {
+export default function SummaryPie({renderedFeatures}) {
 
 
-    const pieData = [clickInfo.feature.properties.as/clickInfo.feature.properties.tot_enr, 
-                     clickInfo.feature.properties.bl/clickInfo.feature.properties.tot_enr, 
-                     clickInfo.feature.properties.hi/clickInfo.feature.properties.tot_enr, 
-                     clickInfo.feature.properties.or/clickInfo.feature.properties.tot_enr, 
-                     clickInfo.feature.properties.wh/clickInfo.feature.properties.tot_enr]
+    const pieData = [((renderedFeatures.map(e => e.properties.as).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100),
+                     ((renderedFeatures.map(e => e.properties.bl).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100),
+                     ((renderedFeatures.map(e => e.properties.hi).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100),
+                     ((renderedFeatures.map(e => e.properties.or).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100),
+                     ((renderedFeatures.map(e => e.properties.wh).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100)
+                    ]
+
 
     const options = {
         reponsive: true,
@@ -27,7 +29,7 @@ export default function MapPie({clickInfo}) {
                 callbacks: {
                     label: function(context) {
                         let label = context.dataset.data[context.dataIndex];
-                        return (data.labels[context.dataIndex] + ' ' + Math.round(label*100) + '%');
+                        return (data.labels[context.dataIndex] + ' ' + (label).toFixed(1) + '%');
                     }
                 }
             },

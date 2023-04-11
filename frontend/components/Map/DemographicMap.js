@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useCallback, useRef} from "react";
 import axios from 'axios';
 import { Loader } from "../Loader";
-import Map, {Layer, Source, Popup, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
+import Map, {Layer, Source, NavigationControl, GeolocateControl, FullscreenControl} from 'react-map-gl';
 import mapbox_token from "../../Key";
 import MapPie from "./MapPies";
 import Slideover from "./Slideover";
+import SummaryPie from "./SummaryPie";
+import AreaPie from "./AreaPie";
 import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 export default function DemographicMap() {
 
@@ -59,8 +62,13 @@ export default function DemographicMap() {
         source: 'state-boundary-source',
         'source-layer': 'cb_2018_us_state_500k-8q06w5',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
-            'fill-color': 'rgba(0,0,0,0.1)'
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
+            'fill-color': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                'rgba(0,0,0,0.1)',
+                'rgba(255,255,255,0.1)'
+            ],
         },
         layout: {
             visibility: stateVisible
@@ -77,13 +85,13 @@ export default function DemographicMap() {
         source: 'county-boundary-source',
         'source-layer': 'cb_2018_us_county_500k-6dd9y3',
         paint: {
-            'fill-outline-color': [
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
+            'fill-color': [
                 'case',
-                ['boolean', ['feature-state', 'hover'], true],
+                ['boolean', ['feature-state', 'hover'], false],
                 'rgba(0,0,0,0.1)',
                 'rgba(255,255,255,0.1)'
             ],
-            'fill-color': 'rgba(0,0,0,0.1)'
         },
         layout: {
             visibility: countyVisible
@@ -99,15 +107,20 @@ export default function DemographicMap() {
         type: 'fill',
         'source-layer': '2021_sd_unified-4mqqrn',
         paint: {
-            'fill-outline-color': 'rgba(0,0,0,0.1)',
-            'fill-color': 'rgba(0,0,0,0.1)'
+            'fill-outline-color': 'rgba(0,0,0,0.4)',
+            'fill-color': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                'rgba(0,0,0,0.1)',
+                'rgba(255,255,255,0.1)'
+            ],
         },
         layout: {
             visibility: districtVisible
         }
     }
 
-    const prop_array = ['max', ['get', 'prop_as'], ['get', 'prop_bl'], ['get', 'prop_hi'], ['get', 'prop_or'], ['get', 'prop_wh']];
+    const prop_array = ['max', ['get', 'as'], ['get', 'bl'], ['get', 'hi'], ['get', 'or'], ['get', 'wh']];
 
     const LayerProps = {
         id: 'schools',
@@ -115,11 +128,11 @@ export default function DemographicMap() {
         paint: {
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 3.5, 1, 14, 9],
             'circle-color': [
-                'case', ['==', ['get', 'prop_as'], prop_array],  "#FF5050", 
-                        ['==', ['get', 'prop_bl'], prop_array],  "#4472C4", 
-                        ['==', ['get', 'prop_hi'], prop_array],  "#FF9900", 
-                        ['==', ['get', 'prop_or'], prop_array],  "#FFC000", 
-                        ['==', ['get', 'prop_wh'], prop_array],  "#339933",
+                'case', ['==', ['get', 'as'], prop_array],  "#FF5050", 
+                        ['==', ['get', 'bl'], prop_array],  "#4472C4", 
+                        ['==', ['get', 'hi'], prop_array],  "#FF9900", 
+                        ['==', ['get', 'or'], prop_array],  "#FFC000", 
+                        ['==', ['get', 'wh'], prop_array],  "#339933",
                         "#808080"
                 ],
         }
@@ -140,7 +153,12 @@ export default function DemographicMap() {
     // Click info state variable, to hold relevant data from clicked school
     const [clickInfo, setClickInfo] = useState(null);
 
-    const handleClick = useCallback((event) => {
+    // Initializing variables for hover source and hover source layer, so that we can refer back to them in onmouseleave function
+    let hoverSource;
+    let hoverSourceLayer;
+
+    // Hover function gets data from hovered areas and sets styles
+    const handleHover = useCallback((event) => {
         setClickInfo(null);
         const {
             features,
@@ -148,19 +166,55 @@ export default function DemographicMap() {
         } = event;
         const hoveredFeature = event.features && event.features[0];
         setClickInfo(hoveredFeature && {feature: hoveredFeature, x, y});
-        clickInfo && mapRef.current.setFeatureState({source: 'county-boundary-source', sourceLayer: 'cb_2018_us_county_500k-6dd9y3', id: 'county-boundary'}, {hover: true})
-        // const center = [event.lngLat.lng, event.lngLat.lat];
-        // hoveredFeature && mapRef.current.easeTo({center: center, duration: 500});
-      }, [])
+        if (hoveredFeature) {
+            hoverSource = hoveredFeature.source;
+            hoverSourceLayer = hoveredFeature.sourceLayer;
+        }
+        hoveredFeature && mapRef.current.removeFeatureState({source: hoveredFeature.source, sourceLayer: hoveredFeature.sourceLayer});
+        hoveredFeature && mapRef.current.setFeatureState({source: hoveredFeature.source, sourceLayer: hoveredFeature.sourceLayer, id: hoveredFeature.id}, {hover: true});
+    }, [])
 
-      
+    // True if a school is under the mouse
     const selectedSchool = clickInfo && clickInfo.feature.properties.sch_name || '';
+    // True if an area is under the mouse
     const selectedArea = clickInfo && clickInfo.feature.properties.NAME || ''
-
 
     // Set State on mouse enter
     const onMouseEnter = useCallback(() => setCursor('pointer'), []);
-    const onMouseLeave = useCallback(() => setCursor('auto'), []);
+
+    // Set state on mouse leave
+    const onMouseLeave = useCallback(() => {
+        mapRef.current.removeFeatureState({source: hoverSource, sourceLayer: hoverSourceLayer});
+        setCursor('auto')
+    }, []);
+
+    // Set state on mouse exiting map canvas
+    const onMouseOut = useCallback(() => {
+        mapRef.current.removeFeatureState({source: hoverSource, sourceLayer: hoverSourceLayer});
+        setClickInfo(null);
+    }, []);
+
+    // State variable for currently rendered source
+    const [renderedFeatures, setRenderedFeatures] = useState([]);
+
+    // return an array of the schools currently rendered
+    const querySchools = useCallback(() => {
+        setRenderedFeatures(mapRef.current.queryRenderedFeatures({layers: ['schools']}))
+    }, []);
+
+    // Determine ID based on feature under the mouse
+    let areaID = () => {
+        if(clickInfo.feature.properties.GEOID.length === 5) {
+            return 'county_id'
+        } else if (clickInfo.feature.properties.GEOID.length === 7) {
+            return 'dist_id'
+        } else if (clickInfo.feature.properties.STUSPS) {
+            return 'state_abb'
+        }
+    }
+
+    // Determine which property to match with
+    let layerProp = () => clickInfo.feature.properties.STUSPS ? 'STUSPS' : 'GEOID';
 
     return (
         <>
@@ -179,10 +233,17 @@ export default function DemographicMap() {
         mapboxAccessToken={mapbox_token}
         attributionControl={true}
         interactiveLayerIds={['schools', 'district-boundary', 'county-boundary', 'state-boundary']}
-        onMouseMove={handleClick}
         cursor={cursor}
+        onDragStart={onMouseOut}
+        onDragEnd={querySchools}
+        onLoad={() => setRenderedFeatures([])}
+        onMouseMove={handleHover}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        onMouseOut={onMouseOut}
+        onResize={querySchools}
+        onZoomStart={onMouseOut}
+        onZoomEnd={querySchools}
         >
         <GeolocateControl position="top-left"/>
         <FullscreenControl position="top-left"/>
@@ -200,7 +261,7 @@ export default function DemographicMap() {
         <Layer {...LayerProps}/>
         </Source>
         {(selectedSchool || selectedArea) && (
-            <div style={{left: clickInfo.x + 20, top: clickInfo.y + 20, zIndex: 10, position: 'absolute', fontSize: '10px', maxWidth: '300px'}} className="bg-gray-900 text-white text-center font-raleway w-60 h-300 rounded-md">
+            <div style={{left: clickInfo.x + 20, top: clickInfo.y + 20, zIndex: 10, position: 'absolute', fontSize: '10px', maxWidth: '300px'}} className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md">
 
             {selectedSchool && (
                 <div className="p-3">
@@ -210,17 +271,17 @@ export default function DemographicMap() {
                 <br/>
                 <span><b>County: </b>{clickInfo.feature.properties.county_name}</span>
                 <br/>
-                <span><b>{clickInfo.feature.properties.year} Enrollment: </b> {clickInfo.feature.properties.tot_enr}</span>
+                <span><b>{clickInfo.feature.properties.year} Enrollment: </b> {(clickInfo.feature.properties.tot_enr).toLocaleString()}</span>
                 <br/>
-                <span className="text-asian"><b>Asian:</b> <span className="text-white">{(clickInfo.feature.properties.prop_as*100).toFixed(1)}%</span></span>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((clickInfo.feature.properties.as/clickInfo.feature.properties.tot_enr)*100).toFixed(1)}%</span></span>
                 <br/>
-                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{(clickInfo.feature.properties.prop_bl*100).toFixed(1)}%</span></span>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((clickInfo.feature.properties.bl/clickInfo.feature.properties.tot_enr)*100).toFixed(1)}%</span></span>
                 <br/>
-                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{(clickInfo.feature.properties.prop_hi*100).toFixed(1)}%</span></span>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((clickInfo.feature.properties.hi/clickInfo.feature.properties.tot_enr)*100).toFixed(1)}%</span></span>
                 <br/>
-                <span className="text-other"><b>Other:</b> <span className="text-white">{(clickInfo.feature.properties.prop_or*100).toFixed(1)}%</span></span>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((clickInfo.feature.properties.or/clickInfo.feature.properties.tot_enr)*100).toFixed(1)}%</span></span>
                 <br/>
-                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{(clickInfo.feature.properties.prop_wh*100).toFixed(1)}%</span></span>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((clickInfo.feature.properties.wh/clickInfo.feature.properties.tot_enr)*100).toFixed(1)}%</span></span>
                 <br/>
                 <div className="w-1/2 justify-center pt-2 mx-auto">
                 <MapPie clickInfo={clickInfo}/>
@@ -229,15 +290,59 @@ export default function DemographicMap() {
                 </div>
             )}
 
-            {selectedArea && 
+            {selectedArea &&
                 <div className="p-3">
                 <span><b>{selectedArea}</b></span>
+                <br/>
+                <span>Total Schools: {data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).length.toLocaleString()}</span>
+                <br/>
+                <span>Students Enrolled: {data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.as).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.bl).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.hi).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.or).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.wh).reduce((a,b) => a+b, 0)/data.features.filter(e => e.properties[areaID()] === clickInfo.feature.properties[layerProp()]).map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                <AreaPie areaID={areaID} layerProp={layerProp} piedata={data} clickInfo={clickInfo}/> 
+                </div>
                 </div>
             }
 
             </div>  
             )  
         }
+        <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md">
+            <div className="p-3">
+            {renderedFeatures.length === 0 ? 
+                <span className="italic">Zoom or drag the map to see school data here!</span> 
+                :
+                <>
+                <span><b>Schools in View: </b>{renderedFeatures ? (renderedFeatures.length).toLocaleString() : 0}</span>
+                <br/>
+                <span><b>Students Enrolled: </b>{renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0).toLocaleString()}</span>
+                <br/>
+                <span className="text-asian"><b>Asian:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.as).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-blackstudents"><b>Black:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.bl).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-hispanic"><b>Hispanic:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.hi).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-other"><b>Other:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.or).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <span className="text-whitestudents"><b>White:</b> <span className="text-white">{((renderedFeatures.map(e => e.properties.wh).reduce((a,b) => a+b, 0)/renderedFeatures.map(e => e.properties.tot_enr).reduce((a,b) => a+b, 0))*100).toFixed(1)}%</span></span>
+                <br/>
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                <SummaryPie renderedFeatures={renderedFeatures}/>
+                </div>
+                </>}
+            </div>
+        </div>
         </Map>
         <Slideover handleVisibility={handleVisibility} handleBounds={handleBounds}/>
         </div>
