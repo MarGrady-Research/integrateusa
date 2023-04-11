@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'gPjBmwb-G1F58J-zxNvZd5OZF32qqZTTWboBvHSPHE0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'integrateusa.org', 'www.integrateusa.org']
 
