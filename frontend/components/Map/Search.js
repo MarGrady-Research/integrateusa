@@ -13,11 +13,11 @@ export default function Search({radio, handleBounds}) {
     // Set URL to search for Counties/Districts/States
     const url = () => {
         if (radio.level === "District") {
-            return "http://localhost:8000/" + "api/districtnames/?q="
+            return "https://integrateusa.org/" + "api/districtnames/?q="
         } else if (radio.level === "County") {
-            return "http://localhost:8000/" + "api/countynames/?q="
+            return "https://integrateusa.org/" + "api/countynames/?q="
         } else if (radio.level === "State") {
-            return "http://localhost:8000/" + "api/statenames/?q="
+            return "https://integrateusa.org/" + "api/statenames/?q="
         }
     };
 
