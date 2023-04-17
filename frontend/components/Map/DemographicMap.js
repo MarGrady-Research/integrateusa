@@ -236,7 +236,7 @@ export default function DemographicMap() {
         cursor={cursor}
         onDragStart={onMouseOut}
         onDragEnd={querySchools}
-        onLoad={() => setRenderedFeatures([])}
+        onLoad={querySchools}
         onMouseMove={handleHover}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
