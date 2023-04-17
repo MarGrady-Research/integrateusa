@@ -261,7 +261,7 @@ export default function DemographicMap() {
         <Layer {...LayerProps}/>
         </Source>
         {(selectedSchool || selectedArea) && (
-            <div style={{left: clickInfo.x + 20, top: clickInfo.y + 20, zIndex: 10, position: 'absolute', fontSize: '10px', maxWidth: '300px'}} className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md">
+            <div style={{left: clickInfo.x + 20, top: clickInfo.y + 20, zIndex: 10, position: 'absolute', fontSize: '12px', maxWidth: '300px'}} className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md">
 
             {selectedSchool && (
                 <div className="p-3">
