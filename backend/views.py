@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
+from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
@@ -47,6 +47,14 @@ class countyNameList(generics.ListAPIView):
         query = self.request.GET.get("q")
         return CountyNames.objects.annotate(similarity = search.TrigramSimilarity('county_name', query)).filter(similarity__gte = 0.10).filter(county_name__icontains = query).order_by('-similarity')
 
+class schoolNameList(generics.ListAPIView):
+    queryset = SchoolNames.objects.all()
+    serializer_class = SchoolNameSerializer
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return SchoolNames.objects.annotate(similarity = search.TrigramSimilarity('sch_name', query)).filter(similarity__gte = 0.10).filter(sch_name__icontains = query).order_by('-similarity')
+
 class stateNameList(generics.ListAPIView):
     queryset = StateNames.objects.all()
     serializer_class = StateNameSerializer
@@ -76,7 +84,11 @@ class countyTrendsList(generics.ListAPIView):
 class stateTrendsList(generics.ListAPIView):
     queryset = StateTrends.objects.all()
     serializer_class = StateTrendSerializer
-    filterset_fields = ['state_abb']
+    filterset_fields = [
+        'state_abb', 
+        'grade', 
+        'year'
+    ]
 
 
 # Segregation Views

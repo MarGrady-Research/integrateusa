@@ -3,29 +3,35 @@ import PieChart from "./Pie";
 import InsetMap from "./InsetMap";
 import dynamic from "next/dynamic";
 import SchoolLevelTable from "./SchoolLevelTable";
+import {years} from "../Select/SelectOptions";
 
 const BarChart = dynamic(() => import('./Bar'), {
     ssr: false
 })
 
-export default function Info({InfoData, title, id, bounds}) {
+export default function Info({InfoData, title, id, bounds, grade, year}) {
+
+    /* used this when we were selecting all grades and years -- but too slow */
+    /* let filterData = InfoData.filter(e => e.grade === grade & e.year === year) */
+    
+    let filterData = InfoData
 
     const schoolLevel = {
-        ES: InfoData.filter(e => e.level === "ES"),
-        ESMS: InfoData.filter(e => e.level === "ESMS"),
-        MS: InfoData.filter(e => e.level === "MS"),
-        MSHS: InfoData.filter(e => e.level === "MSHS"),
-        HS: InfoData.filter(e => e.level === "HS"),
-        K12: InfoData.filter(e => e.level === "K12"),
-        Other: InfoData.filter(e => e.level === "Other"),
-        Total: {all_schools: InfoData.length,
-                all_students: InfoData.map(e => e.tot_enr).reduce((a,b)=>a+b,0)}
+        ES: filterData.filter(e => e.level === "ES"),
+        ESMS: filterData.filter(e => e.level === "ESMS"),
+        MS: filterData.filter(e => e.level === "MS"),
+        MSHS: filterData.filter(e => e.level === "MSHS"),
+        HS: filterData.filter(e => e.level === "HS"),
+        K12: filterData.filter(e => e.level === "K12"),
+        Other: filterData.filter(e => e.level === "Other"),
+        Total: {all_schools: filterData.length,
+                all_students: filterData.map(e => e.tot_enr).reduce((a,b)=>a+b,0)}
         }
 
     return(
         
         <>
-        { InfoData.length > 0 && title &&
+        {filterData.length > 0 && title &&
         <div className="flex flex-row mx-auto">
             <span className="text-4xl"><b>{title}</b></span>
         </div>
@@ -41,15 +47,16 @@ export default function Info({InfoData, title, id, bounds}) {
             <SchoolLevelTable schoolLevel={schoolLevel}/>
             </div>
             <div className="w-1/4 h-full">
-            <PieChart InfoData={InfoData} />
+            <PieChart filterData={filterData}/>
             </div>
         </div>
         <div className="pb-5">
             <div className="flex flex-row mx-auto">
+                {/* <span className="text-2xl pb-2">Race Breakdown by School: {years.filter(e => e.value === year)[0]["label"]}</span>*/}
                 <span className="text-2xl pb-2">Race Breakdown by School</span>
             </div>
             <div className="h-100 w-100 overflow-auto">
-                <BarChart InfoData={InfoData} className="py-4 left-0 top-0 absolute"/>
+                <BarChart filterData={filterData} className="py-4 left-0 top-0 absolute"/>
             </div>
         </div>
         </>
