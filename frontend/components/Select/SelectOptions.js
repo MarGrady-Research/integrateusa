@@ -13,7 +13,7 @@
     {value: 2012, label: "2011-12"},
     {value: 2011, label: "2010-11"},
     {value: 2010, label: "2009-10"},
-    {value: 2009, label: "2009-09"},
+    {value: 2009, label: "2008-09"},
     {value: 2008, label: "2007-08"},
     {value: 2007, label: "2006-07"},
     {value: 2006, label: "2005-06"},
