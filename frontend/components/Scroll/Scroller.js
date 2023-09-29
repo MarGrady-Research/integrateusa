@@ -258,7 +258,7 @@ export default function Scroller() {
                     
                 <div className='flex flex-col px-4 items-center'>
                     <span className='font-raleway inline-flex items-center text-center text-xl'>
-                    IntegrateUSA was built to explore segregation in Districts, Counties and States nationwide
+                    IntegrateUSA was built to explore segregation in districts, counties and states nationwide
                     <br/>
                     <br/>
                     Use the dashboard to visualize demographics and understand segregation levels in different areas over time

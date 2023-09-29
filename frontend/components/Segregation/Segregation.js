@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Comparison from "./ComparisonTable";
 import SegBar from "./Bar";
 import Select from 'react-select';
+import {grades} from "../Select/SelectOptions.js"
 
 export default function Segregation({SegData, id, grade, title, measure, handleMeasure}) {
 
@@ -48,7 +49,7 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
     }, [SegData])
 
     // State variable for selected racial group
-    const [selected, setSelected] = useState({value: 'norm_exp_as', label: 'Asian', iso: 'exp_as_as', non: 'exp_non_as_as'});
+    const [selected, setSelected] = useState({value: 'norm_exp_bl', label: 'Black', iso: 'exp_bl_bl', non: 'exp_non_bl_bl'});
 
     // Options for Race selection:
     const options = [
@@ -65,6 +66,9 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
         handleMeasure(selectedGroup)
     }, [selected])
 
+    console.log(grades)
+    console.log(grade)
+
     return (
 
         <>
@@ -75,11 +79,12 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
     
         <div className="flex flex-row justify-between pt-3">
 
-            <div className="flex flex-col justify-between text-justify text-sm p-2">
-                <span>We can measure segregation by comparing the makeup of schools attended by students in different racial groups</span>
+            <div className="text-xl flex flex-col justify-between text-justify text-sm ">
+                <br></br>
+                <span>We can measure segregation by comparing the makeup of schools attended by students in different racial groups.</span>
                 <br/>
                 <span>The typical <Select options={options} 
-                                          defaultValue={{value: 'norm_exp_as', label: 'Asian', iso: 'exp_as_as', non: 'exp_non_as_as'}} 
+                                          defaultValue={{value: 'norm_exp_bl', label: 'Black', iso: 'exp_bl_bl', non: 'exp_non_bl_bl'}} 
                                           onChange={e => setSelected(e)} 
                                           components={{IndicatorSeparator: () => null}} 
                                           isSearchable={false} 
@@ -89,11 +94,11 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
                                               boxShadow: "none",
                                               border: state.isFocused && "none"
                                             })}}
-                                          className="inline-flex" />  student in {title} attends a school that is <b>{(focus[selected.iso]*100).toFixed(1)}% {selected.label}</b></span>
+                                          className="inline-flex" /> student in {title} attends a school that is <b>{(focus[selected.iso]*100).toFixed(1)}% {selected.label}</b>.</span>
                 <br/>
-                <span>The typical non-{selected.label} student attends a school that is <b>{(focus[selected.non]*100).toFixed(1)}% {selected.label}</b></span>
+                <span>The typical non-{selected.label} student attends a school that is <b>{(focus[selected.non]*100).toFixed(1)}% {selected.label}</b>.</span>
                 <br/>
-                <span>The difference between these two numbers, <b>{(focus[selected.value]*100).toFixed(1)}%</b> is the normalized exposure index for <b>{selected.label}</b> students</span>
+                <span>The difference between these two numbers, <b>{(focus[selected.value]*100).toFixed(1)}%</b> is a measure of segregation for <b>{selected.label}</b> students.</span>
                 <br/>
             </div>
 
