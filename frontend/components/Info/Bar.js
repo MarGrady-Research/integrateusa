@@ -13,60 +13,61 @@ ChartJS.register(
     zoomPlugin,
 );
 
-
-export default function BarChart({InfoData}) {
+export default function BarChart({filterData}) {
 
     const bar = (data, group) => {
         return data.map(e => (e[group]))
         }
 
-    const [labels, setLabels] = useState(InfoData.map(e => e.sch_name))
+    const [labels, setLabels] = useState(filterData.map(e => e.sch_name))
+    
+    /* how does this code relate to the sortData section below? */
+    const [asianData, setAsianData] = useState(bar(filterData, "prop_as"));
+    const [blackData, setBlackData] = useState(bar(filterData, "prop_bl"));
+    const [hispanicData, setHispanicData] = useState(bar(filterData, "prop_hi"));
+    const [otherData, setOtherData] = useState(bar(filterData, "prop_or"));
+    const [whiteData, setWhiteData] = useState(bar(filterData, "prop_wh"));
 
-    const [asianData, setAsianData] = useState(bar(InfoData, "prop_as"));
-    const [blackData, setBlackData] = useState(bar(InfoData, "prop_bl"));
-    const [hispanicData, setHispanicData] = useState(bar(InfoData, "prop_hi"));
-    const [otherData, setOtherData] = useState(bar(InfoData, "prop_or"));
-    const [whiteData, setWhiteData] = useState(bar(InfoData, "prop_wh"));
-
+    /* what is the code below doing? why is Asian set to 0 vs 1 for others? */
     const [asianOrder, setAsianOrder] = useState(0);
     const [blackOrder, setBlackOrder] = useState(1);
     const [hispanicOrder, setHispanicOrder] = useState(1);
     const [otherOrder, setOtherOrder] = useState(1);
     const [whiteOrder, setWhiteOrder] = useState(1);
-
+    
     const barData = [
         {
             label: 'Asian',
             id: "prop_as",
-            data: asianData,
+            data: bar(filterData, "prop_as"),
             backgroundColor: "#FF5050",
             order: asianOrder
         },
         {
             label: 'Black',
             id: "prop_bl",
-            data: blackData,
+            data: bar(filterData, "prop_bl"),
             backgroundColor: "#4472C4",
             order: blackOrder
         },
         {
             label: 'Hispanic',
             id: "prop_hi",
-            data: hispanicData,
+            data: bar(filterData, "prop_hi"),
             backgroundColor: "#FF9900",
             order: hispanicOrder
         },
         {
             label: 'Other',
             id: "prop_or",
-            data: otherData,
+            data: bar(filterData, "prop_or"),
             backgroundColor: "#FFC000",
             order: otherOrder
         },
         {
             label: 'White',
             id: "prop_wh",
-            data: whiteData,
+            data: bar(filterData, "prop_wh"),
             backgroundColor: "#339933",
             order: whiteOrder
         }
@@ -74,7 +75,7 @@ export default function BarChart({InfoData}) {
  
     const sortData = (group) => {
 
-        let newdata = InfoData;
+        let newdata = filterData;
         newdata.sort((a, b) => {return ((a[group]) - (b[group]))});
 
         setLabels(newdata.map(e => e.sch_name))

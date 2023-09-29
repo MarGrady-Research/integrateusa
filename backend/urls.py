@@ -6,6 +6,7 @@ urlpatterns = [
     path('api/districtnames/', views.districtNameList.as_view()),
     path('api/districtnamesalt/', views.districtNameAltList.as_view()),
     path('api/countynames/', views.countyNameList.as_view()),
+    path('api/schoolnames/', views.schoolNameList.as_view()),
     path('api/district/', views.districtList.as_view()),
     path('api/county/', views.countyList.as_view()),
     path('api/statenames/', views.stateNameList.as_view()),

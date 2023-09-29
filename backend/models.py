@@ -81,6 +81,21 @@ class DistNamesAlt(models.Model):
     def __str__(self):
         return self.dist_name," (", self.dist_id, ")"
 
+class SchoolNames(models.Model):
+    nces_id  = models.TextField(primary_key=True)
+    sch_name  = models.TextField()
+    dist_id  = models.TextField()
+    dist_name  = models.TextField()
+    state_abb  = models.TextField()
+    lngmin = models.FloatField()
+    latmin = models.FloatField()
+    lngmax = models.FloatField()
+    latmax = models.FloatField()
+
+    class Meta:
+        db_table = 'school_names'
+
+
 class StateNames(models.Model):
     state_abb = models.CharField(max_length = 2, primary_key=True)
     fips = models.IntegerField(blank=True, null=True)
@@ -95,6 +110,8 @@ class StateNames(models.Model):
 
     def __str__(self):
         self.state_abb
+
+
 
 
 # Trend Models

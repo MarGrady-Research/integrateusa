@@ -8,7 +8,7 @@ ChartJS.register(
     Legend
 )
 
-export default function PieChart({InfoData}) {
+export default function PieChart({filterData}) {
 
     const groups = ["asian", "black", "hispanic", "other", "white"]
 
@@ -22,12 +22,12 @@ export default function PieChart({InfoData}) {
         return  arr.map(item => {
             return ({
                 group: item,
-                enr: Math.round((enrSum(InfoData, item)/total)*100)
+                enr: Math.round((enrSum(filterData, item)/total)*100)
             })
         });
     }
 
-    const enrTotal = enrSum(InfoData, "tot_enr")
+    const enrTotal = enrSum(filterData, "tot_enr")
     const pieData = enrData(groups, enrTotal);
 
 

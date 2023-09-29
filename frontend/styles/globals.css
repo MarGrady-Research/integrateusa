@@ -31,6 +31,11 @@ a {
     @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap
   }
 
+  /* column header - would like to fix to the left (but not sure how to do) */
+  .school-ch {
+    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap
+  }
+
   .paginate-btn {
     @apply relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50
   }
