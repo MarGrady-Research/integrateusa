@@ -94,11 +94,11 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
                                               boxShadow: "none",
                                               border: state.isFocused && "none"
                                             })}}
-                                          className="inline-flex" /> student in {title} attends a school that is <b>{(focus[selected.iso]*100).toFixed(1)}% {selected.label}</b>.</span>
+                                          className="inline-flex" /> student in {title} attends a school that is <b>{(focus[selected.iso]).toFixed(1)}% {selected.label}</b>.</span>
                 <br/>
-                <span>The typical non-{selected.label} student attends a school that is <b>{(focus[selected.non]*100).toFixed(1)}% {selected.label}</b>.</span>
+                <span>The typical non-{selected.label} student attends a school that is <b>{(focus[selected.non]).toFixed(1)}% {selected.label}</b>.</span>
                 <br/>
-                <span>The difference between these two numbers, <b>{(focus[selected.value]*100).toFixed(1)}%</b> is a measure of segregation for <b>{selected.label}</b> students.</span>
+                <span>The difference between these two numbers, <b>{(focus[selected.value]).toFixed(1)}%</b> is a measure of segregation for <b>{selected.label}</b> students.</span>
                 <br/>
             </div>
 
