@@ -1,4 +1,4 @@
-// JLM This is copied from the GradeLines.js and SchoolLevelTable.js, and I'm working on modifying
+// JLM This is copied from the GradeLines.js and SchoolLevelTable.js
 
 import React, { useRef, useState, useEffect } from "react";
 import {years} from "../Select/SelectOptions.js"

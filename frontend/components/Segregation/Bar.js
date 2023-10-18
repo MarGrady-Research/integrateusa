@@ -19,31 +19,31 @@ export default function SegBar({focus}) {
         {
             label: 'Asian',
             id: 'as',
-            data: [focus.exp_as_as, focus.exp_bl_as, focus.exp_hi_as, focus.exp_or_as, focus.exp_wh_as],
+            data: [focus.exp_as_as/100, focus.exp_bl_as/100, focus.exp_hi_as/100, focus.exp_or_as/100, focus.exp_wh_as/100],
             backgroundColor: "#FF5050",
         },
         {
             label: 'Black',
             id: 'bl',
-            data: [focus.exp_as_bl, focus.exp_bl_bl, focus.exp_hi_bl, focus.exp_or_bl, focus.exp_wh_bl],
+            data: [focus.exp_as_bl/100, focus.exp_bl_bl/100, focus.exp_hi_bl/100, focus.exp_or_bl/100, focus.exp_wh_bl/100],
             backgroundColor: "#4472C4",
         },
         {
             label: 'Hispanic',
             id: 'hi',
-            data: [focus.exp_as_hi, focus.exp_bl_hi, focus.exp_hi_hi, focus.exp_or_hi, focus.exp_wh_hi],
+            data: [focus.exp_as_hi/100, focus.exp_bl_hi/100, focus.exp_hi_hi/100, focus.exp_or_hi/100, focus.exp_wh_hi/100],
             backgroundColor: "#FF9900",
         },
         {
             label: 'Other',
             id: 'or',
-            data: [focus.exp_as_or, focus.exp_bl_or, focus.exp_hi_or, focus.exp_or_or, focus.exp_wh_or],
+            data: [focus.exp_as_or/100, focus.exp_bl_or/100, focus.exp_hi_or/100, focus.exp_or_or/100, focus.exp_wh_or/100],
             backgroundColor: "#FFC000",
         },
         {
             label: 'White',
             id: 'wh',
-            data: [focus.exp_as_wh, focus.exp_bl_wh, focus.exp_hi_wh, focus.exp_or_wh, focus.exp_wh_wh],
+            data: [focus.exp_as_wh/100, focus.exp_bl_wh/100, focus.exp_hi_wh/100, focus.exp_or_wh/100, focus.exp_wh_wh/100],
             backgroundColor: "#339933",
         }
     ]
