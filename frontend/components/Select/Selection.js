@@ -14,6 +14,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 export default function Selection() {
 
+  
   // adding in NextJS router for conditionally rendering different pages in return statement
   const router = useRouter()
   const currentpath = router.pathname
@@ -248,7 +249,7 @@ export default function Selection() {
         getSegData();
       }
       setTitle(selectedname);
-      setInput('');
+      setInput(''); // JLM: what does this do? Doesn't seem to affect things if I remove.
     }
     setClicked(false);
   }, [clicked])
