@@ -10,6 +10,8 @@ ChartJS.register(
 
 export default function PieChart({filterData}) {
 
+    console.log(filterData)
+
     const groups = ["asian", "black", "hispanic", "other", "white"]
 
     const enrSum = (arr, group) => {

@@ -14,6 +14,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 export default function Selection() {
 
+  
   // adding in NextJS router for conditionally rendering different pages in return statement
   const router = useRouter()
   const currentpath = router.pathname
@@ -45,8 +46,8 @@ export default function Selection() {
   // const [tempID, setTempID] = useState();
 
   // Grade state
-  const gradelevel = () => currentpath === '/segregation' ? '01': 'All'
-  const [grade, setGrade] = useState(gradelevel)
+  // const gradelevel = () => currentpath === '/segregation' ? '01': 'All'
+  const [grade, setGrade] = useState('All')
 
   // Year state 
 
@@ -248,7 +249,7 @@ export default function Selection() {
         getSegData();
       }
       setTitle(selectedname);
-      setInput('');
+      setInput(''); // JLM: what does this do? Doesn't seem to affect things if I remove.
     }
     setClicked(false);
   }, [clicked])
@@ -299,8 +300,9 @@ export default function Selection() {
           <Select 
           options={grades}
           onChange={e => setGrade(e.value)}
-          defaultValue={() => { if (currentpath === '/segregation') {return {label: 'Grade 1', value: '01'}} else { return {label: 'All Grades', value: 'All'}}}}
-          isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
+          defaultValue={{label:'All Grades', value: 'All'}}
+          // defaultValue={() => { if (currentpath === '/segregation') {return {label: 'Grade 1', value: '01'}} else { return {label: 'All Grades', value: 'All'}}}}
+          // isOptionDisabled={(e) => currentpath === '/segregation' ? e.value === 'All' : null}
           placeholder="Select a grade"
           name='grades'
           className='pr-4'
