@@ -29,7 +29,7 @@ export default function LineGraph ({linedata, id}) {
             y: {
                 position: 'right',
                 min:0,
-                max: 1
+                max: 100
             }
         }
     }
