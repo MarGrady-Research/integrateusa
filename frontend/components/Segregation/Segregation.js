@@ -66,9 +66,6 @@ export default function Segregation({SegData, id, grade, title, measure, handleM
         handleMeasure(selectedGroup)
     }, [selected])
 
-    console.log(grades)
-    console.log(grade)
-
     return (
 
         <>
