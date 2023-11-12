@@ -5,8 +5,6 @@ import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PieChart({ filterData }) {
-  console.log(filterData);
-
   const groups = ["asian", "black", "hispanic", "other", "white"];
 
   const enrSum = (arr, group) => {

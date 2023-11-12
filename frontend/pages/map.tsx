@@ -1,7 +1,7 @@
 import React from "react";
 
 import Head from "../components/fragments/Head";
-import Header from "../components/Header";
+import Header from "../components/fragments/Header";
 import DemographicMap from "../components/Map/DemographicMap";
 
 export default function Map() {
