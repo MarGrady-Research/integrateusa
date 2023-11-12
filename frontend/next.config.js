@@ -5,9 +5,9 @@ const nextConfig = {
 };
 
 module.exports = {
-  nextConfig,
+  ...nextConfig,
   output: "standalone",
-  webpackDevMiddleware: (config) => {
+  webpack: (config) => {
     config.watchOptions = {
       poll: 1000,
       aggregateTimeout: 300,
