@@ -54,3 +54,22 @@ export const yearsData = [
   { value: 2001, label: "2000-01" },
   { value: 2000, label: "1999-00" },
 ];
+
+export const gradesData = [
+  { value: "All", label: "All Grades", label2: "student" },
+  { value: "PK", label: "Pre-K", label2: "pre-k student" },
+  { value: "KG", label: "Kindergarten", label2: "kindergartener" },
+  { value: "01", label: "Grade 1", label2: "first-grader" },
+  { value: "02", label: "Grade 2", label2: "second-grader" },
+  { value: "03", label: "Grade 3", label2: "third-grader" },
+  { value: "04", label: "Grade 4", label2: "fourth-grader" },
+  { value: "05", label: "Grade 5", label2: "fifth-grader" },
+  { value: "06", label: "Grade 6", label2: "sixth-grader" },
+  { value: "07", label: "Grade 7", label2: "seventh-grader" },
+  { value: "08", label: "Grade 8", label2: "eighth-grader" },
+  { value: "09", label: "Grade 9", label2: "ninth-grader" },
+  { value: "10", label: "Grade 10", label2: "tenth-grader" },
+  { value: "11", label: "Grade 11", label2: "eleventh-grader" },
+  { value: "12", label: "Grade 12", label2: "twelvth-grader" },
+  { value: "UG", label: "Ungraded", label2: "ungraded student" },
+];
