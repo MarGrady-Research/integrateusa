@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
+import { useSelector } from "react-redux";
 
 import { levelSelectData } from "../../data";
+import { selectLevels } from "../../../../../store/selectSlice";
 
-interface Props {
-  levels: number;
-}
+export default function SearchSelect() {
+  const levels = useSelector(selectLevels);
 
-export default function SearchSelect({ levels }: Props) {
   const [id, setID] = useState(3620580);
-  const [selectedname, setSelectedName] = useState();
+  const [selectedname, setSelectedName] = useState("");
   const [bounds, setBounds] = useState([
     [-74.25609, 40.496094],
     [-73.70017, 40.915276],

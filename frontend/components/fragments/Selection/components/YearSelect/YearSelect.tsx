@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 
 import { yearsData } from "../../data";
+import { selectLevels } from "../../../../../store/selectSlice";
 
-interface Props {
-  levels: number;
-}
+export default function YearSelect() {
+  const levels = useSelector(selectLevels);
 
-export default function YearSelect({ levels }: Props) {
   let currentYear = Math.max(...yearsData.map((e) => e.value));
   let currentYearLabel = yearsData.filter((e) => e.value === currentYear)[0][
     "label"

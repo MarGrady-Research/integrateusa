@@ -6,13 +6,11 @@ import YearSelect from "./components/YearSelect";
 import GradeSelect from "./components/GradeSelect";
 
 export default function Selection() {
-  const [levels, setLevels] = useState(0);
-
   return (
     <div className="flex flex-row">
       <LevelSelect />
-      <SearchSelect levels={levels} />
-      <YearSelect levels={levels} />
+      <SearchSelect />
+      <YearSelect />
       <GradeSelect />
     </div>
   );
