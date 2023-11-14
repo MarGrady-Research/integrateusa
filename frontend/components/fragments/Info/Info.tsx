@@ -1,10 +1,10 @@
 import React from "react";
-import PieChart from "./Pie";
-import InsetMap from "./InsetMap";
+import PieChart from "./components/Pie";
+import InsetMap from "./components/InsetMap";
 import dynamic from "next/dynamic";
-import SchoolLevelTable from "./SchoolLevelTable";
+import SchoolLevelTable from "./components/SchoolLevelTable";
 
-const BarChart = dynamic(() => import("./Bar"), {
+const BarChart = dynamic(() => import("./components/Bar"), {
   ssr: false,
 });
 
@@ -53,7 +53,6 @@ export default function Info({ InfoData, title, id, bounds }) {
       </div>
       <div className="pb-5">
         <div className="flex flex-row mx-auto">
-          {/* <span className="text-2xl pb-2">Race Breakdown by School: {years.filter(e => e.value === year)[0]["label"]}</span>*/}
           <span className="text-2xl pb-2">Race Breakdown by School</span>
         </div>
         <div className="h-100 w-100 overflow-auto">
