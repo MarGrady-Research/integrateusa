@@ -75,7 +75,7 @@ export default function AreaChart({ TrendData, grade }) {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as any,
       },
     },
     scales: {

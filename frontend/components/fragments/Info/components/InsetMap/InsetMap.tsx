@@ -9,14 +9,14 @@ export default function InsetMap({ id, bounds }) {
   const mapRef = useRef();
 
   const onLoad = useCallback(() => {
-    mapRef.current.fitBounds(bounds, { padding: 25, duration: 2000 });
+    (mapRef.current as any).fitBounds(bounds, { padding: 25, duration: 2000 });
   }, [bounds]);
 
   let stringID = "" + id;
 
   const districtLayer = {
     id: "district-boundary",
-    type: "fill",
+    type: "fill" as any,
     "source-layer": "2021_sd_unified-4mqqrn",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.1)",
@@ -27,7 +27,7 @@ export default function InsetMap({ id, bounds }) {
 
   const countyLayer = {
     id: "boundary",
-    type: "fill",
+    type: "fill" as any,
     "source-layer": "cb_2018_us_county_500k-6dd9y3",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.1)",
@@ -38,7 +38,7 @@ export default function InsetMap({ id, bounds }) {
 
   const stateLayer = {
     id: "state-boundary",
-    type: "fill",
+    type: "fill" as any,
     "source-layer": "cb_2018_us_state_500k-8q06w5",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.1)",
@@ -59,7 +59,6 @@ export default function InsetMap({ id, bounds }) {
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={mapbox_token}
-        className="overflow-x-auto w-500"
         onLoad={onLoad}
       >
         <Source

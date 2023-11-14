@@ -56,10 +56,7 @@ export default function Info({ InfoData, title, id, bounds }) {
           <span className="text-2xl pb-2">Race Breakdown by School</span>
         </div>
         <div className="h-100 w-100 overflow-auto">
-          <BarChart
-            filterData={filterData}
-            className="py-4 left-0 top-0 absolute"
-          />
+          <BarChart filterData={filterData} />
         </div>
       </div>
     </>

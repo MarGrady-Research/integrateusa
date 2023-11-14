@@ -153,7 +153,7 @@ export default function BarChart({ filterData }) {
         options={sortOptions}
         onChange={(e) => sortData(e.value)}
       />
-      <Bar data={data} options={options} />
+      <Bar data={data} options={options as any} />
     </>
   );
 }

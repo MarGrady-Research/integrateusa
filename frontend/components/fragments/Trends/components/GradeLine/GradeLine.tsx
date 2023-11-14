@@ -48,12 +48,12 @@ export default function GradeLines({ TrendData, grade }) {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as any,
       },
     },
     scales: {
       y: {
-        position: "right",
+        position: "right" as any,
       },
     },
   };

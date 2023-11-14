@@ -63,7 +63,7 @@ export default function BarChart100({ TrendData, grade }) {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as any,
       },
     },
     scales: {

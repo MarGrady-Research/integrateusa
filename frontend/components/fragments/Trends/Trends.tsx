@@ -57,7 +57,7 @@ export default function Trends({ TrendData, grade }) {
         </div>
 
         <div className="flex flex-row">
-          <TableYearGrade TrendData={TrendData} grade={grade} />
+          <TableYearGrade TrendData={TrendData} />
         </div>
       </>
     );
