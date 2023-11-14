@@ -1,4 +1,4 @@
-import Reacts from "react";
+import React from "react";
 
 export function Loader({ text = "Loading...", noText = false }) {
   return (
