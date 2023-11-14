@@ -27,7 +27,7 @@ export default function SearchSelect({ levels }: Props) {
 
   const [alt, setAlt] = useState(false);
 
-  const Alt = useCallback(async () => {
+  useCallback(async () => {
     setAlt(!alt);
   }, []);
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import LevelSelect from "./components/LevelSelect";
 import SearchSelect from "./components/SearchSelect";
+import YearSelect from "./components/YearSelect";
 
 export default function Selection() {
   const [levels, setLevels] = useState(0);
@@ -10,6 +11,7 @@ export default function Selection() {
     <div className="flex flex-row">
       <LevelSelect setLevels={setLevels} />
       <SearchSelect levels={levels} />
+      <YearSelect levels={levels} />
     </div>
   );
 }
