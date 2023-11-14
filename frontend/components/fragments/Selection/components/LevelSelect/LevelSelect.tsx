@@ -1,21 +1,27 @@
 import React from "react";
 import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
+
+import { selectLevels, setLevels } from "../../../../../store/selectSlice";
 
 import { levelSelectData } from "../../data";
 
-interface Props {
-  setLevels: (value: number) => void;
-}
+export default function LevelSelect() {
+  const levels = useSelector(selectLevels);
+  const dispatch = useDispatch();
 
-export default function LevelSelect({ setLevels }: Props) {
+  const handleChange = (e) => {
+    dispatch(setLevels(e.value));
+  };
+
+  const selectedLevel = levelSelectData.find((l) => l.value === levels);
+
   return (
     <Select
       options={levelSelectData}
       placeholder="Geographic Level"
-      defaultValue={{ label: "District", value: 0 }}
-      onChange={(e) => {
-        setLevels(e.value);
-      }}
+      value={selectedLevel}
+      onChange={handleChange}
       components={{ IndicatorSeparator: () => null }}
       className="pr-2"
       isSearchable={false}

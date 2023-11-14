@@ -10,7 +10,7 @@ export default function Selection() {
 
   return (
     <div className="flex flex-row">
-      <LevelSelect setLevels={setLevels} />
+      <LevelSelect />
       <SearchSelect levels={levels} />
       <YearSelect levels={levels} />
       <GradeSelect />
