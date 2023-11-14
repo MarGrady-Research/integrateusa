@@ -2,59 +2,59 @@ import { Disclosure, Transition, RadioGroup } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 
+const exposure = [
+  {
+    name: "Asian Normalized Exposure",
+    accessor: "norm_exp_as",
+    group: "Asian",
+  },
+  {
+    name: "Black Normalized Exposure",
+    accessor: "norm_exp_bl",
+    group: "Black",
+  },
+  {
+    name: "Hispanic Normalized Exposure",
+    accessor: "norm_exp_hi",
+    group: "Hispanic",
+  },
+  {
+    name: "Other Race Race Normalized Exposure",
+    accessor: "norm_exp_or",
+    group: "Other Race",
+  },
+  {
+    name: "White Normalized Exposure",
+    accessor: "norm_exp_wh",
+    group: "White",
+  },
+  {
+    name: "Asian/White Normalized Exposure",
+    accessor: "norm_exp_aw",
+    group: "Asian and White",
+  },
+];
+
+const measures = [
+  {
+    name: "Exposure Rate",
+    desc: "The share of students of one racial group enrolled in the average school attended by students of another (or the same) racial group",
+  },
+  {
+    name: "Normalized Exposure",
+    desc: "Calculates the difference in the exposure rates for two groups of students to the same group of students",
+  },
+  {
+    name: "Segregation Index",
+    desc: "The average percentage point difference between the proportion of a group of students in a school and that same proportion in the school's district (or county, etc.)",
+  },
+  {
+    name: "Dissimilarity Index",
+    desc: "The share of students of one group who would have to switch schools to have an even balance of students across a district (or county, etc.)",
+  },
+];
+
 export default function Accordion({ handleMeasure, currentpath }) {
-  const exposure = [
-    {
-      name: "Asian Normalized Exposure",
-      accessor: "norm_exp_as",
-      group: "Asian",
-    },
-    {
-      name: "Black Normalized Exposure",
-      accessor: "norm_exp_bl",
-      group: "Black",
-    },
-    {
-      name: "Hispanic Normalized Exposure",
-      accessor: "norm_exp_hi",
-      group: "Hispanic",
-    },
-    {
-      name: "Other Race Race Normalized Exposure",
-      accessor: "norm_exp_or",
-      group: "Other Race",
-    },
-    {
-      name: "White Normalized Exposure",
-      accessor: "norm_exp_wh",
-      group: "White",
-    },
-    {
-      name: "Asian/White Normalized Exposure",
-      accessor: "norm_exp_aw",
-      group: "Asian and White",
-    },
-  ];
-
-  const measures = [
-    {
-      name: "Exposure Rate",
-      desc: "The share of students of one racial group enrolled in the average school attended by students of another (or the same) racial group",
-    },
-    {
-      name: "Normalized Exposure",
-      desc: "Calculates the difference in the exposure rates for two groups of students to the same group of students",
-    },
-    {
-      name: "Segregation Index",
-      desc: "The average percentage point difference between the proportion of a group of students in a school and that same proportion in the school's district (or county, etc.)",
-    },
-    {
-      name: "Dissimilarity Index",
-      desc: "The share of students of one group who would have to switch schools to have an even balance of students across a district (or county, etc.)",
-    },
-  ];
-
   function CheckIcon(props) {
     return (
       <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -73,10 +73,18 @@ export default function Accordion({ handleMeasure, currentpath }) {
   function ExposureRadio() {
     const [selected, setSelected] = useState(exposure[4]);
 
+    const handleChange = (value: string) => {
+      const val = exposure.find((v) => v.name === value);
+
+      if (val) {
+        setSelected(val);
+      }
+    };
+
     return (
       <div className="w-full px-4 py-3">
         <div className="w-full">
-          <RadioGroup value={selected.name} onChange={setSelected}>
+          <RadioGroup value={selected.name} onChange={handleChange}>
             <RadioGroup.Label className="sr-only">
               Normalized Exposure
             </RadioGroup.Label>
@@ -147,10 +155,18 @@ export default function Accordion({ handleMeasure, currentpath }) {
   function MeasureRadio() {
     const [selected, setSelected] = useState(measures[1]);
 
+    const handleChange = (value: string) => {
+      const val = measures.find((v) => v.name === value);
+
+      if (val) {
+        setSelected(val);
+      }
+    };
+
     return (
       <div className="w-full px-4 py-3">
         <div className="w-full">
-          <RadioGroup value={selected.name} onChange={setSelected}>
+          <RadioGroup value={selected.name} onChange={handleChange}>
             <RadioGroup.Label className="sr-only">
               Segregation Measures
             </RadioGroup.Label>
