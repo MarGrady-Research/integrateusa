@@ -2,7 +2,8 @@ import React from "react";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
-import Selection from "../components/Select/Selection";
+import Selection from "../components/fragments/Selection";
+import Page from "../components/layouts/Page";
 
 export default function Info() {
   return (
@@ -11,9 +12,9 @@ export default function Info() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <div className="relative flex flex-col font-raleway">
+      <Page>
         <Selection />
-      </div>
+      </Page>
     </>
   );
 }

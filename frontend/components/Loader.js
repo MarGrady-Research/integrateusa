@@ -1,9 +1,5 @@
-import React, { FC } from "react";
+import Reacts from "react";
 
-// type Props = {
-//   noText?: boolean;
-//   text?: string;
-// };
 export function Loader({ text = "Loading...", noText = false }) {
   return (
     <div className="flex flex-col justify-center items-center text-xl font-light">
@@ -30,4 +26,4 @@ export function Loader({ text = "Loading...", noText = false }) {
       {!noText ? <div className="opacity-50 mt-4">{text}</div> : null}
     </div>
   );
-};
+}
