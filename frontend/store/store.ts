@@ -4,10 +4,20 @@ import {
   Action,
   combineReducers,
 } from "@reduxjs/toolkit";
-import { selectSlice } from "./selectSlice";
 import { createWrapper } from "next-redux-wrapper";
-import { persistReducer, persistStore } from "redux-persist";
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
+
+import { selectSlice } from "./selectSlice";
 
 const rootReducer = combineReducers({
   [selectSlice.name]: selectSlice.reducer,
@@ -21,20 +31,32 @@ const makeConfiguredStore = () =>
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
+
   if (isServer) {
     return makeConfiguredStore();
   } else {
     const persistConfig = {
       key: "nextjs",
+      version: 1,
       whitelist: ["select"],
       storage,
     };
+
     const persistedReducer = persistReducer(persistConfig, rootReducer);
+
     let store: any = configureStore({
       reducer: persistedReducer,
       devTools: process.env.NODE_ENV !== "production",
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          serializableCheck: {
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+          },
+        }),
     });
+
     store.__persistor = persistStore(store);
+
     return store;
   }
 };

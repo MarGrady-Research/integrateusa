@@ -20,9 +20,6 @@ export default function YearSelect() {
 
   const selectedYear = yearsData.find((y) => y.value === year);
 
-  console.log("XXX");
-  console.log(year);
-
   return (
     <Select
       options={yearsData}
