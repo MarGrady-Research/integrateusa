@@ -1,7 +1,7 @@
 import React from "react";
-import BarChart from "./Bar";
-import BarChart100 from "./Bar100";
-import TableYearGrade from "./TableYearGrade"; // can set ./TableYearGrade back to ./GradeLine to get line graph back
+import BarChart from "./components/Bar";
+import BarChart100 from "./components/Bar100";
+import TableYearGrade from "./components/TableYearGrade"; // can set ./TableYearGrade back to ./GradeLine to get line graph back
 
 export default function Trends({ TrendData, grade }) {
   /* calculate totals and percentages by race */
@@ -35,7 +35,7 @@ export default function Trends({ TrendData, grade }) {
   /* display trend bar charts and table (wrapped in if statement b/c otherwise runs through twice,
     once to display blank tables and then a second time with data) */
 
-  if (0 < TrendData.length) {
+  if (TrendData.length > 0) {
     return (
       <>
         <div className="flex flex-row">
@@ -62,4 +62,6 @@ export default function Trends({ TrendData, grade }) {
       </>
     );
   }
+
+  return null;
 }
