@@ -8,6 +8,9 @@ export interface SelectState {
   levels: number;
   year: number;
   grade: string;
+  id: number;
+  selectedName: string;
+  bounds: [number, number][];
 }
 
 const currentYear = Math.max(...yearsData.map((e) => e.value));
@@ -16,6 +19,12 @@ const initialState: SelectState = {
   levels: 0,
   year: currentYear,
   grade: "All",
+  id: 3620580,
+  selectedName: "New York City Public Schools (NY)",
+  bounds: [
+    [-74.25609, 40.496094],
+    [-73.70017, 40.915276],
+  ],
 };
 
 export const selectSlice = createSlice({
@@ -31,6 +40,15 @@ export const selectSlice = createSlice({
     setGrade(state, action) {
       state.grade = action.payload;
     },
+    setId(state, action) {
+      state.id = action.payload;
+    },
+    setSelectedName(state, action) {
+      state.selectedName = action.payload;
+    },
+    setBounds(state, action) {
+      state.bounds = action.payload;
+    },
   },
 
   extraReducers: {
@@ -43,10 +61,21 @@ export const selectSlice = createSlice({
   },
 });
 
-export const { setLevels, setYear, setGrade } = selectSlice.actions;
+export const {
+  setLevels,
+  setYear,
+  setGrade,
+  setId,
+  setSelectedName,
+  setBounds,
+} = selectSlice.actions;
 
 export const selectLevels = (state: AppState) => state.select.levels;
 export const selectYear = (state: AppState) => state.select.year;
 export const selectGrade = (state: AppState) => state.select.grade;
+export const selectId = (state: AppState) => state.select.id;
+export const selectSelectedName = (state: AppState) =>
+  state.select.selectedName;
+export const selectBounds = (state: AppState) => state.select.bounds;
 
 export default selectSlice.reducer;

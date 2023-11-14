@@ -1,28 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { levelSelectData } from "../../data";
-import { selectLevels } from "../../../../../store/selectSlice";
+import {
+  selectLevels,
+  selectId,
+  selectSelectedName,
+  setId,
+  setSelectedName,
+  setBounds,
+} from "../../../../../store/selectSlice";
 
 export default function SearchSelect() {
   const levels = useSelector(selectLevels);
+  const id = useSelector(selectId);
+  const selectedName = useSelector(selectSelectedName);
+  const dispatch = useDispatch();
 
-  const [id, setID] = useState(3620580);
-  const [selectedname, setSelectedName] = useState("");
-  const [bounds, setBounds] = useState([
-    [-74.25609, 40.496094],
-    [-73.70017, 40.915276],
-  ]);
-
-  const nameIdBounds = (e) => {
-    setID(e.value);
-    setSelectedName(e.label);
-    setBounds([
-      [e.lngmin, e.latmin],
-      [e.lngmax, e.latmax],
-    ]);
+  const handleChange = (e) => {
+    dispatch(setId(e.value));
+    dispatch(setSelectedName(e.label));
+    dispatch(
+      setBounds([
+        [e.lngmin, e.latmin],
+        [e.lngmax, e.latmax],
+      ])
+    );
   };
 
   const [alt, setAlt] = useState(false);
@@ -96,21 +101,17 @@ export default function SearchSelect() {
     return Options;
   };
 
-  const [input, setInput] = useState("");
-  const handleInputChange = (inputValue) => setInput(inputValue);
-
   return (
     <AsyncSelect
       name="idselect"
       cacheOptions
       defaultOptions
-      defaultValue={{
-        label: "New York City Public Schools (NY)",
-        value: 3620580,
+      value={{
+        label: selectedName,
+        value: id,
       }}
-      onChange={nameIdBounds}
+      onChange={handleChange}
       loadOptions={loadOptions}
-      onInputChange={handleInputChange}
       components={{
         DropdownIndicator: () => null,
         IndicatorSeparator: () => null,
