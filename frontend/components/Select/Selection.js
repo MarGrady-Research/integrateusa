@@ -3,13 +3,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 import { years, grades } from "./SelectOptions";
 import Info from "../Info/Info";
 import Segregation from "../Segregation/Segregation";
 import Trends from "../Trends/Trends";
-import { Loader } from "../Loader";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import Loader from "../fragments/Loader";
 
 export default function Selection() {
   // adding in NextJS router for conditionally rendering different pages in return statement

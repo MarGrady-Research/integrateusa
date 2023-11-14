@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Loader({ text = "Loading...", noText = false }) {
+export default function Loader({ text = "Loading...", noText = false }) {
   return (
     <div className="flex flex-col justify-center items-center text-xl font-light">
       <svg
