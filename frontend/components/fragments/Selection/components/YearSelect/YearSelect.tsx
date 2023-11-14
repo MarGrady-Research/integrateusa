@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import Select from "react-select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { yearsData } from "../../data";
-import { selectLevels } from "../../../../../store/selectSlice";
+import {
+  selectLevels,
+  selectYear,
+  setYear,
+} from "../../../../../store/selectSlice";
 
 export default function YearSelect() {
   const levels = useSelector(selectLevels);
+  const year = useSelector(selectYear);
+  const dispatch = useDispatch();
 
-  let currentYear = Math.max(...yearsData.map((e) => e.value));
-  let currentYearLabel = yearsData.filter((e) => e.value === currentYear)[0][
-    "label"
-  ];
+  const handleChange = (e) => {
+    dispatch(setYear(e.value));
+  };
 
-  const [year, setYear] = useState(currentYear);
+  const selectedYear = yearsData.find((y) => y.value === year);
+
+  console.log("XXX");
+  console.log(year);
 
   return (
     <Select
       options={yearsData}
-      onChange={(e) => setYear(e.value)}
-      defaultValue={{ label: currentYearLabel, value: currentYear }}
+      onChange={handleChange}
+      value={selectedYear}
       isOptionDisabled={(e) =>
         levels == 1 ? e.value >= 2000 && e.value <= 2002 : null
       }
