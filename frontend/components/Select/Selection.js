@@ -9,7 +9,6 @@ import Info from "../Info/Info";
 import Segregation from "../Segregation/Segregation";
 import Trends from "../Trends/Trends";
 import { Loader } from "../Loader";
-import SelectSlideover from "./SelectSlideover";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 export default function Selection() {

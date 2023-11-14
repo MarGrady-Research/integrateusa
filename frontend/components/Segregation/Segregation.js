@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Comparison from "./ComparisonTable";
 import SegBar from "./Bar";
 import Select from "react-select";
-import { grades } from "../Select/SelectOptions.js";
 
 export default function Segregation({
   SegData,
