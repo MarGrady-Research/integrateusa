@@ -77,7 +77,7 @@ export default function InfoPage() {
       </Head>
       <Header />
       <Page>
-        <Selection />
+        <Selection getData={getData} isLoading={isLoading} />
         {isLoading ? (
           <div className="pt-5">
             <Loader />
