@@ -7,9 +7,10 @@ import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
 import Loader from "../components/fragments/Loader";
+import Segregation from "../components/fragments/Segregation";
 import { selectYear, selectGrade, selectLevels } from "../store/selectSlice";
 
-export default function Segregation() {
+export default function SegregationPage() {
   const levels = useSelector(selectLevels);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
@@ -66,7 +67,15 @@ export default function Segregation() {
           <div className="pt-5">
             <Loader />
           </div>
-        ) : null}
+        ) : (
+          <div className="mx-auto mt-5">
+            <Segregation
+              segData={segData}
+              measure={measure}
+              handleMeasure={handleMeasure}
+            />
+          </div>
+        )}
       </Page>
     </>
   );

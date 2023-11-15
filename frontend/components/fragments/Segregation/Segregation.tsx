@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import Comparison from "./ComparisonTable";
-import SegBar from "./Bar";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 
-export default function Segregation({
-  SegData,
-  id,
-  grade,
-  title,
-  measure,
-  handleMeasure,
-}) {
+import Comparison from "./components/ComparisonTable";
+import SegBar from "./components/Bar";
+import {
+  selectId,
+  selectGrade,
+  selectSelectedName,
+} from "../../../store/selectSlice";
+
+export default function Segregation({ segData, measure, handleMeasure }) {
+  const grade = useSelector(selectGrade);
+  const id = useSelector(selectId);
+  const title = useSelector(selectSelectedName);
+
   // variables to hold query info
   let idlevel;
   let namelevel;
   let table;
 
   // Find the max number of schools in the dataset
-  let maxschools = Math.max(...SegData.map((e) => e["num_schools"]));
+  let maxschools = Math.max(...segData.map((e) => e["num_schools"]));
 
   // Set variables based on id level
   const name = () => {
@@ -41,8 +45,8 @@ export default function Segregation({
   // Function to find data of selected area
   const findFocus = () => {
     name();
-    let pos = SegData.map((e) => e[idlevel]).indexOf("" + id);
-    return SegData[pos];
+    let pos = segData.map((e) => e[idlevel]).indexOf("" + id);
+    return segData[pos];
   };
 
   // State variable for selected area
@@ -51,7 +55,7 @@ export default function Segregation({
   // Find data on selected district once page has been loaded
   useEffect(() => {
     setFocus(findFocus);
-  }, [SegData]);
+  }, [segData]);
 
   // State variable for selected racial group
   const [selected, setSelected] = useState({
@@ -174,7 +178,7 @@ export default function Segregation({
         <Comparison
           id={id}
           grade={grade}
-          segData={SegData}
+          segData={segData}
           idlevel={idlevel}
           namelevel={namelevel}
           table={table}

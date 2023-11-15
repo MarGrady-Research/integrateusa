@@ -1,15 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
-import LineGraph from "./Line";
-import Pagination from "./Pagination";
-import { sortRows, filterRows, paginateRows } from "./Helpers";
-import { years } from "../Select/SelectOptions";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+
+import LineGraph from "../Line/Line";
+import Pagination from "../Pagination/Pagination";
+import { sortRows, filterRows, paginateRows } from "../../helpers";
+import { yearsData } from "../../../Selection/data";
 
 export default function Comparison({
   id,
@@ -101,7 +96,7 @@ export default function Comparison({
   }
 
   const getLineData = async (id) => {
-    const labels = years
+    const labels = yearsData
       .map((e) => e.value)
       .sort((a, b) => {
         return a - b;
@@ -121,7 +116,6 @@ export default function Comparison({
 
     let finaldata = data.map((e) => {
       return {
-        seg: e[measure.accessor],
         seg: e[measure.accessor],
         year: e.year,
       };
@@ -385,14 +379,14 @@ export default function Comparison({
                       <input
                         type="text"
                         className="w-7 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={min[column.accessor]}
+                        placeholder={min[column.accessor].toString()}
                         readOnly={false}
                         onChange={(e) => minSearch(e)}
                       />
                       <input
                         type="text"
                         className="w-7 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={max[column.accessor]}
+                        placeholder={max[column.accessor].toString()}
                         readOnly={false}
                         onChange={(e) => maxSearch(e)}
                       />
