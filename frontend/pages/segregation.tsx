@@ -1,11 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
+import Loader from "../components/fragments/Loader";
+import { selectYear, selectGrade, selectLevels } from "../store/selectSlice";
 
 export default function Segregation() {
+  const levels = useSelector(selectLevels);
+  const year = useSelector(selectYear);
+  const grade = useSelector(selectGrade);
+
+  const [segData, setSegData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getData = async () => {
+    let idlevel;
+
+    switch (levels) {
+      case 0:
+        idlevel = "district";
+        break;
+      case 1:
+        idlevel = "county";
+        break;
+      case 2:
+        idlevel = "state";
+        break;
+    }
+
+    const url = `http://localhost:8000/api/${idlevel}/?year=${year}&grade=${grade}`;
+
+    setIsLoading(true);
+    axios
+      .get(url)
+      .then((res) => {
+        setSegData(res.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   // Measure state variable and handleMeasure function to pass to Accordion
   const [measure, setMeasure] = useState({});
   const handleMeasure = (e) => setMeasure(e);
@@ -17,7 +61,12 @@ export default function Segregation() {
       </Head>
       <Header />
       <Page>
-        <Selection />
+        <Selection getData={getData} isLoading={isLoading} />
+        {isLoading ? (
+          <div className="pt-5">
+            <Loader />
+          </div>
+        ) : null}
       </Page>
     </>
   );
