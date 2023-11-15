@@ -5,22 +5,17 @@ import { useSelector } from "react-redux";
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
-import {
-  selectId,
-  selectSelectedName,
-  selectBounds,
-} from "../../../store/selectSlice";
+import { selectId, selectBounds } from "../../../store/selectSlice";
 
 const BarChart = dynamic(() => import("./components/Bar"), {
   ssr: false,
 });
 
-export default function Info({ infoData }) {
+export default function Info({ infoData, title }) {
   /* used this when we were selecting all grades and years -- but too slow */
   /* let filterData = InfoData.filter(e => e.grade === grade & e.year === year) */
 
   const id = useSelector(selectId);
-  const title = useSelector(selectSelectedName);
   const bounds = useSelector(selectBounds);
 
   let filterData = infoData;

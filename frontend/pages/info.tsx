@@ -15,6 +15,7 @@ import {
   selectGrade,
   selectLevels,
   selectId,
+  selectSelectedName,
 } from "../store/selectSlice";
 
 export default function InfoPage() {
@@ -22,10 +23,12 @@ export default function InfoPage() {
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
+  const title = useSelector(selectSelectedName);
 
   const [infoData, setInfoData] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [infoTitle, setInfoTitle] = useState(title);
 
   const getData = async () => {
     if (year != undefined && grade != undefined && id != undefined) {
@@ -58,6 +61,7 @@ export default function InfoPage() {
         .then((values) => {
           setInfoData(values[0].data);
           setTrendData(values[1].data);
+          setInfoTitle(title);
           setIsLoading(false);
         })
         .catch(() => {
@@ -84,7 +88,7 @@ export default function InfoPage() {
           </div>
         ) : (
           <div className="mx-auto mt-5">
-            <Info infoData={infoData} />
+            <Info infoData={infoData} title={infoTitle} />
             <Trends trendData={trendData} />
           </div>
         )}
