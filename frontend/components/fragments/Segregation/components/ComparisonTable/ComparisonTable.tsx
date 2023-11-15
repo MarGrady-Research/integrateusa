@@ -379,14 +379,14 @@ export default function Comparison({
                       <input
                         type="text"
                         className="w-7 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={min[column.accessor].toString()}
+                        placeholder={min[column.accessor]}
                         readOnly={false}
                         onChange={(e) => minSearch(e)}
                       />
                       <input
                         type="text"
                         className="w-7 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={max[column.accessor].toString()}
+                        placeholder={max[column.accessor]}
                         readOnly={false}
                         onChange={(e) => maxSearch(e)}
                       />

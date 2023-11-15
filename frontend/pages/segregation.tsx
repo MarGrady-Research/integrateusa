@@ -16,7 +16,7 @@ export default function SegregationPage() {
   const grade = useSelector(selectGrade);
 
   const [segData, setSegData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
     let idlevel;

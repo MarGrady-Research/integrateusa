@@ -27,7 +27,7 @@ export default function InfoPage() {
 
   const [infoData, setInfoData] = useState([]);
   const [trendData, setTrendData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [infoTitle, setInfoTitle] = useState(title);
 
   const getData = async () => {
