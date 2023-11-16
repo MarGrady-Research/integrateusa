@@ -117,7 +117,6 @@ export default function SearchSelect() {
         IndicatorSeparator: () => null,
       }}
       placeholder={"Type a " + levelSelectData[levels].label + " name"}
-      className="pr-2 flex-none w-72"
     />
   );
 }

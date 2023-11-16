@@ -23,7 +23,6 @@ export default function LevelSelect() {
       value={selectedLevel}
       onChange={handleChange}
       components={{ IndicatorSeparator: () => null }}
-      className="pr-2"
       isSearchable={false}
     />
   );

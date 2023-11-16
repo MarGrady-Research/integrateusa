@@ -30,7 +30,6 @@ export default function YearSelect() {
       }
       placeholder="Select a year"
       name="years"
-      className="pr-2"
       isSearchable={false}
     />
   );

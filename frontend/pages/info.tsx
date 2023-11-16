@@ -80,8 +80,8 @@ export default function InfoPage() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
+      <Selection getData={getData} isLoading={isLoading} />
       <Page>
-        <Selection getData={getData} isLoading={isLoading} />
         {isLoading ? (
           <div className="pt-5">
             <Loader />

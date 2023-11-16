@@ -22,7 +22,6 @@ export default function GradeSelect() {
       value={selectedGrade}
       placeholder="Select a grade"
       name="grades"
-      className="pr-4"
     />
   );
 }
