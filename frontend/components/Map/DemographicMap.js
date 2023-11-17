@@ -602,7 +602,7 @@ export default function DemographicMap() {
                   )}
                 </div>
               )}
-              <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md">
+              <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md hidden lg:block">
                 <div className="p-3">
                   {renderedFeatures.length === 0 ? (
                     <span className="italic">

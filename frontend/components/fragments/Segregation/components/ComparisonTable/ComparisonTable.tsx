@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import clsx from "clsx";
 
 import LineGraph from "../Line/Line";
 import Pagination from "../Pagination/Pagination";
@@ -15,6 +16,7 @@ export default function Comparison({
   table,
   measure,
   maxschools,
+  year,
 }) {
   // Setting columns array
   const columns = [
@@ -182,9 +184,9 @@ export default function Comparison({
   });
 
   // function to return table JSX
-  const tableRows = (columns, segData) => {
+  const tableRows = (columns) => {
     return (
-      <table className="min-w-full">
+      <table className="min-w-full table-fixed">
         <thead className="border-b bg-gray-200">
           <tr>
             {columns.map((column) => {
@@ -204,7 +206,12 @@ export default function Comparison({
                   scope="col"
                   className="px-2 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider"
                 >
-                  <div className="flex flex-row">
+                  <div
+                    className={clsx({
+                      "flex flex-row": true,
+                      "justify-center": column.accessor != namelevel,
+                    })}
+                  >
                     <span className="px-1">{column.label}</span>
                     {column.accessor !== "checkbox" && (
                       <button onClick={() => handleSort(column.accessor)}>
@@ -275,27 +282,7 @@ export default function Comparison({
                           [column.accessor]: e.target.value,
                         }));
                   }
-                  if (column.accessor === "num_schools") {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: 1,
-                        }))
-                      : setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: 0,
-                        }))
-                      : setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: e.target.value,
-                        }));
-                  }
+
                   let searchVal = e.target.value === "" ? 0 : e.target.value;
                   handleSearch(
                     [searchVal, max[column.accessor]],
@@ -335,37 +322,7 @@ export default function Comparison({
                           [column.accessor]: e.target.value,
                         }));
                   }
-                  if (column.accessor === "num_schools") {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: maxschools,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else if (column.accessor === measure.accessor) {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: 1,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: 100,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  }
+
                   let searchVal = e.target.value === "" ? 100 : e.target.value;
                   handleSearch(
                     [min[column.accessor], searchVal],
@@ -375,17 +332,17 @@ export default function Comparison({
 
                 return (
                   <td>
-                    <div className="w-full px-2 py-1 flex flex-row justify-around">
+                    <div className="w-full px-2 py-1 flex flex-row justify-center">
                       <input
                         type="text"
-                        className="w-7 bg-gray-200 border rounded-md text-xs text-center"
+                        className="w-10 bg-gray-200 border rounded-md text-xs text-center mr-2"
                         placeholder={min[column.accessor]}
                         readOnly={false}
                         onChange={(e) => minSearch(e)}
                       />
                       <input
                         type="text"
-                        className="w-7 bg-gray-200 border rounded-md text-xs text-center"
+                        className="w-10 bg-gray-200 border rounded-md text-xs text-center"
                         placeholder={max[column.accessor]}
                         readOnly={false}
                         onChange={(e) => maxSearch(e)}
@@ -459,7 +416,7 @@ export default function Comparison({
     <>
       <div className="mb-10">
         <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
-          {tableRows(columns, segData)}
+          {tableRows(columns)}
         </div>
         <Pagination
           activePage={activePage}
@@ -470,7 +427,7 @@ export default function Comparison({
         />
       </div>
       <div className="w-full">
-        <LineGraph linedata={linedata} id={id} measure={measure} />
+        <LineGraph linedata={linedata} id={id} year={year} />
       </div>
     </>
   );

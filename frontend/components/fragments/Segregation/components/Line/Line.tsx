@@ -12,6 +12,9 @@ import {
 import { Line } from "react-chartjs-2";
 import { yearsData } from "../../../Selection/data";
 
+import { legendMargin } from "../../../../../charts";
+import { primaryColor } from "../../../../../constants";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,7 +25,7 @@ ChartJS.register(
   Legend
 );
 
-export default function LineGraph({ linedata, id }) {
+export default function LineGraph({ linedata, id, year }) {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
@@ -36,6 +39,23 @@ export default function LineGraph({ linedata, id }) {
         position: "right" as any,
         min: 0,
         max: 100,
+      },
+      x: {
+        stacked: true,
+        ticks: {
+          font: {
+            weight: (c) => {
+              if (c.tick.label === year) {
+                return "bold";
+              }
+            },
+          },
+          color: (c) => {
+            if (c.tick.label === year) {
+              return primaryColor;
+            }
+          },
+        },
       },
     },
   };
@@ -67,9 +87,5 @@ export default function LineGraph({ linedata, id }) {
     makeLines();
   }, [linedata, makeLines]);
 
-  return (
-    <div>
-      <Line options={options} data={data} className="w-full h-full" />
-    </div>
-  );
+  return <Line options={options} data={data} plugins={[legendMargin]} />;
 }

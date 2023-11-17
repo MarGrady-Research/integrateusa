@@ -73,6 +73,7 @@ export default function SegregationPage() {
               segData={segData}
               measure={measure}
               handleMeasure={handleMeasure}
+              year={year}
             />
           </div>
         )}

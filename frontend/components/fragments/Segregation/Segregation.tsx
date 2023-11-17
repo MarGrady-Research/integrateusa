@@ -10,7 +10,7 @@ import {
   selectSelectedName,
 } from "../../../store/selectSlice";
 
-export default function Segregation({ segData, measure, handleMeasure }) {
+export default function Segregation({ segData, measure, handleMeasure, year }) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
@@ -160,7 +160,7 @@ export default function Segregation({ segData, measure, handleMeasure }) {
           </p>
         </div>
 
-        <div>
+        <div className="h-96">
           <SegBar focus={focus} />
         </div>
       </div>
@@ -174,6 +174,7 @@ export default function Segregation({ segData, measure, handleMeasure }) {
         table={table}
         measure={measure}
         maxschools={maxschools}
+        year={year}
       />
     </>
   );
