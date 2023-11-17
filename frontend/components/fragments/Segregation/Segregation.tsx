@@ -110,21 +110,15 @@ export default function Segregation({ segData, measure, handleMeasure }) {
 
   return (
     <>
-      <div className="flex flex-row">
-        <span className="text-4xl">
-          <b>{title}</b>
-        </span>
-      </div>
+      <h1 className="text-4xl font-bold mb-5">{title}</h1>
 
-      <div className="flex flex-row justify-between pt-3">
-        <div className="text-xl flex flex-col justify-between text-justify text-sm ">
-          <br></br>
-          <span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 mb-10">
+        <div className="text-justify text-md lg:text-xl">
+          <p className="mb-4 lg:mb-6">
             We can measure segregation by comparing the makeup of schools
             attended by students in different racial groups.
-          </span>
-          <br />
-          <span>
+          </p>
+          <p className="mb-4 lg:mb-6">
             The typical{" "}
             <Select
               options={options}
@@ -151,30 +145,27 @@ export default function Segregation({ segData, measure, handleMeasure }) {
               {focus[selected.iso].toFixed(1)}% {selected.label}
             </b>
             .
-          </span>
-          <br />
-          <span>
+          </p>
+          <p className="mb-4 lg:mb-6">
             The typical non-{selected.label} student attends a school that is{" "}
             <b>
               {focus[selected.non].toFixed(1)}% {selected.label}
             </b>
             .
-          </span>
-          <br />
-          <span>
+          </p>
+          <p className="mb-4 lg:mb-6">
             The difference between these two numbers,{" "}
             <b>{focus[selected.value].toFixed(1)}%</b> is a measure of
             segregation for <b>{selected.label}</b> students.
-          </span>
-          <br />
+          </p>
         </div>
 
-        <div className="h-200 w-1/2">
+        <div>
           <SegBar focus={focus} />
         </div>
       </div>
 
-      <div className="pt-3 container">
+      <div className="container">
         <Comparison
           id={id}
           grade={grade}
