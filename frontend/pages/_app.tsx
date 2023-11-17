@@ -2,8 +2,10 @@ import React from "react";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { ThemeProvider } from "@mui/material/styles";
 
 import { wrapper } from "../store/store";
+import { theme } from "../styles/materialTheme";
 
 import "../styles/globals.css";
 
@@ -14,7 +16,9 @@ function MyApp({ Component, ...rest }: AppProps) {
   return (
     <Provider store={store}>
       <PersistGate persistor={store.__persistor} loading={<div />}>
-        <Component {...pageProps} />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </PersistGate>
     </Provider>
   );
