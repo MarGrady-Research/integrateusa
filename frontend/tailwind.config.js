@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
+import { primaryColor } from "./constants";
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -11,7 +13,7 @@ module.exports = {
         raleway: ["Raleway", "sans-serif"],
       },
       colors: {
-        primary: "rgb(66,120,196)",
+        primary: primaryColor,
         secondary: "rgb(252,136,55)",
         "line-red": "rgb(255, 99, 132)",
         asian: "#FF5050",

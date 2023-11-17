@@ -2,18 +2,9 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { legendMargin } from "../../../../../charts";
 
-const legendMargin = {
-  id: "legendMargin",
-  beforeInit: (chart) => {
-    const fitValue = chart.legend.fit;
-    chart.legend.fit = function fit() {
-      fitValue.bind(chart.legend)();
-      return (this.height += 10);
-    };
-  },
-};
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PieChart({ filterData }) {
   const groups = ["asian", "black", "hispanic", "other", "white"];

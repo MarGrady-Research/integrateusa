@@ -1,0 +1,1 @@
+export { primaryColor } from "./constants";

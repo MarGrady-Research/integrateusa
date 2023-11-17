@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade"; // can set ./TableYearGrade back to ./GradeLine to get line graph back
-import { selectGrade } from "../../../store/selectSlice";
+import { selectGrade, selectYear } from "../../../store/selectSlice";
 
 export default function Trends({ trendData }) {
   const grade = useSelector(selectGrade);
+  const year = useSelector(selectYear);
 
   /* calculate totals and percentages by race */
   for (let i = 0; i < trendData.length; i++) {
@@ -43,27 +44,21 @@ export default function Trends({ trendData }) {
   if (trendData.length > 0) {
     return (
       <>
-        <div className="flex flex-row">
-          <span className="text-2xl">Enrollment Trends by Race</span>
-        </div>
-
-        <div className="flex flex-wrap justify-apart h-full">
-          <div className="w-1/2 h-full pt-3">
-            <BarChart TrendData={trendData} grade={grade} />
+        <h2 className="text-2xl mb-4">Enrollment Trends by Race</h2>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 xl:gap-5 mb-10">
+          <div>
+            <div className="lg:w-5/6 xl:w-full mx-auto">
+              <BarChart TrendData={trendData} grade={grade} year={year} />
+            </div>
           </div>
-
-          <div className="w-1/2 h-full py-3">
-            <BarChart100 TrendData={trendData} grade={grade} />
+          <div>
+            <div className="lg:w-5/6 xl:w-full mx-auto">
+              <BarChart100 TrendData={trendData} grade={grade} year={year} />
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-row">
-          <span className="text-2xl">Enrollment Trends by Grade</span>
-        </div>
-
-        <div className="flex flex-row">
-          <TableYearGrade TrendData={trendData} />
-        </div>
+        <h2 className="text-2xl mb-4">Enrollment Trends by Grade</h2>
+        <TableYearGrade TrendData={trendData} />
       </>
     );
   }

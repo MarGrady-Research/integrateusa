@@ -11,6 +11,8 @@ import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Select from "react-select";
 
+import { legendMargin } from "../../../../../charts";
+
 ChartJS.register(
   LinearScale,
   BarElement,
@@ -19,17 +21,6 @@ ChartJS.register(
   Legend,
   zoomPlugin
 );
-
-const legendMargin = {
-  id: "legendMargin",
-  beforeInit: (chart) => {
-    const fitValue = chart.legend.fit;
-    chart.legend.fit = function fit() {
-      fitValue.bind(chart.legend)();
-      return (this.height += 10);
-    };
-  },
-};
 
 export default function BarChart({ filterData }) {
   const bar = (data, group) => {

@@ -10,6 +10,9 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
+import { legendMargin } from "../../../../../charts";
+import { primaryColor } from "../../../../../constants";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,7 +23,7 @@ ChartJS.register(
 );
 
 /* 100% Bar Chart */
-export default function BarChart100({ TrendData, grade }) {
+export default function BarChart100({ TrendData, grade, year }) {
   let sortedData = TrendData.filter((e) => e.grade === grade).sort((a, b) => {
     return a["year"] - b["year"];
   });
@@ -74,9 +77,23 @@ export default function BarChart100({ TrendData, grade }) {
       },
       x: {
         stacked: true,
+        ticks: {
+          font: {
+            weight: (c) => {
+              if (c.tick.label === year) {
+                return "bold";
+              }
+            },
+          },
+          color: (c) => {
+            if (c.tick.label === year) {
+              return primaryColor;
+            }
+          },
+        },
       },
     },
   };
 
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} plugins={[legendMargin]} />;
 }
