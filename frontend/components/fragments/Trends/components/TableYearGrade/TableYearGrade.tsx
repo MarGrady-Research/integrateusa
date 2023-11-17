@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import Button from "@mui/material/Button";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
@@ -44,8 +45,12 @@ export default function TableYearGrade({
     );
   };
 
-  const tableBody = (years, grades) =>
-    years.map((year) => (
+  const yearIndex = yearsData.findIndex((y) => y.value === selectedYear);
+  const isInDecade = yearIndex <= 9;
+  const yearsToDisplay = isInDecade ? yearsData.slice(0, 9) : yearsData;
+
+  const tableBody = () => {
+    return yearsToDisplay.map((year) => (
       <tr key={year.value}>
         <td
           className={clsx({
@@ -55,18 +60,26 @@ export default function TableYearGrade({
         >
           {year.label}
         </td>
-        {grades.map((grade) => renderCell(grade.value, year.value))}
+        {gradesTableData.map((grade) => renderCell(grade.value, year.value))}
       </tr>
     ));
+  };
 
   return (
-    <div className="shadow border border-gray-200 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-200">{tableHeader(gradesTableData)}</thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {tableBody(yearsData, gradesTableData)}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="shadow border border-gray-200 overflow-x-auto mb-4">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-200">{tableHeader(gradesTableData)}</thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {tableBody()}
+          </tbody>
+        </table>
+      </div>
+      {isInDecade && (
+        <div className="flex justify-end">
+          <Button variant="outlined">View more</Button>
+        </div>
+      )}
+    </>
   );
 }
