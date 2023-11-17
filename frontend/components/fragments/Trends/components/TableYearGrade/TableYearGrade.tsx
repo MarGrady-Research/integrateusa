@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import Button from "@mui/material/Button";
 
@@ -10,6 +10,10 @@ export default function TableYearGrade({
   selectedGrade,
   selectedYear,
 }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => setExpanded((e) => !e);
+
   const tableHeader = (e) => (
     <tr>
       <th scope="col" className="school-ch"></th>
@@ -47,7 +51,8 @@ export default function TableYearGrade({
 
   const yearIndex = yearsData.findIndex((y) => y.value === selectedYear);
   const isInDecade = yearIndex <= 9;
-  const yearsToDisplay = isInDecade ? yearsData.slice(0, 9) : yearsData;
+  const yearsToDisplay =
+    isInDecade && !expanded ? yearsData.slice(0, 9) : yearsData;
 
   const tableBody = () => {
     return yearsToDisplay.map((year) => (
@@ -76,8 +81,10 @@ export default function TableYearGrade({
         </table>
       </div>
       {isInDecade && (
-        <div className="flex justify-end">
-          <Button variant="outlined">View more</Button>
+        <div className="flex justify-end" onClick={toggleExpanded}>
+          <Button variant="outlined">
+            {expanded ? "View less" : "View more"}
+          </Button>
         </div>
       )}
     </>
