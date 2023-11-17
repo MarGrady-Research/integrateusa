@@ -47,14 +47,14 @@ export default function Header() {
           <NavLink url="/about" title="About" />
         </nav>
         <Link href="http://www.margrady.com/">
-          <span className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+          <div className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
             <Image
               src="/mg-logo-text.png"
               alt="MarGrady Logo"
               width={250}
               height={60}
             />
-          </span>
+          </div>
         </Link>
       </div>
     </header>
