@@ -32,66 +32,58 @@ export default function SchoolLevelTable({ schoolLevel }) {
   };
 
   return (
-    <div className="mt-2 container flex flex-col">
-      <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-2 lg:-mx-4">
-        <div className="py-2 align -middle inline-block min-w-full">
-          <div className="shadow overflow-hidden border border-gray-200">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-200">
-                  <tr>
-                    <th scope="col" className="school-th">
-                      School Type
-                    </th>
-                    <th scope="col" className="school-th">
-                      # of Schools
-                    </th>
-                    <th scope="col" className="school-th">
-                      % of Schools
-                    </th>
-                    <th scope="col" className="school-th">
-                      # of Students
-                    </th>
-                    <th scope="col" className="school-th">
-                      % of Students
-                    </th>
-                  </tr>
-                </thead>
+    <div className="shadow overflow-hidden border border-gray-200">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-200">
+          <tr>
+            <th scope="col" className="school-th">
+              School Type
+            </th>
+            <th scope="col" className="school-th">
+              # of Schools
+            </th>
+            <th scope="col" className="school-th">
+              % of Schools
+            </th>
+            <th scope="col" className="school-th">
+              # of Students
+            </th>
+            <th scope="col" className="school-th">
+              % of Students
+            </th>
+          </tr>
+        </thead>
 
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {tableRows("ES")}
-                  {tableRows("ESMS")}
-                  {tableRows("MS")}
-                  {tableRows("MSHS")}
-                  {tableRows("HS")}
-                  {tableRows("K12")}
-                  {tableRows("Other")}
-                </tbody>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {tableRows("ES")}
+          {tableRows("ESMS")}
+          {tableRows("MS")}
+          {tableRows("MSHS")}
+          {tableRows("HS")}
+          {tableRows("K12")}
+          {tableRows("Other")}
+        </tbody>
 
-                <tfoot className="border-b">
-                  <tr>
-                    <td scope="col" className="school-td font-medium py-4">
-                      Total
-                    </td>
-                    <td scope="col" className="school-td font-medium py-4">
-                      {schoolLevel.Total.all_schools.toLocaleString()}
-                    </td>
-                    <td scope="col" className="school-td font-medium py-4">
-                      100
-                    </td>
-                    <td scope="col" className="school-td font-medium py-4">
-                      {schoolLevel.Total.all_students.toLocaleString()}
-                    </td>
-                    <td scope="col" className="school-td font-medium py-4">
-                      100
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+        <tfoot className="border-b">
+          <tr>
+            <td scope="col" className="school-td font-medium py-4">
+              Total
+            </td>
+            <td scope="col" className="school-td font-medium py-4">
+              {schoolLevel.Total.all_schools.toLocaleString()}
+            </td>
+            <td scope="col" className="school-td font-medium py-4">
+              100
+            </td>
+            <td scope="col" className="school-td font-medium py-4">
+              {schoolLevel.Total.all_students.toLocaleString()}
+            </td>
+            <td scope="col" className="school-td font-medium py-4">
+              100
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }

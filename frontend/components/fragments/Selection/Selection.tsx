@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function Selection({ getData, isLoading }: Props) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
 

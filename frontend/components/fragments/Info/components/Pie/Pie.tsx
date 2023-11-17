@@ -4,6 +4,17 @@ import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const legendMargin = {
+  id: "legendMargin",
+  beforeInit: (chart) => {
+    const fitValue = chart.legend.fit;
+    chart.legend.fit = function fit() {
+      fitValue.bind(chart.legend)();
+      return (this.height += 10);
+    };
+  },
+};
+
 export default function PieChart({ filterData }) {
   const groups = ["asian", "black", "hispanic", "other", "white"];
 
@@ -27,6 +38,7 @@ export default function PieChart({ filterData }) {
 
   const options = {
     reponsive: true,
+    maintainAspectRatio: false,
     plugins: {
       tooltip: {
         enabled: true,
@@ -60,5 +72,5 @@ export default function PieChart({ filterData }) {
     ],
   };
 
-  return <Pie data={data} options={options} />;
+  return <Pie data={data} options={options} plugins={[legendMargin]} />;
 }

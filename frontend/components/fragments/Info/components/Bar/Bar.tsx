@@ -20,6 +20,17 @@ ChartJS.register(
   zoomPlugin
 );
 
+const legendMargin = {
+  id: "legendMargin",
+  beforeInit: (chart) => {
+    const fitValue = chart.legend.fit;
+    chart.legend.fit = function fit() {
+      fitValue.bind(chart.legend)();
+      return (this.height += 10);
+    };
+  },
+};
+
 export default function BarChart({ filterData }) {
   const bar = (data, group) => {
     return data.map((e) => e[group]);
@@ -148,12 +159,16 @@ export default function BarChart({ filterData }) {
 
   return (
     <>
-      <Select
-        placeholder="Sort by..."
-        options={sortOptions}
-        onChange={(e) => sortData(e.value)}
-      />
-      <Bar data={data} options={options as any} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 mb-4">
+        <Select
+          placeholder="Sort by..."
+          options={sortOptions}
+          onChange={(e) => sortData(e.value)}
+        />
+      </div>
+      <div className="lg:w-5/6 mx-auto">
+        <Bar data={data} options={options as any} plugins={[legendMargin]} />
+      </div>
     </>
   );
 }

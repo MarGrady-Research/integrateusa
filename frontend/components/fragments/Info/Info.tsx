@@ -1,11 +1,14 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
+import clsx from "clsx";
 
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
 import { selectId, selectBounds } from "../../../store/selectSlice";
+
+import { container } from "./Info.module.scss";
 
 const BarChart = dynamic(() => import("./components/Bar"), {
   ssr: false,
@@ -37,33 +40,23 @@ export default function Info({ infoData, title }) {
   return (
     <>
       {filterData.length > 0 && title && (
-        <div className="flex flex-row mx-auto">
-          <span className="text-4xl">
-            <b>{title}</b>
-          </span>
-        </div>
+        <h1 className="text-4xl font-bold mb-5">{title}</h1>
       )}
-      <div className="flex flex-row mt-auto">
-        <span className="text-2xl pt-4 pb-2">Overview</span>
-      </div>
-      <div className="container relative flex flex-wrap justify-between pb-5">
-        <div className="w-1/3 h-300">
+      <h2 className="text-2xl mb-4">Overview</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-5 mb-10">
+        <div className={clsx("hidden lg:block", container)}>
           <InsetMap id={id} bounds={bounds} />
         </div>
-        <div className="w-1/3 h-full">
+        <div className={clsx(container, "col-span-2")}>
           <SchoolLevelTable schoolLevel={schoolLevel} />
         </div>
-        <div className="w-1/4 h-full">
+        <div className={container}>
           <PieChart filterData={filterData} />
         </div>
       </div>
-      <div className="pb-5">
-        <div className="flex flex-row mx-auto">
-          <span className="text-2xl pb-2">Race Breakdown by School</span>
-        </div>
-        <div className="h-100 w-100 overflow-auto">
-          <BarChart filterData={filterData} />
-        </div>
+      <div className="mb-10">
+        <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
+        <BarChart filterData={filterData} />
       </div>
     </>
   );
