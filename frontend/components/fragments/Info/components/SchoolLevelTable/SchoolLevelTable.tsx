@@ -32,7 +32,7 @@ export default function SchoolLevelTable({ schoolLevel }) {
   };
 
   return (
-    <div className="shadow overflow-hidden border border-gray-200">
+    <div className="shadow overflow-x-auto border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-200">
           <tr>

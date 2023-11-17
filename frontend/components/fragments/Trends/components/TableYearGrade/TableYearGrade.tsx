@@ -1,63 +1,72 @@
-// JLM This is copied from the GradeLines.js and SchoolLevelTable.js
-
 import React from "react";
+import clsx from "clsx";
+
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
 
-export default function TableYearGrade({ TrendData }) {
-  /* tableHeader: function to create header row across the top of the table */
+export default function TableYearGrade({
+  TrendData,
+  selectedGrade,
+  selectedYear,
+}) {
   const tableHeader = (e) => (
     <tr>
       <th scope="col" className="school-ch"></th>
       {e.map((element) => (
         <th scope="col" className="school-th" key={element.value}>
-          {" "}
-          {element.label}{" "}
+          {element.label}
         </th>
       ))}
     </tr>
   );
 
-  /* tableBody: function to create rows and columns for body of table */
-  const tableBody = (e, f) =>
-    e.map((elementRow) => (
-      <tr key={elementRow.value}>
-        <td className="school-ch"> {elementRow.label} </td>
-        {f.map((elementCol) => (
-          <td className="school-td" key={elementCol.value}>
-            {" "}
-            {TrendData.filter(
-              (e) => e.year === elementRow.value && e.grade === elementCol.value
-            )[0]
-              ? TrendData.filter(
-                  (e) =>
-                    e.year === elementRow.value && e.grade === elementCol.value
-                )[0]["total"].toLocaleString()
-              : "-"}
-          </td>
-        ))}
+  const renderCell = (grade, year) => {
+    let content = "-";
+
+    const cells = TrendData.filter((e) => e.year === year && e.grade === grade);
+
+    if (cells.length > 0) {
+      content = cells[0]["total"].toLocaleString();
+    }
+
+    const isSelectedYear = year === selectedYear;
+    const isSelectedGrade = grade === selectedGrade;
+
+    const isSelected = isSelectedGrade || isSelectedYear;
+
+    return (
+      <td
+        className={clsx({ "school-td": true, "bg-gray-100": isSelected })}
+        key={grade}
+      >
+        {content}
+      </td>
+    );
+  };
+
+  const tableBody = (years, grades) =>
+    years.map((year) => (
+      <tr key={year.value}>
+        <td
+          className={clsx({
+            "school-ch": true,
+            "bg-gray-100": year.value === selectedYear,
+          })}
+        >
+          {year.label}
+        </td>
+        {grades.map((grade) => renderCell(grade.value, year.value))}
       </tr>
     ));
-  /* return statement, which calls the functions */
-  return (
-    <div className="mt-2 container flex flex-col">
-      <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-2 lg:-mx-4">
-        <div className="py-2 align -middle inline-block min-w-full">
-          <div className="shadow overflow-hidden border border-gray-200">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-200">
-                  {tableHeader(gradesTableData)}
-                </thead>
 
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {tableBody(yearsData, gradesTableData)}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+  return (
+    <div className="shadow border border-gray-200 overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-200">{tableHeader(gradesTableData)}</thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {tableBody(yearsData, gradesTableData)}
+        </tbody>
+      </table>
     </div>
   );
 }

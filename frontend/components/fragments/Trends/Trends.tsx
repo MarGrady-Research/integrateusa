@@ -58,7 +58,11 @@ export default function Trends({ trendData }) {
           </div>
         </div>
         <h2 className="text-2xl mb-4">Enrollment Trends by Grade</h2>
-        <TableYearGrade TrendData={trendData} />
+        <TableYearGrade
+          TrendData={trendData}
+          selectedGrade={grade}
+          selectedYear={year}
+        />
       </>
     );
   }
