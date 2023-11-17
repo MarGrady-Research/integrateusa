@@ -12,7 +12,7 @@ export default function Pagination({
 
   return (
     <>
-      <div className="pt-3 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex-1 flex justify-between sm:hidden">
           <button
             onClick={() => setActivePage(activePage - 1)}

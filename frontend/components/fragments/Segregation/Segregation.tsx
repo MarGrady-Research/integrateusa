@@ -165,18 +165,16 @@ export default function Segregation({ segData, measure, handleMeasure }) {
         </div>
       </div>
 
-      <div className="container">
-        <Comparison
-          id={id}
-          grade={grade}
-          segData={segData}
-          idlevel={idlevel}
-          namelevel={namelevel}
-          table={table}
-          measure={measure}
-          maxschools={maxschools}
-        />
-      </div>
+      <Comparison
+        id={id}
+        grade={grade}
+        segData={segData}
+        idlevel={idlevel}
+        namelevel={namelevel}
+        table={table}
+        measure={measure}
+        maxschools={maxschools}
+      />
     </>
   );
 }

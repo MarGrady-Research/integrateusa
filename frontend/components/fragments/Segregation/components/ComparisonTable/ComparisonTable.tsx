@@ -457,21 +457,10 @@ export default function Comparison({
 
   return (
     <>
-      <div
-        className={`w-full transition-width transition-duration-500 ease-in`}
-      >
-        <div className="w-full mt-2 container flex flex-col">
-          <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
-            <div className="py-2 align -middle inline-block min-w-full sm:px-6 lg:px-8">
-              <div className="shadow overflow-hidden border border-gray-200 sm:rounded-lg">
-                <div className="overflow-x-auto">
-                  {tableRows(columns, segData)}
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="mb-10">
+        <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
+          {tableRows(columns, segData)}
         </div>
-
         <Pagination
           activePage={activePage}
           count={count}
@@ -480,13 +469,8 @@ export default function Comparison({
           setActivePage={setActivePage}
         />
       </div>
-
-      <div
-        className={`w-full  flex flex-1 h-full transition-width transition-duration-500 ease-in`}
-      >
-        <div className="w-full">
-          <LineGraph linedata={linedata} id={id} measure={measure} />
-        </div>
+      <div className="w-full">
+        <LineGraph linedata={linedata} id={id} measure={measure} />
       </div>
     </>
   );
