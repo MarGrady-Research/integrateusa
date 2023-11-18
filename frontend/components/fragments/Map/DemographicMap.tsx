@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
-import axios from "axios";
+import React, { useState, useCallback, useRef } from "react";
 import Map, {
   Layer,
   Source,
@@ -14,33 +13,9 @@ import MapPie from "./components/MapPies";
 import Slideover from "./components/Slideover";
 import SummaryPie from "./components/SummaryPie";
 import AreaPie from "./components/AreaPie";
-import Loader from "../../fragments/Loader";
 
-export default function DemographicMap() {
-  const [isLoading, setIsLoading] = useState(false);
-
+export default function DemographicMap({ mapData }) {
   const [cursor, setCursor] = useState("auto");
-
-  const [data, setData] = useState({
-    type: "FeatureCollection" as "FeatureCollection",
-    features: [],
-  });
-
-  const getData = async () => {
-    setIsLoading(true);
-    const response = await axios.get(
-      "http://localhost:8000/api/mapschools/?q=2022"
-    );
-    setData((d) => ({
-      ...d,
-      features: response.data.map((e) => e.map_data),
-    }));
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const [stateVisible, setStateVisible] = useState("none");
 
@@ -261,458 +236,448 @@ export default function DemographicMap() {
     clickInfo.feature.properties.STUSPS ? "STUSPS" : "GEOID";
 
   return (
-    <>
-      {isLoading ? (
-        <div className="pt-5">
-          <Loader />
-        </div>
-      ) : (
-        <>
-          <div className="relative w-full h-[calc(100vh-66px)]">
-            <Map
-              ref={mapRef}
-              initialViewState={{
-                longitude: -100,
-                latitude: 40,
-                zoom: 4,
-              }}
-              style={{ position: "relative", width: "100%", height: "100%" }}
-              mapStyle="mapbox://styles/mapbox/light-v10"
-              mapboxAccessToken={mapbox_token}
-              attributionControl={true}
-              interactiveLayerIds={[
-                "schools",
-                "district-boundary",
-                "county-boundary",
-                "state-boundary",
-              ]}
-              cursor={cursor}
-              onDragStart={onMouseOut}
-              onDragEnd={querySchools}
-              onLoad={querySchools}
-              onMouseMove={handleHover}
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-              onMouseOut={onMouseOut}
-              onResize={querySchools}
-              onZoomStart={onMouseOut}
-              onZoomEnd={querySchools}
-            >
-              <GeolocateControl position="top-left" />
-              <FullscreenControl position="top-left" />
-              <NavigationControl position="top-left" />
-              <Source
-                id="district-boundary-source"
-                type="vector"
-                url="mapbox://theokaufman.45uz283x"
-              >
-                <Layer {...districtLayer} />
-              </Source>
-              <Source
-                id="county-boundary-source"
-                type="vector"
-                url="mapbox://theokaufman.6i9q4by5"
-              >
-                <Layer {...countyLayer} />
-              </Source>
-              <Source
-                id="state-boundary-source"
-                type="vector"
-                url="mapbox://theokaufman.a7l31auu"
-              >
-                <Layer {...stateLayer} />
-              </Source>
-              <Source type="geojson" data={data}>
-                <Layer {...LayerProps} />
-              </Source>
-              {(selectedSchool || selectedArea) && (
-                <div
-                  style={{
-                    left: clickInfo.x + 20,
-                    top: clickInfo.y + 20,
-                    zIndex: 10,
-                    position: "absolute",
-                    maxWidth: "300px",
-                  }}
-                  className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
-                >
-                  {selectedSchool && (
-                    <div className="p-3">
-                      <span className="overflow-ellipsis">
-                        <b>{selectedSchool}</b>
-                      </span>
-                      <br />
-                      <span>
-                        <b>District: </b>
-                        {clickInfo.feature.properties.dist_name}
-                      </span>
-                      <br />
-                      <span>
-                        <b>County: </b>
-                        {clickInfo.feature.properties.county_name}
-                      </span>
-                      <br />
-                      <span>
-                        <b>{clickInfo.feature.properties.year} Enrollment: </b>{" "}
-                        {clickInfo.feature.properties.tot_enr.toLocaleString()}
-                      </span>
-                      <br />
-                      <span className="text-asian">
-                        <b>Asian:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (clickInfo.feature.properties.as /
-                              clickInfo.feature.properties.tot_enr) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-blackstudents">
-                        <b>Black:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (clickInfo.feature.properties.bl /
-                              clickInfo.feature.properties.tot_enr) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-hispanic">
-                        <b>Hispanic:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (clickInfo.feature.properties.hi /
-                              clickInfo.feature.properties.tot_enr) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-other">
-                        <b>Other:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (clickInfo.feature.properties.or /
-                              clickInfo.feature.properties.tot_enr) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-whitestudents">
-                        <b>White:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (clickInfo.feature.properties.wh /
-                              clickInfo.feature.properties.tot_enr) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <div className="w-1/2 justify-center pt-2 mx-auto">
-                        <MapPie clickInfo={clickInfo} />
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedArea && (
-                    <div className="p-3">
-                      <span>
-                        <b>{selectedArea}</b>
-                      </span>
-                      <br />
-                      <span>
-                        Total Schools:{" "}
-                        {data.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .length.toLocaleString()}
-                      </span>
-                      <br />
-                      <span>
-                        Students Enrolled:{" "}
-                        {data.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)
-                          .toLocaleString()}
-                      </span>
-                      <br />
-                      <span className="text-asian">
-                        <b>Asian:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (data.features
-                              .filter(
-                                (e) =>
-                                  e.properties[areaID()] ===
-                                  clickInfo.feature.properties[layerProp()]
-                              )
-                              .map((e) => e.properties.as)
-                              .reduce((a, b) => a + b, 0) /
-                              data.features
-                                .filter(
-                                  (e) =>
-                                    e.properties[areaID()] ===
-                                    clickInfo.feature.properties[layerProp()]
-                                )
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-blackstudents">
-                        <b>Black:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (data.features
-                              .filter(
-                                (e) =>
-                                  e.properties[areaID()] ===
-                                  clickInfo.feature.properties[layerProp()]
-                              )
-                              .map((e) => e.properties.bl)
-                              .reduce((a, b) => a + b, 0) /
-                              data.features
-                                .filter(
-                                  (e) =>
-                                    e.properties[areaID()] ===
-                                    clickInfo.feature.properties[layerProp()]
-                                )
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-hispanic">
-                        <b>Hispanic:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (data.features
-                              .filter(
-                                (e) =>
-                                  e.properties[areaID()] ===
-                                  clickInfo.feature.properties[layerProp()]
-                              )
-                              .map((e) => e.properties.hi)
-                              .reduce((a, b) => a + b, 0) /
-                              data.features
-                                .filter(
-                                  (e) =>
-                                    e.properties[areaID()] ===
-                                    clickInfo.feature.properties[layerProp()]
-                                )
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-other">
-                        <b>Other:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (data.features
-                              .filter(
-                                (e) =>
-                                  e.properties[areaID()] ===
-                                  clickInfo.feature.properties[layerProp()]
-                              )
-                              .map((e) => e.properties.or)
-                              .reduce((a, b) => a + b, 0) /
-                              data.features
-                                .filter(
-                                  (e) =>
-                                    e.properties[areaID()] ===
-                                    clickInfo.feature.properties[layerProp()]
-                                )
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-whitestudents">
-                        <b>White:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (data.features
-                              .filter(
-                                (e) =>
-                                  e.properties[areaID()] ===
-                                  clickInfo.feature.properties[layerProp()]
-                              )
-                              .map((e) => e.properties.wh)
-                              .reduce((a, b) => a + b, 0) /
-                              data.features
-                                .filter(
-                                  (e) =>
-                                    e.properties[areaID()] ===
-                                    clickInfo.feature.properties[layerProp()]
-                                )
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <div className="w-1/2 justify-center pt-2 mx-auto">
-                        <AreaPie
-                          areaID={areaID}
-                          layerProp={layerProp}
-                          piedata={data}
-                          clickInfo={clickInfo}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md hidden lg:block">
-                <div className="p-3">
-                  {renderedFeatures.length === 0 ? (
-                    <span className="italic">
-                      Zoom or drag the map to see school data here!
-                    </span>
-                  ) : (
-                    <>
-                      <span>
-                        <b>Schools in View: </b>
-                        {renderedFeatures
-                          ? renderedFeatures.length.toLocaleString()
-                          : 0}
-                      </span>
-                      <br />
-                      <span>
-                        <b>Students Enrolled: </b>
-                        {renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)
-                          .toLocaleString()}
-                      </span>
-                      <br />
-                      <span className="text-asian">
-                        <b>Asian:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (renderedFeatures
-                              .map((e) => e.properties.as)
-                              .reduce((a, b) => a + b, 0) /
-                              renderedFeatures
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-blackstudents">
-                        <b>Black:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (renderedFeatures
-                              .map((e) => e.properties.bl)
-                              .reduce((a, b) => a + b, 0) /
-                              renderedFeatures
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-hispanic">
-                        <b>Hispanic:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (renderedFeatures
-                              .map((e) => e.properties.hi)
-                              .reduce((a, b) => a + b, 0) /
-                              renderedFeatures
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-other">
-                        <b>Other:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (renderedFeatures
-                              .map((e) => e.properties.or)
-                              .reduce((a, b) => a + b, 0) /
-                              renderedFeatures
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <span className="text-whitestudents">
-                        <b>White:</b>{" "}
-                        <span className="text-white">
-                          {(
-                            (renderedFeatures
-                              .map((e) => e.properties.wh)
-                              .reduce((a, b) => a + b, 0) /
-                              renderedFeatures
-                                .map((e) => e.properties.tot_enr)
-                                .reduce((a, b) => a + b, 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </span>
-                      <br />
-                      <div className="w-1/2 justify-center pt-2 mx-auto">
-                        <SummaryPie renderedFeatures={renderedFeatures} />
-                      </div>
-                    </>
-                  )}
+    <div className="relative w-full h-[calc(100vh-66px)]">
+      <Map
+        ref={mapRef}
+        initialViewState={{
+          longitude: -100,
+          latitude: 40,
+          zoom: 4,
+        }}
+        style={{ position: "relative", width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/light-v10"
+        mapboxAccessToken={mapbox_token}
+        attributionControl={true}
+        interactiveLayerIds={[
+          "schools",
+          "district-boundary",
+          "county-boundary",
+          "state-boundary",
+        ]}
+        cursor={cursor}
+        onDragStart={onMouseOut}
+        onDragEnd={querySchools}
+        onLoad={querySchools}
+        onMouseMove={handleHover}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseOut={onMouseOut}
+        onResize={querySchools}
+        onZoomStart={onMouseOut}
+        onZoomEnd={querySchools}
+      >
+        <GeolocateControl position="top-left" />
+        <FullscreenControl position="top-left" />
+        <NavigationControl position="top-left" />
+        <Source
+          id="district-boundary-source"
+          type="vector"
+          url="mapbox://theokaufman.45uz283x"
+        >
+          <Layer {...districtLayer} />
+        </Source>
+        <Source
+          id="county-boundary-source"
+          type="vector"
+          url="mapbox://theokaufman.6i9q4by5"
+        >
+          <Layer {...countyLayer} />
+        </Source>
+        <Source
+          id="state-boundary-source"
+          type="vector"
+          url="mapbox://theokaufman.a7l31auu"
+        >
+          <Layer {...stateLayer} />
+        </Source>
+        <Source type="geojson" data={mapData}>
+          <Layer {...LayerProps} />
+        </Source>
+        {(selectedSchool || selectedArea) && (
+          <div
+            style={{
+              left: clickInfo.x + 20,
+              top: clickInfo.y + 20,
+              zIndex: 10,
+              position: "absolute",
+              maxWidth: "300px",
+            }}
+            className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
+          >
+            {selectedSchool && (
+              <div className="p-3">
+                <span className="overflow-ellipsis">
+                  <b>{selectedSchool}</b>
+                </span>
+                <br />
+                <span>
+                  <b>District: </b>
+                  {clickInfo.feature.properties.dist_name}
+                </span>
+                <br />
+                <span>
+                  <b>County: </b>
+                  {clickInfo.feature.properties.county_name}
+                </span>
+                <br />
+                <span>
+                  <b>{clickInfo.feature.properties.year} Enrollment: </b>{" "}
+                  {clickInfo.feature.properties.tot_enr.toLocaleString()}
+                </span>
+                <br />
+                <span className="text-asian">
+                  <b>Asian:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (clickInfo.feature.properties.as /
+                        clickInfo.feature.properties.tot_enr) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-blackstudents">
+                  <b>Black:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (clickInfo.feature.properties.bl /
+                        clickInfo.feature.properties.tot_enr) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-hispanic">
+                  <b>Hispanic:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (clickInfo.feature.properties.hi /
+                        clickInfo.feature.properties.tot_enr) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-other">
+                  <b>Other:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (clickInfo.feature.properties.or /
+                        clickInfo.feature.properties.tot_enr) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-whitestudents">
+                  <b>White:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (clickInfo.feature.properties.wh /
+                        clickInfo.feature.properties.tot_enr) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                  <MapPie clickInfo={clickInfo} />
                 </div>
               </div>
-            </Map>
-            <Slideover
-              handleVisibility={handleVisibility}
-              handleBounds={handleBounds}
-            />
+            )}
+
+            {selectedArea && (
+              <div className="p-3">
+                <span>
+                  <b>{selectedArea}</b>
+                </span>
+                <br />
+                <span>
+                  Total Schools:{" "}
+                  {mapData.features
+                    .filter(
+                      (e) =>
+                        e.properties[areaID()] ===
+                        clickInfo.feature.properties[layerProp()]
+                    )
+                    .length.toLocaleString()}
+                </span>
+                <br />
+                <span>
+                  Students Enrolled:{" "}
+                  {mapData.features
+                    .filter(
+                      (e) =>
+                        e.properties[areaID()] ===
+                        clickInfo.feature.properties[layerProp()]
+                    )
+                    .map((e) => e.properties.tot_enr)
+                    .reduce((a, b) => a + b, 0)
+                    .toLocaleString()}
+                </span>
+                <br />
+                <span className="text-asian">
+                  <b>Asian:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (mapData.features
+                        .filter(
+                          (e) =>
+                            e.properties[areaID()] ===
+                            clickInfo.feature.properties[layerProp()]
+                        )
+                        .map((e) => e.properties.as)
+                        .reduce((a, b) => a + b, 0) /
+                        mapData.features
+                          .filter(
+                            (e) =>
+                              e.properties[areaID()] ===
+                              clickInfo.feature.properties[layerProp()]
+                          )
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-blackstudents">
+                  <b>Black:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (mapData.features
+                        .filter(
+                          (e) =>
+                            e.properties[areaID()] ===
+                            clickInfo.feature.properties[layerProp()]
+                        )
+                        .map((e) => e.properties.bl)
+                        .reduce((a, b) => a + b, 0) /
+                        mapData.features
+                          .filter(
+                            (e) =>
+                              e.properties[areaID()] ===
+                              clickInfo.feature.properties[layerProp()]
+                          )
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-hispanic">
+                  <b>Hispanic:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (mapData.features
+                        .filter(
+                          (e) =>
+                            e.properties[areaID()] ===
+                            clickInfo.feature.properties[layerProp()]
+                        )
+                        .map((e) => e.properties.hi)
+                        .reduce((a, b) => a + b, 0) /
+                        mapData.features
+                          .filter(
+                            (e) =>
+                              e.properties[areaID()] ===
+                              clickInfo.feature.properties[layerProp()]
+                          )
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-other">
+                  <b>Other:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (mapData.features
+                        .filter(
+                          (e) =>
+                            e.properties[areaID()] ===
+                            clickInfo.feature.properties[layerProp()]
+                        )
+                        .map((e) => e.properties.or)
+                        .reduce((a, b) => a + b, 0) /
+                        mapData.features
+                          .filter(
+                            (e) =>
+                              e.properties[areaID()] ===
+                              clickInfo.feature.properties[layerProp()]
+                          )
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-whitestudents">
+                  <b>White:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (mapData.features
+                        .filter(
+                          (e) =>
+                            e.properties[areaID()] ===
+                            clickInfo.feature.properties[layerProp()]
+                        )
+                        .map((e) => e.properties.wh)
+                        .reduce((a, b) => a + b, 0) /
+                        mapData.features
+                          .filter(
+                            (e) =>
+                              e.properties[areaID()] ===
+                              clickInfo.feature.properties[layerProp()]
+                          )
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                  <AreaPie
+                    areaID={areaID}
+                    layerProp={layerProp}
+                    piedata={mapData}
+                    clickInfo={clickInfo}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        </>
-      )}
-    </>
+        )}
+        <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md hidden lg:block">
+          <div className="p-3">
+            {renderedFeatures.length === 0 ? (
+              <span className="italic">
+                Zoom or drag the map to see school data here!
+              </span>
+            ) : (
+              <>
+                <span>
+                  <b>Schools in View: </b>
+                  {renderedFeatures
+                    ? renderedFeatures.length.toLocaleString()
+                    : 0}
+                </span>
+                <br />
+                <span>
+                  <b>Students Enrolled: </b>
+                  {renderedFeatures
+                    .map((e) => e.properties.tot_enr)
+                    .reduce((a, b) => a + b, 0)
+                    .toLocaleString()}
+                </span>
+                <br />
+                <span className="text-asian">
+                  <b>Asian:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (renderedFeatures
+                        .map((e) => e.properties.as)
+                        .reduce((a, b) => a + b, 0) /
+                        renderedFeatures
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-blackstudents">
+                  <b>Black:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (renderedFeatures
+                        .map((e) => e.properties.bl)
+                        .reduce((a, b) => a + b, 0) /
+                        renderedFeatures
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-hispanic">
+                  <b>Hispanic:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (renderedFeatures
+                        .map((e) => e.properties.hi)
+                        .reduce((a, b) => a + b, 0) /
+                        renderedFeatures
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-other">
+                  <b>Other:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (renderedFeatures
+                        .map((e) => e.properties.or)
+                        .reduce((a, b) => a + b, 0) /
+                        renderedFeatures
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <span className="text-whitestudents">
+                  <b>White:</b>{" "}
+                  <span className="text-white">
+                    {(
+                      (renderedFeatures
+                        .map((e) => e.properties.wh)
+                        .reduce((a, b) => a + b, 0) /
+                        renderedFeatures
+                          .map((e) => e.properties.tot_enr)
+                          .reduce((a, b) => a + b, 0)) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                </span>
+                <br />
+                <div className="w-1/2 justify-center pt-2 mx-auto">
+                  <SummaryPie renderedFeatures={renderedFeatures} />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </Map>
+      <Slideover
+        handleVisibility={handleVisibility}
+        handleBounds={handleBounds}
+      />
+    </div>
   );
 }

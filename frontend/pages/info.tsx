@@ -30,7 +30,7 @@ export default function InfoPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [infoTitle, setInfoTitle] = useState(title);
 
-  const getData = async () => {
+  const getData = () => {
     if (year != undefined && grade != undefined && id != undefined) {
       let table;
 
@@ -57,7 +57,7 @@ export default function InfoPage() {
       const infoPromise = axios.get(infoUrl);
       const trendPromise = axios.get(trendUrl);
 
-      await Promise.all([infoPromise, trendPromise])
+      Promise.all([infoPromise, trendPromise])
         .then((values) => {
           setInfoData(values[0].data);
           setTrendData(values[1].data);

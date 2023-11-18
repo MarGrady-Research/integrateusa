@@ -18,7 +18,7 @@ export default function SegregationPage() {
   const [segData, setSegData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getData = async () => {
+  const getData = () => {
     let idlevel;
 
     switch (levels) {
