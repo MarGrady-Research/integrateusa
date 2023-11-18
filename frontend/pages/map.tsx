@@ -13,18 +13,13 @@ export default function Map() {
     features: [],
   });
 
-  const [data, setData] = useState({
-    type: "FeatureCollection" as "FeatureCollection",
-    features: [],
-  });
-
   const getData = () => {
     setIsLoading(true);
 
     axios
       .get("http://localhost:8000/api/mapschools/?q=2022")
       .then((res) => {
-        setData((d) => ({
+        setMapData((d) => ({
           ...d,
           features: res.data.map((e) => e.map_data),
         }));
@@ -45,7 +40,7 @@ export default function Map() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <div className="absolute flex flex-col h-[calc(100vh-83px)] w-full">
+      <div className="absolute flex flex-col h-[calc(100vh-84px)] w-full">
         {isLoading ? (
           <div className="pt-5">
             <Loader />

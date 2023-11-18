@@ -14,6 +14,40 @@ import Slideover from "./components/Slideover";
 import SummaryPie from "./components/SummaryPie";
 import AreaPie from "./components/AreaPie";
 
+const getStudentInfo = (renderedFeatures) => {
+  let studentsTotal = 0;
+  let asianTotal = 0;
+  let blackTotal = 0;
+  let hispanicTotal = 0;
+  let whiteTotal = 0;
+  let otherTotal = 0;
+
+  for (let feature of renderedFeatures) {
+    studentsTotal += feature.properties.tot_enr;
+    asianTotal += feature.properties.as;
+    blackTotal += feature.properties.bl;
+    hispanicTotal += feature.properties.hi;
+    whiteTotal += feature.properties.wh;
+    otherTotal += feature.properties.or;
+  }
+
+  const studentsEnrolled = studentsTotal.toLocaleString();
+  const asianPercentage = ((asianTotal / studentsTotal) * 100).toFixed(1);
+  const blackPercentage = ((blackTotal / studentsTotal) * 100).toFixed(1);
+  const hispanicPercentage = ((hispanicTotal / studentsTotal) * 100).toFixed(1);
+  const whitePercentage = ((whiteTotal / studentsTotal) * 100).toFixed(1);
+  const otherPercentage = ((otherTotal / studentsTotal) * 100).toFixed(1);
+
+  return {
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+  };
+};
+
 export default function DemographicMap({ mapData }) {
   const [cursor, setCursor] = useState("auto");
 
@@ -157,7 +191,6 @@ export default function DemographicMap({ mapData }) {
   const handleHover = useCallback((event) => {
     setClickInfo(null);
     const {
-      features,
       point: { x, y },
     } = event;
 
@@ -234,6 +267,15 @@ export default function DemographicMap({ mapData }) {
 
   let layerProp = () =>
     clickInfo.feature.properties.STUSPS ? "STUSPS" : "GEOID";
+
+  const {
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+  } = getStudentInfo(renderedFeatures);
 
   return (
     <div className="relative w-full h-[calc(100vh-66px)]">
@@ -580,90 +622,32 @@ export default function DemographicMap({ mapData }) {
                 <br />
                 <span>
                   <b>Students Enrolled: </b>
-                  {renderedFeatures
-                    .map((e) => e.properties.tot_enr)
-                    .reduce((a, b) => a + b, 0)
-                    .toLocaleString()}
+                  {studentsEnrolled}
                 </span>
                 <br />
                 <span className="text-asian">
                   <b>Asian:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (renderedFeatures
-                        .map((e) => e.properties.as)
-                        .reduce((a, b) => a + b, 0) /
-                        renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
+                  <span className="text-white">{asianPercentage}%</span>
                 </span>
                 <br />
                 <span className="text-blackstudents">
                   <b>Black:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (renderedFeatures
-                        .map((e) => e.properties.bl)
-                        .reduce((a, b) => a + b, 0) /
-                        renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
+                  <span className="text-white">{blackPercentage}%</span>
                 </span>
                 <br />
                 <span className="text-hispanic">
                   <b>Hispanic:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (renderedFeatures
-                        .map((e) => e.properties.hi)
-                        .reduce((a, b) => a + b, 0) /
-                        renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-other">
-                  <b>Other:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (renderedFeatures
-                        .map((e) => e.properties.or)
-                        .reduce((a, b) => a + b, 0) /
-                        renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
+                  <span className="text-white">{hispanicPercentage}%</span>
                 </span>
                 <br />
                 <span className="text-whitestudents">
                   <b>White:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (renderedFeatures
-                        .map((e) => e.properties.wh)
-                        .reduce((a, b) => a + b, 0) /
-                        renderedFeatures
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
+                  <span className="text-white">{whitePercentage}%</span>
+                </span>
+                <br />
+                <span className="text-other">
+                  <b>Other:</b>{" "}
+                  <span className="text-white">{otherPercentage}%</span>
                 </span>
                 <br />
                 <div className="w-1/2 justify-center pt-2 mx-auto">
