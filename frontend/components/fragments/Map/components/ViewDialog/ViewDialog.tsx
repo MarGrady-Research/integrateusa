@@ -2,7 +2,7 @@ import React from "react";
 
 import SummaryPie from "../SummaryPie";
 
-const getStudentInfo = (renderedFeatures) => {
+const getViewInfo = (renderedFeatures) => {
   let studentsTotal = 0;
   let asianTotal = 0;
   let blackTotal = 0;
@@ -44,7 +44,7 @@ export default function ViewDialog({ renderedFeatures }) {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
-  } = getStudentInfo(renderedFeatures);
+  } = getViewInfo(renderedFeatures);
 
   const noOfSchoolsInView = renderedFeatures.length.toLocaleString();
   const areSchoolsPresentInView = renderedFeatures.length != 0;

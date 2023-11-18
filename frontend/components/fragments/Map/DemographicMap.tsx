@@ -9,10 +9,10 @@ import Map, {
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import mapbox_token from "../../../Key";
-import MapPie from "./components/MapPies";
 import Slideover from "./components/Slideover";
 import AreaPie from "./components/AreaPie";
 import ViewDialog from "./components/ViewDialog";
+import SchoolDialog from "./components/SchoolDialog";
 
 export default function DemographicMap({ mapData }) {
   const [cursor, setCursor] = useState("auto");
@@ -292,6 +292,7 @@ export default function DemographicMap({ mapData }) {
         <Source type="geojson" data={mapData}>
           <Layer {...LayerProps} />
         </Source>
+        {selectedSchool && <SchoolDialog clickInfo={clickInfo} />}
         {(selectedSchool || selectedArea) && (
           <div
             style={{
@@ -303,93 +304,6 @@ export default function DemographicMap({ mapData }) {
             }}
             className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
           >
-            {selectedSchool && (
-              <div className="p-3">
-                <span className="overflow-ellipsis">
-                  <b>{selectedSchool}</b>
-                </span>
-                <br />
-                <span>
-                  <b>District: </b>
-                  {clickInfo.feature.properties.dist_name}
-                </span>
-                <br />
-                <span>
-                  <b>County: </b>
-                  {clickInfo.feature.properties.county_name}
-                </span>
-                <br />
-                <span>
-                  <b>{clickInfo.feature.properties.year} Enrollment: </b>{" "}
-                  {clickInfo.feature.properties.tot_enr.toLocaleString()}
-                </span>
-                <br />
-                <span className="text-asian">
-                  <b>Asian:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (clickInfo.feature.properties.as /
-                        clickInfo.feature.properties.tot_enr) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-blackstudents">
-                  <b>Black:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (clickInfo.feature.properties.bl /
-                        clickInfo.feature.properties.tot_enr) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-hispanic">
-                  <b>Hispanic:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (clickInfo.feature.properties.hi /
-                        clickInfo.feature.properties.tot_enr) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-other">
-                  <b>Other:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (clickInfo.feature.properties.or /
-                        clickInfo.feature.properties.tot_enr) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-whitestudents">
-                  <b>White:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (clickInfo.feature.properties.wh /
-                        clickInfo.feature.properties.tot_enr) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <div className="w-1/2 justify-center pt-2 mx-auto">
-                  <MapPie clickInfo={clickInfo} />
-                </div>
-              </div>
-            )}
-
             {selectedArea && (
               <div className="p-3">
                 <span>
