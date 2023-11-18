@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
-import Control from "./Control";
+import Control from "../Control";
 
 export default function Slideover({ handleVisibility, handleBounds }) {
   // state for panel open/close

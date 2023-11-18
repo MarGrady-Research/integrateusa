@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
-import Loader from "../fragments/Loader";
-
 import Map, {
   Layer,
   Source,
@@ -9,32 +7,34 @@ import Map, {
   GeolocateControl,
   FullscreenControl,
 } from "react-map-gl";
-import mapbox_token from "../../Key";
-import MapPie from "./MapPies";
-import Slideover from "./Slideover";
-import SummaryPie from "./SummaryPie";
-import AreaPie from "./AreaPie";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import mapbox_token from "../../../Key";
+import MapPie from "./components/MapPies";
+import Slideover from "./components/Slideover";
+import SummaryPie from "./components/SummaryPie";
+import AreaPie from "./components/AreaPie";
+import Loader from "../../fragments/Loader";
+
 export default function DemographicMap() {
-  // Loading state variable
   const [isLoading, setIsLoading] = useState(false);
 
-  // Cursor state variable
   const [cursor, setCursor] = useState("auto");
 
-  // Data state variable
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    type: "FeatureCollection" as "FeatureCollection",
+    features: [],
+  });
 
   const getData = async () => {
     setIsLoading(true);
     const response = await axios.get(
       "http://localhost:8000/api/mapschools/?q=2022"
     );
-    setData({
-      type: "FeatureCollection",
+    setData((d) => ({
+      ...d,
       features: response.data.map((e) => e.map_data),
-    });
+    }));
     setIsLoading(false);
   };
 
@@ -42,7 +42,6 @@ export default function DemographicMap() {
     getData();
   }, []);
 
-  // State variable to control the visibility of the boundary layer
   const [stateVisible, setStateVisible] = useState("none");
 
   const handleVisibility = (level) => {
@@ -65,10 +64,9 @@ export default function DemographicMap() {
     }
   };
 
-  // Layer object for state boundary layer
   const stateLayer = {
     id: "state-boundary",
-    type: "fill",
+    type: "fill" as any,
     source: "state-boundary-source",
     "source-layer": "cb_2018_us_state_500k-8q06w5",
     paint: {
@@ -79,19 +77,17 @@ export default function DemographicMap() {
         "rgba(0,0,0,0.1)",
         "rgba(255,255,255,0.1)",
       ],
-    },
+    } as any,
     layout: {
-      visibility: stateVisible,
+      visibility: stateVisible as any,
     },
   };
 
-  // State variable to control the visibility of the county boundary layer
   const [countyVisible, setCountyVisible] = useState("none");
 
-  // Layer object for the county boundary layer
   const countyLayer = {
     id: "county-boundary",
-    type: "fill",
+    type: "fill" as any,
     source: "county-boundary-source",
     "source-layer": "cb_2018_us_county_500k-6dd9y3",
     paint: {
@@ -102,19 +98,17 @@ export default function DemographicMap() {
         "rgba(0,0,0,0.1)",
         "rgba(255,255,255,0.1)",
       ],
-    },
+    } as any,
     layout: {
-      visibility: countyVisible,
+      visibility: countyVisible as any,
     },
   };
 
-  // State variable to control the visibility of the district boundary layer
   const [districtVisible, setDistrictVisible] = useState("none");
 
-  // Layer object for the district boundary layer
   const districtLayer = {
     id: "district-boundary",
-    type: "fill",
+    type: "fill" as any,
     "source-layer": "2021_sd_unified-4mqqrn",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
@@ -124,9 +118,9 @@ export default function DemographicMap() {
         "rgba(0,0,0,0.1)",
         "rgba(255,255,255,0.1)",
       ],
-    },
+    } as any,
     layout: {
-      visibility: districtVisible,
+      visibility: districtVisible as any,
     },
   };
 
@@ -141,7 +135,7 @@ export default function DemographicMap() {
 
   const LayerProps = {
     id: "schools",
-    type: "circle",
+    type: "circle" as any,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
       "circle-color": [
@@ -158,101 +152,101 @@ export default function DemographicMap() {
         "#339933",
         "#808080",
       ],
-    },
+    } as any,
   };
 
   // Using the useMap hook to access additional map methods
   const mapRef = useRef();
 
   const updateBounds = useCallback((e) => {
-    mapRef.current.fitBounds(
-      [
-        [e.lngmin, e.latmin],
-        [e.lngmax, e.latmax],
-      ],
-      { padding: 25, duration: 2000 }
-    );
+    if (mapRef.current) {
+      (mapRef.current as any).fitBounds(
+        [
+          [e.lngmin, e.latmin],
+          [e.lngmax, e.latmax],
+        ],
+        { padding: 25, duration: 2000 }
+      );
+    }
   }, []);
 
-  // Handle bounds change
   const handleBounds = (e) => {
     updateBounds(e);
   };
 
-  // Click info state variable, to hold relevant data from clicked school
   const [clickInfo, setClickInfo] = useState(null);
 
-  // Initializing variables for hover source and hover source layer, so that we can refer back to them in onmouseleave function
   let hoverSource;
   let hoverSourceLayer;
 
-  // Hover function gets data from hovered areas and sets styles
   const handleHover = useCallback((event) => {
     setClickInfo(null);
     const {
       features,
       point: { x, y },
     } = event;
+
     const hoveredFeature = event.features && event.features[0];
     setClickInfo(hoveredFeature && { feature: hoveredFeature, x, y });
+
     if (hoveredFeature) {
       hoverSource = hoveredFeature.source;
       hoverSourceLayer = hoveredFeature.sourceLayer;
-    }
-    hoveredFeature &&
-      mapRef.current.removeFeatureState({
-        source: hoveredFeature.source,
-        sourceLayer: hoveredFeature.sourceLayer,
-      });
-    hoveredFeature &&
-      mapRef.current.setFeatureState(
-        {
+
+      if (mapRef.current) {
+        (mapRef.current as any).removeFeatureState({
           source: hoveredFeature.source,
           sourceLayer: hoveredFeature.sourceLayer,
-          id: hoveredFeature.id,
-        },
-        { hover: true }
-      );
+        });
+        (mapRef.current as any).setFeatureState(
+          {
+            source: hoveredFeature.source,
+            sourceLayer: hoveredFeature.sourceLayer,
+            id: hoveredFeature.id,
+          },
+          { hover: true }
+        );
+      }
+    }
   }, []);
 
-  // True if a school is under the mouse
   const selectedSchool =
     (clickInfo && clickInfo.feature.properties.sch_name) || "";
-  // True if an area is under the mouse
   const selectedArea = (clickInfo && clickInfo.feature.properties.NAME) || "";
 
-  // Set State on mouse enter
   const onMouseEnter = useCallback(() => setCursor("pointer"), []);
 
-  // Set state on mouse leave
   const onMouseLeave = useCallback(() => {
-    mapRef.current.removeFeatureState({
-      source: hoverSource,
-      sourceLayer: hoverSourceLayer,
-    });
+    if (mapRef.current) {
+      (mapRef.current as any).removeFeatureState({
+        source: hoverSource,
+        sourceLayer: hoverSourceLayer,
+      });
+    }
+
     setCursor("auto");
   }, []);
 
-  // Set state on mouse exiting map canvas
   const onMouseOut = useCallback(() => {
-    mapRef.current.removeFeatureState({
-      source: hoverSource,
-      sourceLayer: hoverSourceLayer,
-    });
+    if (mapRef.current) {
+      (mapRef.current as any).removeFeatureState({
+        source: hoverSource,
+        sourceLayer: hoverSourceLayer,
+      });
+    }
     setClickInfo(null);
   }, []);
 
-  // State variable for currently rendered source
   const [renderedFeatures, setRenderedFeatures] = useState([]);
 
-  // return an array of the schools currently rendered
   const querySchools = useCallback(() => {
-    setRenderedFeatures(
-      mapRef.current.queryRenderedFeatures({ layers: ["schools"] })
-    );
+    if (mapRef.current) {
+      setRenderedFeatures(
+        (mapRef.current as any).queryRenderedFeatures({ layers: ["schools"] })
+      );
+    }
   }, []);
 
-  // Determine ID based on feature under the mouse
   let areaID = () => {
     if (clickInfo.feature.properties.GEOID.length === 5) {
       return "county_id";
@@ -263,7 +257,6 @@ export default function DemographicMap() {
     }
   };
 
-  // Determine which property to match with
   let layerProp = () =>
     clickInfo.feature.properties.STUSPS ? "STUSPS" : "GEOID";
 
