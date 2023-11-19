@@ -7,9 +7,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Divider from "@mui/material/Divider";
 
 import Control from "../Control";
-import { button } from "./Slideover.module.scss";
-
-const drawerWidth = 360;
+import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 
 export default function Slideover({ handleVisibility, handleBounds }) {
   const [open, setOpen] = useState(false);
@@ -38,12 +36,14 @@ export default function Slideover({ handleVisibility, handleBounds }) {
         open={open}
         onClose={toggleOpen}
         sx={{
-          width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
             boxSizing: "border-box",
           },
+        }}
+        classes={{
+          root: drawerRoot,
+          paper: drawerPaper,
         }}
         variant="persistent"
       >

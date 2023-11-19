@@ -1,7 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import clsx from "clsx";
 import { useRouter } from "next/router";
+
+import { root } from "./Header.module.scss";
 
 interface NavLinkProps {
   url: string;
@@ -16,7 +19,7 @@ function NavLink({ url, title }: NavLinkProps) {
   return (
     <Link href={url}>
       <a
-        className={`mr-5 last:mr-0 hover:text-secondary ${
+        className={`mr-3 sm:mr-5 last:mr-0 hover:text-secondary ${
           isActiveURL ? "text-primary hover:text-primary" : ""
         }`}
       >
@@ -28,7 +31,12 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header className="text-black bg-white font-sans shadow text-sm sm:text-base lg:text-lg">
+    <header
+      className={clsx(
+        "text-black bg-white font-sans shadow text-sm sm:text-base lg:text-lg relative",
+        root
+      )}
+    >
       <div className="container p-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
         <div className="flex items-center flex-col lg:flex-row">
           <Link href="/">
@@ -41,7 +49,7 @@ export default function Header() {
               />
             </a>
           </Link>
-          <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center  justify-center">
+          <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
             <NavLink url="/info" title="Demographic Info" />
             <NavLink url="/segregation" title="Segregation" />
             <NavLink url="/map" title="Map" />

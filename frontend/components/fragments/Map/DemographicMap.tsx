@@ -226,9 +226,9 @@ export default function DemographicMap({ mapData }) {
       <Map
         ref={mapRef}
         initialViewState={{
-          longitude: -100,
-          latitude: 40,
-          zoom: 6,
+          longitude: -98.5795,
+          latitude: 39.828175,
+          zoom: 4,
         }}
         style={{ position: "relative", width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"

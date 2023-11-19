@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import clsx from "clsx";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
 import Loader from "../components/fragments/Loader";
+
+import { mapHolder } from "./Map.module.scss";
 
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +43,7 @@ export default function Map() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <div className="absolute flex flex-col h-[calc(100vh-84px)] w-full">
+      <div className={clsx("absolute w-full", mapHolder)}>
         {isLoading ? (
           <div className="pt-5">
             <Loader />

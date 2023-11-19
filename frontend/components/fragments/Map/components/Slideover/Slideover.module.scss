@@ -1,7 +1,32 @@
 @import "styles/common.scss";
+@import "styles/constants.scss";
+
+$drawerWidth: 360px;
 
 .button {
   @extend .mapControlButton;
   width: 40px;
   height: 40px;
+}
+
+.drawerRoot {
+  width: 100%;
+  @screen sm {
+    width: $drawerWidth;
+  }
+}
+
+.drawerPaper {
+  width: 100%;
+
+  padding-top: $navbarMobileHeight;
+
+  @screen sm {
+    width: $drawerWidth;
+    padding-top: $navbarTabletHeight;
+  }
+
+  @screen lg {
+    padding-top: $navbarDesktopHeight;
+  }
 }
