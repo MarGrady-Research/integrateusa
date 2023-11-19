@@ -16,7 +16,7 @@ function NavLink({ url, title }: NavLinkProps) {
   return (
     <Link href={url}>
       <a
-        className={`mr-5 hover:text-secondary ${
+        className={`mr-5 last:mr-0 hover:text-secondary ${
           isActiveURL ? "text-primary hover:text-primary" : ""
         }`}
       >
@@ -28,31 +28,33 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header className="text-black bg-white font-sans shadow text-base lg:text-lg">
-      <div className="container p-3 mx-auto flex flex-wrap flex-col md:flex-row items-center ">
-        <Link href="/">
-          <a className="flex title-font items-center text-black mb-4 md:mb-0">
-            <Image
-              src="/IntegrateUSALogo.png"
-              alt="IntegrateUSA logo"
-              width={200}
-              height={60}
-            />
-          </a>
-        </Link>
-        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center  justify-center">
-          <NavLink url="/info" title="Demographic Info" />
-          <NavLink url="/segregation" title="Segregation" />
-          <NavLink url="/map" title="Map" />
-          <NavLink url="/about" title="About" />
-        </nav>
-        <div className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+    <header className="text-black bg-white font-sans shadow text-sm sm:text-base lg:text-lg">
+      <div className="container p-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
+        <div className="flex items-center flex-col lg:flex-row">
+          <Link href="/">
+            <a className="flex items-center text-black w-40 sm:w-auto">
+              <Image
+                src="/IntegrateUSALogo.png"
+                alt="IntegrateUSA logo"
+                width={200}
+                height={60}
+              />
+            </a>
+          </Link>
+          <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center  justify-center">
+            <NavLink url="/info" title="Demographic Info" />
+            <NavLink url="/segregation" title="Segregation" />
+            <NavLink url="/map" title="Map" />
+            <NavLink url="/about" title="About" />
+          </nav>
+        </div>
+        <div className="absolute lg:relative w-28 sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
           <Link href="http://www.margrady.com/">
             <Image
               src="/mg-logo-text.png"
               alt="MarGrady Logo"
               width={250}
-              height={60}
+              height={57}
             />
           </Link>
         </div>
