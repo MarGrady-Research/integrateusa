@@ -3,6 +3,7 @@ import Paper from "@mui/material/Paper";
 import clsx from "clsx";
 
 import SummaryPie from "../SummaryPie";
+// @ts-ignore
 import { root } from "./ViewDialog.module.scss";
 
 interface Props {

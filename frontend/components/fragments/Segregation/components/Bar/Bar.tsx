@@ -120,7 +120,7 @@ export default function SegBar({ focus }) {
         max: 1,
         position: "right",
       },
-    },
+    } as any,
   };
 
   return <Bar options={options} data={data} />;

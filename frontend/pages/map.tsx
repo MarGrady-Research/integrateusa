@@ -7,6 +7,7 @@ import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
 import Loader from "../components/fragments/Loader";
 
+// @ts-ignore
 import { mapHolder } from "./Map.module.scss";
 
 export default function Map() {

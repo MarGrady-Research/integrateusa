@@ -91,9 +91,9 @@ export default function Comparison({
 
   class Line {
     constructor(id, name, data) {
-      this.id = id;
-      this.name = name;
-      this.data = data;
+      (this as any).id = id;
+      (this as any).name = name;
+      (this as any).data = data;
     }
   }
 
@@ -336,14 +336,14 @@ export default function Comparison({
                       <input
                         type="text"
                         className="w-10 bg-gray-200 border rounded-md text-xs text-center mr-2"
-                        placeholder={min[column.accessor]}
+                        placeholder={min[column.accessor].toString()}
                         readOnly={false}
                         onChange={(e) => minSearch(e)}
                       />
                       <input
                         type="text"
                         className="w-10 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={max[column.accessor]}
+                        placeholder={max[column.accessor].toString()}
                         readOnly={false}
                         onChange={(e) => maxSearch(e)}
                       />
@@ -371,7 +371,7 @@ export default function Comparison({
                           }
                           disabled={row[idlevel] === "" + id ? true : false}
                           onChange={() => {}}
-                          onClick={(e) => updateID(e.target.id)}
+                          onClick={(e) => updateID((e.target as any).id)}
                           readOnly={false}
                         />
                       </th>

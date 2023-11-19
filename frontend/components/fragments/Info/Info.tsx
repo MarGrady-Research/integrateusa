@@ -8,6 +8,7 @@ import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
 import { selectId, selectBounds } from "../../../store/selectSlice";
 
+// @ts-ignore
 import { container } from "./Info.module.scss";
 
 const BarChart = dynamic(() => import("./components/Bar"), {

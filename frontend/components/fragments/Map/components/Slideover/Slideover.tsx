@@ -7,6 +7,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Divider from "@mui/material/Divider";
 
 import Control from "../Control";
+// @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 
 export default function Slideover({ handleVisibility, handleBounds }) {

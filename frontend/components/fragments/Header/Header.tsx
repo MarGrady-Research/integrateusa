@@ -4,6 +4,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 
+// @ts-ignore
 import { root } from "./Header.module.scss";
 
 interface NavLinkProps {
