@@ -40,13 +40,27 @@ const getAreaInfo = (clickInfo, mapData) => {
     }
   }
 
+  const asianPercentageRaw = (asianTotal / studentsTotal) * 100;
+  const blackPercentageRaw = (blackTotal / studentsTotal) * 100;
+  const hispanicPercentageRaw = (hispanicTotal / studentsTotal) * 100;
+  const whitePercentageRaw = (whiteTotal / studentsTotal) * 100;
+  const otherPercentageRaw = (otherTotal / studentsTotal) * 100;
+
   const schoolsInArea = schoolsTotal.toLocaleString();
   const studentsEnrolled = studentsTotal.toLocaleString();
-  const asianPercentage = (asianTotal / studentsTotal) * 100;
-  const blackPercentage = (blackTotal / studentsTotal) * 100;
-  const hispanicPercentage = (hispanicTotal / studentsTotal) * 100;
-  const whitePercentage = (whiteTotal / studentsTotal) * 100;
-  const otherPercentage = (otherTotal / studentsTotal) * 100;
+  const asianPercentage = asianPercentageRaw.toFixed(1);
+  const blackPercentage = blackPercentageRaw.toFixed(1);
+  const hispanicPercentage = hispanicPercentageRaw.toFixed(1);
+  const whitePercentage = whitePercentageRaw.toFixed(1);
+  const otherPercentage = otherPercentageRaw.toFixed(1);
+
+  const pieData = [
+    asianPercentageRaw,
+    blackPercentageRaw,
+    hispanicPercentageRaw,
+    whitePercentageRaw,
+    otherPercentageRaw,
+  ];
 
   return {
     areaName,
@@ -57,6 +71,7 @@ const getAreaInfo = (clickInfo, mapData) => {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   };
 };
 
@@ -70,15 +85,8 @@ export default function AreaDialog({ clickInfo, mapData }) {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   } = getAreaInfo(clickInfo, mapData);
-
-  const pieData = [
-    asianPercentage,
-    blackPercentage,
-    hispanicPercentage,
-    whitePercentage,
-    otherPercentage,
-  ];
 
   return (
     <div
@@ -101,28 +109,24 @@ export default function AreaDialog({ clickInfo, mapData }) {
         <span>Students Enrolled: {studentsEnrolled}</span>
         <br />
         <span className="text-asian">
-          <b>Asian:</b>{" "}
-          <span className="text-white">{asianPercentage.toFixed(1)}%</span>
+          <b>Asian:</b> <span className="text-white">{asianPercentage}%</span>
         </span>
         <br />
         <span className="text-blackstudents">
-          <b>Black:</b>{" "}
-          <span className="text-white">{blackPercentage.toFixed(1)}%</span>
+          <b>Black:</b> <span className="text-white">{blackPercentage}%</span>
         </span>
         <br />
         <span className="text-hispanic">
           <b>Hispanic:</b>{" "}
-          <span className="text-white">{hispanicPercentage.toFixed(1)}%</span>
+          <span className="text-white">{hispanicPercentage}%</span>
         </span>
         <br />
         <span className="text-whitestudents">
-          <b>White:</b>{" "}
-          <span className="text-white">{whitePercentage.toFixed(1)}%</span>
+          <b>White:</b> <span className="text-white">{whitePercentage}%</span>
         </span>
         <br />
         <span className="text-other">
-          <b>Other:</b>{" "}
-          <span className="text-white">{otherPercentage.toFixed(1)}%</span>
+          <b>Other:</b> <span className="text-white">{otherPercentage}%</span>
         </span>
         <br />
         <div className="w-1/2 justify-center pt-2 mx-auto">

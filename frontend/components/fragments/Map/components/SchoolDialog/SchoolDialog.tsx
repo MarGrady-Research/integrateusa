@@ -28,12 +28,26 @@ const getSchoolInfo = (clickInfo) => {
   const whiteTotal = wh;
   const otherTotal = or;
 
+  const asianRatio = asianTotal / studentsTotal;
+  const blackRatio = blackTotal / studentsTotal;
+  const hispanicRatio = hispanicTotal / studentsTotal;
+  const whiteRatio = whiteTotal / studentsTotal;
+  const otherRatio = otherTotal / studentsTotal;
+
   const studentsEnrolled = studentsTotal.toLocaleString();
-  const asianPercentage = ((asianTotal / studentsTotal) * 100).toFixed(1);
-  const blackPercentage = ((blackTotal / studentsTotal) * 100).toFixed(1);
-  const hispanicPercentage = ((hispanicTotal / studentsTotal) * 100).toFixed(1);
-  const whitePercentage = ((whiteTotal / studentsTotal) * 100).toFixed(1);
-  const otherPercentage = ((otherTotal / studentsTotal) * 100).toFixed(1);
+  const asianPercentage = (asianRatio * 100).toFixed(1);
+  const blackPercentage = (blackRatio * 100).toFixed(1);
+  const hispanicPercentage = (hispanicRatio * 100).toFixed(1);
+  const whitePercentage = (whiteRatio * 100).toFixed(1);
+  const otherPercentage = (otherRatio * 100).toFixed(1);
+
+  const pieData = [
+    asianRatio,
+    blackRatio,
+    hispanicRatio,
+    whiteRatio,
+    otherRatio,
+  ];
 
   return {
     schoolName,
@@ -46,6 +60,7 @@ const getSchoolInfo = (clickInfo) => {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   };
 };
 
@@ -61,6 +76,7 @@ export default function SchoolDialog({ clickInfo }) {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   } = getSchoolInfo(clickInfo);
 
   return (
@@ -115,7 +131,7 @@ export default function SchoolDialog({ clickInfo }) {
         </span>
         <br />
         <div className="w-1/2 justify-center pt-2 mx-auto">
-          <MapPie clickInfo={clickInfo} />
+          <MapPie pieData={pieData} />
         </div>
       </div>
     </div>
