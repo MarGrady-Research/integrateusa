@@ -7,14 +7,11 @@ export default function Control({
   handleVisibility,
   handleBounds,
 }) {
-  // Radio Elements and functions
-
   const handleChange = (e) => {
     handleRadio(e);
     handleVisibility(e.target.value);
   };
 
-  //  Legend elements
   const race = [
     { race: "Asian", color: "#FF5050" },
     { race: "Black", color: "#4472C4" },
@@ -44,22 +41,21 @@ export default function Control({
   const boundaries = () => {
     return (
       <>
-        <div className="flex flex-col pt-2">
-          <div className="p-1">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="School"
-                value="School"
-                checked={radio.level === "School"}
-                onChange={handleChange}
-                className="w-4 h-4 mr-2"
-              />
-              No Boundary
-            </label>
-          </div>
+        <p className="text-lg text-gray-900 mb-1">Boundaries</p>
+        <div className="flex flex-col mb-4">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="School"
+              value="School"
+              checked={radio.level === "School"}
+              onChange={handleChange}
+              className="w-4 h-4 mr-2"
+            />
+            No Boundary
+          </label>
 
-          <div className="p-1 flex items-center">
+          <div className="flex items-center">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -73,7 +69,7 @@ export default function Control({
             </label>
           </div>
 
-          <div className="p-1 inline-flex">
+          <div className="inline-flex">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -87,7 +83,7 @@ export default function Control({
             </label>
           </div>
 
-          <div className="p-1 inline-flex">
+          <div className="inline-flex">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -102,7 +98,7 @@ export default function Control({
           </div>
         </div>
 
-        <div className="pt-5">
+        <div>
           <Search radio={radio} handleBounds={handleBounds} />
         </div>
       </>
@@ -110,14 +106,13 @@ export default function Control({
   };
 
   return (
-    <div>
-      <div className="flex flex-col w-full">
-        <p className="text-lg text-gray-900 pb-2">Legend</p>
-        <div className="text-left p-1">{legend()}</div>
+    <>
+      <p className="text-lg text-gray-900 mb-1">Legend</p>
+      <div className="flex flex-col w-full mb-4">
+        <div className="text-left">{legend()}</div>
       </div>
 
-      <p className="text-lg pt-4 text-gray-900">Boundaries</p>
       {boundaries()}
-    </div>
+    </>
   );
 }

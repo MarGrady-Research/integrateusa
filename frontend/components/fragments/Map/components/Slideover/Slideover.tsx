@@ -55,7 +55,7 @@ export default function Slideover({ handleVisibility, handleBounds }) {
         </div>
         <Divider />
         <div className="p-4 font-sans">
-          <h1>Map Options</h1>
+          <h1 className="text-xl mb-4">Map Options</h1>
           <Control
             radio={radio}
             handleRadio={handleRadio}
