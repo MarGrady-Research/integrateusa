@@ -20,12 +20,26 @@ const getViewInfo = (renderedFeatures) => {
     otherTotal += or;
   }
 
+  const asianPercentageRaw = (asianTotal / studentsTotal) * 100;
+  const blackPercentageRaw = (blackTotal / studentsTotal) * 100;
+  const hispanicPercentageRaw = (hispanicTotal / studentsTotal) * 100;
+  const whitePercentageRaw = (whiteTotal / studentsTotal) * 100;
+  const otherPercentageRaw = (otherTotal / studentsTotal) * 100;
+
   const studentsEnrolled = studentsTotal.toLocaleString();
-  const asianPercentage = ((asianTotal / studentsTotal) * 100).toFixed(1);
-  const blackPercentage = ((blackTotal / studentsTotal) * 100).toFixed(1);
-  const hispanicPercentage = ((hispanicTotal / studentsTotal) * 100).toFixed(1);
-  const whitePercentage = ((whiteTotal / studentsTotal) * 100).toFixed(1);
-  const otherPercentage = ((otherTotal / studentsTotal) * 100).toFixed(1);
+  const asianPercentage = asianPercentageRaw.toFixed(1);
+  const blackPercentage = blackPercentageRaw.toFixed(1);
+  const hispanicPercentage = hispanicPercentageRaw.toFixed(1);
+  const whitePercentage = whitePercentageRaw.toFixed(1);
+  const otherPercentage = otherPercentageRaw.toFixed(1);
+
+  const pieData = [
+    asianPercentageRaw,
+    blackPercentageRaw,
+    hispanicPercentageRaw,
+    whitePercentageRaw,
+    otherPercentageRaw,
+  ];
 
   return {
     studentsEnrolled,
@@ -34,6 +48,7 @@ const getViewInfo = (renderedFeatures) => {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   };
 };
 
@@ -45,6 +60,7 @@ export default function ViewDialog({ renderedFeatures }) {
     hispanicPercentage,
     whitePercentage,
     otherPercentage,
+    pieData,
   } = getViewInfo(renderedFeatures);
 
   const noOfSchoolsInView = renderedFeatures.length.toLocaleString();
@@ -95,7 +111,7 @@ export default function ViewDialog({ renderedFeatures }) {
             </span>
             <br />
             <div className="w-1/2 justify-center pt-2 mx-auto">
-              <SummaryPie renderedFeatures={renderedFeatures} />
+              <SummaryPie pieData={pieData} />
             </div>
           </>
         )}

@@ -19,8 +19,8 @@ module.exports = {
         asian: "#FF5050",
         blackstudents: "#4472C4",
         hispanic: "#FF9900",
-        other: "#FFC000",
         whitestudents: "#339933",
+        other: "#FFC000",
       },
       transitionProperty: {
         width: "width",
