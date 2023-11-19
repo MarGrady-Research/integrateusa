@@ -1,7 +1,11 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import MenuIcon from "@mui/icons-material/Menu";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+
 import Control from "../Control";
+import { button } from "./Slideover.module.scss";
 
 export default function Slideover({ handleVisibility, handleBounds }) {
   // state for panel open/close
@@ -14,13 +18,18 @@ export default function Slideover({ handleVisibility, handleBounds }) {
     setRadio({ level: evt.target.value });
   };
 
+  const toggleOpen = () => setOpen((o) => !o);
+
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
-        className="absolute top-5 right-8 z-20 drop-shadow-xl"
+        onClick={toggleOpen}
+        className={clsx(
+          "absolute top-2.5 right-2.5 z-20 flex justify-center items-center",
+          button
+        )}
       >
-        <Bars3Icon className="w-10 h-10 bg-gray-100 rounded-md" />
+        <MenuIcon fontSize="large" />
       </button>
 
       <Transition.Root show={open} as={Fragment}>

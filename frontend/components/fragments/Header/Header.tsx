@@ -28,10 +28,10 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header className="text-black bg-white font-sans shadow">
-      <div className="container p-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+    <header className="text-black bg-white font-sans shadow text-base lg:text-lg">
+      <div className="container p-3 mx-auto flex flex-wrap flex-col md:flex-row items-center ">
         <Link href="/">
-          <a className="flex title-font font-medium items-center text-black mb-4 md:mb-0">
+          <a className="flex title-font items-center text-black mb-4 md:mb-0">
             <Image
               src="/IntegrateUSALogo.png"
               alt="IntegrateUSA logo"
@@ -40,22 +40,22 @@ export default function Header() {
             />
           </a>
         </Link>
-        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-lg justify-center">
+        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center  justify-center">
           <NavLink url="/info" title="Demographic Info" />
           <NavLink url="/segregation" title="Segregation" />
           <NavLink url="/map" title="Map" />
           <NavLink url="/about" title="About" />
         </nav>
-        <Link href="http://www.margrady.com/">
-          <div className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+        <div className="inline-flex items-center hover:cursor-pointer sm:ml-auto sm:mt-0 mt-4 md:justify-center">
+          <Link href="http://www.margrady.com/">
             <Image
               src="/mg-logo-text.png"
               alt="MarGrady Logo"
               width={250}
               height={60}
             />
-          </div>
-        </Link>
+          </Link>
+        </div>
       </div>
     </header>
   );
