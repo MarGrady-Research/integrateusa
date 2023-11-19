@@ -336,14 +336,22 @@ export default function Comparison({
                       <input
                         type="text"
                         className="w-10 bg-gray-200 border rounded-md text-xs text-center mr-2"
-                        placeholder={min[column.accessor].toString()}
+                        placeholder={
+                          min[column.accessor]
+                            ? min[column.accessor].toString()
+                            : ""
+                        }
                         readOnly={false}
                         onChange={(e) => minSearch(e)}
                       />
                       <input
                         type="text"
                         className="w-10 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={max[column.accessor].toString()}
+                        placeholder={
+                          max[column.accessor]
+                            ? max[column.accessor].toString()
+                            : ""
+                        }
                         readOnly={false}
                         onChange={(e) => maxSearch(e)}
                       />
