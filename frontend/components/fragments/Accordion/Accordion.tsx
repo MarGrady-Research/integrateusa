@@ -234,7 +234,7 @@ export default function Accordion({ handleMeasure, currentpath }) {
       <Disclosure>
         {({ open }) => (
           <>
-            <Disclosure.Button className="font-raleway inline-flex justify-between bg-transparent hover:bg-gray-500 text-black hover:text-white py-2 px-2 border border-gray-300 hover:border-transparent rounded">
+            <Disclosure.Button className="inline-flex justify-between bg-transparent hover:bg-gray-500 text-black hover:text-white py-2 px-2 border border-gray-300 hover:border-transparent rounded">
               Options + Info
               <ChevronUpIcon
                 className={`${
@@ -250,7 +250,7 @@ export default function Accordion({ handleMeasure, currentpath }) {
               leaveFrom="transform scale-100 opacity-100"
               leaveTo="transform scale-95 opacity-0"
             >
-              <Disclosure.Panel className="text-black font-raleway pt-2">
+              <Disclosure.Panel className="text-black pt-2">
                 <div className="space-y-2 bg-gray-100 rounded-md">
                   <div className="text-xl font-semibold px-4">
                     <span>District</span>

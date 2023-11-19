@@ -119,7 +119,7 @@ export default function Scroller() {
 
         <Link href="/info">
           <div className="flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center">
-            <span className="font-raleway inline-flex items-center text-xl">
+            <span className="inline-flex items-center text-xl">
               Explore the dashboard{" "}
               <ChevronDoubleRightIcon className="h-6 w-6" />
             </span>
@@ -128,7 +128,7 @@ export default function Scroller() {
 
         <div className="flex flex-col items-center">
           <div>
-            <span className="font-raleway text-xl">
+            <span className=" text-xl">
               Scroll down for a case study of New York City&#39;s District 15{" "}
             </span>
           </div>
@@ -310,7 +310,7 @@ export default function Scroller() {
 
       <div className="sticky w-screen h-screen flex flex-col py-10 items-center justify-between">
         <div className="flex flex-col px-4 items-center">
-          <span className="font-raleway inline-flex items-center text-center text-xl">
+          <span className="inline-flex items-center text-center text-xl">
             IntegrateUSA was built to explore segregation in districts, counties
             and states nationwide
             <br />
@@ -322,7 +322,7 @@ export default function Scroller() {
 
         <Link href="/info">
           <div className="flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center">
-            <span className="font-raleway inline-flex items-center text-xl">
+            <span className="inline-flex items-center text-xl">
               Explore the dashboard{" "}
               <ChevronDoubleRightIcon className="h-6 w-6" />
             </span>

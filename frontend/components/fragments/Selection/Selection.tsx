@@ -24,7 +24,7 @@ export default function Selection({ getData, isLoading }: Props) {
     <div className="shadow relative">
       <div
         className={clsx({
-          "grid grid-cols-1 lg:grid-cols-5 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-raleway":
+          "grid grid-cols-1 lg:grid-cols-5 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-sans":
             true,
           "hidden lg:grid": !expanded,
         })}

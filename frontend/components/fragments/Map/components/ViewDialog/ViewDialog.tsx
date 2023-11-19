@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import Paper from "@mui/material/Paper";
 
 import SummaryPie from "../SummaryPie";
 
@@ -69,6 +70,47 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
 
   const noOfSchoolsInView = renderedFeatures.length.toLocaleString();
   const areSchoolsPresentInView = renderedFeatures.length != 0;
+
+  return (
+    <Paper className="absolute bottom-10 left-10 p-3 pb-4 w-60 text-center text-sm hidden lg:block !bg-slate-50">
+      {!areSchoolsPresentInView ? (
+        <p className="italic">Zoom or drag the map to see school data here!</p>
+      ) : (
+        <>
+          <div className="mb-2">
+            <p>
+              <b>Schools in View: </b>
+              {noOfSchoolsInView}
+            </p>
+            <p>
+              <b>Students Enrolled: </b>
+              {studentsEnrolled}
+            </p>
+          </div>
+          <div className="mb-4">
+            <p>
+              <b className="text-asian">Asian: </b> {asianPercentage}%
+            </p>
+            <p>
+              <b className="text-blackstudents">Black: </b> {blackPercentage}%
+            </p>
+            <p>
+              <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+            </p>
+            <p>
+              <b className="text-whitestudents">White: </b> {whitePercentage}%
+            </p>
+            <p>
+              <b className="text-other">Other: </b> {otherPercentage}%
+            </p>
+          </div>
+          <div className="w-1/2 mx-auto">
+            <SummaryPie pieData={pieData} />
+          </div>
+        </>
+      )}
+    </Paper>
+  );
 
   return (
     <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md hidden lg:block">

@@ -382,7 +382,7 @@ export default function Comparison({
                         key={column.accessor}
                         className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${
                           row[idlevel] === "" + id
-                            ? "text-line-red font-semibold font-raleway"
+                            ? "text-line-red font-semibold"
                             : ""
                         }`}
                       >
@@ -395,7 +395,7 @@ export default function Comparison({
                         key={column.accessor}
                         className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${
                           row[idlevel] === "" + id
-                            ? "text-line-red font-semibold font-raleway"
+                            ? "text-line-red font-semibold"
                             : ""
                         }`}
                       >

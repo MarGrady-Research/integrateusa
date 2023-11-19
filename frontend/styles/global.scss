@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+@import "./typography.scss";
 
 html,
 body {
@@ -21,27 +22,21 @@ a {
 }
 
 @layer components {
-
   /* SchoolLevelTable Classes */
   .school-th {
-    @apply px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider
+    @apply px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider;
   }
 
   .school-td {
-    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap
+    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap;
   }
 
   /* column header - would like to fix to the left (but not sure how to do) */
   .school-ch {
-    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap
+    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap;
   }
 
   .paginate-btn {
-    @apply relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50
+    @apply relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50;
   }
-
 }
-
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */

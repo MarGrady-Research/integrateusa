@@ -17,7 +17,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        raleway: ["Raleway", "sans-serif"],
+        sans: ["Franklin Gothic Book", "sans-serif"],
       },
       colors: {
         primary: primaryColor,

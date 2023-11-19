@@ -28,7 +28,7 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header className="text-black bg-white body-font font-raleway shadow">
+    <header className="text-black bg-white body-font font-sans shadow">
       <div className="container p-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <Link href="/">
           <a className="flex title-font font-medium items-center text-black mb-4 md:mb-0">

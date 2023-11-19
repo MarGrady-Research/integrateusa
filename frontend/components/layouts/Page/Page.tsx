@@ -5,5 +5,5 @@ interface Props {
 }
 
 export default function Page({ children }: Props) {
-  return <div className="container mx-auto p-5 font-raleway">{children}</div>;
+  return <div className="container mx-auto p-5 font-sans">{children}</div>;
 }

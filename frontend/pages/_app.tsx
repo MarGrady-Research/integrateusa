@@ -7,7 +7,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { wrapper } from "../store/store";
 import { theme } from "../styles/materialTheme";
 
-import "../styles/globals.css";
+import "../styles/global.scss";
 
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
