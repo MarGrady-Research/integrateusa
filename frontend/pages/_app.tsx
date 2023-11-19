@@ -3,11 +3,15 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "@mui/material/styles";
+import { Chart as ChartJS } from "chart.js";
 
 import { wrapper } from "../store/store";
 import { theme } from "../styles/materialTheme";
+import { defaultFont } from "../constants";
 
 import "../styles/global.scss";
+
+ChartJS.defaults.font.family = defaultFont;
 
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);

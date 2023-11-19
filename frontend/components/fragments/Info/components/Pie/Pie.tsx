@@ -3,11 +3,18 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 import { legendMargin } from "../../../../../charts";
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "../../../../../constants";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PieChart({ filterData }) {
-  const groups = ["asian", "black", "hispanic", "other", "white"];
+  const groups = ["asian", "black", "hispanic", "white", "other"];
 
   const enrSum = (arr, group) => {
     return arr.reduce(function (a, b) {
@@ -45,19 +52,25 @@ export default function PieChart({ filterData }) {
   };
 
   const data = {
-    labels: ["Asian", "Black", "Hispanic", "Other", "White"],
+    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
     datasets: [
       {
         label: "Enrollment Share by Race",
         data: pieData.map((e) => e.enr),
-        borderColor: ["#FF5050", "#4472C4", "#FF9900", "#FFC000", "#339933"],
+        borderColor: [
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
+        ],
         borderWidth: 1,
         backgroundColor: [
-          "#FF5050",
-          "#4472C4",
-          "#FF9900",
-          "#FFC000",
-          "#339933",
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
         ],
       },
     ],

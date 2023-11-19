@@ -1,17 +1,19 @@
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { useState } from "react";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Divider from "@mui/material/Divider";
 
 import Control from "../Control";
 import { button } from "./Slideover.module.scss";
 
+const drawerWidth = 360;
+
 export default function Slideover({ handleVisibility, handleBounds }) {
-  // state for panel open/close
   const [open, setOpen] = useState(false);
 
-  // radio state
   const [radio, setRadio] = useState({ level: "School" });
 
   const handleRadio = (evt) => {
@@ -31,70 +33,36 @@ export default function Slideover({ handleVisibility, handleBounds }) {
       >
         <MenuIcon fontSize="large" />
       </button>
-
-      <Transition.Root show={open} as={Fragment}>
-        <Dialog
-          as="div"
-          className="absolute right-0 h-full z-30"
-          onClose={setOpen}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-in-out duration-500"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in-out duration-500"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
-
-          <div className="relative inset-0 overflow-hidden">
-            <div className="inset-0 overflow-hidden">
-              <div className="pointer-events-none relative  right-0  max-w-full pl-10">
-                <Transition.Child
-                  as={Fragment}
-                  enter="transform transition ease-in-out duration-500 sm:duration-700"
-                  enterFrom="translate-x-full"
-                  enterTo="translate-x-0"
-                  leave="transform transition ease-in-out duration-500 sm:duration-700"
-                  leaveFrom="translate-x-0"
-                  leaveTo="translate-x-full"
-                >
-                  <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
-                    <div className="relative flex flex-col h-screen drop-shadow-xl bg-gray-100 shadow-xl">
-                      <button
-                        type="button"
-                        className="rounded-md text-black hover:text-primary focus:outline-none p-3"
-                        onClick={() => setOpen(false)}
-                      >
-                        <span className="sr-only">Close panel</span>
-                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
-                      <div className="px-4 sm:px-6">
-                        <Dialog.Title className="text-xl font-medium text-gray-900">
-                          Map Options
-                        </Dialog.Title>
-                      </div>
-                      <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                        <div className="absolute inset-0 px-4 sm:px-6">
-                          <Control
-                            radio={radio}
-                            handleRadio={handleRadio}
-                            handleVisibility={handleVisibility}
-                            handleBounds={handleBounds}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </div>
-        </Dialog>
-      </Transition.Root>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={toggleOpen}
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+      >
+        <div className="flex flex-start p-2">
+          <IconButton onClick={toggleOpen}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <div className="p-4 font-sans">
+          <h1>Map Options</h1>
+          <Control
+            radio={radio}
+            handleRadio={handleRadio}
+            handleVisibility={handleVisibility}
+            handleBounds={handleBounds}
+          />
+        </div>
+      </Drawer>
     </>
   );
 }

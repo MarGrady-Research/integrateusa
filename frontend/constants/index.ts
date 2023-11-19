@@ -5,4 +5,5 @@ export {
   hispanicColor,
   whiteColor,
   otherColor,
+  defaultFont,
 } from "./constants";

@@ -7,6 +7,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
+  defaultFont,
 } from "./constants";
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Libre Franklin", "sans-serif"],
+        sans: [defaultFont, "sans-serif"],
       },
       colors: {
         primary: primaryColor,
