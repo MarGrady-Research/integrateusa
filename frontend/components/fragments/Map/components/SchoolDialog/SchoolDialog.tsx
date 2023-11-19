@@ -1,6 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 
 import MapPie from "../MapPies";
+
+interface Props {
+  clickInfo: any;
+}
 
 const getSchoolInfo = (clickInfo) => {
   const {
@@ -64,7 +68,7 @@ const getSchoolInfo = (clickInfo) => {
   };
 };
 
-export default function SchoolDialog({ clickInfo }) {
+const SchoolDialog = memo(({ clickInfo }: Props) => {
   const {
     schoolName,
     districtName,
@@ -136,4 +140,6 @@ export default function SchoolDialog({ clickInfo }) {
       </div>
     </div>
   );
-}
+});
+
+export default SchoolDialog;

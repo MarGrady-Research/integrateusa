@@ -1,6 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 
 import AreaPie from "../AreaPie";
+
+interface Props {
+  clickInfo: any;
+  mapData: any[];
+}
 
 const getAreaInfo = (clickInfo, mapData) => {
   const { NAME, GEOID, STUSPS } = clickInfo.feature.properties;
@@ -75,7 +80,7 @@ const getAreaInfo = (clickInfo, mapData) => {
   };
 };
 
-export default function AreaDialog({ clickInfo, mapData }) {
+const AreaDialog = memo(({ clickInfo, mapData }: Props) => {
   const {
     areaName,
     schoolsInArea,
@@ -135,4 +140,6 @@ export default function AreaDialog({ clickInfo, mapData }) {
       </div>
     </div>
   );
-}
+});
+
+export default AreaDialog;

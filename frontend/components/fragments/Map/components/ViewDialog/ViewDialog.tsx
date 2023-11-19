@@ -1,6 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 
 import SummaryPie from "../SummaryPie";
+
+interface Props {
+  renderedFeatures: any[];
+}
 
 const getViewInfo = (renderedFeatures) => {
   let studentsTotal = 0;
@@ -52,7 +56,7 @@ const getViewInfo = (renderedFeatures) => {
   };
 };
 
-export default function ViewDialog({ renderedFeatures }) {
+const ViewDialog = memo(({ renderedFeatures }: Props) => {
   const {
     studentsEnrolled,
     asianPercentage,
@@ -118,4 +122,6 @@ export default function ViewDialog({ renderedFeatures }) {
       </div>
     </div>
   );
-}
+});
+
+export default ViewDialog;
