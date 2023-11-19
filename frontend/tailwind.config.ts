@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 
-import { primaryColor } from "./constants";
+import {
+  primaryColor,
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "./constants";
 
 module.exports = {
   content: [
@@ -16,11 +23,11 @@ module.exports = {
         primary: primaryColor,
         secondary: "rgb(252,136,55)",
         "line-red": "rgb(255, 99, 132)",
-        asian: "#FF5050",
-        blackstudents: "#4472C4",
-        hispanic: "#FF9900",
-        whitestudents: "#339933",
-        other: "#FFC000",
+        asian: asianColor,
+        blackstudents: blackColor,
+        hispanic: hispanicColor,
+        whitestudents: whiteColor,
+        other: otherColor,
       },
       transitionProperty: {
         width: "width",

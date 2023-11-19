@@ -2,6 +2,14 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "../../../../../constants";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SummaryPie({ pieData }) {
@@ -32,14 +40,20 @@ export default function SummaryPie({ pieData }) {
       {
         label: "Enrollment Share by Race",
         data: pieData,
-        borderColor: ["#FF5050", "#4472C4", "#FF9900", "#339933", "#FFC000"],
+        borderColor: [
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
+        ],
         borderWidth: 1,
         backgroundColor: [
-          "#FF5050",
-          "#4472C4",
-          "#FF9900",
-          "#339933",
-          "#FFC000",
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
         ],
       },
     ],

@@ -1,1 +1,8 @@
-export { primaryColor } from "./constants";
+export {
+  primaryColor,
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "./constants";
