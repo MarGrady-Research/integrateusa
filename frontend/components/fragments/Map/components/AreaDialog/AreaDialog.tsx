@@ -31,7 +31,7 @@ const getAreaInfo = (clickInfo, mapData) => {
   let whiteTotal = 0;
   let otherTotal = 0;
 
-  for (let feature of mapData) {
+  for (let feature of mapData.features) {
     const { tot_enr, as, bl, hi, wh, or } = feature.properties;
 
     if (feature.properties[areaId] === layerProp) {

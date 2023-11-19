@@ -221,16 +221,6 @@ export default function DemographicMap({ mapData }) {
     }
   }, []);
 
-  let areaID = () => {
-    if (clickInfo.feature.properties.GEOID.length === 5) {
-      return "county_id";
-    } else if (clickInfo.feature.properties.GEOID.length === 7) {
-      return "dist_id";
-    } else if (clickInfo.feature.properties.STUSPS) {
-      return "state_abb";
-    }
-  };
-
   return (
     <div className="relative w-full h-[calc(100vh-66px)]">
       <Map
@@ -238,7 +228,7 @@ export default function DemographicMap({ mapData }) {
         initialViewState={{
           longitude: -100,
           latitude: 40,
-          zoom: 4,
+          zoom: 6,
         }}
         style={{ position: "relative", width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
