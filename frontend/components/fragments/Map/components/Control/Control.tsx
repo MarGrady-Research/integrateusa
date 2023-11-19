@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Search from "../Search";
 
-export default function Control({
-  radio,
-  handleRadio,
-  handleVisibility,
-  handleBounds,
-}) {
+export default function Control({ handleVisibility, handleBounds }) {
+  const [level, setLevel] = useState("School");
+
   const handleChange = (e) => {
-    handleRadio(e);
+    setLevel(e.target.value);
     handleVisibility(e.target.value);
   };
 
@@ -48,7 +45,7 @@ export default function Control({
               type="radio"
               name="School"
               value="School"
-              checked={radio.level === "School"}
+              checked={level === "School"}
               onChange={handleChange}
               className="w-4 h-4 mr-2"
             />
@@ -61,7 +58,7 @@ export default function Control({
                 type="radio"
                 name="District"
                 value="District"
-                checked={radio.level === "District"}
+                checked={level === "District"}
                 onChange={handleChange}
                 className="w-4 h-4 mr-2"
               />
@@ -75,7 +72,7 @@ export default function Control({
                 type="radio"
                 name="County"
                 value="County"
-                checked={radio.level === "County"}
+                checked={level === "County"}
                 onChange={handleChange}
                 className="w-4 h-4 mr-2"
               />
@@ -89,7 +86,7 @@ export default function Control({
                 type="radio"
                 name="State"
                 value="State"
-                checked={radio.level === "State"}
+                checked={level === "State"}
                 onChange={handleChange}
                 className="w-4 h-4 mr-2"
               />
@@ -99,7 +96,7 @@ export default function Control({
         </div>
 
         <div>
-          <Search radio={radio} handleBounds={handleBounds} />
+          <Search level={level} handleBounds={handleBounds} />
         </div>
       </>
     );

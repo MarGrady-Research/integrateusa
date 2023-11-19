@@ -134,6 +134,7 @@ export default function DemographicMap({ mapData }) {
   const mapRef = useRef();
 
   const updateBounds = useCallback((e) => {
+    console.log(e);
     if (mapRef.current) {
       (mapRef.current as any).fitBounds(
         [

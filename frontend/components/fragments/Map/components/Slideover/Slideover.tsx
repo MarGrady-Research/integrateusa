@@ -12,13 +12,6 @@ import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 
 export default function Slideover({ handleVisibility, handleBounds }) {
   const [open, setOpen] = useState(false);
-
-  const [radio, setRadio] = useState({ level: "School" });
-
-  const handleRadio = (evt) => {
-    setRadio({ level: evt.target.value });
-  };
-
   const toggleOpen = () => setOpen((o) => !o);
 
   return (
@@ -57,8 +50,6 @@ export default function Slideover({ handleVisibility, handleBounds }) {
         <div className="p-4 font-sans">
           <h1 className="text-xl mb-4">Map Options</h1>
           <Control
-            radio={radio}
-            handleRadio={handleRadio}
             handleVisibility={handleVisibility}
             handleBounds={handleBounds}
           />
