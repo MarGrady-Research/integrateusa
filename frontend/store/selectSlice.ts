@@ -10,7 +10,12 @@ export interface SelectState {
   grade: string;
   id: number;
   selectedName: string;
-  bounds: [number, number][];
+  bounds: {
+    lngmin: number;
+    latmin: number;
+    lngmax: number;
+    latmax: number;
+  };
 }
 
 const currentYear = Math.max(...yearsData.map((e) => e.value));
@@ -21,10 +26,12 @@ const initialState: SelectState = {
   grade: "All",
   id: 3620580,
   selectedName: "New York City Public Schools (NY)",
-  bounds: [
-    [-74.25609, 40.496094],
-    [-73.70017, 40.915276],
-  ],
+  bounds: {
+    lngmin: -74.25609,
+    latmin: 40.496094,
+    lngmax: -73.70017,
+    latmax: 40.915276,
+  },
 };
 
 export const selectSlice = createSlice({

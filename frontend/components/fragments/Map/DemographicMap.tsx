@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import Map, {
   Layer,
   Source,
@@ -7,14 +7,18 @@ import Map, {
   FullscreenControl,
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useSelector } from "react-redux";
 
 import mapbox_token from "../../../Key";
 import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
 import AreaDialog from "./components/AreaDialog";
 import SchoolDialog from "./components/SchoolDialog";
+import { selectBounds } from "../../../store/selectSlice";
 
-export default function DemographicMap({ mapData }) {
+export default function DemographicMap({ mapData, onSmallerScreen }) {
+  const initialBounds = useSelector(selectBounds);
+
   const [cursor, setCursor] = useState("auto");
 
   const [stateVisible, setStateVisible] = useState("none");
@@ -134,7 +138,6 @@ export default function DemographicMap({ mapData }) {
   const mapRef = useRef();
 
   const updateBounds = useCallback((e) => {
-    console.log(e);
     if (mapRef.current) {
       (mapRef.current as any).fitBounds(
         [
@@ -222,6 +225,13 @@ export default function DemographicMap({ mapData }) {
     }
   }, []);
 
+  const onLoad = () => {
+    if (onSmallerScreen) {
+      updateBounds(initialBounds);
+    }
+    querySchools();
+  };
+
   return (
     <>
       <Map
@@ -244,7 +254,7 @@ export default function DemographicMap({ mapData }) {
         cursor={cursor}
         onDragStart={onMouseOut}
         onDragEnd={querySchools}
-        onLoad={querySchools}
+        onLoad={onLoad}
         onMouseMove={handleHover}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

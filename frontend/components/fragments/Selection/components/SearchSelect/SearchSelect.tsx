@@ -23,10 +23,12 @@ export default function SearchSelect() {
     dispatch(setId(e.value));
     dispatch(setSelectedName(e.label));
     dispatch(
-      setBounds([
-        [e.lngmin, e.latmin],
-        [e.lngmax, e.latmax],
-      ])
+      setBounds({
+        lngmin: e.lngmin,
+        latmin: e.latmin,
+        lngmax: e.lngmax,
+        latmax: e.latmax,
+      })
     );
   };
 

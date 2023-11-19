@@ -38,6 +38,11 @@ export default function Info({ infoData, title }) {
     },
   };
 
+  const mapBounds = [
+    [bounds.lngmin, bounds.latmin],
+    [bounds.lngmax, bounds.latmax],
+  ];
+
   return (
     <>
       {filterData.length > 0 && title && (
@@ -46,7 +51,7 @@ export default function Info({ infoData, title }) {
       <h2 className="text-2xl mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>
-          <InsetMap id={id} bounds={bounds} />
+          <InsetMap id={id} bounds={mapBounds} />
         </div>
         <div className={clsx(container, "col-span-2")}>
           <SchoolLevelTable schoolLevel={schoolLevel} />

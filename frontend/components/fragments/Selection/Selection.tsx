@@ -10,6 +10,9 @@ import SearchSelect from "./components/SearchSelect";
 import YearSelect from "./components/YearSelect";
 import GradeSelect from "./components/GradeSelect";
 
+// @ts-ignore
+import { expandButton } from "./Selection.module.scss";
+
 interface Props {
   getData: () => void;
   isLoading: boolean;
@@ -45,7 +48,10 @@ export default function Selection({ getData, isLoading }: Props) {
         </div>
       </div>
       <Button
-        className="!absolute left-1/2 -translate-x-1/2 -translate-y-1/2 !bg-white !rounded-full lg:!hidden"
+        className={clsx(
+          "!absolute left-1/2 -translate-x-1/2 -translate-y-1/3 !p-0 !bg-white !rounded-full  lg:!hidden",
+          expandButton
+        )}
         variant="outlined"
         onClick={toggleExpanded}
       >

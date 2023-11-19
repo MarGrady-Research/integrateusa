@@ -10,6 +10,8 @@ import Loader from "../components/fragments/Loader";
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";
 
+type Device = "Tablet" | "Desktop" | "Initial";
+
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
   const [mapData, setMapData] = useState({
@@ -38,6 +40,33 @@ export default function Map() {
     getData();
   }, []);
 
+  const [device, setDevice] = useState("Initial");
+
+  useEffect(() => {
+    const returnDevice = (): Device => {
+      if (window.innerWidth < 1024) {
+        return "Tablet";
+      }
+
+      return "Desktop";
+    };
+
+    const handleResize = () => {
+      const currentDevice = returnDevice();
+      setDevice(currentDevice);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const deviceLoading = device === "Initial";
+  const onSmallerScreen = device === "Tablet";
+
   return (
     <>
       <Head title="Map" desc="Mapping segregation">
@@ -45,12 +74,12 @@ export default function Map() {
       </Head>
       <Header />
       <div className={clsx("absolute w-full", mapHolder)}>
-        {isLoading ? (
+        {isLoading || deviceLoading ? (
           <div className="pt-5">
             <Loader />
           </div>
         ) : (
-          <DemographicMap mapData={mapData} />
+          <DemographicMap mapData={mapData} onSmallerScreen={onSmallerScreen} />
         )}
       </div>
     </>
