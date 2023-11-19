@@ -28,7 +28,7 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header className="text-black bg-white body-font font-sans shadow">
+    <header className="text-black bg-white font-sans shadow">
       <div className="container p-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <Link href="/">
           <a className="flex title-font font-medium items-center text-black mb-4 md:mb-0">
@@ -40,7 +40,7 @@ export default function Header() {
             />
           </a>
         </Link>
-        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+        <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-lg justify-center">
           <NavLink url="/info" title="Demographic Info" />
           <NavLink url="/segregation" title="Segregation" />
           <NavLink url="/map" title="Map" />

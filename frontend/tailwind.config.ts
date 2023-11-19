@@ -17,7 +17,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Franklin Gothic Book", "sans-serif"],
+        sans: ["Libre Franklin", "sans-serif"],
       },
       colors: {
         primary: primaryColor,

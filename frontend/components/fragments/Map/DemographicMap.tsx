@@ -222,7 +222,7 @@ export default function DemographicMap({ mapData }) {
   }, []);
 
   return (
-    <div className="relative w-full h-[calc(100vh-66px)]">
+    <>
       <Map
         ref={mapRef}
         initialViewState={{
@@ -287,6 +287,6 @@ export default function DemographicMap({ mapData }) {
         handleVisibility={handleVisibility}
         handleBounds={handleBounds}
       />
-    </div>
+    </>
   );
 }

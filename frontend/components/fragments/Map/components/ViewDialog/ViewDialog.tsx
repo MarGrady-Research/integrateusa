@@ -1,7 +1,9 @@
 import React, { memo } from "react";
 import Paper from "@mui/material/Paper";
+import clsx from "clsx";
 
 import SummaryPie from "../SummaryPie";
+import { root } from "./ViewDialog.module.scss";
 
 interface Props {
   renderedFeatures: any[];
@@ -72,9 +74,18 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
   const areSchoolsPresentInView = renderedFeatures.length != 0;
 
   return (
-    <Paper className="absolute bottom-10 left-10 p-3 pb-4 w-60 text-center text-sm hidden lg:block !bg-slate-50">
+    <Paper
+      className={clsx(
+        "absolute bottom-10 left-2.5 p-3 w-60 h-80 text-center text-sm font-sans hidden lg:block font-normal",
+        root
+      )}
+    >
       {!areSchoolsPresentInView ? (
-        <p className="italic">Zoom or drag the map to see school data here!</p>
+        <div className="flex items-center h-full">
+          <p className="italic">
+            Zoom or drag the map to see school data here!
+          </p>
+        </div>
       ) : (
         <>
           <div className="mb-2">
@@ -110,59 +121,6 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
         </>
       )}
     </Paper>
-  );
-
-  return (
-    <div className="absolute bottom-10 left-10 bg-gray-900 text-white text-center font-light w-60 h-72 rounded-md hidden lg:block">
-      <div className="p-3">
-        {!areSchoolsPresentInView ? (
-          <span className="italic">
-            Zoom or drag the map to see school data here!
-          </span>
-        ) : (
-          <>
-            <span>
-              <b>Schools in View: </b>
-              {noOfSchoolsInView}
-            </span>
-            <br />
-            <span>
-              <b>Students Enrolled: </b>
-              {studentsEnrolled}
-            </span>
-            <br />
-            <span className="text-asian">
-              <b>Asian:</b>{" "}
-              <span className="text-white">{asianPercentage}%</span>
-            </span>
-            <br />
-            <span className="text-blackstudents">
-              <b>Black:</b>{" "}
-              <span className="text-white">{blackPercentage}%</span>
-            </span>
-            <br />
-            <span className="text-hispanic">
-              <b>Hispanic:</b>{" "}
-              <span className="text-white">{hispanicPercentage}%</span>
-            </span>
-            <br />
-            <span className="text-whitestudents">
-              <b>White:</b>{" "}
-              <span className="text-white">{whitePercentage}%</span>
-            </span>
-            <br />
-            <span className="text-other">
-              <b>Other:</b>{" "}
-              <span className="text-white">{otherPercentage}%</span>
-            </span>
-            <br />
-            <div className="w-1/2 justify-center pt-2 mx-auto">
-              <SummaryPie pieData={pieData} />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
   );
 });
 
