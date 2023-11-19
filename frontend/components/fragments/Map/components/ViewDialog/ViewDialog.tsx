@@ -11,12 +11,13 @@ const getViewInfo = (renderedFeatures) => {
   let otherTotal = 0;
 
   for (let feature of renderedFeatures) {
-    studentsTotal += feature.properties.tot_enr;
-    asianTotal += feature.properties.as;
-    blackTotal += feature.properties.bl;
-    hispanicTotal += feature.properties.hi;
-    whiteTotal += feature.properties.wh;
-    otherTotal += feature.properties.or;
+    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+    studentsTotal += tot_enr;
+    asianTotal += as;
+    blackTotal += bl;
+    hispanicTotal += hi;
+    whiteTotal += wh;
+    otherTotal += or;
   }
 
   const studentsEnrolled = studentsTotal.toLocaleString();

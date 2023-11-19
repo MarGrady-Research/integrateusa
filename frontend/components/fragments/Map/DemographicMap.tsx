@@ -10,8 +10,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import mapbox_token from "../../../Key";
 import Slideover from "./components/Slideover";
-import AreaPie from "./components/AreaPie";
 import ViewDialog from "./components/ViewDialog";
+import AreaDialog from "./components/AreaDialog";
 import SchoolDialog from "./components/SchoolDialog";
 
 export default function DemographicMap({ mapData }) {
@@ -231,9 +231,6 @@ export default function DemographicMap({ mapData }) {
     }
   };
 
-  let layerProp = () =>
-    clickInfo.feature.properties.STUSPS ? "STUSPS" : "GEOID";
-
   return (
     <div className="relative w-full h-[calc(100vh-66px)]">
       <Map
@@ -293,189 +290,7 @@ export default function DemographicMap({ mapData }) {
           <Layer {...LayerProps} />
         </Source>
         {selectedSchool && <SchoolDialog clickInfo={clickInfo} />}
-        {(selectedSchool || selectedArea) && (
-          <div
-            style={{
-              left: clickInfo.x + 20,
-              top: clickInfo.y + 20,
-              zIndex: 10,
-              position: "absolute",
-              maxWidth: "300px",
-            }}
-            className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
-          >
-            {selectedArea && (
-              <div className="p-3">
-                <span>
-                  <b>{selectedArea}</b>
-                </span>
-                <br />
-                <span>
-                  Total Schools:{" "}
-                  {mapData.features
-                    .filter(
-                      (e) =>
-                        e.properties[areaID()] ===
-                        clickInfo.feature.properties[layerProp()]
-                    )
-                    .length.toLocaleString()}
-                </span>
-                <br />
-                <span>
-                  Students Enrolled:{" "}
-                  {mapData.features
-                    .filter(
-                      (e) =>
-                        e.properties[areaID()] ===
-                        clickInfo.feature.properties[layerProp()]
-                    )
-                    .map((e) => e.properties.tot_enr)
-                    .reduce((a, b) => a + b, 0)
-                    .toLocaleString()}
-                </span>
-                <br />
-                <span className="text-asian">
-                  <b>Asian:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (mapData.features
-                        .filter(
-                          (e) =>
-                            e.properties[areaID()] ===
-                            clickInfo.feature.properties[layerProp()]
-                        )
-                        .map((e) => e.properties.as)
-                        .reduce((a, b) => a + b, 0) /
-                        mapData.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-blackstudents">
-                  <b>Black:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (mapData.features
-                        .filter(
-                          (e) =>
-                            e.properties[areaID()] ===
-                            clickInfo.feature.properties[layerProp()]
-                        )
-                        .map((e) => e.properties.bl)
-                        .reduce((a, b) => a + b, 0) /
-                        mapData.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-hispanic">
-                  <b>Hispanic:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (mapData.features
-                        .filter(
-                          (e) =>
-                            e.properties[areaID()] ===
-                            clickInfo.feature.properties[layerProp()]
-                        )
-                        .map((e) => e.properties.hi)
-                        .reduce((a, b) => a + b, 0) /
-                        mapData.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-other">
-                  <b>Other:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (mapData.features
-                        .filter(
-                          (e) =>
-                            e.properties[areaID()] ===
-                            clickInfo.feature.properties[layerProp()]
-                        )
-                        .map((e) => e.properties.or)
-                        .reduce((a, b) => a + b, 0) /
-                        mapData.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <span className="text-whitestudents">
-                  <b>White:</b>{" "}
-                  <span className="text-white">
-                    {(
-                      (mapData.features
-                        .filter(
-                          (e) =>
-                            e.properties[areaID()] ===
-                            clickInfo.feature.properties[layerProp()]
-                        )
-                        .map((e) => e.properties.wh)
-                        .reduce((a, b) => a + b, 0) /
-                        mapData.features
-                          .filter(
-                            (e) =>
-                              e.properties[areaID()] ===
-                              clickInfo.feature.properties[layerProp()]
-                          )
-                          .map((e) => e.properties.tot_enr)
-                          .reduce((a, b) => a + b, 0)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </span>
-                </span>
-                <br />
-                <div className="w-1/2 justify-center pt-2 mx-auto">
-                  <AreaPie
-                    areaID={areaID}
-                    layerProp={layerProp}
-                    piedata={mapData}
-                    clickInfo={clickInfo}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {selectedArea && <AreaDialog clickInfo={clickInfo} mapData={mapData} />}
         <ViewDialog renderedFeatures={renderedFeatures} />
       </Map>
       <Slideover
