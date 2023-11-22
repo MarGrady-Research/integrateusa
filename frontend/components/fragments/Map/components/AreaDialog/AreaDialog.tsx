@@ -1,14 +1,27 @@
 import React, { memo } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material/styles";
 
 import AreaPie from "../AreaPie";
 
+// @ts-ignore
+import { paper } from "./AreaDialog.module.scss";
+
 interface Props {
-  clickInfo: any;
+  dialogInfo: any;
+  open: boolean;
+  handleClose: () => void;
   mapData: any[];
 }
 
-const getAreaInfo = (clickInfo, mapData) => {
-  const { NAME, GEOID, STUSPS } = clickInfo.feature.properties;
+const getAreaInfo = (dialogInfo, mapData) => {
+  const { NAME, GEOID, STUSPS } = dialogInfo.feature.properties;
 
   const areaName = NAME;
   const layerProp = STUSPS || GEOID;
@@ -35,7 +48,7 @@ const getAreaInfo = (clickInfo, mapData) => {
     const { tot_enr, as, bl, hi, wh, or } = feature.properties;
 
     if (feature.properties[areaId] === layerProp) {
-      schoolsTotal += feature.length;
+      schoolsTotal += 1;
       studentsTotal += tot_enr;
       asianTotal += as;
       blackTotal += bl;
@@ -80,7 +93,7 @@ const getAreaInfo = (clickInfo, mapData) => {
   };
 };
 
-const AreaDialog = memo(({ clickInfo, mapData }: Props) => {
+const AreaDialog = memo(({ dialogInfo, open, handleClose, mapData }: Props) => {
   const {
     areaName,
     schoolsInArea,
@@ -91,54 +104,56 @@ const AreaDialog = memo(({ clickInfo, mapData }: Props) => {
     whitePercentage,
     otherPercentage,
     pieData,
-  } = getAreaInfo(clickInfo, mapData);
+  } = getAreaInfo(dialogInfo, mapData);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <div
-      style={{
-        left: clickInfo.x + 20,
-        top: clickInfo.y + 20,
-        zIndex: 10,
-        position: "absolute",
-        maxWidth: "300px",
-      }}
-      className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
+    <Dialog
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      fullScreen={fullScreen}
+      classes={{ root: "font-sans", paper }}
     >
-      <div className="p-3">
-        <span>
-          <b>{areaName}</b>
-        </span>
-        <br />
-        <span>Total Schools: {schoolsInArea}</span>
-        <br />
-        <span>Students Enrolled: {studentsEnrolled}</span>
-        <br />
-        <span className="text-asian">
-          <b>Asian:</b> <span className="text-white">{asianPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-blackstudents">
-          <b>Black:</b> <span className="text-white">{blackPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-hispanic">
-          <b>Hispanic:</b>{" "}
-          <span className="text-white">{hispanicPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-whitestudents">
-          <b>White:</b> <span className="text-white">{whitePercentage}%</span>
-        </span>
-        <br />
-        <span className="text-other">
-          <b>Other:</b> <span className="text-white">{otherPercentage}%</span>
-        </span>
-        <br />
+      <DialogTitle className="text-center !font-semibold">
+        {areaName}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText className="pb-10">
+          <p>
+            <b>Total Schools:</b> {schoolsInArea}
+          </p>
+          <p>
+            <b>Students Enrolled:</b> {studentsEnrolled}
+          </p>
+        </DialogContentText>
+        <DialogContentText className="pb-4 text-center">
+          <p>
+            <b className="text-asian">Asian: </b> {asianPercentage}%
+          </p>
+          <p>
+            <b className="text-blackstudents">Black: </b> {blackPercentage}%
+          </p>
+          <p>
+            <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+          </p>
+          <p>
+            <b className="text-whitestudents">White: </b> {whitePercentage}%
+          </p>
+          <p>
+            <b className="text-other">Other: </b> {otherPercentage}%
+          </p>
+        </DialogContentText>
         <div className="w-1/2 justify-center pt-2 mx-auto">
           <AreaPie pieData={pieData} />
         </div>
-      </div>
-    </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
   );
 });
 

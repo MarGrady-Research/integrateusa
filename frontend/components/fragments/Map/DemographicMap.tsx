@@ -20,6 +20,12 @@ import { selectBounds } from "../../../store/selectSlice";
 export default function DemographicMap({ mapData, onSmallerScreen }) {
   const initialBounds = useSelector(selectBounds);
 
+  const [schoolDialogOpen, setSchoolDialogOpen] = useState(false);
+  const toggleSchoolDialog = () => setSchoolDialogOpen((o) => !o);
+
+  const [areaDialogOpen, setAreaDialogOpen] = useState(false);
+  const toggleAreaDialog = () => setAreaDialogOpen((o) => !o);
+
   const [cursor, setCursor] = useState("auto");
 
   const [stateVisible, setStateVisible] = useState("none");
@@ -162,13 +168,15 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     updateBounds(e);
   };
 
-  const [clickInfo, setClickInfo] = useState(null);
+  const [hoverInfo, setHoverInfo] = useState(null);
+  const [dialogInfo, setDialogInfo] = useState(null);
 
   let hoverSource;
   let hoverSourceLayer;
 
   const handleHover = useCallback((event) => {
-    setClickInfo(null);
+    setHoverInfo(null);
+    setDialogInfo(null);
     const {
       point: { x, y },
       originalEvent: {
@@ -177,9 +185,17 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     } = event;
 
     const hoveredFeature = event.features && event.features[0];
-    setClickInfo(
-      hoveredFeature && { feature: hoveredFeature, x, y, height, width }
+    setHoverInfo(
+      hoveredFeature && {
+        schoolName: hoveredFeature.properties.sch_name,
+        areaName: hoveredFeature.properties.NAME,
+        x,
+        y,
+        height,
+        width,
+      }
     );
+    setDialogInfo(hoveredFeature && { feature: hoveredFeature });
 
     if (hoveredFeature) {
       hoverSource = hoveredFeature.source;
@@ -202,10 +218,6 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     }
   }, []);
 
-  const selectedSchool =
-    (clickInfo && clickInfo.feature.properties.sch_name) || "";
-  const selectedArea = (clickInfo && clickInfo.feature.properties.NAME) || "";
-
   const onMouseEnter = useCallback(() => setCursor("pointer"), []);
 
   const onMouseLeave = useCallback(() => {
@@ -226,13 +238,25 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         sourceLayer: hoverSourceLayer,
       });
     }
-    setClickInfo(null);
+    setHoverInfo(null);
   }, []);
 
   const handleClick = useCallback(() => {
-    if (clickInfo) {
+    if (dialogInfo) {
+      const isSchool = !!dialogInfo.feature.properties.sch_name;
+
+      if (isSchool) {
+        toggleSchoolDialog();
+        return;
+      }
+
+      const isArea = !!dialogInfo.feature.properties.NAME;
+
+      if (isArea) {
+        toggleAreaDialog();
+      }
     }
-  }, [clickInfo]);
+  }, [dialogInfo]);
 
   const [renderedFeatures, setRenderedFeatures] = useState([]);
 
@@ -252,14 +276,19 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
   };
 
   const coordinates = {
-    x: clickInfo?.x,
-    y: clickInfo?.y,
-    height: clickInfo?.height,
-    width: clickInfo?.width,
+    x: hoverInfo?.x,
+    y: hoverInfo?.y,
+    height: hoverInfo?.height,
+    width: hoverInfo?.width,
   };
 
-  const schoolName = clickInfo?.feature.properties?.sch_name;
-  const areaName = clickInfo?.feature.properties?.NAME;
+  const schoolName = hoverInfo?.schoolName;
+  const areaName = hoverInfo?.areaName;
+
+  const isSchoolSelected =
+    dialogInfo && !!dialogInfo.feature.properties.sch_name;
+
+  const isAreaSelected = dialogInfo && !!dialogInfo.feature.properties.NAME;
 
   return (
     <>
@@ -320,10 +349,23 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         <Source id="schools-source" type="geojson" data={mapData} generateId>
           <Layer {...LayerProps} />
         </Source>
-        {selectedSchool && (
-          <Popup name={schoolName} coordinates={coordinates} />
+        {schoolName && <Popup name={schoolName} coordinates={coordinates} />}
+        {areaName && <Popup name={areaName} coordinates={coordinates} />}
+        {isSchoolSelected && (
+          <SchoolDialog
+            dialogInfo={dialogInfo}
+            open={schoolDialogOpen}
+            handleClose={toggleSchoolDialog}
+          />
         )}
-        {selectedArea && <Popup name={areaName} coordinates={coordinates} />}
+        {isAreaSelected && (
+          <AreaDialog
+            dialogInfo={dialogInfo}
+            open={areaDialogOpen}
+            handleClose={toggleAreaDialog}
+            mapData={mapData}
+          />
+        )}
         <ViewDialog renderedFeatures={renderedFeatures} />
       </Map>
       <Slideover

@@ -1,12 +1,25 @@
 import React, { memo } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material/styles";
 
 import MapPie from "../MapPies";
 
+// @ts-ignore
+import { paper } from "./SchoolDialog.module.scss";
+
 interface Props {
-  clickInfo: any;
+  dialogInfo: any;
+  open: boolean;
+  handleClose: () => void;
 }
 
-const getSchoolInfo = (clickInfo) => {
+const getSchoolInfo = (dialogInfo) => {
   const {
     dist_name,
     county_name,
@@ -18,7 +31,7 @@ const getSchoolInfo = (clickInfo) => {
     wh,
     or,
     sch_name,
-  } = clickInfo.feature.properties;
+  } = dialogInfo.feature.properties;
 
   const districtName = dist_name;
   const countyName = county_name;
@@ -68,7 +81,7 @@ const getSchoolInfo = (clickInfo) => {
   };
 };
 
-const SchoolDialog = memo(({ clickInfo }: Props) => {
+const SchoolDialog = memo(({ dialogInfo, open, handleClose }: Props) => {
   const {
     schoolName,
     districtName,
@@ -81,64 +94,61 @@ const SchoolDialog = memo(({ clickInfo }: Props) => {
     whitePercentage,
     otherPercentage,
     pieData,
-  } = getSchoolInfo(clickInfo);
+  } = getSchoolInfo(dialogInfo);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <div
-      style={{
-        left: clickInfo.x + 20,
-        top: clickInfo.y + 20,
-        zIndex: 10,
-        position: "absolute",
-        maxWidth: "300px",
-      }}
-      className="bg-gray-900 text-white text-center font-light w-60 h-300 rounded-md"
+    <Dialog
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      fullScreen={fullScreen}
+      classes={{ root: "font-sans", paper }}
     >
-      <div className="p-3">
-        <span className="overflow-ellipsis">
-          <b>{schoolName}</b>
-        </span>
-        <br />
-        <span>
-          <b>District: </b>
-          {districtName}
-        </span>
-        <br />
-        <span>
-          <b>County: </b>
-          {countyName}
-        </span>
-        <br />
-        <span>
-          <b>{enrollmentYear} Enrollment: </b> {studentsEnrolled}
-        </span>
-        <br />
-        <span className="text-asian">
-          <b>Asian:</b> <span className="text-white">{asianPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-blackstudents">
-          <b>Black:</b> <span className="text-white">{blackPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-hispanic">
-          <b>Hispanic:</b>{" "}
-          <span className="text-white">{hispanicPercentage}%</span>
-        </span>
-        <br />
-        <span className="text-whitestudents">
-          <b>White:</b> <span className="text-white">{whitePercentage}%</span>
-        </span>
-        <br />
-        <span className="text-other">
-          <b>Other:</b> <span className="text-white">{otherPercentage}%</span>
-        </span>
-        <br />
-        <div className="w-1/2 justify-center pt-2 mx-auto">
+      <DialogTitle className="text-center !font-semibold">
+        {schoolName}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText className="pb-10">
+          <p>
+            <b>District: </b>
+            {districtName}
+          </p>
+          <p>
+            <b>County: </b>
+            {countyName}
+          </p>
+          <p>
+            <b>{enrollmentYear} Enrollment: </b> {studentsEnrolled}
+          </p>
+        </DialogContentText>
+        <DialogContentText className="pb-4 text-center">
+          <p>
+            <b className="text-asian">Asian: </b> {asianPercentage}%
+          </p>
+          <p>
+            <b className="text-blackstudents">Black: </b> {blackPercentage}%
+          </p>
+          <p>
+            <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+          </p>
+          <p>
+            <b className="text-whitestudents">White: </b> {whitePercentage}%
+          </p>
+          <p>
+            <b className="text-other">Other: </b> {otherPercentage}%
+          </p>
+        </DialogContentText>
+        <div className="w-1/2 justify-center mx-auto">
           <MapPie pieData={pieData} />
         </div>
-      </div>
-    </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
   );
 });
 
