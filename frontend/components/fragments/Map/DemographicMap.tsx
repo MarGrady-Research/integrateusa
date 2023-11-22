@@ -14,6 +14,7 @@ import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
 import AreaDialog from "./components/AreaDialog";
 import SchoolDialog from "./components/SchoolDialog";
+import Popup from "./components/Popup";
 import { selectBounds } from "../../../store/selectSlice";
 
 export default function DemographicMap({ mapData, onSmallerScreen }) {
@@ -115,6 +116,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
   const LayerProps = {
     id: "schools",
     type: "circle" as any,
+    source: "schools-source",
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
       "circle-color": [
@@ -130,6 +132,13 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         ["==", ["get", "wh"], prop_array],
         "#339933",
         "#808080",
+      ],
+      "circle-stroke-width": 2,
+      "circle-stroke-color": [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        "#000",
+        "transparent",
       ],
     } as any,
   };
@@ -162,10 +171,15 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     setClickInfo(null);
     const {
       point: { x, y },
+      originalEvent: {
+        originalTarget: { height, width },
+      },
     } = event;
 
     const hoveredFeature = event.features && event.features[0];
-    setClickInfo(hoveredFeature && { feature: hoveredFeature, x, y });
+    setClickInfo(
+      hoveredFeature && { feature: hoveredFeature, x, y, height, width }
+    );
 
     if (hoveredFeature) {
       hoverSource = hoveredFeature.source;
@@ -206,7 +220,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
   }, []);
 
   const onMouseOut = useCallback(() => {
-    if (mapRef.current) {
+    if (mapRef.current && hoverSource && hoverSourceLayer) {
       (mapRef.current as any).removeFeatureState({
         source: hoverSource,
         sourceLayer: hoverSourceLayer,
@@ -214,6 +228,11 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     }
     setClickInfo(null);
   }, []);
+
+  const handleClick = useCallback(() => {
+    if (clickInfo) {
+    }
+  }, [clickInfo]);
 
   const [renderedFeatures, setRenderedFeatures] = useState([]);
 
@@ -231,6 +250,16 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     }
     querySchools();
   };
+
+  const coordinates = {
+    x: clickInfo?.x,
+    y: clickInfo?.y,
+    height: clickInfo?.height,
+    width: clickInfo?.width,
+  };
+
+  const schoolName = clickInfo?.feature.properties?.sch_name;
+  const areaName = clickInfo?.feature.properties?.NAME;
 
   return (
     <>
@@ -255,6 +284,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         onDragStart={onMouseOut}
         onDragEnd={querySchools}
         onLoad={onLoad}
+        onClick={handleClick}
         onMouseMove={handleHover}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -287,11 +317,13 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         >
           <Layer {...stateLayer} />
         </Source>
-        <Source type="geojson" data={mapData}>
+        <Source id="schools-source" type="geojson" data={mapData} generateId>
           <Layer {...LayerProps} />
         </Source>
-        {selectedSchool && <SchoolDialog clickInfo={clickInfo} />}
-        {selectedArea && <AreaDialog clickInfo={clickInfo} mapData={mapData} />}
+        {selectedSchool && (
+          <Popup name={schoolName} coordinates={coordinates} />
+        )}
+        {selectedArea && <Popup name={areaName} coordinates={coordinates} />}
         <ViewDialog renderedFeatures={renderedFeatures} />
       </Map>
       <Slideover
