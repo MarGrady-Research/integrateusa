@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import Link from "next/link";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -123,6 +124,16 @@ const SchoolDialog = memo(({ dialogInfo, open, handleClose }: Props) => {
           <p>
             <b>{enrollmentYear} Enrollment: </b> {studentsEnrolled}
           </p>
+          <Link href="/info">
+            <a className="font-semibold text-primary hover:text-secondary table">
+              Demographic Info
+            </a>
+          </Link>
+          <Link href="/segregation">
+            <a className="font-semibold text-primary hover:text-secondary">
+              Segregation
+            </a>
+          </Link>
         </DialogContentText>
         <DialogContentText className="pb-4 text-center">
           <p>
