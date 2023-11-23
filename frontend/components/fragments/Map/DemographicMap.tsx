@@ -171,8 +171,8 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
   const [hoverInfo, setHoverInfo] = useState(null);
   const [dialogInfo, setDialogInfo] = useState(null);
 
-  let hoverSource;
-  let hoverSourceLayer;
+  const [hoverSource, setHoverSource] = useState(null);
+  const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
 
   const handleHover = useCallback((event) => {
     setHoverInfo(null);
@@ -198,8 +198,8 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     setDialogInfo(hoveredFeature && { feature: hoveredFeature });
 
     if (hoveredFeature) {
-      hoverSource = hoveredFeature.source;
-      hoverSourceLayer = hoveredFeature.sourceLayer;
+      setHoverSource(hoveredFeature.source);
+      setHoverSourceLayer(hoveredFeature.sourceLayer);
 
       if (mapRef.current) {
         (mapRef.current as any).removeFeatureState({
@@ -221,7 +221,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
   const onMouseEnter = useCallback(() => setCursor("pointer"), []);
 
   const onMouseLeave = useCallback(() => {
-    if (mapRef.current) {
+    if (mapRef.current && hoverSource && hoverSourceLayer) {
       (mapRef.current as any).removeFeatureState({
         source: hoverSource,
         sourceLayer: hoverSourceLayer,

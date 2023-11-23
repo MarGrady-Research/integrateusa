@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
-import ScrollerPie from "./Graph1";
-import ScrollerBar from "./Graph2";
-import ScrollerBar2 from "./Graph3";
-import ScrollerBar3 from "./Graph4";
-import ScrollerLine from "./Graph5";
-import ScrollerLine2 from "./Graph6";
-import ScrollerLine3 from "./Graph7";
-import ScrollerLine4 from "./Graph8";
+import Link from "next/link";
+import Image from "next/image";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+
+import ScrollerPie from "./graphs/Graph1";
+import ScrollerBar from "./graphs/Graph2";
+import ScrollerBar2 from "./graphs/Graph3";
+import ScrollerBar3 from "./graphs/Graph4";
+import ScrollerLine from "./graphs/Graph5";
+import ScrollerLine2 from "./graphs/Graph6";
+import ScrollerLine3 from "./graphs/Graph7";
+import ScrollerLine4 from "./graphs/Graph8";
 import {
   rawdata,
   schooldata,
@@ -17,13 +22,7 @@ import {
   d15ExposureWhiteV2,
   fullCompData,
   compDataNormalized,
-} from "./Data";
-import Link from "next/link";
-import Image from "next/image";
-import {
-  ChevronDoubleRightIcon,
-  ChevronDoubleDownIcon,
-} from "@heroicons/react/20/solid";
+} from "./data";
 
 export default function Scroller() {
   const stepStyle = {
@@ -43,7 +42,7 @@ export default function Scroller() {
 
   const graphicStyle = {
     flexBasis: "60%",
-    position: "sticky",
+    position: "sticky" as "sticky",
     width: "100%",
     height: "60vh",
     top: "20vh",
@@ -121,7 +120,7 @@ export default function Scroller() {
           <div className="flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center">
             <span className="inline-flex items-center text-xl">
               Explore the dashboard{" "}
-              <ChevronDoubleRightIcon className="h-6 w-6" />
+              <KeyboardDoubleArrowRightIcon className="h-6 w-6" />
             </span>
           </div>
         </Link>
@@ -133,7 +132,7 @@ export default function Scroller() {
             </span>
           </div>
           <div>
-            <ChevronDoubleDownIcon className="w-7 h-7 pt-2 animate-bounce" />
+            <KeyboardDoubleArrowDownIcon className="w-7 h-7 pt-2 animate-bounce" />
           </div>
         </div>
       </div>
@@ -324,7 +323,7 @@ export default function Scroller() {
           <div className="flex flex-col  hover:text-gray-500 hover:cursor-pointer items-center">
             <span className="inline-flex items-center text-xl">
               Explore the dashboard{" "}
-              <ChevronDoubleRightIcon className="h-6 w-6" />
+              <KeyboardDoubleArrowRightIcon className="h-6 w-6" />
             </span>
           </div>
         </Link>
