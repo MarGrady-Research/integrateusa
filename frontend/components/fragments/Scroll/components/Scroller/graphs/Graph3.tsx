@@ -84,13 +84,6 @@ export default function ScrollerBar2({ exposureData }) {
     responsive: true,
     scales: {
       x: {
-        // ticks: {
-        //     maxRotation: 50,
-        //     minRotation: 30,
-        //     padding: 10,
-        //     autoSkip: false,
-        //     fontSize: 10
-        //   },
         grid: {
           display: false,
         },
@@ -106,7 +99,7 @@ export default function ScrollerBar2({ exposureData }) {
         },
         position: "right",
       },
-    },
+    } as any,
   };
 
   return <Bar data={data} options={options} />;

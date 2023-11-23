@@ -25,3 +25,5 @@ services:
       - /app/.next
     ports:
       - "3000:3000"
+    environment:
+      - MAPBOX_TOKEN=${MAPBOX_TOKEN}

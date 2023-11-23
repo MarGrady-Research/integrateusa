@@ -146,7 +146,7 @@ export default function ScrollerLine4({ compDataNormalized }) {
           display: false,
         },
       },
-    },
+    } as any,
     annotations: {
       line1: {
         type: "line",

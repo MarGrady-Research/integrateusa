@@ -126,7 +126,6 @@ export default function ScrollerLine3({ fullCompData }) {
 
   const options = {
     responsive: true,
-    // maintainAspectRatio: true,
     plugins: {
       legend: {
         display: false,
@@ -146,7 +145,7 @@ export default function ScrollerLine3({ fullCompData }) {
           display: false,
         },
       },
-    },
+    } as any,
     annotations: {
       line1: {
         type: "line",
@@ -162,7 +161,6 @@ export default function ScrollerLine3({ fullCompData }) {
         type: "label",
         xValue: 9,
         yValue: 0.45,
-        //backgroundColor: 'rgba(245,245,245)',
         content: ["Integration Plan", "Implemented"],
         font: {
           size: 12,

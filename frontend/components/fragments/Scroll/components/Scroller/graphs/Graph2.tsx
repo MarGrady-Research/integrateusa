@@ -94,7 +94,7 @@ export default function ScrollerBar({ schooldata }) {
         },
         position: "right",
       },
-    },
+    } as any,
   };
 
   return <Bar data={data} options={options} />;

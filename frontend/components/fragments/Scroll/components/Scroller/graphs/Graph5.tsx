@@ -42,7 +42,7 @@ export default function ScrollerLine({ d15ExposureWhite }) {
           display: false,
         },
       },
-    },
+    } as any,
   };
 
   const labels = [

@@ -52,13 +52,6 @@ export default function ScrollerBar3({ comparisonData }) {
     responsive: true,
     scales: {
       x: {
-        // ticks: {
-        //     maxRotation: 50,
-        //     minRotation: 30,
-        //     padding: 10,
-        //     autoSkip: false,
-        //     fontSize: 10
-        //   },
         grid: {
           display: false,
         },
@@ -72,13 +65,12 @@ export default function ScrollerBar3({ comparisonData }) {
         },
         position: "right",
       },
-    },
+    } as any,
     annotations: {
       label1: {
         type: "label",
         xValue: 0,
         yValue: 21,
-        //backgroundColor: 'rgba(245,245,245)',
         content: ["42%"],
         font: {
           size: 18,
@@ -88,7 +80,6 @@ export default function ScrollerBar3({ comparisonData }) {
         type: "label",
         xValue: 1,
         yValue: 12,
-        //backgroundColor: 'rgba(245,245,245)',
         content: ["24%"],
         font: {
           size: 18,
@@ -99,7 +90,6 @@ export default function ScrollerBar3({ comparisonData }) {
         xValue: 2,
         yValue: 9,
         color: "white",
-        //backgroundColor: 'rgba(245,245,245)',
         content: ["18%"],
         font: {
           size: 18,
