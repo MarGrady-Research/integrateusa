@@ -9,7 +9,6 @@ import Map, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useSelector } from "react-redux";
 
-import mapbox_token from "../../../Key";
 import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
 import AreaDialog from "./components/AreaDialog";
@@ -301,7 +300,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         }}
         style={{ position: "relative", width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
-        mapboxAccessToken={mapbox_token}
+        mapboxAccessToken={process.env.MAPBOX_TOKEN}
         attributionControl={true}
         interactiveLayerIds={[
           "schools",

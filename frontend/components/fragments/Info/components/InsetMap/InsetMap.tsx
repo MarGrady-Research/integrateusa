@@ -2,8 +2,6 @@ import React, { useCallback, useRef } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import mapbox_token from "../../../../../Key";
-
 export default function InsetMap({ id, bounds }) {
   // Using the useMap hook to set up ease to functionality
   const mapRef = useRef();
@@ -58,7 +56,7 @@ export default function InsetMap({ id, bounds }) {
         }}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
-        mapboxAccessToken={mapbox_token}
+        mapboxAccessToken={process.env.MAPBOX_TOKEN}
         onLoad={onLoad}
       >
         <Source
