@@ -56,7 +56,7 @@ export default function InsetMap({ id, bounds }) {
         }}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
-        mapboxAccessToken={process.env.MAPBOX_TOKEN}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         onLoad={onLoad}
       >
         <Source

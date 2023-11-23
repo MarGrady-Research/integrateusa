@@ -300,7 +300,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         }}
         style={{ position: "relative", width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
-        mapboxAccessToken={process.env.MAPBOX_TOKEN}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         attributionControl={true}
         interactiveLayerIds={[
           "schools",

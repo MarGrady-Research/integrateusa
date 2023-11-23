@@ -26,4 +26,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MAPBOX_TOKEN=${MAPBOX_TOKEN}
+      - NEXT_PUBLIC_MAPBOX_TOKEN=${MAPBOX_TOKEN}
