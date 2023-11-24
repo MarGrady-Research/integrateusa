@@ -16,7 +16,6 @@ ChartJS.defaults.font.family = defaultFont;
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.withCredentials = true;
 
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
