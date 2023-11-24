@@ -38,7 +38,6 @@ export default function About() {
               target="_blank"
               rel="noreferrer"
             >
-              {" "}
               Common Core of Data.
             </a>{" "}
             The data have been cleaned to standardize school codes and names
@@ -62,8 +61,7 @@ export default function About() {
               target="_blank"
               rel="noreferrer"
             >
-              {" "}
-              Segregation Index project.{" "}
+              Segregation Index project.
             </a>
           </p>
           <p className="mb-3">
@@ -71,8 +69,11 @@ export default function About() {
             support in making this project possible.
           </p>
           <p className="mb-3">
-            If you have any questions, please contact MarGrady Research at
-            integrateusa@margrady.com.
+            If you have any questions, please contact MarGrady Research at{" "}
+            <a href="mailto:integrateusa@margrady.com" className="text-primary">
+              integrateusa@margrady.com
+            </a>
+            .
           </p>
         </div>
       </div>
