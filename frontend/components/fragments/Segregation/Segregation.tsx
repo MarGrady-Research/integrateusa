@@ -10,7 +10,7 @@ import {
   selectSelectedName,
 } from "../../../store/selectSlice";
 
-export default function Segregation({ segData, measure, handleMeasure, year }) {
+export default function Segregation({ segData, year }) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
@@ -99,13 +99,15 @@ export default function Segregation({ segData, measure, handleMeasure, year }) {
     },
   ];
 
+  const [measure, setMeasure] = useState({});
+
   // Use effect to update normalized exposure for selected group
   useEffect(() => {
     const selectedGroup = {
       name: `${selected.label} Normalized Exposure`,
       accessor: selected.value,
     };
-    handleMeasure(selectedGroup);
+    setMeasure(selectedGroup);
   }, [selected]);
 
   return (

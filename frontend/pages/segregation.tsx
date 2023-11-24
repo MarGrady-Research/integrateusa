@@ -51,10 +51,6 @@ export default function SegregationPage() {
     getData();
   }, []);
 
-  // Measure state variable and handleMeasure function to pass to Accordion
-  const [measure, setMeasure] = useState({});
-  const handleMeasure = (e) => setMeasure(e);
-
   return (
     <>
       <Head title="Segregation" desc="Segregation Metrics">
@@ -69,12 +65,7 @@ export default function SegregationPage() {
           </div>
         ) : (
           <div className="mx-auto mt-5">
-            <Segregation
-              segData={segData}
-              measure={measure}
-              handleMeasure={handleMeasure}
-              year={year}
-            />
+            <Segregation segData={segData} year={year} />
           </div>
         )}
       </Page>

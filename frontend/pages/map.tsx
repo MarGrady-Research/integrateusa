@@ -6,11 +6,10 @@ import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
 import Loader from "../components/fragments/Loader";
+import useDevice from "../hooks/useDevice";
 
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";
-
-type Device = "Tablet" | "Desktop" | "Initial";
 
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,30 +39,7 @@ export default function Map() {
     getData();
   }, []);
 
-  const [device, setDevice] = useState("Initial");
-
-  useEffect(() => {
-    const returnDevice = (): Device => {
-      if (window.innerWidth < 1024) {
-        return "Tablet";
-      }
-
-      return "Desktop";
-    };
-
-    const handleResize = () => {
-      const currentDevice = returnDevice();
-      setDevice(currentDevice);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
+  const device = useDevice();
   const deviceLoading = device === "Initial";
   const onSmallerScreen = device === "Tablet";
 
