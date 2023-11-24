@@ -20,9 +20,10 @@ function NavLink({ url, title }: NavLinkProps) {
   return (
     <Link href={url}>
       <a
-        className={`mr-3 sm:mr-5 last:mr-0 hover:text-secondary ${
-          isActiveURL ? "text-primary hover:text-primary" : ""
-        }`}
+        className={clsx({
+          "mr-3 sm:mr-5 last:mr-0 hover:text-secondary ": true,
+          "text-primary hover:text-primary": isActiveURL,
+        })}
       >
         {title}
       </a>

@@ -46,7 +46,7 @@ export default function SearchSelect() {
     if (alt === true && levels === 0) {
       return "/api/districtnamesalt/?q=";
     } else {
-      return "/" + levelSelectData[levels].route;
+      return levelSelectData[levels].route;
     }
   };
 
@@ -58,46 +58,45 @@ export default function SearchSelect() {
     const response = await axios.get(setURL() + input);
 
     const Options = await response.data.map((d) => {
-      if (levels == 0) {
-        return {
-          value: d.dist_id,
-          label: d.dist_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
+      let labelData = {
+        value: "",
+        label: "",
+      };
+
+      switch (levels) {
+        case 0:
+          labelData = {
+            value: d.dist_id,
+            label: d.dist_name,
+          };
+          break;
+        case 1:
+          labelData = {
+            value: d.county_id,
+            label: d.county_name,
+          };
+          break;
+        case 2:
+          labelData = {
+            value: d.state_abb,
+            label: d.state_name,
+          };
+          break;
+        case 3:
+          labelData = {
+            value: d.nces_id,
+            label: d.sch_name,
+          };
+          break;
       }
-      if (levels === 1) {
-        return {
-          value: d.county_id,
-          label: d.county_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
-      }
-      if (levels === 2) {
-        return {
-          value: d.state_abb,
-          label: d.state_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
-      }
-      if (levels === 3) {
-        return {
-          value: d.nces_id,
-          label: d.sch_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
-      }
+
+      return {
+        ...labelData,
+        lngmin: d.lngmin,
+        latmin: d.latmin,
+        lngmax: d.lngmax,
+        latmax: d.latmax,
+      };
     });
 
     return Options;
