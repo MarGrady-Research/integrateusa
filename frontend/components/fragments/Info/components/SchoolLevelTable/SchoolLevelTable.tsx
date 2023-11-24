@@ -1,49 +1,83 @@
 import React from "react";
 
-export default function SchoolLevelTable({ infoData }) {
+const getSchoolLevel = (infoData) => {
   const schoolLevel = {
-    ES: infoData.filter((e) => e.level === "ES"),
-    ESMS: infoData.filter((e) => e.level === "ESMS"),
-    MS: infoData.filter((e) => e.level === "MS"),
-    MSHS: infoData.filter((e) => e.level === "MSHS"),
-    HS: infoData.filter((e) => e.level === "HS"),
-    K12: infoData.filter((e) => e.level === "K12"),
-    Other: infoData.filter((e) => e.level === "Other"),
+    ES: {
+      schools: 0,
+      students: 0,
+    },
+    ESMS: {
+      schools: 0,
+      students: 0,
+    },
+    MS: {
+      schools: 0,
+      students: 0,
+    },
+    MSHS: {
+      schools: 0,
+      students: 0,
+    },
+    HS: {
+      schools: 0,
+      students: 0,
+    },
+    K12: {
+      schools: 0,
+      students: 0,
+    },
+    Other: {
+      schools: 0,
+      students: 0,
+    },
     Total: {
-      all_schools: infoData.length,
-      all_students: infoData.map((e) => e.tot_enr).reduce((a, b) => a + b, 0),
+      schools: 0,
+      students: 0,
     },
   };
 
+  for (let school of infoData) {
+    schoolLevel.Total.schools += 1;
+    schoolLevel.Total.students += school.tot_enr;
+
+    schoolLevel[school.level].schools += 1;
+    schoolLevel[school.level].students += school.tot_enr;
+  }
+
+  return schoolLevel;
+};
+
+export default function SchoolLevelTable({ infoData }) {
+  const schoolLevel = getSchoolLevel(infoData);
+
+  const totalSchools = schoolLevel.Total.schools;
+  const totalStudents = schoolLevel.Total.students;
+
   const tableRows = (schooltype) => {
+    const noOfSchools = schoolLevel[schooltype].schools;
+    const noOfStudents = schoolLevel[schooltype].students;
+
+    const percentageOfSchools = Math.round((noOfSchools / totalSchools) * 100);
+    const percentageOfStudents = Math.round(
+      (noOfStudents / totalStudents) * 100
+    );
+
+    const noOfSchoolsString = noOfSchools.toLocaleString();
+    const noOfStudentsString = noOfStudents.toLocaleString();
+
     return (
       <tr key={schooltype} className="border-b">
         <td className="school-td">{schooltype}</td>
-        <td className="school-td">{schoolLevel[schooltype].length}</td>
-        <td className="school-td">
-          {Math.round(
-            (schoolLevel[schooltype].length / schoolLevel.Total.all_schools) *
-              100
-          )}
-        </td>
-        <td className="school-td">
-          {schoolLevel[schooltype]
-            .map((e) => e.tot_enr)
-            .reduce((a, b) => a + b, 0)
-            .toLocaleString()}
-        </td>
-        <td className="school-td">
-          {Math.round(
-            (schoolLevel[schooltype]
-              .map((e) => e.tot_enr)
-              .reduce((a, b) => a + b, 0) /
-              schoolLevel.Total.all_students) *
-              100
-          )}
-        </td>
+        <td className="school-td">{noOfSchoolsString}</td>
+        <td className="school-td">{percentageOfSchools}</td>
+        <td className="school-td">{noOfStudentsString}</td>
+        <td className="school-td">{percentageOfStudents}</td>
       </tr>
     );
   };
+
+  const totalSchoolsString = totalSchools.toLocaleString();
+  const totalStudentsString = totalStudents.toLocaleString();
 
   return (
     <div className="shadow overflow-x-auto border border-gray-200">
@@ -84,13 +118,13 @@ export default function SchoolLevelTable({ infoData }) {
               Total
             </td>
             <td scope="col" className="school-td font-medium py-4">
-              {schoolLevel.Total.all_schools.toLocaleString()}
+              {totalSchoolsString}
             </td>
             <td scope="col" className="school-td font-medium py-4">
               100
             </td>
             <td scope="col" className="school-td font-medium py-4">
-              {schoolLevel.Total.all_students.toLocaleString()}
+              {totalStudentsString}
             </td>
             <td scope="col" className="school-td font-medium py-4">
               100
