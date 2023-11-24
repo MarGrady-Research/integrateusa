@@ -10,7 +10,7 @@ export default function InsetMap({ id, bounds }) {
     (mapRef.current as any).fitBounds(bounds, { padding: 25, duration: 2000 });
   }, [bounds]);
 
-  let stringID = "" + id;
+  let stringID = id.toString();
 
   const districtLayer = {
     id: "district-boundary",

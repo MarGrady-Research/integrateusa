@@ -16,9 +16,6 @@ const BarChart = dynamic(() => import("./components/Bar"), {
 });
 
 export default function Info({ infoData, title }) {
-  /* used this when we were selecting all grades and years -- but too slow */
-  /* let filterData = InfoData.filter(e => e.grade === grade & e.year === year) */
-
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
 
