@@ -1,6 +1,20 @@
 import React from "react";
 
-export default function SchoolLevelTable({ schoolLevel }) {
+export default function SchoolLevelTable({ infoData }) {
+  const schoolLevel = {
+    ES: infoData.filter((e) => e.level === "ES"),
+    ESMS: infoData.filter((e) => e.level === "ESMS"),
+    MS: infoData.filter((e) => e.level === "MS"),
+    MSHS: infoData.filter((e) => e.level === "MSHS"),
+    HS: infoData.filter((e) => e.level === "HS"),
+    K12: infoData.filter((e) => e.level === "K12"),
+    Other: infoData.filter((e) => e.level === "Other"),
+    Total: {
+      all_schools: infoData.length,
+      all_students: infoData.map((e) => e.tot_enr).reduce((a, b) => a + b, 0),
+    },
+  };
+
   const tableRows = (schooltype) => {
     return (
       <tr key={schooltype} className="border-b">

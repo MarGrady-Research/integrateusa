@@ -19,22 +19,6 @@ export default function Info({ infoData, title }) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
 
-  let filterData = infoData;
-
-  const schoolLevel = {
-    ES: filterData.filter((e) => e.level === "ES"),
-    ESMS: filterData.filter((e) => e.level === "ESMS"),
-    MS: filterData.filter((e) => e.level === "MS"),
-    MSHS: filterData.filter((e) => e.level === "MSHS"),
-    HS: filterData.filter((e) => e.level === "HS"),
-    K12: filterData.filter((e) => e.level === "K12"),
-    Other: filterData.filter((e) => e.level === "Other"),
-    Total: {
-      all_schools: filterData.length,
-      all_students: filterData.map((e) => e.tot_enr).reduce((a, b) => a + b, 0),
-    },
-  };
-
   const mapBounds = [
     [bounds.lngmin, bounds.latmin],
     [bounds.lngmax, bounds.latmax],
@@ -42,7 +26,7 @@ export default function Info({ infoData, title }) {
 
   return (
     <>
-      {filterData.length > 0 && title && (
+      {infoData.length > 0 && title && (
         <h1 className="text-4xl font-bold mb-5">{title}</h1>
       )}
       <h2 className="text-2xl mb-4">Overview</h2>
@@ -51,15 +35,15 @@ export default function Info({ infoData, title }) {
           <InsetMap id={id} bounds={mapBounds} />
         </div>
         <div className={clsx(container, "col-span-2")}>
-          <SchoolLevelTable schoolLevel={schoolLevel} />
+          <SchoolLevelTable infoData={infoData} />
         </div>
         <div className={container}>
-          <PieChart filterData={filterData} />
+          <PieChart filterData={infoData} />
         </div>
       </div>
       <div className="mb-10">
         <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-        <BarChart filterData={filterData} />
+        <BarChart filterData={infoData} />
       </div>
     </>
   );
