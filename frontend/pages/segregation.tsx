@@ -33,7 +33,7 @@ export default function SegregationPage() {
         break;
     }
 
-    const url = `http://localhost:8000/api/${idlevel}/?year=${year}&grade=${grade}`;
+    const url = `/api/${idlevel}/?year=${year}&grade=${grade}`;
 
     setIsLoading(true);
     axios

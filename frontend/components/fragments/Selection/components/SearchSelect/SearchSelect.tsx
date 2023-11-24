@@ -44,9 +44,9 @@ export default function SearchSelect() {
 
   const setURL = () => {
     if (alt === true && levels === 0) {
-      return "http://localhost:8000/" + "api/districtnamesalt/?q=";
+      return "/api/districtnamesalt/?q=";
     } else {
-      return "http://localhost:8000/" + levelSelectData[levels].route;
+      return "/" + levelSelectData[levels].route;
     }
   };
 

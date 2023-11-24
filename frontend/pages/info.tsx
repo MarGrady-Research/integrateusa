@@ -49,8 +49,8 @@ export default function InfoPage() {
           break;
       }
 
-      const infoUrl = `http://localhost:8000/api/schools/?year=${year}&grade=${grade}&${levelSelectData[levels].id}=${id}`;
-      const trendUrl = `http://localhost:8000/api/${table}/?${levelSelectData[levels].id}=${id}`;
+      const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelSelectData[levels].id}=${id}`;
+      const trendUrl = `/api/${table}/?${levelSelectData[levels].id}=${id}`;
 
       setIsLoading(true);
 

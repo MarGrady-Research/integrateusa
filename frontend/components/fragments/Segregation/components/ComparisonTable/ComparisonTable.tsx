@@ -105,14 +105,7 @@ export default function Comparison({
       });
 
     const response = await axios.get(
-      "http://localhost:8000/api/" +
-        table +
-        "/?grade=" +
-        grade +
-        "&" +
-        idlevel +
-        "=" +
-        id
+      "/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id
     );
     let data = response.data;
 

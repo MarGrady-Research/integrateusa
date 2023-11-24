@@ -10,11 +10,11 @@ export default function Search({ level, handleBounds }) {
   // Set URL to search for Counties/Districts/States
   const url = () => {
     if (level === "District") {
-      return "http://localhost:8000/" + "api/districtnames/?q=";
+      return "/api/districtnames/?q=";
     } else if (level === "County") {
-      return "http://localhost:8000/" + "api/countynames/?q=";
+      return "/api/countynames/?q=";
     } else if (level === "State") {
-      return "http://localhost:8000/" + "api/statenames/?q=";
+      return "/api/statenames/?q=";
     }
   };
 

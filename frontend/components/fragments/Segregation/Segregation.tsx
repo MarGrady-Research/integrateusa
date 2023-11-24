@@ -86,12 +86,7 @@ export default function Segregation({ segData, year }) {
     setFocus(findFocus(segData, idlevel, strID));
   }, [segData, idlevel, strID]);
 
-  const [selected, setSelected] = useState({
-    value: "norm_exp_bl",
-    label: "Black",
-    iso: "exp_bl_bl",
-    non: "exp_non_bl_bl",
-  });
+  const [selected, setSelected] = useState(options[2]);
 
   const [measure, setMeasure] = useState({});
 
@@ -120,12 +115,7 @@ export default function Segregation({ segData, year }) {
             The typical{" "}
             <Select
               options={options}
-              defaultValue={{
-                value: "norm_exp_bl",
-                label: "Black",
-                iso: "exp_bl_bl",
-                non: "exp_non_bl_bl",
-              }}
+              defaultValue={options[2]}
               onChange={(e) => setSelected(e)}
               components={{ IndicatorSeparator: () => null }}
               isSearchable={false}

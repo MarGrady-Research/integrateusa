@@ -22,7 +22,7 @@ export default function Map() {
     setIsLoading(true);
 
     axios
-      .get("http://localhost:8000/api/mapschools/?q=2022")
+      .get("/api/mapschools/?q=2022")
       .then((res) => {
         setMapData((d) => ({
           ...d,
