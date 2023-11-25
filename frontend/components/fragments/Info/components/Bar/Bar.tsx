@@ -36,6 +36,29 @@ export default function BarChart({ filterData }) {
   const [otherOrder, setOtherOrder] = useState(1);
   const [whiteOrder, setWhiteOrder] = useState(1);
 
+  const sortData = (group) => {
+    let newdata = filterData;
+    newdata.sort((a, b) => {
+      return a[group] - b[group];
+    });
+
+    setLabels(newdata.map((e) => e.sch_name));
+
+    group === "prop_as" ? setAsianOrder(0) : setAsianOrder(1);
+    group === "prop_bl" ? setBlackOrder(0) : setBlackOrder(1);
+    group === "prop_hi" ? setHispanicOrder(0) : setHispanicOrder(1);
+    group === "prop_or" ? setOtherOrder(0) : setOtherOrder(1);
+    group === "prop_wh" ? setWhiteOrder(0) : setWhiteOrder(1);
+  };
+
+  const sortOptions = [
+    { value: "prop_as", label: "Asian" },
+    { value: "prop_bl", label: "Black" },
+    { value: "prop_hi", label: "Hispanic" },
+    { value: "prop_or", label: "Other" },
+    { value: "prop_wh", label: "White" },
+  ];
+
   const barData = [
     {
       label: "Asian",
@@ -74,29 +97,6 @@ export default function BarChart({ filterData }) {
     },
   ];
 
-  const sortData = (group) => {
-    let newdata = filterData;
-    newdata.sort((a, b) => {
-      return a[group] - b[group];
-    });
-
-    setLabels(newdata.map((e) => e.sch_name));
-
-    group === "prop_as" ? setAsianOrder(0) : setAsianOrder(1);
-    group === "prop_bl" ? setBlackOrder(0) : setBlackOrder(1);
-    group === "prop_hi" ? setHispanicOrder(0) : setHispanicOrder(1);
-    group === "prop_or" ? setOtherOrder(0) : setOtherOrder(1);
-    group === "prop_wh" ? setWhiteOrder(0) : setWhiteOrder(1);
-  };
-
-  const sortOptions = [
-    { value: "prop_as", label: "Asian" },
-    { value: "prop_bl", label: "Black" },
-    { value: "prop_hi", label: "Hispanic" },
-    { value: "prop_or", label: "Other" },
-    { value: "prop_wh", label: "White" },
-  ];
-
   const data = {
     labels: labels,
     datasets: barData,
@@ -109,7 +109,7 @@ export default function BarChart({ filterData }) {
         display: true,
         callbacks: {
           label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
+            const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
         },
