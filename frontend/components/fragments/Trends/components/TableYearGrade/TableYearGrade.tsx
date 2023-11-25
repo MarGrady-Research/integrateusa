@@ -4,22 +4,29 @@ import Button from "@mui/material/Button";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
+import { TrendData } from "../../../../../interfaces";
+
+interface Props {
+  trendData: TrendData;
+  selectedGrade: string;
+  selectedYear: number;
+}
 
 export default function TableYearGrade({
   trendData,
   selectedGrade,
   selectedYear,
-}) {
+}: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
 
-  const tableHeader = (e) => (
+  const tableHeader = (grades) => (
     <tr>
-      <th scope="col" className="school-ch"></th>
-      {e.map((element) => (
-        <th scope="col" className="school-th" key={element.value}>
-          {element.label}
+      <th scope="col" className="school-ch" />
+      {grades.map((grade) => (
+        <th scope="col" className="school-th" key={grade.value}>
+          {grade.label}
         </th>
       ))}
     </tr>
@@ -70,6 +77,7 @@ export default function TableYearGrade({
     ));
   };
 
+  const buttonMsg = expanded ? "View less" : "View more";
   return (
     <>
       <div className="shadow border border-gray-200 overflow-x-auto mb-4">
@@ -82,9 +90,7 @@ export default function TableYearGrade({
       </div>
       {isInDecade && (
         <div className="flex justify-end" onClick={toggleExpanded}>
-          <Button variant="outlined">
-            {expanded ? "View less" : "View more"}
-          </Button>
+          <Button variant="outlined">{buttonMsg}</Button>
         </div>
       )}
     </>
