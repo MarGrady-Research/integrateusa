@@ -13,3 +13,11 @@
     background-color: #f2f2f2;
   }
 }
+
+.headCell {
+  @apply px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider;
+}
+
+.contentCell {
+  @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap;
+}

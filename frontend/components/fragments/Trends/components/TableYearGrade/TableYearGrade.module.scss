@@ -11,9 +11,3 @@
     @extend .contentCell;
   }
 }
-
-.footerRow {
-  td {
-    @apply font-medium py-4;
-  }
-}

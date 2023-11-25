@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,12 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+import {
+  selectedLineColor,
+  unselectedLineColor,
+} from "../../../../../constants";
+import { TrendData } from "../../../../../interfaces";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,28 +27,55 @@ ChartJS.register(
   Legend
 );
 
-export default function GradeLines({ trendData, grade }) {
-  const grades = [
-    "PK",
-    "KG",
-    "01",
-    "02",
-    "03",
-    "04",
-    "05",
-    "06",
-    "07",
-    "08",
-    "09",
-    "10",
-    "11",
-    "12",
-    "UG",
-  ];
+const grades = [
+  "PK",
+  "KG",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "UG",
+];
 
-  let sortedData = trendData.sort((a, b) => {
-    return a["year"] - b["year"];
-  });
+interface Props {
+  trendData: TrendData;
+  grade: string;
+}
+
+const sortTrendData = (trendData: TrendData) =>
+  trendData.sort((a, b) => a.year - b.year);
+
+const getLineData = (data: TrendData) => {
+  const lineData = {};
+
+  for (let grade of grades) {
+    lineData[grade] = [];
+  }
+
+  for (let trend of data) {
+    const { asian, black, hispanic, white, other } = trend;
+    const total = asian + black + hispanic + white + other;
+
+    if (lineData[trend.grade]) {
+      lineData[trend.grade].push(total);
+    }
+  }
+
+  return lineData;
+};
+
+export default function GradeLines({ trendData, grade }: Props) {
+  const sortedData = useMemo(() => sortTrendData(trendData), [trendData]);
+
+  const lineData = useMemo(() => getLineData(sortedData), [sortedData]);
 
   const options = {
     responsive: true,
@@ -60,24 +93,18 @@ export default function GradeLines({ trendData, grade }) {
 
   const labels = [...new Set(sortedData.map((e) => e.year))];
 
-  const makeLines = () => {
-    return grades.map((el) => {
-      return {
-        label: el,
-        data: sortedData
-          .filter((e) => e.grade === el)
-          .map((e) => e.asian + e.black + e.hispanic + e.other + e.white),
-        borderColor: el === grade ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
-        backgroundColor:
-          el === grade ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
-      };
-    });
-  };
+  const makeLines = () =>
+    grades.map((el) => ({
+      label: el,
+      data: lineData[el],
+      borderColor: el === grade ? selectedLineColor : unselectedLineColor,
+      backgroundColor: el === grade ? selectedLineColor : unselectedLineColor,
+    }));
 
   const data = {
     labels,
     datasets: makeLines(),
   };
 
-  return <>{trendData && <Line options={options} data={data} />}</>;
+  return <Line options={options} data={data} />;
 }

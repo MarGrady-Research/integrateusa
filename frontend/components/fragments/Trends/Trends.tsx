@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade";
+import GradeLine from "./components/GradeLine";
+
 import { selectGrade, selectYear } from "../../../store/selectSlice";
 
 import { TrendData } from "../../../interfaces";
@@ -15,33 +17,6 @@ interface Props {
 export default function Trends({ trendData }: Props) {
   const grade = useSelector(selectGrade);
   const year = useSelector(selectYear);
-
-  /*for (let i = 0; i < trendData.length; i++) {
-    trendData[i]["total"] =
-      trendData[i]["asian"] +
-      trendData[i]["black"] +
-      trendData[i]["hispanic"] +
-      trendData[i]["white"] +
-      trendData[i]["other"];
-    trendData[i]["prop_as"] =
-      Math.round((trendData[i]["asian"] / trendData[i]["total"]) * 1000) / 10;
-    trendData[i]["prop_bl"] =
-      Math.round((trendData[i]["black"] / trendData[i]["total"]) * 1000) / 10;
-    trendData[i]["prop_hi"] =
-      Math.round((trendData[i]["hispanic"] / trendData[i]["total"]) * 1000) /
-      10;
-    trendData[i]["prop_wh"] =
-      Math.round((trendData[i]["white"] / trendData[i]["total"]) * 1000) / 10;
-    trendData[i]["prop_ot"] =
-      Math.round(
-        (100 -
-          (trendData[i]["prop_as"] +
-            trendData[i]["prop_bl"] +
-            trendData[i]["prop_hi"] +
-            trendData[i]["prop_wh"])) *
-          10
-      ) / 10;
-  }*/
 
   if (trendData.length > 0) {
     return (
@@ -60,11 +35,12 @@ export default function Trends({ trendData }: Props) {
           </div>
         </div>
         <h2 className="text-2xl mb-4">Enrollment Trends by Grade</h2>
-        {/*<TableYearGrade
+        <TableYearGrade
           trendData={trendData}
           selectedGrade={grade}
           selectedYear={year}
-    />*/}
+        />
+        <GradeLine trendData={trendData} grade={grade} />
       </>
     );
   }

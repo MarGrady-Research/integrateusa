@@ -6,6 +6,9 @@ import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
 import { TrendData } from "../../../../../interfaces";
 
+// @ts-ignore
+import { headRow, contentRow } from "./TableYearGrade.module.scss";
+
 interface Props {
   trendData: TrendData;
   selectedGrade: string;
@@ -22,10 +25,10 @@ export default function TableYearGrade({
   const toggleExpanded = () => setExpanded((e) => !e);
 
   const tableHeader = (grades) => (
-    <tr>
-      <th scope="col" className="school-ch" />
+    <tr className={headRow}>
+      <th scope="col" />
       {grades.map((grade) => (
-        <th scope="col" className="school-th" key={grade.value}>
+        <th scope="col" key={grade.value}>
           {grade.label}
         </th>
       ))}
@@ -35,10 +38,13 @@ export default function TableYearGrade({
   const renderCell = (grade, year) => {
     let content = "-";
 
-    const cells = trendData.filter((e) => e.year === year && e.grade === grade);
+    const trend = trendData.find((t) => t.year === year && t.grade === grade);
 
-    if (cells.length > 0) {
-      content = cells[0]["total"].toLocaleString();
+    if (trend) {
+      const { asian, black, hispanic, white, other } = trend;
+      const total = asian + black + hispanic + white + other;
+
+      content = total.toLocaleString();
     }
 
     const isSelectedYear = year === selectedYear;
@@ -47,10 +53,7 @@ export default function TableYearGrade({
     const isSelected = isSelectedGrade || isSelectedYear;
 
     return (
-      <td
-        className={clsx({ "school-td": true, "bg-gray-100": isSelected })}
-        key={grade}
-      >
+      <td className={clsx({ "bg-gray-100": isSelected })} key={grade}>
         {content}
       </td>
     );
@@ -63,10 +66,9 @@ export default function TableYearGrade({
 
   const tableBody = () => {
     return yearsToDisplay.map((year) => (
-      <tr key={year.value}>
+      <tr key={year.value} className={contentRow}>
         <td
           className={clsx({
-            "school-ch": true,
             "bg-gray-100": year.value === selectedYear,
           })}
         >
@@ -78,6 +80,7 @@ export default function TableYearGrade({
   };
 
   const buttonMsg = expanded ? "View less" : "View more";
+
   return (
     <>
       <div className="shadow border border-gray-200 overflow-x-auto mb-4">

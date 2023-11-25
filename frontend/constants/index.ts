@@ -10,4 +10,6 @@ export {
   districtBoundaryURL,
   countyBoundaryURL,
   stateBoundaryURL,
+  selectedLineColor,
+  unselectedLineColor,
 } from "./constants";
