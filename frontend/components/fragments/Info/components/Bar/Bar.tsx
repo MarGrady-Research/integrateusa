@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -20,6 +20,8 @@ import {
 } from "../../../../../constants";
 import { legendMargin } from "../../../../../charts";
 
+import { InfoData } from "../../../../../interfaces";
+
 ChartJS.register(
   LinearScale,
   BarElement,
@@ -29,7 +31,15 @@ ChartJS.register(
   zoomPlugin
 );
 
-export default function BarChart({ infoData }) {
+interface Props {
+  infoData: InfoData;
+}
+
+const getBarData = (infoData: InfoData) => {};
+
+export default function BarChart({ infoData }: Props) {
+  const barDataRaw = useMemo(() => getBarData(infoData), [infoData]);
+
   const bar = (data, group) => {
     return data.map((e) => e[group]);
   };

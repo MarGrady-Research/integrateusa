@@ -1,6 +1,7 @@
 export type InfoData = School[];
 
 interface School {
+  sch_name: string;
   tot_enr: number;
   asian: number;
   black: number;
