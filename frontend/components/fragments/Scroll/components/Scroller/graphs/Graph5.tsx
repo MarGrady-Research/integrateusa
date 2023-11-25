@@ -10,6 +10,8 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+import { selectedLineColor } from "../../../../../../constants";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -18,6 +20,22 @@ ChartJS.register(
   Title,
   Tooltip
 );
+
+const labels = [
+  2010,
+  2011,
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  "",
+];
 
 export default function ScrollerLine({ d15ExposureWhite }) {
   const options = {
@@ -45,30 +63,14 @@ export default function ScrollerLine({ d15ExposureWhite }) {
     } as any,
   };
 
-  const labels = [
-    2010,
-    2011,
-    2012,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    "",
-  ];
-
   const data = {
     labels,
     datasets: [
       {
         label: "District 15",
         data: d15ExposureWhite,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: selectedLineColor,
+        backgroundColor: selectedLineColor,
       },
     ],
   };

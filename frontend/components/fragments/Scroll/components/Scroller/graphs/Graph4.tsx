@@ -8,27 +8,23 @@ import {
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 
-ChartJS.register(
-  LinearScale,
-  BarElement,
-  CategoryScale,
-  // Tooltip,
-  annotationPlugin
-);
+import { whiteColor } from "../../../../../../constants";
+
+ChartJS.register(LinearScale, BarElement, CategoryScale, annotationPlugin);
+
+const labels = [
+  "Demographics of Avg White Student's School",
+  "Demograpics of Avg Non-White Student's school",
+];
 
 export default function ScrollerBar3({ comparisonData }) {
-  const labels = [
-    "Demographics of Avg White Student's School",
-    "Demograpics of Avg Non-White Student's school",
-  ];
-
   const data = {
     labels: labels,
     datasets: [
       {
         data: comparisonData,
-        backgroundColor: ["#339933", "#339933", "#000000"],
-        borderColor: ["#339933", "#339933", "#000000"],
+        backgroundColor: [whiteColor, whiteColor],
+        borderColor: [whiteColor, whiteColor],
       },
     ],
   };
@@ -42,8 +38,8 @@ export default function ScrollerBar3({ comparisonData }) {
         enabled: false,
         display: false,
         callbacks: {
-          label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
+          label: (context) => {
+            const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
         },
