@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,8 +19,8 @@ import {
   otherColor,
 } from "../../../../../constants";
 import { legendMargin } from "../../../../../charts";
-
-import { InfoData } from "../../../../../interfaces";
+import { InfoData, RacialProportion } from "../../../../../interfaces";
+import { sortOnOrder } from "../../../../../utils";
 
 ChartJS.register(
   LinearScale,
@@ -35,81 +35,96 @@ interface Props {
   infoData: InfoData;
 }
 
-const getBarData = (infoData: InfoData) => {};
+const sortOptions = [
+  { value: "prop_as", label: "Asian" },
+  { value: "prop_bl", label: "Black" },
+  { value: "prop_hi", label: "Hispanic" },
+  { value: "prop_wh", label: "White" },
+  { value: "prop_or", label: "Other" },
+] as { value: RacialProportion; label: string }[];
+
+const labelOrder = ["Asian", "Black", "Hispanic", "White", "Other"];
+
+const getBarData = (data: InfoData) => {
+  const asianData = [];
+  const blackData = [];
+  const hispanicData = [];
+  const whiteData = [];
+  const otherData = [];
+  const labels = [];
+
+  for (let school of data) {
+    const { prop_as, prop_bl, prop_hi, prop_wh, prop_or, sch_name } = school;
+
+    asianData.push(prop_as);
+    blackData.push(prop_bl);
+    hispanicData.push(prop_hi);
+    whiteData.push(prop_wh);
+    otherData.push(prop_or);
+    labels.push(sch_name);
+  }
+
+  return {
+    asianData,
+    blackData,
+    hispanicData,
+    whiteData,
+    otherData,
+    labels,
+  };
+};
 
 export default function BarChart({ infoData }: Props) {
-  const barDataRaw = useMemo(() => getBarData(infoData), [infoData]);
+  const [sortBy, setSortBy] = useState(null as RacialProportion | null);
 
-  const bar = (data, group) => {
-    return data.map((e) => e[group]);
-  };
+  const handleSort = (e) => setSortBy(e.value);
 
-  const [labels, setLabels] = useState(infoData.map((e) => e.sch_name));
+  const sortedData = [...infoData];
 
-  const [asianOrder, setAsianOrder] = useState(0);
-  const [blackOrder, setBlackOrder] = useState(1);
-  const [hispanicOrder, setHispanicOrder] = useState(1);
-  const [whiteOrder, setWhiteOrder] = useState(1);
-  const [otherOrder, setOtherOrder] = useState(1);
-
-  const sortData = (group) => {
-    let newdata = infoData;
-    newdata.sort((a, b) => {
-      return a[group] - b[group];
+  if (!!sortBy) {
+    sortedData.sort((a, b) => {
+      return a[sortBy] - b[sortBy];
     });
+  }
 
-    setLabels(newdata.map((e) => e.sch_name));
-
-    group === "prop_as" ? setAsianOrder(0) : setAsianOrder(1);
-    group === "prop_bl" ? setBlackOrder(0) : setBlackOrder(1);
-    group === "prop_hi" ? setHispanicOrder(0) : setHispanicOrder(1);
-    group === "prop_wh" ? setWhiteOrder(0) : setWhiteOrder(1);
-    group === "prop_or" ? setOtherOrder(0) : setOtherOrder(1);
-  };
-
-  const sortOptions = [
-    { value: "prop_as", label: "Asian" },
-    { value: "prop_bl", label: "Black" },
-    { value: "prop_hi", label: "Hispanic" },
-    { value: "prop_wh", label: "White" },
-    { value: "prop_or", label: "Other" },
-  ];
+  const { asianData, blackData, hispanicData, whiteData, otherData, labels } =
+    getBarData(sortedData);
 
   const barData = [
     {
       label: "Asian",
       id: "prop_as",
-      data: bar(infoData, "prop_as"),
+      data: asianData,
       backgroundColor: asianColor,
-      order: asianOrder,
+      order: sortBy === "prop_as" ? 0 : 1,
     },
     {
       label: "Black",
       id: "prop_bl",
-      data: bar(infoData, "prop_bl"),
+      data: blackData,
       backgroundColor: blackColor,
-      order: blackOrder,
+      order: sortBy === "prop_bl" ? 0 : 1,
     },
     {
       label: "Hispanic",
       id: "prop_hi",
-      data: bar(infoData, "prop_hi"),
+      data: hispanicData,
       backgroundColor: hispanicColor,
-      order: hispanicOrder,
+      order: sortBy === "prop_hi" ? 0 : 1,
     },
     {
       label: "White",
       id: "prop_wh",
-      data: bar(infoData, "prop_wh"),
+      data: whiteData,
       backgroundColor: whiteColor,
-      order: whiteOrder,
+      order: sortBy === "prop_wh" ? 0 : 1,
     },
     {
       label: "Other",
       id: "prop_or",
-      data: bar(infoData, "prop_or"),
+      data: otherData,
       backgroundColor: otherColor,
-      order: otherOrder,
+      order: sortBy === "prop_or" ? 0 : 1,
     },
   ];
 
@@ -120,11 +135,16 @@ export default function BarChart({ infoData }: Props) {
 
   const options = {
     plugins: {
+      legend: {
+        labels: {
+          sort: (a, b) => sortOnOrder(a.text, b.text, labelOrder),
+        },
+      },
       tooltip: {
         enabled: true,
         display: true,
         callbacks: {
-          label: function (context) {
+          label: (context) => {
             const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
@@ -170,7 +190,7 @@ export default function BarChart({ infoData }: Props) {
         <Select
           placeholder="Sort by..."
           options={sortOptions}
-          onChange={(e) => sortData(e.value)}
+          onChange={handleSort}
         />
       </div>
       <div className="lg:w-5/6 mx-auto">

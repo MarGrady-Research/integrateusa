@@ -18,7 +18,7 @@ import {
   selectSelectedName,
 } from "../store/selectSlice";
 
-import { InfoData } from "../interfaces";
+import { InfoData, TrendData } from "../interfaces";
 
 export default function InfoPage() {
   const levels = useSelector(selectLevels);
@@ -28,7 +28,7 @@ export default function InfoPage() {
   const title = useSelector(selectSelectedName);
 
   const [infoData, setInfoData] = useState([] as InfoData);
-  const [trendData, setTrendData] = useState([]);
+  const [trendData, setTrendData] = useState([] as TrendData);
   const [isLoading, setIsLoading] = useState(true);
   const [infoTitle, setInfoTitle] = useState(title);
 

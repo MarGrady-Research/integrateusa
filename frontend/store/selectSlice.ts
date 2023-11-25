@@ -75,8 +75,8 @@ export const {
 } = selectSlice.actions;
 
 export const selectLevels = (state: AppState) => state.select.levels;
-export const selectYear = (state: AppState) => state.select.year;
-export const selectGrade = (state: AppState) => state.select.grade;
+export const selectYear = (state: AppState) => state.select.year as number;
+export const selectGrade = (state: AppState) => state.select.grade as string;
 export const selectId = (state: AppState) => state.select.id as number;
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName;

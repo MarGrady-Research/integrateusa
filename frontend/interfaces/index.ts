@@ -1,1 +1,7 @@
-export type { InfoData, Bounds, SchoolType } from "./interfaces";
+export type {
+  InfoData,
+  TrendData,
+  Bounds,
+  SchoolType,
+  RacialProportion,
+} from "./interfaces";

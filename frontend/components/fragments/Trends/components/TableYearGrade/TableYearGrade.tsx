@@ -6,7 +6,7 @@ import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
 
 export default function TableYearGrade({
-  TrendData,
+  trendData,
   selectedGrade,
   selectedYear,
 }) {
@@ -28,7 +28,7 @@ export default function TableYearGrade({
   const renderCell = (grade, year) => {
     let content = "-";
 
-    const cells = TrendData.filter((e) => e.year === year && e.grade === grade);
+    const cells = trendData.filter((e) => e.year === year && e.grade === grade);
 
     if (cells.length > 0) {
       content = cells[0]["total"].toLocaleString();

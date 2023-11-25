@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-export default function GradeLines({ TrendData, grade }) {
+export default function GradeLines({ trendData, grade }) {
   const grades = [
     "PK",
     "KG",
@@ -40,7 +40,7 @@ export default function GradeLines({ TrendData, grade }) {
     "UG",
   ];
 
-  let sortedData = TrendData.sort((a, b) => {
+  let sortedData = trendData.sort((a, b) => {
     return a["year"] - b["year"];
   });
 
@@ -79,5 +79,5 @@ export default function GradeLines({ TrendData, grade }) {
     datasets: makeLines(),
   };
 
-  return <>{TrendData && <Line options={options} data={data} />}</>;
+  return <>{trendData && <Line options={options} data={data} />}</>;
 }

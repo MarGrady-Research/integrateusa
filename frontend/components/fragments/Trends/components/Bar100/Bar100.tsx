@@ -23,10 +23,12 @@ ChartJS.register(
 );
 
 /* 100% Bar Chart */
-export default function BarChart100({ TrendData, grade, year }) {
-  let sortedData = TrendData.filter((e) => e.grade === grade).sort((a, b) => {
-    return a["year"] - b["year"];
-  });
+export default function BarChart100({ trendData, grade, year }) {
+  let sortedData = trendData
+    .filter((e) => e.grade === grade)
+    .sort((a, b) => {
+      return a["year"] - b["year"];
+    });
 
   const labels = sortedData.map((e) => e.year);
 
