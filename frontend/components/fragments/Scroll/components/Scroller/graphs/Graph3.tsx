@@ -9,6 +9,14 @@ import {
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "../../../../../../constants";
+
 ChartJS.register(
   LinearScale,
   BarElement,
@@ -17,46 +25,71 @@ ChartJS.register(
   annotationPlugin
 );
 
-export default function ScrollerBar2({ exposureData }) {
-  const labels = [
-    "Demographics of Avg White Student's School",
-    "Demograpics of Avg Non-White Student's school",
-  ];
+const labels = [
+  "Demographics of Avg White Student's School",
+  "Demograpics of Avg Non-White Student's school",
+];
 
-  const bar = (data, group) => {
-    return data.map((e) => e[group]);
+const getBarData = (exposureData) => {
+  const asianData = [];
+  const blackData = [];
+  const hispanicData = [];
+  const whiteData = [];
+  const otherData = [];
+
+  for (let e of exposureData) {
+    const { white, asian, black, hispanic, other } = e;
+
+    asianData.push(asian);
+    blackData.push(black);
+    hispanicData.push(hispanic);
+    whiteData.push(white);
+    otherData.push(other);
+  }
+
+  return {
+    asianData,
+    blackData,
+    hispanicData,
+    whiteData,
+    otherData,
   };
+};
+
+export default function ScrollerBar2({ exposureData }) {
+  const { asianData, blackData, hispanicData, whiteData, otherData } =
+    getBarData(exposureData);
 
   const barData = [
     {
       label: "White",
       id: "prop_wh",
-      data: bar(exposureData, "white"),
-      backgroundColor: "#339933",
+      data: whiteData,
+      backgroundColor: whiteColor,
     },
     {
       label: "Asian",
       id: "prop_as",
-      data: bar(exposureData, "asian"),
-      backgroundColor: "#FF5050",
+      data: asianData,
+      backgroundColor: asianColor,
     },
     {
       label: "Black",
       id: "prop_bl",
-      data: bar(exposureData, "black"),
-      backgroundColor: "#4472C4",
+      data: blackData,
+      backgroundColor: blackColor,
     },
     {
       label: "Hispanic",
       id: "prop_hi",
-      data: bar(exposureData, "hispanic"),
-      backgroundColor: "#FF9900",
+      data: hispanicData,
+      backgroundColor: hispanicColor,
     },
     {
       label: "Other",
       id: "prop_or",
-      data: bar(exposureData, "other"),
-      backgroundColor: "#FFC000",
+      data: otherData,
+      backgroundColor: otherColor,
     },
   ];
 
@@ -74,8 +107,8 @@ export default function ScrollerBar2({ exposureData }) {
         enabled: true,
         display: true,
         callbacks: {
-          label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
+          label: (context) => {
+            const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
         },
