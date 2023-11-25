@@ -1,4 +1,4 @@
-export const rawdata = {
+export const rawData = {
   year: 2019,
   grade: "06",
   dist_id: "1500000",
@@ -10,7 +10,7 @@ export const rawdata = {
   white: 812,
 };
 
-export const schooldata = [
+export const schoolData = [
   {
     sch_name: "Pave Academy Charter School",
     prop_as: 3.6,

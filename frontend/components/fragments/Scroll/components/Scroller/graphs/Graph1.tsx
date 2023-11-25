@@ -2,23 +2,24 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "../../../../../../constants";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function ScrollerPie({ rawdata }) {
-  const groups = ["asian", "black", "hispanic", "other", "white"];
-  const enrTotal =
-    rawdata.asian +
-    rawdata.black +
-    rawdata.hispanic +
-    rawdata.other +
-    rawdata.white;
+const groups = ["asian", "black", "hispanic", "white", "other"];
 
-  const pieData = groups.map((e) => {
-    return {
-      group: e,
-      enr: Math.round((rawdata[e] / enrTotal) * 100),
-    };
-  });
+export default function ScrollerPie({ rawData }) {
+  const { asian, black, hispanic, other, white } = rawData;
+
+  const enrTotal = asian + black + hispanic + other + white;
+
+  const pieData = groups.map((g) => Math.round((rawData[g] / enrTotal) * 100));
 
   const options = {
     reponsive: true,
@@ -40,19 +41,25 @@ export default function ScrollerPie({ rawdata }) {
   };
 
   const data = {
-    labels: ["Asian", "Black", "Hispanic", "Other", "White"],
+    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
     datasets: [
       {
         label: "Enrollment Share by Race",
-        data: pieData.map((e) => e.enr),
-        borderColor: ["#FF5050", "#4472C4", "#FF9900", "#FFC000", "#339933"],
+        data: pieData,
+        borderColor: [
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
+        ],
         borderWidth: 1,
         backgroundColor: [
-          "#FF5050",
-          "#4472C4",
-          "#FF9900",
-          "#FFC000",
-          "#339933",
+          asianColor,
+          blackColor,
+          hispanicColor,
+          whiteColor,
+          otherColor,
         ],
       },
     ],

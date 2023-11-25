@@ -1,7 +1,7 @@
 import React from "react";
 
 import Head from "../components/fragments/Head";
-import Scroller from "../components/fragments/Scroll";
+import Scroll from "../components/fragments/Scroll";
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
       <Head title="IntegrateUSA" desc="Exploring school segregation">
         <link rel="icon" href="/Image Only.png" />
       </Head>
-      <Scroller />
+      <Scroll />
     </>
   );
 }

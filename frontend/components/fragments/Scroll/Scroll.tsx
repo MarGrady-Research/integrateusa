@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -19,7 +19,7 @@ function WelcomeScreen() {
         />
       </Link>
       <Link href="/info">
-        <a className="hover:text-gray-500  inline-flex items-center">
+        <a className="hover:text-gray-500 inline-flex items-center">
           Explore the dashboard
           <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
         </a>
@@ -50,14 +50,12 @@ function EndScreen() {
           levels in different areas over time
         </p>
       </div>
-
       <Link href="/info">
         <a className="hover:text-gray-500  inline-flex items-center">
           Explore the dashboard
           <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
         </a>
       </Link>
-
       <Link href="http://www.margrady.com/">
         <a>
           <Image
@@ -73,24 +71,10 @@ function EndScreen() {
 }
 
 export default function Scroll() {
-  const [currentStepIndex, setCurrentStepIndex] = useState(null);
-
-  const onStepEnter = ({ data }) => {
-    setCurrentStepIndex(data);
-  };
-
-  const onStepExit = ({ data, direction }) => {
-    data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
-  };
-
   return (
     <div className="font-sans">
       <WelcomeScreen />
-      <Scroller
-        onStepEnter={onStepEnter}
-        onStepExit={onStepExit}
-        currentStepIndex={currentStepIndex}
-      />
+      <Scroller />
       <EndScreen />
     </div>
   );

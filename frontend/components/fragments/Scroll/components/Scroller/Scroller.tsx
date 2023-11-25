@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import clsx from "clsx";
 
@@ -11,8 +11,8 @@ import ScrollerLine2 from "./graphs/Graph6";
 import ScrollerLine3 from "./graphs/Graph7";
 import ScrollerLine4 from "./graphs/Graph8";
 import {
-  rawdata,
-  schooldata,
+  rawData,
+  schoolData,
   exposureData,
   comparisonData,
   d15ExposureWhiteV1,
@@ -26,10 +26,10 @@ import { step, graphic } from "./Scroller.module.scss";
 
 const charts = (currentStepIndex) => {
   if (currentStepIndex === 0) {
-    return <ScrollerPie rawdata={rawdata} />;
+    return <ScrollerPie rawData={rawData} />;
   }
   if (currentStepIndex === 1) {
-    return <ScrollerBar schooldata={schooldata} />;
+    return <ScrollerBar schoolData={schoolData} />;
   }
   if (currentStepIndex === 2) {
     return <ScrollerBar2 exposureData={exposureData} />;
@@ -51,11 +51,17 @@ const charts = (currentStepIndex) => {
   }
 };
 
-export default function Scroller({
-  onStepEnter,
-  onStepExit,
-  currentStepIndex,
-}) {
+export default function Scroller() {
+  const [currentStepIndex, setCurrentStepIndex] = useState(null);
+
+  const onStepEnter = ({ data }) => {
+    setCurrentStepIndex(data);
+  };
+
+  const onStepExit = ({ data, direction }) => {
+    data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
+  };
+
   return (
     <div className="p-20 flex justify-between">
       <div className="basis-1/3 text-center text-xl">
