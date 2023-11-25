@@ -63,9 +63,12 @@ export default function SchoolLevelTable({ infoData }: Props) {
   const totalSchools = schoolLevel.Total.schools;
   const totalStudents = schoolLevel.Total.students;
 
-  const tableRows = (schooltype: SchoolType) => {
-    const noOfSchools = schoolLevel[schooltype].schools;
-    const noOfStudents = schoolLevel[schooltype].students;
+  const totalSchoolsString = totalSchools.toLocaleString();
+  const totalStudentsString = totalStudents.toLocaleString();
+
+  const tableRow = (schoolType: SchoolType) => {
+    const noOfSchools = schoolLevel[schoolType].schools;
+    const noOfStudents = schoolLevel[schoolType].students;
 
     const percentageOfSchools = Math.round((noOfSchools / totalSchools) * 100);
     const percentageOfStudents = Math.round(
@@ -76,8 +79,8 @@ export default function SchoolLevelTable({ infoData }: Props) {
     const noOfStudentsString = noOfStudents.toLocaleString();
 
     return (
-      <tr key={schooltype} className={contentRow}>
-        <td>{schooltype}</td>
+      <tr key={schoolType} className={contentRow}>
+        <td>{schoolType}</td>
         <td>{noOfSchoolsString}</td>
         <td>{percentageOfSchools}</td>
         <td>{noOfStudentsString}</td>
@@ -85,9 +88,6 @@ export default function SchoolLevelTable({ infoData }: Props) {
       </tr>
     );
   };
-
-  const totalSchoolsString = totalSchools.toLocaleString();
-  const totalStudentsString = totalStudents.toLocaleString();
 
   return (
     <div className="shadow overflow-x-auto border border-gray-200">
@@ -101,17 +101,15 @@ export default function SchoolLevelTable({ infoData }: Props) {
             <th scope="col">% of Students</th>
           </tr>
         </thead>
-
         <tbody className="bg-white divide-y divide-gray-200">
-          {tableRows("ES")}
-          {tableRows("ESMS")}
-          {tableRows("MS")}
-          {tableRows("MSHS")}
-          {tableRows("HS")}
-          {tableRows("K12")}
-          {tableRows("Other")}
+          {tableRow("ES")}
+          {tableRow("ESMS")}
+          {tableRow("MS")}
+          {tableRow("MSHS")}
+          {tableRow("HS")}
+          {tableRow("K12")}
+          {tableRow("Other")}
         </tbody>
-
         <tfoot>
           <tr className={clsx(contentRow, footerRow)}>
             <td scope="col">Total</td>
