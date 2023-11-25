@@ -74,6 +74,57 @@ const getBarData = (data: InfoData) => {
   };
 };
 
+const options = {
+  plugins: {
+    legend: {
+      labels: {
+        sort: (a, b) => sortOnOrder(a.text, b.text, labelOrder),
+      },
+    },
+    tooltip: {
+      enabled: true,
+      display: true,
+      callbacks: {
+        label: (context) => {
+          const label = context.dataset.data[context.dataIndex];
+          return context.dataset.label + " " + label + "%";
+        },
+      },
+    },
+    zoom: {
+      pan: {
+        enabled: true,
+        mode: "x",
+      },
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        pinch: {
+          enabled: true,
+        },
+        mode: "x",
+      },
+      limits: {
+        y: { min: 0, max: 150 },
+      },
+    },
+  },
+  responsive: true,
+  scales: {
+    x: {
+      ticks: false,
+      display: false,
+      stacked: true,
+      barPercentage: 1,
+    },
+    y: {
+      stacked: true,
+      max: 100,
+    },
+  },
+};
+
 export default function BarChart({ infoData }: Props) {
   const [sortBy, setSortBy] = useState(null as RacialProportion | null);
 
@@ -131,57 +182,6 @@ export default function BarChart({ infoData }: Props) {
   const data = {
     labels: labels,
     datasets: barData,
-  };
-
-  const options = {
-    plugins: {
-      legend: {
-        labels: {
-          sort: (a, b) => sortOnOrder(a.text, b.text, labelOrder),
-        },
-      },
-      tooltip: {
-        enabled: true,
-        display: true,
-        callbacks: {
-          label: (context) => {
-            const label = context.dataset.data[context.dataIndex];
-            return context.dataset.label + " " + label + "%";
-          },
-        },
-      },
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "x",
-        },
-        zoom: {
-          wheel: {
-            enabled: true,
-          },
-          pinch: {
-            enabled: true,
-          },
-          mode: "x",
-        },
-        limits: {
-          y: { min: 0, max: 150 },
-        },
-      },
-    },
-    responsive: true,
-    scales: {
-      x: {
-        ticks: false,
-        display: false,
-        stacked: true,
-        barPercentage: 1,
-      },
-      y: {
-        stacked: true,
-        max: 100,
-      },
-    },
   };
 
   return (

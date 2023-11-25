@@ -72,24 +72,24 @@ const getLineData = (data: TrendData) => {
   return lineData;
 };
 
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top" as any,
+    },
+  },
+  scales: {
+    y: {
+      position: "right" as any,
+    },
+  },
+};
+
 export default function GradeLines({ trendData, grade }: Props) {
   const sortedData = useMemo(() => sortTrendData(trendData), [trendData]);
 
   const lineData = useMemo(() => getLineData(sortedData), [sortedData]);
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as any,
-      },
-    },
-    scales: {
-      y: {
-        position: "right" as any,
-      },
-    },
-  };
 
   const labels = [...new Set(sortedData.map((e) => e.year))];
 

@@ -45,8 +45,8 @@ export default function AreaPie({ pieData }) {
         enabled: true,
         display: true,
         callbacks: {
-          label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
+          label: (context) => {
+            const label = context.dataset.data[context.dataIndex];
             return (
               data.labels[context.dataIndex] +
               " " +

@@ -55,23 +55,6 @@ const getPieData = (infoData: InfoData) => {
 export default function PieChart({ infoData }: Props) {
   const pieData = getPieData(infoData);
 
-  const options = {
-    reponsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      tooltip: {
-        enabled: true,
-        display: true,
-        callbacks: {
-          label: (context) => {
-            const label = context.dataset.data[context.dataIndex];
-            return data.labels[context.dataIndex] + " " + label + "%";
-          },
-        },
-      },
-    },
-  };
-
   const data = {
     labels: ["Asian", "Black", "Hispanic", "White", "Other"],
     datasets: [
@@ -95,6 +78,23 @@ export default function PieChart({ infoData }: Props) {
         ],
       },
     ],
+  };
+
+  const options = {
+    reponsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        enabled: true,
+        display: true,
+        callbacks: {
+          label: (context) => {
+            const label = context.dataset.data[context.dataIndex];
+            return data.labels[context.dataIndex] + " " + label + "%";
+          },
+        },
+      },
+    },
   };
 
   return <Pie data={data} options={options} plugins={[legendMargin]} />;
