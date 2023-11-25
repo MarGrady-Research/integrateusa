@@ -13,30 +13,6 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function MapPie({ pieData }) {
-  const options = {
-    reponsive: true,
-    plugins: {
-      tooltip: {
-        enabled: true,
-        display: true,
-        callbacks: {
-          label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
-            return (
-              data.labels[context.dataIndex] +
-              " " +
-              Math.round(label * 100) +
-              "%"
-            );
-          },
-        },
-      },
-      legend: {
-        display: false,
-      },
-    },
-  };
-
   const data = {
     labels: ["Asian", "Black", "Hispanic", "White", "Other"],
     datasets: [
@@ -60,6 +36,30 @@ export default function MapPie({ pieData }) {
         ],
       },
     ],
+  };
+
+  const options = {
+    reponsive: true,
+    plugins: {
+      tooltip: {
+        enabled: true,
+        display: true,
+        callbacks: {
+          label: (context) => {
+            let label = context.dataset.data[context.dataIndex];
+            return (
+              data.labels[context.dataIndex] +
+              " " +
+              Math.round(label * 100) +
+              "%"
+            );
+          },
+        },
+      },
+      legend: {
+        display: false,
+      },
+    },
   };
 
   return <Pie data={data} options={options} />;
