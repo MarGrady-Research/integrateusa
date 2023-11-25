@@ -63,7 +63,7 @@ export default function PieChart({ infoData }: Props) {
         enabled: true,
         display: true,
         callbacks: {
-          label: function (context) {
+          label: (context) => {
             const label = context.dataset.data[context.dataIndex];
             return data.labels[context.dataIndex] + " " + label + "%";
           },

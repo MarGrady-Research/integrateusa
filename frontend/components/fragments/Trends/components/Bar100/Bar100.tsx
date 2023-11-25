@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +11,15 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { legendMargin } from "../../../../../charts";
-import { primaryColor } from "../../../../../constants";
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+  primaryColor,
+} from "../../../../../constants";
+import { TrendData } from "../../../../../interfaces";
 
 ChartJS.register(
   CategoryScale,
@@ -22,44 +30,88 @@ ChartJS.register(
   Legend
 );
 
-/* 100% Bar Chart */
-export default function BarChart100({ trendData, grade, year }) {
-  let sortedData = trendData
-    .filter((e) => e.grade === grade)
-    .sort((a, b) => {
-      return a["year"] - b["year"];
-    });
+interface Props {
+  trendData: TrendData;
+  grade: string;
+  year: number;
+}
 
-  const labels = sortedData.map((e) => e.year);
+const sortTrendData = (trendData: TrendData, grade: string) =>
+  trendData.filter((e) => e.grade === grade).sort((a, b) => a.year - b.year);
 
-  /* create bar chart */
+const getBarData = (data: TrendData) => {
+  const asianData = [];
+  const blackData = [];
+  const hispanicData = [];
+  const whiteData = [];
+  const otherData = [];
+  const labels = [];
+
+  for (let trend of data) {
+    const { asian, black, hispanic, white, other, year } = trend;
+
+    const total = asian + black + hispanic + white + other;
+
+    const asianPercentage = (asian / total) * 100;
+    const blackPercentage = (black / total) * 100;
+    const hispanicPercentage = (hispanic / total) * 100;
+    const whitePercentage = (white / total) * 100;
+    const otherPercentage = (other / total) * 100;
+
+    asianData.push(asianPercentage);
+    blackData.push(blackPercentage);
+    hispanicData.push(hispanicPercentage);
+    whiteData.push(whitePercentage);
+    otherData.push(otherPercentage);
+    labels.push(year);
+  }
+
+  return {
+    asianData,
+    blackData,
+    hispanicData,
+    whiteData,
+    otherData,
+    labels,
+  };
+};
+
+export default function BarChart100({ trendData, grade, year }: Props) {
+  const sortedData = useMemo(
+    () => sortTrendData(trendData, grade),
+    [trendData, grade]
+  );
+
+  const { asianData, blackData, hispanicData, whiteData, otherData, labels } =
+    useMemo(() => getBarData(sortedData), [sortedData]);
+
   const data = {
     labels,
     datasets: [
       {
         label: "Asian",
-        data: sortedData.map((e) => e.prop_as),
-        backgroundColor: "#FF5050",
+        data: asianData,
+        backgroundColor: asianColor,
       },
       {
         label: "Black",
-        data: sortedData.map((e) => e.prop_bl),
-        backgroundColor: "#4472C4",
+        data: blackData,
+        backgroundColor: blackColor,
       },
       {
         label: "Hispanic",
-        data: sortedData.map((e) => e.prop_hi),
-        backgroundColor: "#FF9900",
-      },
-      {
-        label: "Other",
-        data: sortedData.map((e) => e.prop_ot),
-        backgroundColor: "#FFC000",
+        data: hispanicData,
+        backgroundColor: hispanicColor,
       },
       {
         label: "White",
-        data: sortedData.map((e) => e.prop_wh),
-        backgroundColor: "#339933",
+        data: whiteData,
+        backgroundColor: whiteColor,
+      },
+      {
+        label: "Other",
+        data: otherData,
+        backgroundColor: otherColor,
       },
     ],
   };
@@ -69,6 +121,15 @@ export default function BarChart100({ trendData, grade, year }) {
     plugins: {
       legend: {
         position: "top" as any,
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) =>
+            context.dataset.label +
+            ": " +
+            parseFloat(context.formattedValue).toFixed(2) +
+            "%",
+        },
       },
     },
     scales: {
