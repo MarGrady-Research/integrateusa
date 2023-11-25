@@ -11,7 +11,6 @@ import ScrollerLine2 from "./graphs/Graph6";
 import ScrollerLine3 from "./graphs/Graph7";
 import ScrollerLine4 from "./graphs/Graph8";
 import {
-  rawData,
   schoolData,
   exposureData,
   comparisonData,
@@ -26,7 +25,7 @@ import { step, graphic } from "./Scroller.module.scss";
 
 const charts = (currentStepIndex) => {
   if (currentStepIndex === 0) {
-    return <ScrollerPie rawData={rawData} />;
+    return <ScrollerPie />;
   }
   if (currentStepIndex === 1) {
     return <ScrollerBar schoolData={schoolData} />;

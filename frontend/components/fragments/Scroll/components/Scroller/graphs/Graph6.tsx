@@ -13,6 +13,8 @@ import annotationPlugin from "chartjs-plugin-annotation";
 
 import { selectedLineColor } from "../../../../../../constants";
 
+import { lineLabels as labels } from "./commonData";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,22 +24,6 @@ ChartJS.register(
   Tooltip,
   annotationPlugin
 );
-
-const labels = [
-  2010,
-  2011,
-  2012,
-  2013,
-  2014,
-  2015,
-  2016,
-  2017,
-  2018,
-  2019,
-  2020,
-  2021,
-  "",
-];
 
 export default function ScrollerLine2({ d15ExposureWhite }) {
   const options = {

@@ -25,10 +25,7 @@ ChartJS.register(
   annotationPlugin
 );
 
-const labels = [
-  "Demographics of Avg White Student's School",
-  "Demograpics of Avg Non-White Student's school",
-];
+import { barLabels as labels } from "./commonData";
 
 const getBarData = (exposureData) => {
   const asianData = [];
