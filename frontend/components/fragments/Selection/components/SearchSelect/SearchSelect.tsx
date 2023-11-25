@@ -17,6 +17,7 @@ export default function SearchSelect() {
   const levels = useSelector(selectLevels);
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
+
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -32,7 +33,7 @@ export default function SearchSelect() {
     );
   };
 
-  const loadOptions = async (input) => {
+  const loadOptions = async (input: string) => {
     if (input.length === 0) {
       return null;
     }
