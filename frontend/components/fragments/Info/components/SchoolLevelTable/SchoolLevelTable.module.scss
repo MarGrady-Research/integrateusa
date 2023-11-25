@@ -1,0 +1,17 @@
+.headRow {
+  th {
+    @apply px-4 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider;
+  }
+}
+
+.contentRow {
+  td {
+    @apply text-sm text-gray-900 text-center font-light px-4 py-2 whitespace-nowrap;
+  }
+}
+
+.footerRow {
+  td {
+    @apply font-medium py-4;
+  }
+}

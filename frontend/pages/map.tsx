@@ -6,7 +6,7 @@ import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
 import Loader from "../components/fragments/Loader";
-import useDevice from "../hooks/useDevice";
+import { useDevice } from "../hooks";
 
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";

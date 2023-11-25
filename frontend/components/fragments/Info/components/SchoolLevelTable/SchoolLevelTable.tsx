@@ -1,6 +1,16 @@
 import React from "react";
+import clsx from "clsx";
 
-const getSchoolLevel = (infoData) => {
+import { InfoData, SchoolType } from "../../../../../interfaces";
+
+// @ts-ignore
+import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";
+
+interface Props {
+  infoData: InfoData;
+}
+
+const getSchoolLevel = (infoData: InfoData) => {
   const schoolLevel = {
     ES: {
       schools: 0,
@@ -47,13 +57,13 @@ const getSchoolLevel = (infoData) => {
   return schoolLevel;
 };
 
-export default function SchoolLevelTable({ infoData }) {
+export default function SchoolLevelTable({ infoData }: Props) {
   const schoolLevel = getSchoolLevel(infoData);
 
   const totalSchools = schoolLevel.Total.schools;
   const totalStudents = schoolLevel.Total.students;
 
-  const tableRows = (schooltype) => {
+  const tableRows = (schooltype: SchoolType) => {
     const noOfSchools = schoolLevel[schooltype].schools;
     const noOfStudents = schoolLevel[schooltype].students;
 
@@ -66,12 +76,12 @@ export default function SchoolLevelTable({ infoData }) {
     const noOfStudentsString = noOfStudents.toLocaleString();
 
     return (
-      <tr key={schooltype} className="border-b">
-        <td className="school-td">{schooltype}</td>
-        <td className="school-td">{noOfSchoolsString}</td>
-        <td className="school-td">{percentageOfSchools}</td>
-        <td className="school-td">{noOfStudentsString}</td>
-        <td className="school-td">{percentageOfStudents}</td>
+      <tr key={schooltype} className={contentRow}>
+        <td>{schooltype}</td>
+        <td>{noOfSchoolsString}</td>
+        <td>{percentageOfSchools}</td>
+        <td>{noOfStudentsString}</td>
+        <td>{percentageOfStudents}</td>
       </tr>
     );
   };
@@ -83,22 +93,12 @@ export default function SchoolLevelTable({ infoData }) {
     <div className="shadow overflow-x-auto border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-200">
-          <tr>
-            <th scope="col" className="school-th">
-              School Type
-            </th>
-            <th scope="col" className="school-th">
-              # of Schools
-            </th>
-            <th scope="col" className="school-th">
-              % of Schools
-            </th>
-            <th scope="col" className="school-th">
-              # of Students
-            </th>
-            <th scope="col" className="school-th">
-              % of Students
-            </th>
+          <tr className={headRow}>
+            <th scope="col">School Type</th>
+            <th scope="col"># of Schools</th>
+            <th scope="col">% of Schools</th>
+            <th scope="col"># of Students</th>
+            <th scope="col">% of Students</th>
           </tr>
         </thead>
 
@@ -112,23 +112,13 @@ export default function SchoolLevelTable({ infoData }) {
           {tableRows("Other")}
         </tbody>
 
-        <tfoot className="border-b">
-          <tr>
-            <td scope="col" className="school-td font-medium py-4">
-              Total
-            </td>
-            <td scope="col" className="school-td font-medium py-4">
-              {totalSchoolsString}
-            </td>
-            <td scope="col" className="school-td font-medium py-4">
-              100
-            </td>
-            <td scope="col" className="school-td font-medium py-4">
-              {totalStudentsString}
-            </td>
-            <td scope="col" className="school-td font-medium py-4">
-              100
-            </td>
+        <tfoot>
+          <tr className={clsx(contentRow, footerRow)}>
+            <td scope="col">Total</td>
+            <td scope="col">{totalSchoolsString}</td>
+            <td scope="col">100</td>
+            <td scope="col">{totalStudentsString}</td>
+            <td scope="col">100</td>
           </tr>
         </tfoot>
       </table>

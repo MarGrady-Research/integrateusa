@@ -11,28 +11,30 @@ import { selectId, selectBounds } from "../../../store/selectSlice";
 // @ts-ignore
 import { container } from "./Info.module.scss";
 
+import { InfoData } from "../../../interfaces";
+
 const BarChart = dynamic(() => import("./components/Bar"), {
   ssr: false,
 });
 
-export default function Info({ infoData, title }) {
+interface Props {
+  title: string;
+  infoData: InfoData;
+}
+
+export default function Info({ infoData, title }: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
 
-  const mapBounds = [
-    [bounds.lngmin, bounds.latmin],
-    [bounds.lngmax, bounds.latmax],
-  ];
+  const showTitle = infoData.length > 0 && !!title;
 
   return (
     <>
-      {infoData.length > 0 && title && (
-        <h1 className="text-4xl font-bold mb-5">{title}</h1>
-      )}
+      {showTitle && <h1 className="text-4xl font-bold mb-5">{title}</h1>}
       <h2 className="text-2xl mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>
-          <InsetMap id={id} bounds={mapBounds} />
+          <InsetMap id={id} bounds={bounds} />
         </div>
         <div className={clsx(container, "col-span-2")}>
           <SchoolLevelTable infoData={infoData} />
