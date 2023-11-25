@@ -11,6 +11,8 @@ import {
 import { Line } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 
+import { selectedLineColor } from "../../../../../../constants";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,6 +22,22 @@ ChartJS.register(
   Tooltip,
   annotationPlugin
 );
+
+const labels = [
+  2010,
+  2011,
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  "",
+];
 
 export default function ScrollerLine2({ d15ExposureWhite }) {
   const options = {
@@ -51,7 +69,7 @@ export default function ScrollerLine2({ d15ExposureWhite }) {
         xMin: 9,
         xMax: 9,
         yMax: 0.42,
-        borderColor: "#000000",
+        borderColor: "#000",
         borderDash: [3, 4],
         borderCapStyle: "round",
         borderWidth: 2,
@@ -68,30 +86,14 @@ export default function ScrollerLine2({ d15ExposureWhite }) {
     },
   };
 
-  const labels = [
-    2010,
-    2011,
-    2012,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    ,
-  ];
-
   const data = {
     labels,
     datasets: [
       {
         label: "District 15",
         data: d15ExposureWhite,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: selectedLineColor,
+        backgroundColor: selectedLineColor,
       },
     ],
   };
