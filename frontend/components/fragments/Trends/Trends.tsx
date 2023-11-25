@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade";
-import GradeLine from "./components/GradeLine";
 
 import { selectGrade, selectYear } from "../../../store/selectSlice";
 
@@ -40,7 +39,6 @@ export default function Trends({ trendData }: Props) {
           selectedGrade={grade}
           selectedYear={year}
         />
-        <GradeLine trendData={trendData} grade={grade} />
       </>
     );
   }
