@@ -11,6 +11,13 @@ import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Select from "react-select";
 
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "../../../../../constants";
 import { legendMargin } from "../../../../../charts";
 
 ChartJS.register(
@@ -29,12 +36,11 @@ export default function BarChart({ filterData }) {
 
   const [labels, setLabels] = useState(filterData.map((e) => e.sch_name));
 
-  /* what is the code below doing? why is Asian set to 0 vs 1 for others? */
   const [asianOrder, setAsianOrder] = useState(0);
   const [blackOrder, setBlackOrder] = useState(1);
   const [hispanicOrder, setHispanicOrder] = useState(1);
-  const [otherOrder, setOtherOrder] = useState(1);
   const [whiteOrder, setWhiteOrder] = useState(1);
+  const [otherOrder, setOtherOrder] = useState(1);
 
   const sortData = (group) => {
     let newdata = filterData;
@@ -47,16 +53,16 @@ export default function BarChart({ filterData }) {
     group === "prop_as" ? setAsianOrder(0) : setAsianOrder(1);
     group === "prop_bl" ? setBlackOrder(0) : setBlackOrder(1);
     group === "prop_hi" ? setHispanicOrder(0) : setHispanicOrder(1);
-    group === "prop_or" ? setOtherOrder(0) : setOtherOrder(1);
     group === "prop_wh" ? setWhiteOrder(0) : setWhiteOrder(1);
+    group === "prop_or" ? setOtherOrder(0) : setOtherOrder(1);
   };
 
   const sortOptions = [
     { value: "prop_as", label: "Asian" },
     { value: "prop_bl", label: "Black" },
     { value: "prop_hi", label: "Hispanic" },
-    { value: "prop_or", label: "Other" },
     { value: "prop_wh", label: "White" },
+    { value: "prop_or", label: "Other" },
   ];
 
   const barData = [
@@ -64,36 +70,36 @@ export default function BarChart({ filterData }) {
       label: "Asian",
       id: "prop_as",
       data: bar(filterData, "prop_as"),
-      backgroundColor: "#FF5050",
+      backgroundColor: asianColor,
       order: asianOrder,
     },
     {
       label: "Black",
       id: "prop_bl",
       data: bar(filterData, "prop_bl"),
-      backgroundColor: "#4472C4",
+      backgroundColor: blackColor,
       order: blackOrder,
     },
     {
       label: "Hispanic",
       id: "prop_hi",
       data: bar(filterData, "prop_hi"),
-      backgroundColor: "#FF9900",
+      backgroundColor: hispanicColor,
       order: hispanicOrder,
-    },
-    {
-      label: "Other",
-      id: "prop_or",
-      data: bar(filterData, "prop_or"),
-      backgroundColor: "#FFC000",
-      order: otherOrder,
     },
     {
       label: "White",
       id: "prop_wh",
       data: bar(filterData, "prop_wh"),
-      backgroundColor: "#339933",
+      backgroundColor: whiteColor,
       order: whiteOrder,
+    },
+    {
+      label: "Other",
+      id: "prop_or",
+      data: bar(filterData, "prop_or"),
+      backgroundColor: otherColor,
+      order: otherOrder,
     },
   ];
 
