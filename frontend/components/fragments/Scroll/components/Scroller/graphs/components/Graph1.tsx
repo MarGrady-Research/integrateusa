@@ -8,8 +8,8 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../../constants";
-import { rawData } from "./data";
+} from "../../../../../../../constants";
+import { rawData } from "../data";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

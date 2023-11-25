@@ -2,23 +2,16 @@ import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import clsx from "clsx";
 
-import ScrollerPie from "./graphs/Graph1";
-import ScrollerBar from "./graphs/Graph2";
-import ScrollerBar2 from "./graphs/Graph3";
-import ScrollerBar3 from "./graphs/Graph4";
-import ScrollerLine from "./graphs/Graph5";
-import ScrollerLine2 from "./graphs/Graph6";
-import ScrollerLine3 from "./graphs/Graph7";
-import ScrollerLine4 from "./graphs/Graph8";
 import {
-  schoolData,
-  exposureData,
-  comparisonData,
-  d15ExposureWhiteV1,
-  d15ExposureWhiteV2,
-  fullCompData,
-  compDataNormalized,
-} from "./graphs/data";
+  ScrollerPie,
+  ScrollerBar,
+  ScrollerBar2,
+  ScrollerBar3,
+  ScrollerLine,
+  ScrollerLine2,
+  ScrollerLine3,
+  ScrollerLine4,
+} from "./graphs";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
@@ -28,25 +21,25 @@ const charts = (currentStepIndex) => {
     return <ScrollerPie />;
   }
   if (currentStepIndex === 1) {
-    return <ScrollerBar schoolData={schoolData} />;
+    return <ScrollerBar />;
   }
   if (currentStepIndex === 2) {
-    return <ScrollerBar2 exposureData={exposureData} />;
+    return <ScrollerBar2 />;
   }
   if (currentStepIndex === 3) {
-    return <ScrollerBar3 comparisonData={comparisonData} />;
+    return <ScrollerBar3 />;
   }
   if (currentStepIndex === 4) {
-    return <ScrollerLine d15ExposureWhite={d15ExposureWhiteV1} />;
+    return <ScrollerLine />;
   }
   if (currentStepIndex === 5) {
-    return <ScrollerLine2 d15ExposureWhite={d15ExposureWhiteV2} />;
+    return <ScrollerLine2 />;
   }
   if (currentStepIndex === 6) {
-    return <ScrollerLine3 fullCompData={fullCompData} />;
+    return <ScrollerLine3 />;
   }
   if (currentStepIndex === 7) {
-    return <ScrollerLine4 compDataNormalized={compDataNormalized} />;
+    return <ScrollerLine4 />;
   }
 };
 
