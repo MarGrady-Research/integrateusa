@@ -2,6 +2,11 @@ export type InfoData = School[];
 
 interface School {
   tot_enr: number;
+  asian: number;
+  black: number;
+  hispanic: number;
+  white: number;
+  other: number;
   level: SchoolType;
 }
 

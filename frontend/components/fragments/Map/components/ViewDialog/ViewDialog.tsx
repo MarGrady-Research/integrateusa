@@ -20,6 +20,7 @@ const getViewInfo = (renderedFeatures) => {
 
   for (let feature of renderedFeatures) {
     const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+
     studentsTotal += tot_enr;
     asianTotal += as;
     blackTotal += bl;

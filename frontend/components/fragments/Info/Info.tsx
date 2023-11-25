@@ -40,7 +40,7 @@ export default function Info({ infoData, title }: Props) {
           <SchoolLevelTable infoData={infoData} />
         </div>
         <div className={container}>
-          <PieChart filterData={infoData} />
+          <PieChart infoData={infoData} />
         </div>
       </div>
       <div className="mb-10">

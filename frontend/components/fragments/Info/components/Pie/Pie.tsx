@@ -10,29 +10,50 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../constants";
+import { InfoData } from "../../../../../interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function PieChart({ filterData }) {
-  const groups = ["asian", "black", "hispanic", "white", "other"];
+interface Props {
+  infoData: InfoData;
+}
 
-  const enrSum = (arr, group) => {
-    return arr.reduce(function (a, b) {
-      return a + b[group];
-    }, 0);
-  };
+const getPieData = (infoData: InfoData) => {
+  let studentsTotal = 0;
+  let asianTotal = 0;
+  let blackTotal = 0;
+  let hispanicTotal = 0;
+  let whiteTotal = 0;
+  let otherTotal = 0;
 
-  const enrData = (arr, total) => {
-    return arr.map((item) => {
-      return {
-        group: item,
-        enr: Math.round((enrSum(filterData, item) / total) * 100),
-      };
-    });
-  };
+  for (let school of infoData) {
+    const { tot_enr, asian, black, hispanic, white, other } = school;
 
-  const enrTotal = enrSum(filterData, "tot_enr");
-  const pieData = enrData(groups, enrTotal);
+    studentsTotal += tot_enr;
+    asianTotal += asian;
+    blackTotal += black;
+    hispanicTotal += hispanic;
+    whiteTotal += white;
+    otherTotal += other;
+  }
+
+  const asianPercentage = Math.round((asianTotal / studentsTotal) * 100);
+  const blackPercentage = Math.round((blackTotal / studentsTotal) * 100);
+  const hispanicPercentage = Math.round((hispanicTotal / studentsTotal) * 100);
+  const whitePercentage = Math.round((whiteTotal / studentsTotal) * 100);
+  const otherPercentage = Math.round((otherTotal / studentsTotal) * 100);
+
+  return [
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+  ];
+};
+
+export default function PieChart({ infoData }: Props) {
+  const pieData = getPieData(infoData);
 
   const options = {
     reponsive: true,
@@ -43,7 +64,7 @@ export default function PieChart({ filterData }) {
         display: true,
         callbacks: {
           label: function (context) {
-            let label = context.dataset.data[context.dataIndex];
+            const label = context.dataset.data[context.dataIndex];
             return data.labels[context.dataIndex] + " " + label + "%";
           },
         },
@@ -56,7 +77,7 @@ export default function PieChart({ filterData }) {
     datasets: [
       {
         label: "Enrollment Share by Race",
-        data: pieData.map((e) => e.enr),
+        data: pieData,
         borderColor: [
           asianColor,
           blackColor,
