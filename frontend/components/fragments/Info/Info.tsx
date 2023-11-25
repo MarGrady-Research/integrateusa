@@ -45,7 +45,7 @@ export default function Info({ infoData, title }: Props) {
       </div>
       <div className="mb-10">
         <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-        <BarChart filterData={infoData} />
+        <BarChart infoData={infoData} />
       </div>
     </>
   );

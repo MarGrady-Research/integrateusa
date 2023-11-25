@@ -29,12 +29,12 @@ ChartJS.register(
   zoomPlugin
 );
 
-export default function BarChart({ filterData }) {
+export default function BarChart({ infoData }) {
   const bar = (data, group) => {
     return data.map((e) => e[group]);
   };
 
-  const [labels, setLabels] = useState(filterData.map((e) => e.sch_name));
+  const [labels, setLabels] = useState(infoData.map((e) => e.sch_name));
 
   const [asianOrder, setAsianOrder] = useState(0);
   const [blackOrder, setBlackOrder] = useState(1);
@@ -43,7 +43,7 @@ export default function BarChart({ filterData }) {
   const [otherOrder, setOtherOrder] = useState(1);
 
   const sortData = (group) => {
-    let newdata = filterData;
+    let newdata = infoData;
     newdata.sort((a, b) => {
       return a[group] - b[group];
     });
@@ -69,35 +69,35 @@ export default function BarChart({ filterData }) {
     {
       label: "Asian",
       id: "prop_as",
-      data: bar(filterData, "prop_as"),
+      data: bar(infoData, "prop_as"),
       backgroundColor: asianColor,
       order: asianOrder,
     },
     {
       label: "Black",
       id: "prop_bl",
-      data: bar(filterData, "prop_bl"),
+      data: bar(infoData, "prop_bl"),
       backgroundColor: blackColor,
       order: blackOrder,
     },
     {
       label: "Hispanic",
       id: "prop_hi",
-      data: bar(filterData, "prop_hi"),
+      data: bar(infoData, "prop_hi"),
       backgroundColor: hispanicColor,
       order: hispanicOrder,
     },
     {
       label: "White",
       id: "prop_wh",
-      data: bar(filterData, "prop_wh"),
+      data: bar(infoData, "prop_wh"),
       backgroundColor: whiteColor,
       order: whiteOrder,
     },
     {
       label: "Other",
       id: "prop_or",
-      data: bar(filterData, "prop_or"),
+      data: bar(infoData, "prop_or"),
       backgroundColor: otherColor,
       order: otherOrder,
     },
