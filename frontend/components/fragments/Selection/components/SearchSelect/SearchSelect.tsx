@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,32 +32,16 @@ export default function SearchSelect() {
     );
   };
 
-  const [alt, setAlt] = useState(false);
-
-  useCallback(async () => {
-    setAlt(!alt);
-  }, []);
-
-  useEffect(() => {
-    setURL();
-  }, [alt]);
-
-  const setURL = () => {
-    if (alt === true && levels === 0) {
-      return "/api/districtnamesalt/?q=";
-    } else {
-      return levelSelectData[levels].route;
-    }
-  };
-
   const loadOptions = async (input) => {
     if (input.length === 0) {
       return null;
     }
 
-    const response = await axios.get(setURL() + input);
+    const url = `${levelSelectData[levels].route}${input}`;
 
-    const Options = await response.data.map((d) => {
+    const response = await axios.get(url);
+
+    const options = await response.data.map((d) => {
       let labelData = {
         value: "",
         label: "",
@@ -99,7 +83,7 @@ export default function SearchSelect() {
       };
     });
 
-    return Options;
+    return options;
   };
 
   return (
