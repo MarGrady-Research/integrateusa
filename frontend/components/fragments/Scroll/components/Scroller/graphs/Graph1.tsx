@@ -9,7 +9,7 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../../constants";
-import { rawData } from "../data";
+import { rawData } from "./data";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

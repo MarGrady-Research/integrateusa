@@ -18,7 +18,7 @@ import {
   d15ExposureWhiteV2,
   fullCompData,
   compDataNormalized,
-} from "./data";
+} from "./graphs/data";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
