@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,7 +13,12 @@ import { Line } from "react-chartjs-2";
 import { yearsData } from "../../../Selection/data";
 
 import { legendMargin } from "../../../../../charts";
-import { primaryColor } from "../../../../../constants";
+import {
+  primaryColor,
+  selectedLineColor,
+  unselectedAreaColor,
+  unselectedLineColor,
+} from "../../../../../constants";
 
 ChartJS.register(
   CategoryScale,
@@ -25,7 +30,7 @@ ChartJS.register(
   Legend
 );
 
-export default function LineGraph({ lineDataRaw, id, year }) {
+export default function LineGraph({ linesData, id, year }) {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
@@ -66,11 +71,11 @@ export default function LineGraph({ lineDataRaw, id, year }) {
       return a - b;
     });
 
-  const lineData = lineDataRaw.map((e) => ({
+  const lineData = linesData.map((e) => ({
     label: e.name,
     data: e.data.map((e) => e.seg),
-    borderColor: e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
-    backgroundColor: e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
+    borderColor: e.id === id ? selectedLineColor : unselectedLineColor,
+    backgroundColor: e.id === id ? selectedLineColor : unselectedLineColor,
   }));
 
   const data = {
