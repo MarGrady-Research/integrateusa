@@ -47,7 +47,7 @@ const getBarData = (data: TrendData) => {
   const otherData = [];
   const labels = [];
 
-  for (let trend of data) {
+  for (const trend of data) {
     const { asian, black, hispanic, white, other, year } = trend;
 
     const total = asian + black + hispanic + white + other;

@@ -35,7 +35,7 @@ const getBarData = (data) => {
   const whiteData = [];
   const otherData = [];
 
-  for (let d of data) {
+  for (const d of data) {
     const { white, asian, black, hispanic, other } = d;
 
     asianData.push(asian);

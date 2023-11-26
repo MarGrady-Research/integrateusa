@@ -56,11 +56,11 @@ const sortTrendData = (trendData: TrendData) =>
 const getLineData = (data: TrendData) => {
   const lineData = {};
 
-  for (let grade of grades) {
+  for (const grade of grades) {
     lineData[grade] = [];
   }
 
-  for (let trend of data) {
+  for (const trend of data) {
     const { asian, black, hispanic, white, other } = trend;
     const total = asian + black + hispanic + white + other;
 

@@ -53,7 +53,7 @@ const getBarData = (data: InfoData) => {
   const otherData = [];
   const labels = [];
 
-  for (let school of data) {
+  for (const school of data) {
     const { prop_as, prop_bl, prop_hi, prop_wh, prop_or, sch_name } = school;
 
     asianData.push(prop_as);

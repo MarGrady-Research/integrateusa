@@ -25,7 +25,7 @@ ChartJS.register(
   Legend
 );
 
-export default function LineGraph({ linedata, id, year }) {
+export default function LineGraph({ lineDataRaw, id, year }) {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
@@ -66,21 +66,16 @@ export default function LineGraph({ linedata, id, year }) {
       return a - b;
     });
 
-  const makeLines = () => {
-    return linedata.map((e) => {
-      return {
-        label: e.name,
-        data: e.data.map((e) => e.seg),
-        borderColor: e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
-        backgroundColor:
-          e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
-      };
-    });
-  };
+  const lineData = lineDataRaw.map((e) => ({
+    label: e.name,
+    data: e.data.map((e) => e.seg),
+    borderColor: e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
+    backgroundColor: e.id === id ? "rgb(255, 99, 132)" : "rgb(169, 169, 169)",
+  }));
 
   const data = {
     labels,
-    datasets: makeLines(),
+    datasets: lineData,
   };
 
   return <Line options={options} data={data} plugins={[legendMargin]} />;

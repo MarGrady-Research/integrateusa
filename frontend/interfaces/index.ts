@@ -7,4 +7,5 @@ export type {
   SchoolType,
   RacialProportion,
   Level,
+  SegEntity,
 } from "./interfaces";

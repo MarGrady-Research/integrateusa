@@ -46,7 +46,7 @@ const getSchoolLevel = (infoData: InfoData) => {
     },
   };
 
-  for (let school of infoData) {
+  for (const school of infoData) {
     schoolLevel.Total.schools += 1;
     schoolLevel.Total.students += school.tot_enr;
 

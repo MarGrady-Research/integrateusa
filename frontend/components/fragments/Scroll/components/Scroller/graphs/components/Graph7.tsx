@@ -32,11 +32,11 @@ ChartJS.register(
 const getLineData = (data) => {
   const lineData = {};
 
-  for (let id of ids) {
+  for (const id of ids) {
     lineData[id.dist_id_alt] = [];
   }
 
-  for (let item of data) {
+  for (const item of data) {
     if (lineData[item.dist_id_alt]) {
       lineData[item.dist_id_alt].push(item.norm_exp_wh);
     }

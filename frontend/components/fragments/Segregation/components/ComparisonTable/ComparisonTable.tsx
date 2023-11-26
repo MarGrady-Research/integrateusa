@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import clsx from "clsx";
 
-import LineGraph from "../Line/Line";
-import Pagination from "../Pagination/Pagination";
+import LineGraph from "../Line";
+import Pagination from "../Pagination";
 import { sortRows, filterRows, paginateRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
 
@@ -89,69 +89,71 @@ export default function Comparison({
   const [lines, setLines] = useState([id]);
   const [linedata, setLineData] = useState([]);
 
-  class Line {
-    constructor(id, name, data) {
-      (this as any).id = id;
-      (this as any).name = name;
-      (this as any).data = data;
-    }
-  }
+  const labels = yearsData
+    .map((e) => e.value)
+    .sort((a, b) => {
+      return a - b;
+    });
 
-  const getLineData = async (id) => {
-    const labels = yearsData
-      .map((e) => e.value)
-      .sort((a, b) => {
-        return a - b;
-      });
-
-    const response = await axios.get(
-      "/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + id
+  const getLinesData = () => {
+    const promises = lines.map((l) =>
+      axios.get("/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + l)
     );
-    let data = response.data;
 
-    let finaldata = data.map((e) => {
-      return {
-        seg: e[measure.accessor],
-        year: e.year,
-      };
-    });
+    Promise.all(promises).then((values) => {
+      const lineData = [];
 
-    labels.forEach((e) => {
-      if (!finaldata?.map((e) => e.year).includes(e)) {
-        let tempdata = [...finaldata, { seg: null, year: e }];
-        finaldata = tempdata.sort((a, b) => {
-          return a["year"] - b["year"];
+      for (const [index, res] of values.entries()) {
+        const data = res.data;
+
+        let finalData = data.map((e) => ({
+          seg: e[measure.accessor],
+          year: e.year,
+        }));
+
+        labels.forEach((e) => {
+          if (!finalData?.map((e) => e.year).includes(e)) {
+            let tempData = [...finalData, { seg: null, year: e }];
+
+            finalData = tempData.sort((a, b) => {
+              return a["year"] - b["year"];
+            });
+          }
         });
+
+        const name = data[0][namelevel];
+
+        const newLine = {
+          id: lines[index],
+          name,
+          data: finalData,
+        };
+
+        lineData.push(newLine);
       }
+
+      setLineData(lineData);
     });
-
-    const name = data[0][namelevel];
-
-    const templine = new Line(id, name, finaldata);
-    setLineData((prevarray) => [...prevarray, templine]);
   };
 
-  const updateLineState = (e) => {
-    if (lines.includes(e) === false) {
-      setLines((current) => [...current, e]);
+  const updateLineState = (line) => {
+    if (!lines.includes(line)) {
+      setLines((currentLines) => [...currentLines, line]);
     } else {
-      setLines((current) =>
-        current.filter((obj) => {
-          return obj !== e;
+      setLines((currentLines) =>
+        currentLines.filter((l) => {
+          return l !== line;
         })
       );
     }
   };
 
-  const updateID = (e) => {
-    updateLineState(e);
+  const updateID = (id) => {
+    updateLineState(id);
   };
 
   useEffect(() => {
-    setLineData([]);
-    lines.forEach((e) => {
-      getLineData(e);
-    });
+    getLinesData();
   }, [lines, measure]);
 
   // Max and min
@@ -428,7 +430,7 @@ export default function Comparison({
         />
       </div>
       <div className="w-full">
-        <LineGraph linedata={linedata} id={id} year={year} />
+        <LineGraph lineDataRaw={linedata} id={id} year={year} />
       </div>
     </>
   );

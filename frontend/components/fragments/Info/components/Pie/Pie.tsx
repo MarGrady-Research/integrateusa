@@ -26,7 +26,7 @@ const getPieData = (infoData: InfoData) => {
   let whiteTotal = 0;
   let otherTotal = 0;
 
-  for (let school of infoData) {
+  for (const school of infoData) {
     const { tot_enr, asian, black, hispanic, white, other } = school;
 
     studentsTotal += tot_enr;
