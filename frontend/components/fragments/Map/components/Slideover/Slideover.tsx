@@ -5,6 +5,7 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Divider from "@mui/material/Divider";
+import { Visibility } from "mapbox-gl";
 
 import Control from "../Control";
 
@@ -13,7 +14,7 @@ import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 import { Bounds } from "../../../../../interfaces";
 
 interface Props {
-  handleVisibility: (s: string) => void;
+  handleVisibility: (s: Visibility) => void;
   handleBounds: (e: Bounds) => void;
 }
 

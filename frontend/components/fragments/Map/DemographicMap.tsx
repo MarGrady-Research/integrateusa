@@ -6,8 +6,9 @@ import Map, {
   GeolocateControl,
   FullscreenControl,
 } from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { Visibility } from "mapbox-gl";
 import { useSelector } from "react-redux";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
@@ -36,8 +37,6 @@ const prop_array = [
   ["get", "wh"],
   ["get", "or"],
 ];
-
-type Visibility = "none" | "visible";
 
 interface Props {
   mapData: MapData;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Search from "../Search";
 
-import { Bounds } from "../../../../../interfaces";
+import { Bounds, Level } from "../../../../../interfaces";
 import {
   asianColor,
   blackColor,
@@ -9,9 +9,10 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../constants";
+import { Visibility } from "mapbox-gl";
 
 interface Props {
-  handleVisibility: (s: string) => void;
+  handleVisibility: (s: Visibility) => void;
   handleBounds: (e: Bounds) => void;
 }
 
@@ -24,7 +25,7 @@ const race = [
 ];
 
 export default function Control({ handleVisibility, handleBounds }: Props) {
-  const [level, setLevel] = useState("School");
+  const [level, setLevel] = useState("School" as Level);
 
   const handleChange = (e) => {
     setLevel(e.target.value);
