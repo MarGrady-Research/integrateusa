@@ -1,6 +1,7 @@
 export type InfoData = School[];
 export type TrendData = Trend[];
 export type MapData = Feature[];
+export type SegData = SegEntity[];
 
 interface School {
   sch_name: string;
@@ -17,6 +18,8 @@ interface School {
   other: number;
   level: SchoolType;
 }
+
+interface SegEntity {}
 
 interface Trend {
   year: number;

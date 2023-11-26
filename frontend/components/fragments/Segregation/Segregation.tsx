@@ -4,11 +4,23 @@ import { useSelector } from "react-redux";
 
 import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
+
 import {
   selectId,
   selectGrade,
   selectSelectedName,
 } from "../../../store/selectSlice";
+
+import { SegData } from "../../../interfaces";
+
+interface Props {
+  segData: SegData;
+  year: number;
+}
+
+type IDLevel = "dist_id" | "county_id" | "state_abb";
+type NameLevel = "dist_name" | "county_name" | "state_abb";
+type Table = "district" | "county" | "state";
 
 const options = [
   {
@@ -43,7 +55,7 @@ const options = [
   },
 ];
 
-const findFocus = (segData, idlevel, strID) => {
+const findFocus = (segData: SegData, idlevel: IDLevel, strID: string) => {
   let posIdx = segData.map((d) => d[idlevel]).indexOf(strID);
 
   if (posIdx != -1) {
@@ -53,14 +65,14 @@ const findFocus = (segData, idlevel, strID) => {
   return null;
 };
 
-export default function Segregation({ segData, year }) {
+export default function Segregation({ segData, year }: Props) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
 
-  let idlevel;
-  let namelevel;
-  let table;
+  let idlevel: IDLevel;
+  let namelevel: NameLevel;
+  let table: Table;
 
   const strID = id.toString();
 
@@ -78,7 +90,7 @@ export default function Segregation({ segData, year }) {
     table = "state";
   }
 
-  const maxschools = Math.max(...segData.map((e) => e["num_schools"]));
+  const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
 
   const [focus, setFocus] = useState(findFocus(segData, idlevel, strID));
 
@@ -147,12 +159,10 @@ export default function Segregation({ segData, year }) {
             segregation for <b>{selected.label}</b> students.
           </p>
         </div>
-
         <div className="h-96">
           <SegBar focus={focus} />
         </div>
       </div>
-
       <Comparison
         id={id}
         grade={grade}
@@ -161,7 +171,7 @@ export default function Segregation({ segData, year }) {
         namelevel={namelevel}
         table={table}
         measure={measure}
-        maxschools={maxschools}
+        maxSchools={maxSchools}
         year={year}
       />
     </>

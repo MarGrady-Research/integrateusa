@@ -9,13 +9,14 @@ import Page from "../components/layouts/Page";
 import Loader from "../components/fragments/Loader";
 import Segregation from "../components/fragments/Segregation";
 import { selectYear, selectGrade, selectLevels } from "../store/selectSlice";
+import { SegData } from "../interfaces";
 
 export default function SegregationPage() {
   const levels = useSelector(selectLevels);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
 
-  const [segData, setSegData] = useState([]);
+  const [segData, setSegData] = useState([] as SegData);
   const [isLoading, setIsLoading] = useState(true);
 
   const getData = () => {

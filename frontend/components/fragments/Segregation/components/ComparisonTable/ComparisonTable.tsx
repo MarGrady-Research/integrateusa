@@ -15,7 +15,7 @@ export default function Comparison({
   idlevel,
   table,
   measure,
-  maxschools,
+  maxSchools,
   year,
 }) {
   // Setting columns array
@@ -167,7 +167,7 @@ export default function Comparison({
   });
 
   const [max, setMax] = useState({
-    num_schools: maxschools,
+    num_schools: maxSchools,
     enr_prop_as: 100,
     enr_prop_bl: 100,
     enr_prop_hi: 100,
@@ -288,7 +288,7 @@ export default function Comparison({
                     e.target.value === "" || e.target.value === undefined
                       ? setMax((oldmax) => ({
                           ...oldmax,
-                          [column.accessor]: maxschools,
+                          [column.accessor]: maxSchools,
                         }))
                       : setMax((oldmax) => ({
                           ...oldmax,

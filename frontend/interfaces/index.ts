@@ -2,6 +2,7 @@ export type {
   InfoData,
   TrendData,
   MapData,
+  SegData,
   Bounds,
   SchoolType,
   RacialProportion,

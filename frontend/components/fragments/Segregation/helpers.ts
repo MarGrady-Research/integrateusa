@@ -26,14 +26,6 @@ export function convertType(value) {
     return value.toString();
   }
 
-  // if (isDateString(value)) {
-  //     return convertDateString(value)
-  // }
-
-  // if (isBoolean(value)) {
-  //     return value ? '1' : '-1'
-  // }
-
   return value;
 }
 
