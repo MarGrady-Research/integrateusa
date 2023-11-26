@@ -80,3 +80,12 @@ export type RacialProportion =
   | "prop_or";
 
 export type Level = "School" | "District" | "County" | "State";
+
+export interface LineData {
+  id: string;
+  name: string;
+  data: {
+    seg: number;
+    year: number;
+  }[];
+}

@@ -10,14 +10,15 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { yearsData } from "../../../Selection/data";
 
+import { yearsData } from "../../../Selection/data";
 import { legendMargin } from "../../../../../charts";
 import {
   primaryColor,
   selectedLineColor,
   unselectedLineColor,
 } from "../../../../../constants";
+import { LineData } from "../../../../../interfaces";
 
 ChartJS.register(
   CategoryScale,
@@ -29,18 +30,30 @@ ChartJS.register(
   Legend
 );
 
-export default function LineGraph({ linesData, id, year }) {
+interface Props {
+  linesData: LineData[];
+  id: string;
+  year: number;
+}
+
+const labels = yearsData
+  .map((e) => e.value)
+  .sort((a, b) => {
+    return a - b;
+  });
+
+export default function LineGraph({ linesData, id, year }: Props) {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
     plugins: {
       legend: {
-        position: "top" as any,
+        position: "top" as "top",
       },
     },
     scales: {
       y: {
-        position: "right" as any,
+        position: "right" as "right",
         min: 0,
         max: 100,
       },
@@ -63,12 +76,6 @@ export default function LineGraph({ linesData, id, year }) {
       },
     },
   };
-
-  const labels = yearsData
-    .map((e) => e.value)
-    .sort((a, b) => {
-      return a - b;
-    });
 
   const lineData = linesData.map((e) => ({
     label: e.name,

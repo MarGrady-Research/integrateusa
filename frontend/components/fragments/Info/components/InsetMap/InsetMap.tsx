@@ -13,7 +13,7 @@ import {
 import { Bounds } from "../../../../../interfaces";
 
 interface Props {
-  id: number;
+  id: string;
   bounds: Bounds;
 }
 
@@ -32,8 +32,6 @@ export default function InsetMap({ id, bounds }: Props) {
     });
   }, [bounds]);
 
-  const stringID = id.toString();
-
   const districtLayer = {
     id: "district-boundary",
     type: "fill" as any,
@@ -42,7 +40,7 @@ export default function InsetMap({ id, bounds }: Props) {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
     },
-    filter: ["==", "GEOID", stringID],
+    filter: ["==", "GEOID", id],
   };
 
   const countyLayer = {
@@ -53,7 +51,7 @@ export default function InsetMap({ id, bounds }: Props) {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
     },
-    filter: ["==", "GEOID", stringID],
+    filter: ["==", "GEOID", id],
   };
 
   const stateLayer = {
@@ -64,7 +62,7 @@ export default function InsetMap({ id, bounds }: Props) {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
     },
-    filter: ["==", "STUSPS", stringID],
+    filter: ["==", "STUSPS", id],
   };
 
   return (

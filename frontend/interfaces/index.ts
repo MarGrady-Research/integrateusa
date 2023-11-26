@@ -8,4 +8,5 @@ export type {
   RacialProportion,
   Level,
   SegEntity,
+  LineData,
 } from "./interfaces";

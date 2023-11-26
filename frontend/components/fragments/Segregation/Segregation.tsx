@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 
@@ -53,8 +53,8 @@ const options = [
 
 const defaultOption = options[2];
 
-const findFocus = (segData: SegData, idLevel: string, strID: string) => {
-  const posIdx = segData.findIndex((d) => d[idLevel] && d[idLevel] === strID);
+const findFocus = (segData: SegData, idLevel: string, id: string) => {
+  const posIdx = segData.findIndex((d) => d[idLevel] && d[idLevel] === id);
 
   if (posIdx != -1) {
     return segData[posIdx];
@@ -70,17 +70,23 @@ export default function Segregation({ segData, year }: Props) {
 
   const [selected, setSelected] = useState(defaultOption);
 
+  const measure = useMemo(
+    () => ({
+      name: `${selected.label} Normalized Exposure`,
+      accessor: selected.value,
+    }),
+    [selected]
+  );
+
   let idLevel: string;
   let nameLevel: string;
   let table: string;
 
-  const strID = id.toString();
-
-  if (strID.length === 7) {
+  if (id.length === 7) {
     idLevel = "dist_id";
     nameLevel = "dist_name";
     table = "district";
-  } else if (strID.length === 5) {
+  } else if (id.length === 5) {
     idLevel = "county_id";
     nameLevel = "county_name";
     table = "county";
@@ -90,18 +96,13 @@ export default function Segregation({ segData, year }: Props) {
     table = "state";
   }
 
-  const [focus, setFocus] = useState(findFocus(segData, idLevel, strID));
+  const [focus, setFocus] = useState(findFocus(segData, idLevel, id));
 
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
 
-  const measure = {
-    name: `${selected.label} Normalized Exposure`,
-    accessor: selected.value,
-  };
-
   useEffect(() => {
-    setFocus(findFocus(segData, idLevel, strID));
-  }, [segData, idLevel, strID]);
+    setFocus(findFocus(segData, idLevel, id));
+  }, [segData, idLevel, id]);
 
   if (!focus) {
     return null;

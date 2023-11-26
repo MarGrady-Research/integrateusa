@@ -10,7 +10,7 @@ export interface SelectState {
   levels: number;
   year: number;
   grade: string;
-  id: number;
+  id: string;
   selectedName: string;
   bounds: Bounds;
 }
@@ -21,7 +21,7 @@ const initialState: SelectState = {
   levels: 0,
   year: currentYear,
   grade: "All",
-  id: 3620580,
+  id: "3620580",
   selectedName: "New York City Public Schools (NY)",
   bounds: {
     lngmin: -74.25609,
@@ -77,7 +77,7 @@ export const {
 export const selectLevels = (state: AppState) => state.select.levels as number;
 export const selectYear = (state: AppState) => state.select.year as number;
 export const selectGrade = (state: AppState) => state.select.grade as string;
-export const selectId = (state: AppState) => state.select.id as number;
+export const selectId = (state: AppState) => state.select.id as string;
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName as string;
 export const selectBounds = (state: AppState) => state.select.bounds as Bounds;

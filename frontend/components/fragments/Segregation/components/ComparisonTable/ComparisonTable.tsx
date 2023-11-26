@@ -8,10 +8,10 @@ import Pagination from "../Pagination";
 import { sortRows, filterRows, paginateRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
 
-import { SegData } from "../../../../../interfaces";
+import { SegData, LineData } from "../../../../../interfaces";
 
 interface Props {
-  id: number;
+  id: string;
   grade: string;
   segData: SegData;
   idLevel: string;
@@ -100,7 +100,7 @@ export default function Comparison({
   const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
 
   const [lines, setLines] = useState([id]);
-  const [linesData, setLinesData] = useState([]);
+  const [linesData, setLinesData] = useState([] as LineData[]);
 
   const labels = yearsData
     .map((e) => e.value)
@@ -108,20 +108,20 @@ export default function Comparison({
       return a - b;
     });
 
-  const processLineData = (res, id) => {
-    const data = res.data;
-
-    let finalData = data.map((e) => ({
-      seg: e[measure.accessor],
-      year: e.year,
+  const processLineData = (data, id: string) => {
+    let finalData = data.map((d) => ({
+      seg: d[measure.accessor],
+      year: d.year,
     }));
 
-    labels.forEach((e) => {
-      if (!finalData?.map((e) => e.year).includes(e)) {
-        let tempData = [...finalData, { seg: null, year: e }];
+    labels.forEach((l) => {
+      const yearInData = finalData.findIndex((d) => d.year === l) != -1;
+
+      if (!yearInData) {
+        let tempData = [...finalData, { seg: null, year: l }];
 
         finalData = tempData.sort((a, b) => {
-          return a["year"] - b["year"];
+          return a.year - b.year;
         });
       }
     });
@@ -132,7 +132,7 @@ export default function Comparison({
       id,
       name,
       data: finalData,
-    };
+    } as LineData;
 
     return newLine;
   };
@@ -142,7 +142,7 @@ export default function Comparison({
       "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
 
     axios.get(url).then((res) => {
-      const newLineData = processLineData(res, lineId);
+      const newLineData = processLineData(res.data, lineId);
 
       setLinesData((ld) => [...ld, newLineData]);
     });
@@ -163,7 +163,7 @@ export default function Comparison({
       const linesData = [];
 
       for (const [index, res] of values.entries()) {
-        const newLineData = processLineData(res, lines[index]);
+        const newLineData = processLineData(res.data, lines[index]);
 
         linesData.push(newLineData);
       }
@@ -183,6 +183,7 @@ export default function Comparison({
   };
 
   useEffect(() => {
+    setLinesData([]);
     getLinesData();
   }, [measure]);
 
