@@ -74,12 +74,12 @@ export const {
   setBounds,
 } = selectSlice.actions;
 
-export const selectLevels = (state: AppState) => state.select.levels;
+export const selectLevels = (state: AppState) => state.select.levels as number;
 export const selectYear = (state: AppState) => state.select.year as number;
 export const selectGrade = (state: AppState) => state.select.grade as string;
 export const selectId = (state: AppState) => state.select.id as number;
 export const selectSelectedName = (state: AppState) =>
-  state.select.selectedName;
+  state.select.selectedName as string;
 export const selectBounds = (state: AppState) => state.select.bounds as Bounds;
 
 export default selectSlice.reducer;

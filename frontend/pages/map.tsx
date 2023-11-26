@@ -8,15 +8,14 @@ import DemographicMap from "../components/fragments/Map";
 import Loader from "../components/fragments/Loader";
 import { useDevice } from "../hooks";
 
+import { MapData } from "../interfaces";
+
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";
 
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
-  const [mapData, setMapData] = useState({
-    type: "FeatureCollection" as "FeatureCollection",
-    features: [],
-  });
+  const [mapData, setMapData] = useState([] as MapData);
 
   const getData = () => {
     setIsLoading(true);
@@ -24,10 +23,7 @@ export default function Map() {
     axios
       .get("/api/mapschools/?q=2022")
       .then((res) => {
-        setMapData((d) => ({
-          ...d,
-          features: res.data.map((e) => e.map_data),
-        }));
+        setMapData(res.data.map((d) => d.map_data));
         setIsLoading(false);
       })
       .catch(() => {

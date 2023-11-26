@@ -83,9 +83,5 @@ export default function LineGraph({ linedata, id, year }) {
     datasets: makeLines(),
   };
 
-  useEffect(() => {
-    makeLines();
-  }, [linedata, makeLines]);
-
   return <Line options={options} data={data} plugins={[legendMargin]} />;
 }

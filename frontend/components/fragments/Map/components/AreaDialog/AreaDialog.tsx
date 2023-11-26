@@ -45,7 +45,7 @@ const getAreaInfo = (dialogInfo, mapData) => {
   let whiteTotal = 0;
   let otherTotal = 0;
 
-  for (let feature of mapData.features) {
+  for (let feature of mapData) {
     const { tot_enr, as, bl, hi, wh, or } = feature.properties;
 
     if (feature.properties[areaId] === layerProp) {

@@ -7,9 +7,11 @@ export {
   otherColor,
   defaultFont,
   selectedAreaColor,
+  unselectedAreaColor,
   districtBoundaryURL,
   countyBoundaryURL,
   stateBoundaryURL,
   selectedLineColor,
   unselectedLineColor,
+  defaultMapSchoolColor,
 } from "./constants";

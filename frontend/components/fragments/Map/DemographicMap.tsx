@@ -14,9 +14,39 @@ import ViewDialog from "./components/ViewDialog";
 import AreaDialog from "./components/AreaDialog";
 import SchoolDialog from "./components/SchoolDialog";
 import Popup from "./components/Popup";
-import { selectBounds } from "../../../store/selectSlice";
 
-export default function DemographicMap({ mapData, onSmallerScreen }) {
+import { selectBounds } from "../../../store/selectSlice";
+import { MapData } from "../../../interfaces";
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+  defaultMapSchoolColor,
+  selectedAreaColor,
+  unselectedAreaColor,
+} from "../../../constants";
+
+const prop_array = [
+  "max",
+  ["get", "as"],
+  ["get", "bl"],
+  ["get", "hi"],
+  ["get", "wh"],
+  ["get", "or"],
+];
+
+type Visibility = "none" | "visible";
+
+interface Props {
+  mapData: MapData;
+  onSmallerScreen: boolean;
+}
+
+export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
+  const mapRef = useRef();
+
   const initialBounds = useSelector(selectBounds);
 
   const [schoolDialogOpen, setSchoolDialogOpen] = useState(false);
@@ -27,7 +57,11 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
 
   const [cursor, setCursor] = useState("auto");
 
-  const [stateVisible, setStateVisible] = useState("none");
+  const [stateVisible, setStateVisible] = useState("none" as Visibility);
+  const [countyVisible, setCountyVisible] = useState("none" as Visibility);
+  const [districtVisible, setDistrictVisible] = useState("none" as Visibility);
+
+  const [renderedFeatures, setRenderedFeatures] = useState([]);
 
   const handleVisibility = (level) => {
     if (level === "District") {
@@ -59,16 +93,14 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
       "fill-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        "rgba(0,0,0,0.1)",
-        "rgba(255,255,255,0.1)",
+        selectedAreaColor,
+        unselectedAreaColor,
       ],
     } as any,
     layout: {
-      visibility: stateVisible as any,
+      visibility: stateVisible,
     },
   };
-
-  const [countyVisible, setCountyVisible] = useState("none");
 
   const countyLayer = {
     id: "county-boundary",
@@ -80,16 +112,14 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
       "fill-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        "rgba(0,0,0,0.1)",
-        "rgba(255,255,255,0.1)",
+        selectedAreaColor,
+        unselectedAreaColor,
       ],
     } as any,
     layout: {
-      visibility: countyVisible as any,
+      visibility: countyVisible,
     },
   };
-
-  const [districtVisible, setDistrictVisible] = useState("none");
 
   const districtLayer = {
     id: "district-boundary",
@@ -100,23 +130,14 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
       "fill-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        "rgba(0,0,0,0.1)",
-        "rgba(255,255,255,0.1)",
+        selectedAreaColor,
+        unselectedAreaColor,
       ],
     } as any,
     layout: {
-      visibility: districtVisible as any,
+      visibility: districtVisible,
     },
   };
-
-  const prop_array = [
-    "max",
-    ["get", "as"],
-    ["get", "bl"],
-    ["get", "hi"],
-    ["get", "or"],
-    ["get", "wh"],
-  ];
 
   const LayerProps = {
     id: "schools",
@@ -127,16 +148,16 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
       "circle-color": [
         "case",
         ["==", ["get", "as"], prop_array],
-        "#FF5050",
+        asianColor,
         ["==", ["get", "bl"], prop_array],
-        "#4472C4",
+        blackColor,
         ["==", ["get", "hi"], prop_array],
-        "#FF9900",
+        hispanicColor,
         ["==", ["get", "wh"], prop_array],
-        "#339933",
+        whiteColor,
         ["==", ["get", "or"], prop_array],
-        "#FFC000",
-        "#808080",
+        otherColor,
+        defaultMapSchoolColor,
       ],
       "circle-stroke-width": 2,
       "circle-stroke-color": [
@@ -147,9 +168,6 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
       ],
     } as any,
   };
-
-  // Using the useMap hook to access additional map methods
-  const mapRef = useRef();
 
   const updateBounds = useCallback((e) => {
     if (mapRef.current) {
@@ -257,8 +275,6 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     }
   }, [dialogInfo]);
 
-  const [renderedFeatures, setRenderedFeatures] = useState([]);
-
   const querySchools = useCallback(() => {
     if (mapRef.current) {
       setRenderedFeatures(
@@ -267,12 +283,12 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     }
   }, []);
 
-  const onLoad = () => {
+  const onLoad = useCallback(() => {
     if (onSmallerScreen) {
       updateBounds(initialBounds);
     }
     querySchools();
-  };
+  }, [onSmallerScreen, initialBounds]);
 
   const coordinates = {
     x: hoverInfo?.x,
@@ -288,6 +304,11 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
     dialogInfo && !!dialogInfo.feature.properties.sch_name;
 
   const isAreaSelected = dialogInfo && !!dialogInfo.feature.properties.NAME;
+
+  const mapboxData = {
+    type: "FeatureCollection" as "FeatureCollection",
+    features: mapData,
+  };
 
   return (
     <>
@@ -345,7 +366,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }) {
         >
           <Layer {...stateLayer} />
         </Source>
-        <Source id="schools-source" type="geojson" data={mapData} generateId>
+        <Source id="schools-source" type="geojson" data={mapboxData} generateId>
           <Layer {...LayerProps} />
         </Source>
         {schoolName && <Popup name={schoolName} coordinates={coordinates} />}
