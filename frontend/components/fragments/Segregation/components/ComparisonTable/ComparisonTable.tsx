@@ -169,10 +169,6 @@ export default function Comparison({
     }
   };
 
-  const updateID = (id) => {
-    updateLineState(id);
-  };
-
   useEffect(() => {
     getLinesData();
   }, [measure]);
@@ -252,7 +248,7 @@ export default function Comparison({
                       onClick={() => {
                         calculatedRows
                           .map((e) => e[idlevel])
-                          .forEach((e) => updateID(e));
+                          .forEach((e) => updateLineState(e));
                       }}
                     />
                   </th>
@@ -393,7 +389,7 @@ export default function Comparison({
                           }
                           disabled={row[idlevel] === "" + id ? true : false}
                           onChange={() => {}}
-                          onClick={(e) => updateID((e.target as any).id)}
+                          onClick={(e) => updateLineState((e.target as any).id)}
                           readOnly={false}
                         />
                       </th>
@@ -442,8 +438,6 @@ export default function Comparison({
         </div>
         <Pagination
           activePage={activePage}
-          count={count}
-          rowsPerPage={rowsPerPage}
           totalPages={totalPages}
           setActivePage={setActivePage}
         />

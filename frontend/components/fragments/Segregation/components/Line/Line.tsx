@@ -16,7 +16,6 @@ import { legendMargin } from "../../../../../charts";
 import {
   primaryColor,
   selectedLineColor,
-  unselectedAreaColor,
   unselectedLineColor,
 } from "../../../../../constants";
 
