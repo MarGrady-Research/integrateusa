@@ -4,24 +4,41 @@ import clsx from "clsx";
 
 import LineGraph from "../Line";
 import Pagination from "../Pagination";
+
 import { sortRows, filterRows, paginateRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
+
+import { SegData } from "../../../../../interfaces";
+
+interface Props {
+  id: number;
+  grade: string;
+  segData: SegData;
+  idLevel: string;
+  nameLevel: string;
+  table: string;
+  measure: {
+    accessor: string;
+    name: string;
+  };
+  maxSchools: number;
+  year: number;
+}
 
 export default function Comparison({
   id,
   grade,
   segData,
-  namelevel,
-  idlevel,
+  nameLevel,
+  idLevel,
   table,
   measure,
   maxSchools,
   year,
-}) {
-  // Setting columns array
+}: Props) {
   const columns = [
     { accessor: "checkbox", label: "" },
-    { accessor: namelevel, label: "Name" },
+    { accessor: nameLevel, label: "Name" },
     { accessor: "num_schools", label: "# of Schools" },
     { accessor: "enr_prop_as", label: "% Asian" },
     { accessor: "enr_prop_bl", label: "% Black" },
@@ -31,7 +48,6 @@ export default function Comparison({
     { accessor: measure.accessor, label: measure.name },
   ];
 
-  // Filtering
   const [filters, setFilters] = useState({});
 
   const handleSearch = (value, accessor) => {
@@ -52,7 +68,6 @@ export default function Comparison({
     }
   };
 
-  // Sorting
   const [sort, setSort] = useState({ order: "desc", orderBy: "num_schools" });
 
   const handleSort = (accessor) => {
@@ -66,7 +81,6 @@ export default function Comparison({
     }));
   };
 
-  // Filter then sort, then paginate
   const filteredRows = useMemo(
     () => filterRows(segData, filters),
     [segData, filters]
@@ -76,16 +90,15 @@ export default function Comparison({
     [filteredRows, sort]
   );
 
-  // Pagination
   const [activePage, setActivePage] = useState(1);
+  const handleActivePage = (p) => setActivePage(p);
+
   const rowsPerPage = 10;
   const count = filteredRows.length;
   const totalPages = Math.ceil(count / rowsPerPage);
 
-  // Paginate after sorting and filtering
   const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
 
-  // Beginning of Line Data section
   const [lines, setLines] = useState([id]);
   const [linesData, setLinesData] = useState([]);
 
@@ -113,7 +126,7 @@ export default function Comparison({
       }
     });
 
-    const name = data[0][namelevel];
+    const name = data[0][nameLevel];
 
     const newLine = {
       id,
@@ -126,7 +139,7 @@ export default function Comparison({
 
   const getLineData = (lineId: string) => {
     const url =
-      "/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + lineId;
+      "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
 
     axios.get(url).then((res) => {
       const newLineData = processLineData(res, lineId);
@@ -143,7 +156,7 @@ export default function Comparison({
 
   const getLinesData = () => {
     const promises = lines.map((l) =>
-      axios.get("/api/" + table + "/?grade=" + grade + "&" + idlevel + "=" + l)
+      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`)
     );
 
     Promise.all(promises).then((values) => {
@@ -172,8 +185,6 @@ export default function Comparison({
   useEffect(() => {
     getLinesData();
   }, [measure]);
-
-  // Max and min
 
   const [min, setMin] = useState({
     num_schools: 1,
@@ -220,7 +231,7 @@ export default function Comparison({
                   <div
                     className={clsx({
                       "flex flex-row": true,
-                      "justify-center": column.accessor != namelevel,
+                      "justify-center": column.accessor != nameLevel,
                     })}
                   >
                     <span className="px-1">{column.label}</span>
@@ -247,14 +258,14 @@ export default function Comparison({
                       id="master"
                       onClick={() => {
                         calculatedRows
-                          .map((e) => e[idlevel])
+                          .map((e) => e[idLevel])
                           .forEach((e) => updateLineState(e));
                       }}
                     />
                   </th>
                 );
               }
-              if (column.accessor === namelevel) {
+              if (column.accessor === nameLevel) {
                 return (
                   <td className="px-2 py-1">
                     <input
@@ -373,7 +384,7 @@ export default function Comparison({
           </tr>
           {calculatedRows.map((row) => {
             return (
-              <tr key={row[idlevel]}>
+              <tr key={row[idLevel]}>
                 {columns.map((column) => {
                   if (column.accessor == "checkbox") {
                     return (
@@ -381,24 +392,24 @@ export default function Comparison({
                         <input
                           type="checkbox"
                           className="form-check-input"
-                          id={row[idlevel]}
+                          id={row[idLevel]}
                           checked={
-                            row[idlevel] === "" + id
+                            row[idLevel] === "" + id
                               ? true
-                              : lines.includes(row[idlevel])
+                              : lines.includes(row[idLevel])
                           }
-                          disabled={row[idlevel] === "" + id ? true : false}
+                          disabled={row[idLevel] === "" + id ? true : false}
                           onClick={(e) => updateLineState((e.target as any).id)}
                           readOnly={false}
                         />
                       </th>
                     );
-                  } else if (column.accessor === namelevel) {
+                  } else if (column.accessor === nameLevel) {
                     return (
                       <td
                         key={column.accessor}
                         className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${
-                          row[idlevel] === "" + id
+                          row[idLevel] === "" + id
                             ? "text-line-red font-semibold"
                             : ""
                         }`}
@@ -411,7 +422,7 @@ export default function Comparison({
                       <td
                         key={column.accessor}
                         className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${
-                          row[idlevel] === "" + id
+                          row[idLevel] === "" + id
                             ? "text-line-red font-semibold"
                             : ""
                         }`}
@@ -438,7 +449,7 @@ export default function Comparison({
         <Pagination
           activePage={activePage}
           totalPages={totalPages}
-          setActivePage={setActivePage}
+          handleActivePage={handleActivePage}
         />
       </div>
       <div className="w-full">

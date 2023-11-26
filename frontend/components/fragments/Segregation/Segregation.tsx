@@ -18,10 +18,6 @@ interface Props {
   year: number;
 }
 
-type IDLevel = "dist_id" | "county_id" | "state_abb";
-type NameLevel = "dist_name" | "county_name" | "state_abb";
-type Table = "district" | "county" | "state";
-
 const options = [
   {
     value: "norm_exp_as",
@@ -55,8 +51,10 @@ const options = [
   },
 ];
 
-const findFocus = (segData: SegData, idlevel: IDLevel, strID: string) => {
-  let posIdx = segData.map((d) => d[idlevel]).indexOf(strID);
+const defaultOption = options[2];
+
+const findFocus = (segData: SegData, idLevel: string, strID: string) => {
+  const posIdx = segData.findIndex((d) => d[idLevel] && d[idLevel] === strID);
 
   if (posIdx != -1) {
     return segData[posIdx];
@@ -70,43 +68,40 @@ export default function Segregation({ segData, year }: Props) {
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
 
-  let idlevel: IDLevel;
-  let namelevel: NameLevel;
-  let table: Table;
+  const [selected, setSelected] = useState(defaultOption);
+
+  let idLevel: string;
+  let nameLevel: string;
+  let table: string;
 
   const strID = id.toString();
 
   if (strID.length === 7) {
-    idlevel = "dist_id";
-    namelevel = "dist_name";
+    idLevel = "dist_id";
+    nameLevel = "dist_name";
     table = "district";
   } else if (strID.length === 5) {
-    idlevel = "county_id";
-    namelevel = "county_name";
+    idLevel = "county_id";
+    nameLevel = "county_name";
     table = "county";
   } else {
-    idlevel = "state_abb";
-    namelevel = "state_abb";
+    idLevel = "state_abb";
+    nameLevel = "state_abb";
     table = "state";
   }
 
+  const [focus, setFocus] = useState(findFocus(segData, idLevel, strID));
+
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
 
-  const [focus, setFocus] = useState(findFocus(segData, idlevel, strID));
-  const [selected, setSelected] = useState(options[2]);
-  const [measure, setMeasure] = useState({});
+  const measure = {
+    name: `${selected.label} Normalized Exposure`,
+    accessor: selected.value,
+  };
 
   useEffect(() => {
-    setFocus(findFocus(segData, idlevel, strID));
-  }, [segData, idlevel, strID]);
-
-  useEffect(() => {
-    const selectedGroup = {
-      name: `${selected.label} Normalized Exposure`,
-      accessor: selected.value,
-    };
-    setMeasure(selectedGroup);
-  }, [selected]);
+    setFocus(findFocus(segData, idLevel, strID));
+  }, [segData, idLevel, strID]);
 
   if (!focus) {
     return null;
@@ -165,8 +160,8 @@ export default function Segregation({ segData, year }: Props) {
         id={id}
         grade={grade}
         segData={segData}
-        idlevel={idlevel}
-        namelevel={namelevel}
+        idLevel={idLevel}
+        nameLevel={nameLevel}
         table={table}
         measure={measure}
         maxSchools={maxSchools}
