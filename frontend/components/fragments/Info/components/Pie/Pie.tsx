@@ -52,11 +52,30 @@ const getPieData = (infoData: InfoData) => {
   ];
 };
 
+const labels = ["Asian", "Black", "Hispanic", "White", "Other"];
+
+const options = {
+  reponsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    tooltip: {
+      enabled: true,
+      display: true,
+      callbacks: {
+        label: (context) => {
+          const label = context.dataset.data[context.dataIndex];
+          return labels[context.dataIndex] + " " + label + "%";
+        },
+      },
+    },
+  },
+};
+
 export default function PieChart({ infoData }: Props) {
   const pieData = getPieData(infoData);
 
   const data = {
-    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
+    labels,
     datasets: [
       {
         label: "Enrollment Share by Race",
@@ -78,23 +97,6 @@ export default function PieChart({ infoData }: Props) {
         ],
       },
     ],
-  };
-
-  const options = {
-    reponsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      tooltip: {
-        enabled: true,
-        display: true,
-        callbacks: {
-          label: (context) => {
-            const label = context.dataset.data[context.dataIndex];
-            return data.labels[context.dataIndex] + " " + label + "%";
-          },
-        },
-      },
-    },
   };
 
   return <Pie data={data} options={options} plugins={[legendMargin]} />;

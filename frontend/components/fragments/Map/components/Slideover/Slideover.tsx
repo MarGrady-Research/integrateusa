@@ -7,10 +7,17 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Divider from "@mui/material/Divider";
 
 import Control from "../Control";
+
 // @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
+import { Bounds } from "../../../../../interfaces";
 
-export default function Slideover({ handleVisibility, handleBounds }) {
+interface Props {
+  handleVisibility: (s: string) => void;
+  handleBounds: (e: Bounds) => void;
+}
+
+export default function Slideover({ handleVisibility, handleBounds }: Props) {
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen((o) => !o);
 

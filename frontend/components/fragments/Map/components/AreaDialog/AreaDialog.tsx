@@ -11,6 +11,8 @@ import { useTheme } from "@mui/material/styles";
 
 import AreaPie from "../AreaPie";
 
+import { MapData } from "../../../../../interfaces";
+
 // @ts-ignore
 import { paper } from "./AreaDialog.module.scss";
 
@@ -18,7 +20,7 @@ interface Props {
   dialogInfo: any;
   open: boolean;
   handleClose: () => void;
-  mapData: any[];
+  mapData: MapData;
 }
 
 const getAreaInfo = (dialogInfo, mapData) => {

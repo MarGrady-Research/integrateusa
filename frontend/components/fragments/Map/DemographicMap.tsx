@@ -63,26 +63,6 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
 
   const [renderedFeatures, setRenderedFeatures] = useState([]);
 
-  const handleVisibility = (level) => {
-    if (level === "District") {
-      setDistrictVisible("visible");
-      setCountyVisible("none");
-      setStateVisible("none");
-    } else if (level === "County") {
-      setDistrictVisible("none");
-      setCountyVisible("visible");
-      setStateVisible("none");
-    } else if (level === "State") {
-      setDistrictVisible("none");
-      setCountyVisible("none");
-      setStateVisible("visible");
-    } else {
-      setDistrictVisible("none");
-      setCountyVisible("none");
-      setStateVisible("none");
-    }
-  };
-
   const stateLayer = {
     id: "state-boundary",
     type: "fill" as any,
@@ -167,6 +147,26 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         "transparent",
       ],
     } as any,
+  };
+
+  const handleVisibility = (level) => {
+    if (level === "District") {
+      setDistrictVisible("visible");
+      setCountyVisible("none");
+      setStateVisible("none");
+    } else if (level === "County") {
+      setDistrictVisible("none");
+      setCountyVisible("visible");
+      setStateVisible("none");
+    } else if (level === "State") {
+      setDistrictVisible("none");
+      setCountyVisible("none");
+      setStateVisible("visible");
+    } else {
+      setDistrictVisible("none");
+      setCountyVisible("none");
+      setStateVisible("none");
+    }
   };
 
   const updateBounds = useCallback((e) => {

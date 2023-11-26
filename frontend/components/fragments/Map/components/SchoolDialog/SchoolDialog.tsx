@@ -8,7 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 
-import MapPie from "../MapPies";
+import MapPie from "../MapPie";
 
 // @ts-ignore
 import { paper } from "./SchoolDialog.module.scss";
