@@ -14,6 +14,7 @@ import { rawData } from "../data";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const groups = ["asian", "black", "hispanic", "white", "other"];
+const labels = ["Asian", "Black", "Hispanic", "White", "Other"];
 
 const { asian, black, hispanic, other, white } = rawData;
 
@@ -41,7 +42,7 @@ const options = {
 };
 
 const data = {
-  labels: ["Asian", "Black", "Hispanic", "White", "Other"],
+  labels,
   datasets: [
     {
       label: "Enrollment Share by Race",

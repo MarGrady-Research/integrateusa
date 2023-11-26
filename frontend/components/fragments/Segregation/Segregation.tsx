@@ -93,14 +93,12 @@ export default function Segregation({ segData, year }: Props) {
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
 
   const [focus, setFocus] = useState(findFocus(segData, idlevel, strID));
+  const [selected, setSelected] = useState(options[2]);
+  const [measure, setMeasure] = useState({});
 
   useEffect(() => {
     setFocus(findFocus(segData, idlevel, strID));
   }, [segData, idlevel, strID]);
-
-  const [selected, setSelected] = useState(options[2]);
-
-  const [measure, setMeasure] = useState({});
 
   useEffect(() => {
     const selectedGroup = {
@@ -159,7 +157,7 @@ export default function Segregation({ segData, year }: Props) {
             segregation for <b>{selected.label}</b> students.
           </p>
         </div>
-        <div className="h-96">
+        <div>
           <SegBar focus={focus} />
         </div>
       </div>

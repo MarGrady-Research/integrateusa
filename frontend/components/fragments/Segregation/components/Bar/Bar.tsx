@@ -24,7 +24,7 @@ interface Props {
   focus: SegEntity;
 }
 
-const labels = ["Asian", "Black", "Hispanic", "Other Races", "White"];
+const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
 const options = {
   responsive: true,
