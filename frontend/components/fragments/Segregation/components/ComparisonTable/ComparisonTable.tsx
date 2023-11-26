@@ -388,7 +388,6 @@ export default function Comparison({
                               : lines.includes(row[idlevel])
                           }
                           disabled={row[idlevel] === "" + id ? true : false}
-                          onChange={() => {}}
                           onClick={(e) => updateLineState((e.target as any).id)}
                           readOnly={false}
                         />
