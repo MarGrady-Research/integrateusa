@@ -5,4 +5,5 @@ export type {
   Bounds,
   SchoolType,
   RacialProportion,
+  Level,
 } from "./interfaces";

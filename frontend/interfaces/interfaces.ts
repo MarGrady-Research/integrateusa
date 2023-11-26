@@ -49,3 +49,5 @@ export type RacialProportion =
   | "prop_hi"
   | "prop_wh"
   | "prop_or";
+
+export type Level = "School" | "District" | "County" | "State";

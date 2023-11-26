@@ -4,7 +4,17 @@ import clsx from "clsx";
 // @ts-ignore
 import { root } from "./Popup.module.scss";
 
-export default function Popup({ name, coordinates }) {
+interface Props {
+  name: string;
+  coordinates: {
+    x: number;
+    y: number;
+    height: number;
+    width: number;
+  };
+}
+
+export default function Popup({ name, coordinates }: Props) {
   const { x, y, height, width } = coordinates;
 
   const halfWidth = width / 2;

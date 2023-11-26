@@ -1,64 +1,69 @@
-import React, { useState } from "react";
+import React from "react";
 import AsyncSelect from "react-select/async";
 import axios from "axios";
 
-export default function Search({ level, handleBounds }) {
-  // Input state and function to handle inputs into state/county/district select
-  const [input, setInput] = useState("");
-  const handleInputChange = (inputValue) => setInput(inputValue);
+import { Level, Bounds } from "../../../../../interfaces";
 
-  // Set URL to search for Counties/Districts/States
-  const url = () => {
-    if (level === "District") {
-      return "/api/districtnames/?q=";
-    } else if (level === "County") {
-      return "/api/countynames/?q=";
-    } else if (level === "State") {
-      return "/api/statenames/?q=";
-    }
-  };
+interface Props {
+  level: Level;
+  handleBounds: (e: Bounds) => void;
+}
 
+const url = (level: Level) => {
+  if (level === "District") {
+    return "/api/districtnames/?q=";
+  } else if (level === "County") {
+    return "/api/countynames/?q=";
+  } else if (level === "State") {
+    return "/api/statenames/?q=";
+  }
+};
+
+export default function Search({ level, handleBounds }: Props) {
   const loadOptions = async (input) => {
     if (input.length === 0) {
       return null;
     }
 
-    const response = await axios.get(url() + input);
+    const response = await axios.get(url(level) + input);
 
-    const Options = await response.data.map((d) => {
-      if (level === "District") {
-        return {
-          value: d.dist_id,
-          label: d.dist_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
+    const options = await response.data.map((d) => {
+      let labelData = {
+        value: "",
+        label: "",
+      };
+
+      switch (level) {
+        case "District":
+          labelData = {
+            value: d.dist_id,
+            label: d.dist_name,
+          };
+          break;
+        case "County":
+          labelData = {
+            value: d.county_id,
+            label: d.county_name,
+          };
+          break;
+        case "State":
+          labelData = {
+            value: d.state_abb,
+            label: d.state_name,
+          };
+          break;
       }
-      if (level === "County") {
-        return {
-          value: d.county_id,
-          label: d.county_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
-      }
-      if (level === "State") {
-        return {
-          value: d.state_abb,
-          label: d.state_name,
-          lngmin: d.lngmin,
-          latmin: d.latmin,
-          lngmax: d.lngmax,
-          latmax: d.latmax,
-        };
-      }
+
+      return {
+        ...labelData,
+        lngmin: d.lngmin,
+        latmin: d.latmin,
+        lngmax: d.lngmax,
+        latmax: d.latmax,
+      };
     });
 
-    return Options;
+    return options;
   };
 
   return (
@@ -66,10 +71,9 @@ export default function Search({ level, handleBounds }) {
       name="idselect"
       cacheOptions
       defaultOptions
-      onChange={(e) => handleBounds(e)}
+      onChange={(e: Bounds) => handleBounds(e)}
       loadOptions={loadOptions}
       isDisabled={level === "School"}
-      onInputChange={handleInputChange}
       components={{
         DropdownIndicator: () => null,
         IndicatorSeparator: () => null,

@@ -12,9 +12,36 @@ import {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function MapPie({ pieData }) {
+interface Props {
+  pieData: number[];
+}
+
+const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
+
+const options = {
+  reponsive: true,
+  plugins: {
+    tooltip: {
+      enabled: true,
+      display: true,
+      callbacks: {
+        label: (context) => {
+          const label = context.dataset.data[context.dataIndex];
+          return (
+            labels[context.dataIndex] + " " + Math.round(label * 100) + "%"
+          );
+        },
+      },
+    },
+    legend: {
+      display: false,
+    },
+  },
+};
+
+export default function MapPie({ pieData }: Props) {
   const data = {
-    labels: ["Asian", "Black", "Hispanic", "White", "Other"],
+    labels,
     datasets: [
       {
         label: "Enrollment Share by Race",
@@ -36,30 +63,6 @@ export default function MapPie({ pieData }) {
         ],
       },
     ],
-  };
-
-  const options = {
-    reponsive: true,
-    plugins: {
-      tooltip: {
-        enabled: true,
-        display: true,
-        callbacks: {
-          label: (context) => {
-            let label = context.dataset.data[context.dataIndex];
-            return (
-              data.labels[context.dataIndex] +
-              " " +
-              Math.round(label * 100) +
-              "%"
-            );
-          },
-        },
-      },
-      legend: {
-        display: false,
-      },
-    },
   };
 
   return <Pie data={data} options={options} />;
