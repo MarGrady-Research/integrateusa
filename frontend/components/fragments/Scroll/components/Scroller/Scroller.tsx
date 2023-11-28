@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import clsx from "clsx";
 
-import { ScrollerPie, ScrollerBar, ScrollerLine } from "./graphs";
+import { ScrollerLine } from "./graphs";
 
+import DistrictPie from "../DistrictPie";
+import DistrictBar from "../DistrictBar";
 import ExposureBarChart, { ExposureBarStep } from "../ExposureBarChart";
 
 // @ts-ignore
@@ -20,10 +22,10 @@ const charts = (currentStepIndex) => {
     currentStepIndex === 7;
 
   if (showDistrictPie) {
-    return <ScrollerPie />;
+    return <DistrictPie />;
   }
   if (showDistrictBar) {
-    return <ScrollerBar />;
+    return <DistrictBar />;
   }
   if (showExposureBar) {
     const step =

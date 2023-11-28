@@ -15,8 +15,9 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../../../constants";
-import { schoolData } from "../data";
+} from "../../../../../constants";
+
+import { schoolData } from "./data";
 
 ChartJS.register(
   LinearScale,
@@ -92,7 +93,7 @@ const barData = [
 ];
 
 const data = {
-  labels: labels,
+  labels,
   datasets: barData,
 };
 
@@ -131,6 +132,8 @@ const options = {
   } as any,
 };
 
-export default function ScrollerBar() {
+console.log(barData);
+
+export default function DistrictBar() {
   return <Bar data={data} options={options} />;
 }

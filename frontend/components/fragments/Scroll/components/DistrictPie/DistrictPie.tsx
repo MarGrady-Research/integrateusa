@@ -8,19 +8,12 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../../../constants";
-import { rawData } from "../data";
+} from "../../../../../constants";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const groups = ["asian", "black", "hispanic", "white", "other"];
 const labels = ["Asian", "Black", "Hispanic", "White", "Other"];
-
-const { asian, black, hispanic, other, white } = rawData;
-
-const enrTotal = asian + black + hispanic + other + white;
-
-const pieData = groups.map((g) => Math.round((rawData[g] / enrTotal) * 100));
+const pieData = [13, 13, 41, 30, 4];
 
 const options = {
   reponsive: true,
@@ -66,6 +59,6 @@ const data = {
   ],
 };
 
-export default function ScrollerPie() {
+export default function DistrictPie() {
   return <Pie data={data} options={options} />;
 }
