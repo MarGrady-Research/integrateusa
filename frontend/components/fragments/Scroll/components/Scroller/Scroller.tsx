@@ -2,18 +2,9 @@ import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import clsx from "clsx";
 
-import {
-  ScrollerPie,
-  ScrollerBar,
-  ScrollerBar2,
-  ScrollerBar3,
-  ScrollerLine,
-  ScrollerLine2,
-  ScrollerLine3,
-  ScrollerLine4,
-} from "./graphs";
+import { ScrollerPie, ScrollerBar, ScrollerLine } from "./graphs";
 
-import ExposureBarChart from "../components/ExposureBarChart";
+import ExposureBarChart, { ExposureBarStep } from "../ExposureBarChart";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
@@ -35,7 +26,12 @@ const charts = (currentStepIndex) => {
     return <ScrollerBar />;
   }
   if (showExposureBar) {
-    return <ExposureBarChart />;
+    const step =
+      currentStepIndex === 2
+        ? ExposureBarStep.StepOne
+        : ExposureBarStep.StepTwo;
+
+    return <ExposureBarChart step={step} />;
   }
   if (showIntegrationLine) {
     return <ScrollerLine />;
