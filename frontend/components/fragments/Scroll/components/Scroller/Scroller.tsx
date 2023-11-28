@@ -13,33 +13,32 @@ import {
   ScrollerLine4,
 } from "./graphs";
 
+import ExposureBarChart from "../components/ExposureBarChart";
+
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
 
 const charts = (currentStepIndex) => {
-  if (currentStepIndex === 0) {
+  const showDistrictPie = currentStepIndex === 0;
+  const showDistrictBar = currentStepIndex === 1;
+  const showExposureBar = currentStepIndex === 2 || currentStepIndex === 3;
+  const showIntegrationLine =
+    currentStepIndex === 4 ||
+    currentStepIndex === 5 ||
+    currentStepIndex === 6 ||
+    currentStepIndex === 7;
+
+  if (showDistrictPie) {
     return <ScrollerPie />;
   }
-  if (currentStepIndex === 1) {
+  if (showDistrictBar) {
     return <ScrollerBar />;
   }
-  if (currentStepIndex === 2) {
-    return <ScrollerBar2 />;
+  if (showExposureBar) {
+    return <ExposureBarChart />;
   }
-  if (currentStepIndex === 3) {
-    return <ScrollerBar3 />;
-  }
-  if (currentStepIndex === 4) {
+  if (showIntegrationLine) {
     return <ScrollerLine />;
-  }
-  if (currentStepIndex === 5) {
-    return <ScrollerLine2 />;
-  }
-  if (currentStepIndex === 6) {
-    return <ScrollerLine3 />;
-  }
-  if (currentStepIndex === 7) {
-    return <ScrollerLine4 />;
   }
 };
 
