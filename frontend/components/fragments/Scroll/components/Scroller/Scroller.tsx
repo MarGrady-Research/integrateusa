@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import clsx from "clsx";
 
-import { ScrollerLine } from "./graphs";
-
 import DistrictPie from "../DistrictPie";
 import DistrictBar from "../DistrictBar";
-import ExposureBarChart, { ExposureBarStep } from "../ExposureBarChart";
+import ExposureBar, { ExposureBarStep } from "../ExposureBar";
+import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
@@ -33,10 +32,27 @@ const charts = (currentStepIndex) => {
         ? ExposureBarStep.StepOne
         : ExposureBarStep.StepTwo;
 
-    return <ExposureBarChart step={step} />;
+    return <ExposureBar step={step} />;
   }
   if (showIntegrationLine) {
-    return <ScrollerLine />;
+    let step;
+
+    switch (currentStepIndex) {
+      case 4:
+        step = IntegrationLineStep.StepOne;
+        break;
+      case 5:
+        step = IntegrationLineStep.StepTwo;
+        break;
+      case 6:
+        step = IntegrationLineStep.StepThree;
+        break;
+      case 7:
+        step = IntegrationLineStep.StepFour;
+        break;
+    }
+
+    return <IntegrationLine step={step} />;
   }
 };
 

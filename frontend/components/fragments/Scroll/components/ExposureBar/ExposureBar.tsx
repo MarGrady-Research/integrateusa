@@ -78,7 +78,7 @@ const barData = [
   },
 ];
 
-export default function ScrollerBar2({ step }: Props) {
+export default function ExposureBar({ step }: Props) {
   const isOnFirstStep = step === ExposureBarStep.StepOne;
 
   const barDataFiltered = isOnFirstStep

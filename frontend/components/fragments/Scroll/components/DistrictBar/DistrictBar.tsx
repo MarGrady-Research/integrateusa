@@ -132,8 +132,6 @@ const options = {
   } as any,
 };
 
-console.log(barData);
-
 export default function DistrictBar() {
   return <Bar data={data} options={options} />;
 }
