@@ -96,6 +96,7 @@ const getLines = (data) =>
       id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
     backgroundColor:
       id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
+    order: id.dist_id_alt === distAlt ? 0 : 1,
   }));
 
 export default function IntegrationLine({ step }: Props) {
