@@ -61,7 +61,7 @@ const data = {
 
 export default function DistrictPie() {
   return (
-    <div className="p-0 md:p-20">
+    <div className="p-0 sm:p-32 md:p-0 xl:p-20">
       <Pie data={data} options={options} />
     </div>
   );

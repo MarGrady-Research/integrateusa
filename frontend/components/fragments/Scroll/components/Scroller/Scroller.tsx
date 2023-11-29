@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
-import clsx from "clsx";
 
 import DistrictPie from "../DistrictPie";
 import DistrictBar from "../DistrictBar";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
+
+import { useDevice } from "../../../../../hooks";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
@@ -67,11 +68,15 @@ export default function Scroller() {
     data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
   };
 
+  const device = useDevice();
+
+  const scrollOffset = device === "Tablet" ? 0.85 : 0.5;
+
   return (
     <div className="px-5 md:px-20 flex flex-col md:flex-row">
       <div className="basis-1/3 text-center text-sm md:text-xl order-last md:order-first z-50">
         <Scrollama
-          offset={0.85}
+          offset={scrollOffset}
           onStepEnter={onStepEnter}
           onStepExit={onStepExit}
         >

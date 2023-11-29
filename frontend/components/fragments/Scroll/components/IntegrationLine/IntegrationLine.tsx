@@ -161,7 +161,7 @@ export default function IntegrationLine({ step }: Props) {
         xMin: 9,
         xMax: 9,
         yMin: isOnFourthStep ? -0.2 : 0,
-        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 0.12 : 0.42,
+        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 0.12 : 0.4,
         borderColor: "#000",
         borderDash: [3, 4],
         borderCapStyle: "round",
@@ -170,7 +170,7 @@ export default function IntegrationLine({ step }: Props) {
       label1: {
         type: "label",
         xValue: 9,
-        yValue: isOnFourthStep ? 0.15 : 0.45,
+        yValue: isOnFourthStep ? 0.15 : 0.4375,
         content: isOnFirstStep ? [] : ["Integration Plan", "Implemented"],
         font: {
           size: 12,
