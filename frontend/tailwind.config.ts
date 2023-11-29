@@ -10,7 +10,7 @@ import {
   defaultFont,
 } from "./constants";
 
-module.exports = {
+const tailwindConfig = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}",
@@ -37,3 +37,5 @@ module.exports = {
   },
   plugins: [],
 };
+
+export default tailwindConfig;
