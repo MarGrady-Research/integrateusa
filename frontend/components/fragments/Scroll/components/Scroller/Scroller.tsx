@@ -68,7 +68,7 @@ export default function Scroller() {
   };
 
   return (
-    <div className="p-20 flex justify-between">
+    <div className="p-20 flex">
       <div className="basis-1/3 text-center text-xl">
         <Scrollama
           offset={0.5}
