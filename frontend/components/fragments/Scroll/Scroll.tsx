@@ -75,7 +75,7 @@ export default function Scroll() {
     <div className="font-sans">
       <WelcomeScreen />
       <Scroller />
-      <EndScreen />
+      {/*<EndScreen />*/}
     </div>
   );
 }

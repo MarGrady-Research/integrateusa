@@ -1,11 +1,40 @@
+@import "styles/common.scss";
+
 .step {
-  padding: {
-    top: 50%;
-    bottom: 50%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+  @screen md {
+    justify-content: center;
+  }
+
+  > div {
+    background: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 2px;
+
+    @screen md {
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
   }
 }
 
 .graphic {
-  height: 60vh;
-  top: 20vh;
+  height: 100vh;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: auto;
+  position: sticky;
+
+  @screen md {
+    flex-basis: 66.666667%;
+    padding-top: 0;
+  }
 }
