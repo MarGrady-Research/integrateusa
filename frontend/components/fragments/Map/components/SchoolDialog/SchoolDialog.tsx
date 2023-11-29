@@ -8,7 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 
-import MapPie from "../MapPie";
+import SchoolPie from "../SchoolPie";
 
 // @ts-ignore
 import { paper } from "./SchoolDialog.module.scss";
@@ -142,7 +142,7 @@ const SchoolDialog = memo(({ dialogInfo, open, handleClose }: Props) => {
           </p>
         </DialogContentText>
         <div className="w-1/2 justify-center mx-auto">
-          <MapPie pieData={pieData} />
+          <SchoolPie pieData={pieData} />
         </div>
       </DialogContent>
       <DialogActions>

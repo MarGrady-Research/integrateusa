@@ -39,7 +39,7 @@ const options = {
   },
 };
 
-export default function MapPie({ pieData }: Props) {
+export default function SchoolPie({ pieData }: Props) {
   const data = {
     labels,
     datasets: [
