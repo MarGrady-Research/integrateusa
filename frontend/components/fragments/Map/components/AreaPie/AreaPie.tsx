@@ -1,6 +1,7 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import clsx from "clsx";
 
 import {
   asianColor,
@@ -17,6 +18,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 interface Props {
   hoverInfo: any;
   mapData: MapData;
+  small?: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
@@ -113,7 +115,7 @@ const options = {
   },
 };
 
-export default function AreaPie({ hoverInfo, mapData }: Props) {
+export default function AreaPie({ hoverInfo, mapData, small = false }: Props) {
   const {
     schoolsInArea,
     studentsEnrolled,
@@ -152,7 +154,12 @@ export default function AreaPie({ hoverInfo, mapData }: Props) {
 
   return (
     <>
-      <div className="pb-10">
+      <div
+        className={clsx({
+          "pb-10": !small,
+          "pb-2": small,
+        })}
+      >
         <p>
           <b>Total Schools:</b> {schoolsInArea}
         </p>
@@ -160,7 +167,12 @@ export default function AreaPie({ hoverInfo, mapData }: Props) {
           <b>Students Enrolled:</b> {studentsEnrolled}
         </p>
       </div>
-      <div className="pb-4 text-center">
+      <div
+        className={clsx({
+          "pb-4": !small,
+          "pb-2 text-center": small,
+        })}
+      >
         <p>
           <b className="text-asian">Asian: </b> {asianPercentage}%
         </p>
@@ -177,7 +189,7 @@ export default function AreaPie({ hoverInfo, mapData }: Props) {
           <b className="text-other">Other: </b> {otherPercentage}%
         </p>
       </div>
-      <div className="w-1/2 justify-center pt-2 mx-auto">
+      <div className="w-1/2 justify-center mx-auto">
         <Pie data={data} options={options} />
       </div>
     </>

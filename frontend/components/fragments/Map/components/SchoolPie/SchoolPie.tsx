@@ -1,6 +1,7 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import clsx from "clsx";
 
 import {
   asianColor,
@@ -14,6 +15,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
   hoverInfo: any;
+  small?: boolean;
 }
 
 const getSchoolInfo = (hoverInfo) => {
@@ -99,7 +101,7 @@ const options = {
   },
 };
 
-export default function SchoolPie({ hoverInfo }: Props) {
+export default function SchoolPie({ hoverInfo, small = false }: Props) {
   const {
     districtName,
     countyName,
@@ -140,7 +142,12 @@ export default function SchoolPie({ hoverInfo }: Props) {
 
   return (
     <>
-      <div className="pb-10">
+      <div
+        className={clsx({
+          "pb-4": !small,
+          "pb-2 text-center": small,
+        })}
+      >
         <p>
           <b>District: </b>
           {districtName}

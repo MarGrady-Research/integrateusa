@@ -15,10 +15,10 @@ interface Props {
   open: boolean;
   handleClose: () => void;
   name: string;
-  pie: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const DialogMain = memo(({ open, handleClose, name, pie }: Props) => {
+const DialogMain = memo(({ open, handleClose, name, children }: Props) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -31,7 +31,7 @@ const DialogMain = memo(({ open, handleClose, name, pie }: Props) => {
       classes={{ root: "font-sans", paper }}
     >
       <DialogTitle className="text-center !font-semibold">{name}</DialogTitle>
-      <DialogContent>{pie}</DialogContent>
+      <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>
       </DialogActions>

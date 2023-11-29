@@ -294,11 +294,12 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
 
   const showPopup = entityName && isHovering;
 
-  const pie = schoolName ? (
-    <SchoolPie hoverInfo={hoverInfo} />
-  ) : (
-    <AreaPie hoverInfo={hoverInfo} mapData={mapData} />
-  );
+  const pie = (small?: boolean) =>
+    schoolName ? (
+      <SchoolPie hoverInfo={hoverInfo} small={small} />
+    ) : (
+      <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
+    );
 
   const mapboxData = {
     type: "FeatureCollection" as "FeatureCollection",
@@ -364,13 +365,14 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         <Source id="schools-source" type="geojson" data={mapboxData} generateId>
           <Layer {...LayerProps} />
         </Source>
-        {showPopup && <Popup name={entityName} coordinates={coordinates} />}
-        <Dialog
-          name={entityName}
-          open={dialogOpen}
-          handleClose={toggleDialog}
-          pie={pie}
-        />
+        {showPopup && (
+          <Popup name={entityName} coordinates={coordinates}>
+            {pie(true)}
+          </Popup>
+        )}
+        <Dialog name={entityName} open={dialogOpen} handleClose={toggleDialog}>
+          {pie()}
+        </Dialog>
         <ViewDialog renderedFeatures={renderedFeatures} />
       </Map>
       <Slideover

@@ -12,16 +12,17 @@ interface Props {
     height: number;
     width: number;
   };
+  children: React.ReactNode;
 }
 
-export default function Popup({ name, coordinates }: Props) {
+export default function Popup({ name, coordinates, children }: Props) {
   const { x, y, height, width } = coordinates;
 
   const halfWidth = width / 2;
   const halfHeight = height / 2;
 
-  const left = x < halfWidth ? 20 : -160;
-  const top = y < halfHeight ? 20 : -70;
+  const left = x < halfWidth ? 20 : -260;
+  const top = y < halfHeight ? 20 : -430;
 
   return (
     <div
@@ -32,10 +33,14 @@ export default function Popup({ name, coordinates }: Props) {
         position: "absolute",
         maxWidth: "300px",
       }}
-      className={clsx("bg-white font-sans p-1 text-center", root)}
+      className={clsx(
+        "bg-white p-3 w-60 font-sans font-normal p-1 text-center text-sm ",
+        root
+      )}
     >
-      <p className="text-sm">{name}</p>
-      <p className="italic">Click for more info</p>
+      <p className="mb-2">{name}</p>
+      {children}
+      <p className="italic mt-5">Click for more info</p>
     </div>
   );
 }
