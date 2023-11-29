@@ -203,7 +203,7 @@ export default function Scroller() {
           graphic
         )}
       >
-        <div className="w-1/2">{charts(currentStepIndex)}</div>
+        <div className="w-2/3">{charts(currentStepIndex)}</div>
       </div>
     </div>
   );
