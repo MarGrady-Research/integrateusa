@@ -12,8 +12,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
-import AreaDialog from "./components/AreaDialog";
-import SchoolDialog from "./components/SchoolDialog";
+import SchoolPie from "./components/SchoolPie";
+import AreaPie from "./components/AreaPie";
+import Dialog from "./components/Dialog";
 import Popup from "./components/Popup";
 
 import { selectBounds } from "../../../store/selectSlice";
@@ -48,11 +49,17 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
 
   const initialBounds = useSelector(selectBounds);
 
-  const [schoolDialogOpen, setSchoolDialogOpen] = useState(false);
-  const toggleSchoolDialog = () => setSchoolDialogOpen((o) => !o);
+  const [hoverInfo, setHoverInfo] = useState(null);
+  const [isHovering, setIsHovering] = useState(false);
 
-  const [areaDialogOpen, setAreaDialogOpen] = useState(false);
-  const toggleAreaDialog = () => setAreaDialogOpen((o) => !o);
+  const [hoverSource, setHoverSource] = useState(null);
+  const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const toggleDialog = () => {
+    setDialogOpen((o) => !o);
+    setIsHovering(false);
+  };
 
   const [cursor, setCursor] = useState("auto");
 
@@ -184,15 +191,10 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
     updateBounds(e);
   };
 
-  const [hoverInfo, setHoverInfo] = useState(null);
-  const [dialogInfo, setDialogInfo] = useState(null);
-
-  const [hoverSource, setHoverSource] = useState(null);
-  const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
-
   const handleHover = useCallback((event) => {
     setHoverInfo(null);
-    setDialogInfo(null);
+    setIsHovering(false);
+
     const {
       point: { x, y },
       originalEvent: {
@@ -201,17 +203,17 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
     } = event;
 
     const hoveredFeature = event.features && event.features[0];
+
     setHoverInfo(
       hoveredFeature && {
-        schoolName: hoveredFeature.properties.sch_name,
-        areaName: hoveredFeature.properties.NAME,
+        feature: hoveredFeature,
         x,
         y,
         height,
         width,
       }
     );
-    setDialogInfo(hoveredFeature && { feature: hoveredFeature });
+    setIsHovering(true);
 
     if (hoveredFeature) {
       setHoverSource(hoveredFeature.source);
@@ -244,6 +246,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
       });
     }
 
+    setIsHovering(false);
     setCursor("auto");
   }, []);
 
@@ -254,25 +257,13 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         sourceLayer: hoverSourceLayer,
       });
     }
-    setHoverInfo(null);
   }, []);
 
-  const handleClick = useCallback(() => {
-    if (dialogInfo) {
-      const isSchool = !!dialogInfo.feature.properties.sch_name;
-
-      if (isSchool) {
-        toggleSchoolDialog();
-        return;
-      }
-
-      const isArea = !!dialogInfo.feature.properties.NAME;
-
-      if (isArea) {
-        toggleAreaDialog();
-      }
+  const handleDialog = () => {
+    if (hoverInfo) {
+      toggleDialog();
     }
-  }, [dialogInfo]);
+  };
 
   const querySchools = useCallback(() => {
     if (mapRef.current) {
@@ -296,13 +287,18 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
     width: hoverInfo?.width,
   };
 
-  const schoolName = hoverInfo?.schoolName;
-  const areaName = hoverInfo?.areaName;
+  const schoolName = hoverInfo?.feature.properties?.sch_name;
+  const areaName = hoverInfo?.feature.properties?.NAME;
 
-  const isSchoolSelected =
-    dialogInfo && !!dialogInfo.feature.properties.sch_name;
+  const entityName = schoolName || areaName;
 
-  const isAreaSelected = dialogInfo && !!dialogInfo.feature.properties.NAME;
+  const showPopup = entityName && isHovering;
+
+  const pie = schoolName ? (
+    <SchoolPie hoverInfo={hoverInfo} />
+  ) : (
+    <AreaPie hoverInfo={hoverInfo} mapData={mapData} />
+  );
 
   const mapboxData = {
     type: "FeatureCollection" as "FeatureCollection",
@@ -332,7 +328,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         onDragStart={onMouseOut}
         onDragEnd={querySchools}
         onLoad={onLoad}
-        onClick={handleClick}
+        onClick={handleDialog}
         onMouseMove={handleHover}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -368,23 +364,13 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         <Source id="schools-source" type="geojson" data={mapboxData} generateId>
           <Layer {...LayerProps} />
         </Source>
-        {schoolName && <Popup name={schoolName} coordinates={coordinates} />}
-        {areaName && <Popup name={areaName} coordinates={coordinates} />}
-        {isSchoolSelected && (
-          <SchoolDialog
-            dialogInfo={dialogInfo}
-            open={schoolDialogOpen}
-            handleClose={toggleSchoolDialog}
-          />
-        )}
-        {isAreaSelected && (
-          <AreaDialog
-            dialogInfo={dialogInfo}
-            open={areaDialogOpen}
-            handleClose={toggleAreaDialog}
-            mapData={mapData}
-          />
-        )}
+        {showPopup && <Popup name={entityName} coordinates={coordinates} />}
+        <Dialog
+          name={entityName}
+          open={dialogOpen}
+          handleClose={toggleDialog}
+          pie={pie}
+        />
         <ViewDialog renderedFeatures={renderedFeatures} />
       </Map>
       <Slideover

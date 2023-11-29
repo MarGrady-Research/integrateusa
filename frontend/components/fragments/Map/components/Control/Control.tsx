@@ -37,12 +37,9 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
       <div key={el.race} className="flex items-center">
         <div
           className="w-4 h-4 rounded-sm mr-2 p-1"
-          key={el.race}
           style={{ backgroundColor: el.color }}
         />
-        <p key={el.race} className="text-md">
-          {el.race}
-        </p>
+        <p className="text-md">{el.race}</p>
       </div>
     ));
 

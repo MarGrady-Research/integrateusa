@@ -13,8 +13,68 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  pieData: number[];
+  hoverInfo: any;
 }
+
+const getSchoolInfo = (hoverInfo) => {
+  const {
+    dist_name,
+    county_name,
+    year,
+    tot_enr,
+    as,
+    bl,
+    hi,
+    wh,
+    or,
+    sch_name,
+  } = hoverInfo.feature.properties;
+
+  const districtName = dist_name;
+  const countyName = county_name;
+  const enrollmentYear = year;
+
+  const studentsTotal = tot_enr;
+  const asianTotal = as;
+  const blackTotal = bl;
+  const hispanicTotal = hi;
+  const whiteTotal = wh;
+  const otherTotal = or;
+
+  const asianRatio = asianTotal / studentsTotal;
+  const blackRatio = blackTotal / studentsTotal;
+  const hispanicRatio = hispanicTotal / studentsTotal;
+  const whiteRatio = whiteTotal / studentsTotal;
+  const otherRatio = otherTotal / studentsTotal;
+
+  const studentsEnrolled = studentsTotal.toLocaleString();
+  const asianPercentage = (asianRatio * 100).toFixed(1);
+  const blackPercentage = (blackRatio * 100).toFixed(1);
+  const hispanicPercentage = (hispanicRatio * 100).toFixed(1);
+  const whitePercentage = (whiteRatio * 100).toFixed(1);
+  const otherPercentage = (otherRatio * 100).toFixed(1);
+
+  const pieData = [
+    asianRatio,
+    blackRatio,
+    hispanicRatio,
+    whiteRatio,
+    otherRatio,
+  ];
+
+  return {
+    districtName,
+    countyName,
+    enrollmentYear,
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+    pieData,
+  };
+};
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
@@ -39,7 +99,20 @@ const options = {
   },
 };
 
-export default function SchoolPie({ pieData }: Props) {
+export default function SchoolPie({ hoverInfo }: Props) {
+  const {
+    districtName,
+    countyName,
+    enrollmentYear,
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+    pieData,
+  } = getSchoolInfo(hoverInfo);
+
   const data = {
     labels,
     datasets: [
@@ -65,5 +138,41 @@ export default function SchoolPie({ pieData }: Props) {
     ],
   };
 
-  return <Pie data={data} options={options} />;
+  return (
+    <>
+      <div className="pb-10">
+        <p>
+          <b>District: </b>
+          {districtName}
+        </p>
+        <p>
+          <b>County: </b>
+          {countyName}
+        </p>
+        <p>
+          <b>{enrollmentYear} Enrollment: </b> {studentsEnrolled}
+        </p>
+      </div>
+      <div className="pb-4 text-center">
+        <p>
+          <b className="text-asian">Asian: </b> {asianPercentage}%
+        </p>
+        <p>
+          <b className="text-blackstudents">Black: </b> {blackPercentage}%
+        </p>
+        <p>
+          <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+        </p>
+        <p>
+          <b className="text-whitestudents">White: </b> {whitePercentage}%
+        </p>
+        <p>
+          <b className="text-other">Other: </b> {otherPercentage}%
+        </p>
+      </div>
+      <div className="w-1/2 justify-center mx-auto">
+        <Pie data={data} options={options} />
+      </div>
+    </>
+  );
 }

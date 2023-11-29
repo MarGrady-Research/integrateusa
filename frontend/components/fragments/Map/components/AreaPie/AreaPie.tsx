@@ -10,13 +10,87 @@ import {
   otherColor,
 } from "../../../../../constants";
 
+import { MapData } from "../../../../../interfaces";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  pieData: number[];
+  hoverInfo: any;
+  mapData: MapData;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
+
+const getAreaInfo = (hoverInfo, mapData) => {
+  const { GEOID, STUSPS } = hoverInfo.feature.properties;
+
+  const layerProp = STUSPS || GEOID;
+
+  let areaId = "";
+
+  if (GEOID.length === 5) {
+    areaId = "county_id";
+  } else if (GEOID.length === 7) {
+    areaId = "dist_id";
+  } else if (STUSPS) {
+    areaId = "state_abb";
+  }
+
+  let schoolsTotal = 0;
+  let studentsTotal = 0;
+  let asianTotal = 0;
+  let blackTotal = 0;
+  let hispanicTotal = 0;
+  let whiteTotal = 0;
+  let otherTotal = 0;
+
+  for (const feature of mapData) {
+    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+
+    if (feature.properties[areaId] === layerProp) {
+      schoolsTotal += 1;
+      studentsTotal += tot_enr;
+      asianTotal += as;
+      blackTotal += bl;
+      hispanicTotal += hi;
+      whiteTotal += wh;
+      otherTotal += or;
+    }
+  }
+
+  const asianPercentageRaw = (asianTotal / studentsTotal) * 100;
+  const blackPercentageRaw = (blackTotal / studentsTotal) * 100;
+  const hispanicPercentageRaw = (hispanicTotal / studentsTotal) * 100;
+  const whitePercentageRaw = (whiteTotal / studentsTotal) * 100;
+  const otherPercentageRaw = (otherTotal / studentsTotal) * 100;
+
+  const schoolsInArea = schoolsTotal.toLocaleString();
+  const studentsEnrolled = studentsTotal.toLocaleString();
+  const asianPercentage = asianPercentageRaw.toFixed(1);
+  const blackPercentage = blackPercentageRaw.toFixed(1);
+  const hispanicPercentage = hispanicPercentageRaw.toFixed(1);
+  const whitePercentage = whitePercentageRaw.toFixed(1);
+  const otherPercentage = otherPercentageRaw.toFixed(1);
+
+  const pieData = [
+    asianPercentageRaw,
+    blackPercentageRaw,
+    hispanicPercentageRaw,
+    whitePercentageRaw,
+    otherPercentageRaw,
+  ];
+
+  return {
+    schoolsInArea,
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+    pieData,
+  };
+};
 
 const options = {
   reponsive: true,
@@ -39,7 +113,18 @@ const options = {
   },
 };
 
-export default function AreaPie({ pieData }: Props) {
+export default function AreaPie({ hoverInfo, mapData }: Props) {
+  const {
+    schoolsInArea,
+    studentsEnrolled,
+    asianPercentage,
+    blackPercentage,
+    hispanicPercentage,
+    whitePercentage,
+    otherPercentage,
+    pieData,
+  } = getAreaInfo(hoverInfo, mapData);
+
   const data = {
     labels,
     datasets: [
@@ -65,5 +150,36 @@ export default function AreaPie({ pieData }: Props) {
     ],
   };
 
-  return <Pie data={data} options={options} />;
+  return (
+    <>
+      <div className="pb-10">
+        <p>
+          <b>Total Schools:</b> {schoolsInArea}
+        </p>
+        <p>
+          <b>Students Enrolled:</b> {studentsEnrolled}
+        </p>
+      </div>
+      <div className="pb-4 text-center">
+        <p>
+          <b className="text-asian">Asian: </b> {asianPercentage}%
+        </p>
+        <p>
+          <b className="text-blackstudents">Black: </b> {blackPercentage}%
+        </p>
+        <p>
+          <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+        </p>
+        <p>
+          <b className="text-whitestudents">White: </b> {whitePercentage}%
+        </p>
+        <p>
+          <b className="text-other">Other: </b> {otherPercentage}%
+        </p>
+      </div>
+      <div className="w-1/2 justify-center pt-2 mx-auto">
+        <Pie data={data} options={options} />
+      </div>
+    </>
+  );
 }
