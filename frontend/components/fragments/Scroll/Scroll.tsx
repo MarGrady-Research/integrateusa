@@ -39,7 +39,7 @@ function WelcomeScreen() {
 
 function EndScreen() {
   return (
-    <div className="sticky h-screen flex flex-col py-10 items-center justify-between text-lglg:text-xl px-5">
+    <div className="sticky h-screen flex flex-col py-10 items-center justify-between text-lg lg:text-xl px-5">
       <div className="px-4 text-center">
         <p className="mb-4">
           IntegrateUSA was built to explore segregation in districts, counties

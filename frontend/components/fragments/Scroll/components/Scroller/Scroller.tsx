@@ -73,7 +73,7 @@ export default function Scroller() {
 
   return (
     <div className="px-3 sm:px-5 md:px-10 lg:px-15 xl:px-20 flex flex-col md:flex-row">
-      <div className="basis-1/3 text-center text-sm md:text-base lg:text-lg xl:text-xl order-last md:order-first z-50">
+      <div className="basis-1/3 text-center text-sm md:text-base lg:text-lg xl:text-xl order-last md:order-first">
         <Scrollama
           offset={scrollOffset}
           onStepEnter={onStepEnter}

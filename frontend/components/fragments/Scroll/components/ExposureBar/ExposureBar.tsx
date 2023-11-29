@@ -17,6 +17,8 @@ import {
   otherColor,
 } from "../../../../../constants";
 
+import { useDevice } from "../../../../../hooks";
+
 interface Props {
   step: ExposureBarStep;
 }
@@ -37,6 +39,11 @@ export enum ExposureBarStep {
 const labels = [
   "Demographics of Avg White Student's School",
   "Demograpics of Avg Non-White Student's school",
+];
+
+const mobileLabels = [
+  ["Demographics of", "Avg White Student's", "School"],
+  ["Demographics of", "Avg Non-White Student's", "School"],
 ];
 
 const asianData = [8.99, 8.79];
@@ -99,6 +106,11 @@ export default function ExposureBar({ step }: Props) {
     datasets: barDataFiltered,
   };
 
+  const device = useDevice();
+  const onTablet = device === "Tablet";
+
+  const chartLabels = onTablet ? mobileLabels : labels;
+
   const options = {
     plugins: {
       legend: {
@@ -125,6 +137,12 @@ export default function ExposureBar({ step }: Props) {
         display: true,
         stacked: true,
         barPercentage: 1,
+        ticks: {
+          crossAlign: "far",
+          callback: (value) => {
+            return chartLabels[value];
+          },
+        },
       },
       y: {
         stacked: true,

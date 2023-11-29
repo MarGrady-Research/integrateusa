@@ -15,6 +15,7 @@
     padding: 10px;
     border: 1px solid black;
     border-radius: 2px;
+    z-index: 50;
 
     @screen md {
       padding: 0;
