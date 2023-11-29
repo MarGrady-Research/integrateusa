@@ -38,16 +38,16 @@ export default function InfoPage() {
 
       switch (levels) {
         case 0:
-          table = "districttrends";
+          table = "schools";
           break;
         case 1:
-          table = "countytrends";
+          table = "districttrends";
           break;
         case 2:
-          table = "statetrends";
+          table = "countytrends";
           break;
         case 3:
-          table = "schools";
+          table = "statetrends";
           break;
       }
 

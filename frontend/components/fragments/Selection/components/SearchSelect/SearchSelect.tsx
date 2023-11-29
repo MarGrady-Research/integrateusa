@@ -51,26 +51,26 @@ export default function SearchSelect() {
       switch (levels) {
         case 0:
           labelData = {
+            value: d.nces_id,
+            label: d.sch_name,
+          };
+          break;
+        case 1:
+          labelData = {
             value: d.dist_id,
             label: d.dist_name,
           };
           break;
-        case 1:
+        case 2:
           labelData = {
             value: d.county_id,
             label: d.county_name,
           };
           break;
-        case 2:
+        case 3:
           labelData = {
             value: d.state_abb,
             label: d.state_name,
-          };
-          break;
-        case 3:
-          labelData = {
-            value: d.nces_id,
-            label: d.sch_name,
           };
           break;
       }

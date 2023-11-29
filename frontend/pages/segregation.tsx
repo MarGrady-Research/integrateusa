@@ -23,13 +23,13 @@ export default function SegregationPage() {
     let idlevel;
 
     switch (levels) {
-      case 0:
+      case 1:
         idlevel = "district";
         break;
-      case 1:
+      case 2:
         idlevel = "county";
         break;
-      case 2:
+      case 3:
         idlevel = "state";
         break;
     }

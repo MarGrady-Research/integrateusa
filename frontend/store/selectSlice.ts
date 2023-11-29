@@ -18,7 +18,7 @@ export interface SelectState {
 const currentYear = Math.max(...yearsData.map((e) => e.value));
 
 const initialState: SelectState = {
-  levels: 0,
+  levels: 1,
   year: currentYear,
   grade: "All",
   id: "3620580",
