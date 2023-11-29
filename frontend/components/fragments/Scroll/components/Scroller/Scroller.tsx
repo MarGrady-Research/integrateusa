@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { Scrollama, Step } from "react-scrollama";
 
 import DistrictPie from "../DistrictPie";
@@ -69,12 +69,11 @@ export default function Scroller() {
   };
 
   const device = useDevice();
-
   const scrollOffset = device === "Tablet" ? 0.85 : 0.5;
 
   return (
-    <div className="px-5 md:px-20 flex flex-col md:flex-row">
-      <div className="basis-1/3 text-center text-sm md:text-xl order-last md:order-first z-50">
+    <div className="px-3 sm:px-5 md:px-10 lg:px-15 xl:px-20 flex flex-col md:flex-row">
+      <div className="basis-1/3 text-center text-sm md:text-base lg:text-lg xl:text-xl order-last md:order-first z-50">
         <Scrollama
           offset={scrollOffset}
           onStepEnter={onStepEnter}
@@ -221,7 +220,9 @@ export default function Scroller() {
         </Scrollama>
       </div>
       <div className={graphic}>
-        <div className="w-full md:w-2/3">{charts(currentStepIndex)}</div>
+        <div className="w-full lg:w-3/4 xl:w-2/3 pl-0 md:pl-10 lg:p-0 h-1/2 md:h-3/5">
+          {charts(currentStepIndex)}
+        </div>
       </div>
     </div>
   );

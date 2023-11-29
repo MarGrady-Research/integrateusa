@@ -25,7 +25,7 @@
 }
 
 .graphic {
-  height: 100vh;
+  height: 90vh;
   top: 0;
   display: flex;
   justify-content: center;
@@ -34,6 +34,7 @@
   position: sticky;
 
   @screen md {
+    height: 100vh;
     flex-basis: 66.666667%;
     padding-top: 0;
   }

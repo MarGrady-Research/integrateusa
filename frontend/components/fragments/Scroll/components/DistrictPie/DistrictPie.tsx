@@ -17,6 +17,7 @@ const pieData = [13, 13, 41, 30, 4];
 
 const options = {
   reponsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
@@ -60,9 +61,5 @@ const data = {
 };
 
 export default function DistrictPie() {
-  return (
-    <div className="p-0 sm:p-32 md:p-0 xl:p-20">
-      <Pie data={data} options={options} />
-    </div>
-  );
+  return <Pie data={data} options={options} />;
 }

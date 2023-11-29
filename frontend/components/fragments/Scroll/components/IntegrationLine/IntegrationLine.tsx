@@ -15,6 +15,8 @@ import {
   unselectedLineColor,
 } from "../../../../../constants";
 
+import { useDevice } from "../../../../../hooks";
+
 import { fullCompData, compDataNormalized, ids } from "./data";
 
 interface Props {
@@ -88,12 +90,13 @@ const compDataDistrictPreIntegrationObj = {
   [distAlt]: compDataDistrictPreIntegration,
 };
 
-const getLines = (data) =>
+const getLines = (data, lineWidth = 1) =>
   ids.map((id) => ({
     label: id.dist_name_alt,
     data: data[id.dist_id_alt] || [],
     borderColor:
       id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
+    borderWidth: lineWidth,
     backgroundColor:
       id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
     order: id.dist_id_alt === distAlt ? 0 : 1,
@@ -103,20 +106,23 @@ export default function IntegrationLine({ step }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
+  const device = useDevice();
+  const lineWidth = device === "Tablet" ? 1 : 2;
+
   let lineData = [];
 
   switch (step) {
     case IntegrationLineStep.StepOne:
-      lineData = getLines(compDataDistrictPreIntegrationObj);
+      lineData = getLines(compDataDistrictPreIntegrationObj, lineWidth);
       break;
     case IntegrationLineStep.StepTwo:
-      lineData = getLines(compDataDistrictObj);
+      lineData = getLines(compDataDistrictObj, lineWidth);
       break;
     case IntegrationLineStep.StepThree:
-      lineData = getLines(compData);
+      lineData = getLines(compData, lineWidth);
       break;
     case IntegrationLineStep.StepFour:
-      lineData = getLines(normalizedCompData);
+      lineData = getLines(normalizedCompData, lineWidth);
       break;
   }
 
@@ -127,7 +133,7 @@ export default function IntegrationLine({ step }: Props) {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,

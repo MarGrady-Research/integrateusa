@@ -116,6 +116,7 @@ export default function ExposureBar({ step }: Props) {
       },
     },
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         grid: {
