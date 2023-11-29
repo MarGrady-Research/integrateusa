@@ -6,7 +6,11 @@ import { selectLevels, setLevels } from "../../../../../store/selectSlice";
 
 import { levelSelectData } from "../../data";
 
-export default function LevelSelect() {
+interface Props {
+  omitSchools?: boolean;
+}
+
+export default function LevelSelect({ omitSchools }: Props) {
   const levels = useSelector(selectLevels);
   const dispatch = useDispatch();
 
@@ -14,11 +18,15 @@ export default function LevelSelect() {
     dispatch(setLevels(e.value));
   };
 
-  const selectedLevel = levelSelectData.find((l) => l.value === levels);
+  const data = omitSchools
+    ? levelSelectData.filter((d) => d.label != "School")
+    : levelSelectData;
+
+  const selectedLevel = data.find((l) => l.value === levels);
 
   return (
     <Select
-      options={levelSelectData}
+      options={data}
       placeholder="Geographic Level"
       value={selectedLevel}
       onChange={handleChange}

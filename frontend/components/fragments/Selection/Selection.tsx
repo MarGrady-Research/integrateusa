@@ -16,9 +16,10 @@ import { expandButton } from "./Selection.module.scss";
 interface Props {
   getData: () => void;
   isLoading: boolean;
+  omitSchools?: boolean;
 }
 
-export default function Selection({ getData, isLoading }: Props) {
+export default function Selection({ getData, isLoading, omitSchools }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
@@ -32,7 +33,7 @@ export default function Selection({ getData, isLoading }: Props) {
           "hidden lg:grid": !expanded,
         })}
       >
-        <LevelSelect />
+        <LevelSelect omitSchools={omitSchools} />
         <SearchSelect />
         <YearSelect />
         <GradeSelect />

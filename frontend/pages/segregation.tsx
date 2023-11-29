@@ -58,7 +58,7 @@ export default function SegregationPage() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <Selection getData={getData} isLoading={isLoading} />
+      <Selection getData={getData} isLoading={isLoading} omitSchools />
       <Page>
         {isLoading ? (
           <div className="pt-5">
