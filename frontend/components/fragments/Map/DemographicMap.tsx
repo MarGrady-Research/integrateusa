@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import axios from "axios";
 import Map, {
   Layer,
   Source,
@@ -40,11 +41,15 @@ const prop_array = [
 ];
 
 interface Props {
-  mapData: MapData;
   onSmallerScreen: boolean;
 }
 
-export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
+const schoolsSourceId = "schools-source";
+
+export default function DemographicMap({ onSmallerScreen }: Props) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [mapData, setMapData] = useState([] as MapData);
+
   const mapRef = useRef();
 
   const initialBounds = useSelector(selectBounds);
@@ -54,6 +59,8 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
 
   const [hoverSource, setHoverSource] = useState(null);
   const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
+
+  const [initialRendering, setInitialRendering] = useState(true);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const toggleDialog = () => {
@@ -265,20 +272,49 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
     }
   };
 
-  const querySchools = useCallback(() => {
+  const querySchools = () => {
     if (mapRef.current) {
-      setRenderedFeatures(
-        (mapRef.current as any).queryRenderedFeatures({ layers: ["schools"] })
-      );
+      const features = (mapRef.current as any).queryRenderedFeatures({
+        layers: ["schools"],
+      });
+
+      setRenderedFeatures(features);
     }
+  };
+
+  const getData = useCallback(() => {
+    setIsLoading(true);
+
+    axios
+      .get("/api/mapschools/?q=2022")
+      .then((res) => {
+        setMapData(res.data.map((d) => d.map_data));
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const onLoad = useCallback(() => {
     if (onSmallerScreen) {
       updateBounds(initialBounds);
     }
-    querySchools();
+    getData();
   }, [onSmallerScreen, initialBounds]);
+
+  const onSourceData = (source) => {
+    if (
+      source.isSourceLoaded &&
+      source.sourceId === schoolsSourceId &&
+      source.source.data.features.length > 0
+    ) {
+      querySchools();
+      if (initialRendering) {
+        setInitialRendering(false);
+      }
+    }
+  };
 
   const coordinates = {
     x: hoverInfo?.x,
@@ -337,6 +373,7 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         onResize={querySchools}
         onZoomStart={onMouseOut}
         onZoomEnd={querySchools}
+        onSourceData={onSourceData}
       >
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
@@ -362,7 +399,12 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         >
           <Layer {...stateLayer} />
         </Source>
-        <Source id="schools-source" type="geojson" data={mapboxData} generateId>
+        <Source
+          id={schoolsSourceId}
+          type="geojson"
+          data={mapboxData}
+          generateId
+        >
           <Layer {...LayerProps} />
         </Source>
         {showPopup && (
@@ -373,7 +415,12 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
         <Dialog name={entityName} open={dialogOpen} handleClose={toggleDialog}>
           {pie()}
         </Dialog>
-        <ViewDialog renderedFeatures={renderedFeatures} />
+        {!isLoading && (
+          <ViewDialog
+            renderedFeatures={renderedFeatures}
+            initialRendering={initialRendering}
+          />
+        )}
       </Map>
       <Slideover
         handleVisibility={handleVisibility}

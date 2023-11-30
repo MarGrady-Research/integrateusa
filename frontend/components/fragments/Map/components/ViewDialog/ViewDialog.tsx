@@ -3,11 +3,13 @@ import Paper from "@mui/material/Paper";
 import clsx from "clsx";
 
 import SummaryPie from "../SummaryPie";
+import Loader from "../../../Loader";
 // @ts-ignore
 import { root } from "./ViewDialog.module.scss";
 
 interface Props {
   renderedFeatures: any[];
+  initialRendering: boolean;
 }
 
 const getViewInfo = (renderedFeatures) => {
@@ -61,7 +63,7 @@ const getViewInfo = (renderedFeatures) => {
   };
 };
 
-const ViewDialog = memo(({ renderedFeatures }: Props) => {
+const ViewDialog = memo(({ renderedFeatures, initialRendering }: Props) => {
   const {
     studentsEnrolled,
     asianPercentage,
@@ -75,6 +77,61 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
   const noOfSchoolsInView = renderedFeatures.length.toLocaleString();
   const areSchoolsPresentInView = renderedFeatures.length != 0;
 
+  const content = () => {
+    if (initialRendering) {
+      return (
+        <div className="flex items-center justify-center h-full">
+          <Loader />
+        </div>
+      );
+    }
+
+    if (!areSchoolsPresentInView) {
+      return (
+        <div className="flex items-center h-full">
+          <p className="italic">
+            Zoom or drag the map to see school data here!
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <div className="mb-2">
+          <p>
+            <b>Schools in View: </b>
+            {noOfSchoolsInView}
+          </p>
+          <p>
+            <b>Students Enrolled: </b>
+            {studentsEnrolled}
+          </p>
+        </div>
+        <div className="mb-4">
+          <p>
+            <b className="text-asian">Asian: </b> {asianPercentage}%
+          </p>
+          <p>
+            <b className="text-blackstudents">Black: </b> {blackPercentage}%
+          </p>
+          <p>
+            <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
+          </p>
+          <p>
+            <b className="text-whitestudents">White: </b> {whitePercentage}%
+          </p>
+          <p>
+            <b className="text-other">Other: </b> {otherPercentage}%
+          </p>
+        </div>
+        <div className="w-1/2 mx-auto">
+          <SummaryPie pieData={pieData} />
+        </div>
+      </>
+    );
+  };
+
   return (
     <Paper
       className={clsx(
@@ -82,46 +139,7 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
         root
       )}
     >
-      {!areSchoolsPresentInView ? (
-        <div className="flex items-center h-full">
-          <p className="italic">
-            Zoom or drag the map to see school data here!
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="mb-2">
-            <p>
-              <b>Schools in View: </b>
-              {noOfSchoolsInView}
-            </p>
-            <p>
-              <b>Students Enrolled: </b>
-              {studentsEnrolled}
-            </p>
-          </div>
-          <div className="mb-4">
-            <p>
-              <b className="text-asian">Asian: </b> {asianPercentage}%
-            </p>
-            <p>
-              <b className="text-blackstudents">Black: </b> {blackPercentage}%
-            </p>
-            <p>
-              <b className="text-hispanic">Hispanic: </b> {hispanicPercentage}%
-            </p>
-            <p>
-              <b className="text-whitestudents">White: </b> {whitePercentage}%
-            </p>
-            <p>
-              <b className="text-other">Other: </b> {otherPercentage}%
-            </p>
-          </div>
-          <div className="w-1/2 mx-auto">
-            <SummaryPie pieData={pieData} />
-          </div>
-        </>
-      )}
+      {content()}
     </Paper>
   );
 });

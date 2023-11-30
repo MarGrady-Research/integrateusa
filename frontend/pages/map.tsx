@@ -5,38 +5,13 @@ import clsx from "clsx";
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
-import Loader from "../components/fragments/Loader";
 import { useDevice } from "../hooks";
-
-import { MapData } from "../interfaces";
 
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";
 
 export default function Map() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [mapData, setMapData] = useState([] as MapData);
-
-  const getData = () => {
-    setIsLoading(true);
-
-    axios
-      .get("/api/mapschools/?q=2022")
-      .then((res) => {
-        setMapData(res.data.map((d) => d.map_data));
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
   const device = useDevice();
-  const deviceLoading = device === "Initial";
   const onSmallerScreen = device === "Tablet";
 
   return (
@@ -46,13 +21,7 @@ export default function Map() {
       </Head>
       <Header />
       <div className={clsx("absolute w-full", mapHolder)}>
-        {isLoading || deviceLoading ? (
-          <div className="pt-5">
-            <Loader />
-          </div>
-        ) : (
-          <DemographicMap mapData={mapData} onSmallerScreen={onSmallerScreen} />
-        )}
+        <DemographicMap onSmallerScreen={onSmallerScreen} />
       </div>
     </>
   );
