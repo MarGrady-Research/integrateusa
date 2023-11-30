@@ -43,32 +43,29 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
       </div>
     ));
 
-  const radio = (l: Level, label: string, secondaryLabel?: string) => {
-    return (
-      <div className="inline-flex">
-        <label className="inline-flex items-center">
-          <input
-            type="radio"
-            name={label}
-            value={l}
-            checked={level === l}
-            onChange={handleChange}
-            className="w-4 h-4 mr-2"
-          />
-          {secondaryLabel || label}
-        </label>
-      </div>
-    );
-  };
-
+  const radio = (l: Level, label?: string) => (
+    <div className="inline-flex">
+      <label className="inline-flex items-center">
+        <input
+          type="radio"
+          name={Level[l]}
+          value={l}
+          checked={level === l}
+          onChange={handleChange}
+          className="w-4 h-4 mr-2"
+        />
+        {label || Level[l]}
+      </label>
+    </div>
+  );
   const boundaries = () => (
     <>
       <p className="text-lg text-gray-900 mb-1">Boundaries</p>
       <div className="flex flex-col mb-4">
-        {radio(Level.School, "School", "No Boundary")}
-        {radio(Level.District, "District")}
-        {radio(Level.County, "County")}
-        {radio(Level.State, "State")}
+        {radio(Level.School, "No Boundary")}
+        {radio(Level.District)}
+        {radio(Level.County)}
+        {radio(Level.State)}
       </div>
       <div>
         <Search level={level} handleBounds={handleBounds} />

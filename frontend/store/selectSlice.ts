@@ -4,10 +4,10 @@ import { HYDRATE } from "next-redux-wrapper";
 
 import { yearsData } from "../components/fragments/Selection/data";
 
-import { Bounds } from "../interfaces";
+import { Bounds, Level } from "../interfaces";
 
 export interface SelectState {
-  levels: number;
+  level: Level;
   year: number;
   grade: string;
   id: string;
@@ -18,7 +18,7 @@ export interface SelectState {
 const currentYear = Math.max(...yearsData.map((e) => e.value));
 
 const initialState: SelectState = {
-  levels: 1,
+  level: Level.District,
   year: currentYear,
   grade: "All",
   id: "3620580",
@@ -35,8 +35,8 @@ export const selectSlice = createSlice({
   name: "select",
   initialState,
   reducers: {
-    setLevels(state, action) {
-      state.levels = action.payload;
+    setLevel(state, action) {
+      state.level = action.payload;
     },
     setYear(state, action) {
       state.year = action.payload;
@@ -66,7 +66,7 @@ export const selectSlice = createSlice({
 });
 
 export const {
-  setLevels,
+  setLevel,
   setYear,
   setGrade,
   setId,
@@ -74,7 +74,7 @@ export const {
   setBounds,
 } = selectSlice.actions;
 
-export const selectLevels = (state: AppState) => state.select.levels as number;
+export const selectLevel = (state: AppState) => state.select.level as Level;
 export const selectYear = (state: AppState) => state.select.year as number;
 export const selectGrade = (state: AppState) => state.select.grade as string;
 export const selectId = (state: AppState) => state.select.id as string;

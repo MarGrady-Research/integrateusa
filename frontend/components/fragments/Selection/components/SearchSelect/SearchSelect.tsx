@@ -5,16 +5,17 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { levelSelectData } from "../../data";
 import {
-  selectLevels,
+  selectLevel,
   selectId,
   selectSelectedName,
   setId,
   setSelectedName,
   setBounds,
 } from "../../../../../store/selectSlice";
+import { Level } from "../../../../../interfaces";
 
 export default function SearchSelect() {
-  const levels = useSelector(selectLevels);
+  const level = useSelector(selectLevel);
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
 
@@ -38,7 +39,7 @@ export default function SearchSelect() {
       return null;
     }
 
-    const url = `${levelSelectData[levels].route}${input}`;
+    const url = `${levelSelectData[level].route}${input}`;
 
     const response = await axios.get(url);
 
@@ -48,26 +49,26 @@ export default function SearchSelect() {
         label: "",
       };
 
-      switch (levels) {
-        case 0:
+      switch (level) {
+        case Level.School:
           labelData = {
             value: d.nces_id,
             label: d.sch_name,
           };
           break;
-        case 1:
+        case Level.District:
           labelData = {
             value: d.dist_id,
             label: d.dist_name,
           };
           break;
-        case 2:
+        case Level.County:
           labelData = {
             value: d.county_id,
             label: d.county_name,
           };
           break;
-        case 3:
+        case Level.State:
           labelData = {
             value: d.state_abb,
             label: d.state_name,

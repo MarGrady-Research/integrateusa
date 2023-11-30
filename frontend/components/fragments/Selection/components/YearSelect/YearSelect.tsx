@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { yearsData } from "../../data";
 import {
-  selectLevels,
+  selectLevel,
   selectYear,
   setYear,
 } from "../../../../../store/selectSlice";
+import { Level } from "../../../../../interfaces";
 
 export default function YearSelect() {
-  const levels = useSelector(selectLevels);
+  const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const dispatch = useDispatch();
 
@@ -26,7 +27,7 @@ export default function YearSelect() {
       onChange={handleChange}
       value={selectedYear}
       isOptionDisabled={(e) =>
-        levels == 1 ? e.value >= 2000 && e.value <= 2002 : null
+        level == Level.County ? e.value >= 2000 && e.value <= 2002 : null
       }
       placeholder="Select a year"
       name="years"

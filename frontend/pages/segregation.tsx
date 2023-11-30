@@ -8,11 +8,11 @@ import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
 import Loader from "../components/fragments/Loader";
 import Segregation from "../components/fragments/Segregation";
-import { selectYear, selectGrade, selectLevels } from "../store/selectSlice";
-import { SegData } from "../interfaces";
+import { selectYear, selectGrade, selectLevel } from "../store/selectSlice";
+import { SegData, Level } from "../interfaces";
 
 export default function SegregationPage() {
-  const levels = useSelector(selectLevels);
+  const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
 
@@ -22,14 +22,14 @@ export default function SegregationPage() {
   const getData = () => {
     let idlevel;
 
-    switch (levels) {
-      case 1:
+    switch (level) {
+      case Level.District:
         idlevel = "district";
         break;
-      case 2:
+      case Level.County:
         idlevel = "county";
         break;
-      case 3:
+      case Level.State:
         idlevel = "state";
         break;
     }

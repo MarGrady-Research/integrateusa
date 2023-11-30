@@ -13,15 +13,15 @@ import { levelSelectData } from "../components/fragments/Selection/data";
 import {
   selectYear,
   selectGrade,
-  selectLevels,
+  selectLevel,
   selectId,
   selectSelectedName,
 } from "../store/selectSlice";
 
-import { InfoData, TrendData } from "../interfaces";
+import { InfoData, TrendData, Level } from "../interfaces";
 
 export default function InfoPage() {
-  const levels = useSelector(selectLevels);
+  const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
@@ -36,17 +36,17 @@ export default function InfoPage() {
     if (year != undefined && grade != undefined && id != undefined) {
       let table;
 
-      switch (levels) {
-        case 0:
+      switch (level) {
+        case Level.School:
           table = "schools";
           break;
-        case 1:
+        case Level.District:
           table = "districttrends";
           break;
-        case 2:
+        case Level.County:
           table = "countytrends";
           break;
-        case 3:
+        case Level.State:
           table = "statetrends";
           break;
       }

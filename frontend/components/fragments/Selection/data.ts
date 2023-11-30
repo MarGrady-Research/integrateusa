@@ -1,27 +1,29 @@
+import { Level } from "../../../interfaces";
+
 export const levelSelectData = [
   {
-    value: 0,
+    value: Level.School,
     label: "School",
     route: "/api/schoolnames/?q=",
     id: "nces_id",
     name: "sch_name",
   },
   {
-    value: 1,
+    value: Level.District,
     label: "District",
     route: "/api/districtnames/?q=",
     id: "dist_id",
     name: "dist_name",
   },
   {
-    value: 2,
+    value: Level.County,
     label: "County",
     route: "/api/countynames/?q=",
     id: "county_id",
     name: "county_name",
   },
   {
-    value: 3,
+    value: Level.State,
     label: "State",
     route: "/api/statenames/?q=",
     id: "state_abb",
