@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 
 // @ts-ignore
-import { paper } from "./Dialog.module.scss";
+import { paper } from "./InfoDialog.module.scss";
 
 interface Props {
   open: boolean;
@@ -18,7 +18,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const DialogMain = memo(({ open, handleClose, name, children }: Props) => {
+const InfoDialog = memo(({ open, handleClose, name, children }: Props) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -39,4 +39,4 @@ const DialogMain = memo(({ open, handleClose, name, children }: Props) => {
   );
 });
 
-export default DialogMain;
+export default InfoDialog;

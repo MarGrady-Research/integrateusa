@@ -3,13 +3,11 @@ import Paper from "@mui/material/Paper";
 import clsx from "clsx";
 
 import SummaryPie from "../SummaryPie";
-import Loader from "../../../Loader";
 // @ts-ignore
 import { root } from "./ViewDialog.module.scss";
 
 interface Props {
   renderedFeatures: any[];
-  initialRendering: boolean;
 }
 
 const getViewInfo = (renderedFeatures) => {
@@ -63,7 +61,7 @@ const getViewInfo = (renderedFeatures) => {
   };
 };
 
-const ViewDialog = memo(({ renderedFeatures, initialRendering }: Props) => {
+const ViewDialog = memo(({ renderedFeatures }: Props) => {
   const {
     studentsEnrolled,
     asianPercentage,
@@ -78,14 +76,6 @@ const ViewDialog = memo(({ renderedFeatures, initialRendering }: Props) => {
   const areSchoolsPresentInView = renderedFeatures.length != 0;
 
   const content = () => {
-    if (initialRendering) {
-      return (
-        <div className="flex items-center justify-center h-full">
-          <Loader />
-        </div>
-      );
-    }
-
     if (!areSchoolsPresentInView) {
       return (
         <div className="flex items-center h-full">

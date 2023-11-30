@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import axios from "axios";
 import Map, {
   Layer,
@@ -15,11 +15,12 @@ import Slideover from "./components/Slideover";
 import ViewDialog from "./components/ViewDialog";
 import SchoolPie from "./components/SchoolPie";
 import AreaPie from "./components/AreaPie";
-import Dialog from "./components/Dialog";
+import InfoDialog from "./components/InfoDialog";
+import LoadingDialog from "./components/LoadingDialog";
 import Popup from "./components/Popup";
 
 import { selectBounds } from "../../../store/selectSlice";
-import { MapData, Level } from "../../../interfaces";
+import { MapData, Level, MapStatus } from "../../../interfaces";
 import {
   asianColor,
   blackColor,
@@ -47,7 +48,7 @@ interface Props {
 const schoolsSourceId = "schools-source";
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [mapStatus, setMapStatus] = useState(MapStatus.Fetching);
   const [mapData, setMapData] = useState([] as MapData);
 
   const mapRef = useRef();
@@ -60,11 +61,9 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [hoverSource, setHoverSource] = useState(null);
   const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
 
-  const [initialRendering, setInitialRendering] = useState(true);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const toggleDialog = () => {
-    setDialogOpen((o) => !o);
+  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
+  const toggleInfoDialog = () => {
+    setInfoDialogOpen((o) => !o);
     setIsHovering(false);
   };
 
@@ -268,7 +267,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const handleDialog = () => {
     if (hoverInfo) {
-      toggleDialog();
+      toggleInfoDialog();
     }
   };
 
@@ -283,16 +282,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   };
 
   const getData = useCallback(() => {
-    setIsLoading(true);
+    setMapStatus(MapStatus.Fetching);
 
     axios
       .get("/api/mapschools/?q=2022")
       .then((res) => {
         setMapData(res.data.map((d) => d.map_data));
-        setIsLoading(false);
+        setMapStatus(MapStatus.Rendering);
       })
       .catch(() => {
-        setIsLoading(false);
+        setMapStatus(MapStatus.Failed);
       });
   }, []);
 
@@ -310,9 +309,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       source.source.data.features.length > 0
     ) {
       querySchools();
-      if (initialRendering) {
-        setInitialRendering(false);
-      }
+      setMapStatus(MapStatus.Complete);
     }
   };
 
@@ -341,6 +338,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     type: "FeatureCollection" as "FeatureCollection",
     features: mapData,
   };
+
+  const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
   return (
     <>
@@ -412,15 +411,17 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
             {pie(true)}
           </Popup>
         )}
-        <Dialog name={entityName} open={dialogOpen} handleClose={toggleDialog}>
+        <InfoDialog
+          name={entityName}
+          open={infoDialogOpen}
+          handleClose={toggleInfoDialog}
+        >
           {pie()}
-        </Dialog>
-        {!isLoading && (
-          <ViewDialog
-            renderedFeatures={renderedFeatures}
-            initialRendering={initialRendering}
-          />
+        </InfoDialog>
+        {mapRenderingComplete && (
+          <ViewDialog renderedFeatures={renderedFeatures} />
         )}
+        <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>
       <Slideover
         handleVisibility={handleVisibility}

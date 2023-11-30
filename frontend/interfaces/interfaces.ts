@@ -94,3 +94,10 @@ export interface LineData {
     year: number;
   }[];
 }
+
+export enum MapStatus {
+  Fetching,
+  Rendering,
+  Complete,
+  Failed,
+}

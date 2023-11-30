@@ -10,4 +10,4 @@ export type {
   LineData,
 } from "./interfaces";
 
-export { Level } from "./interfaces";
+export { Level, MapStatus } from "./interfaces";
