@@ -88,9 +88,12 @@ export default function SearchSelect() {
     return options;
   };
 
+  const levelName = Level[level].toLowerCase();
+  const placeholder = `Type a ${levelName} name`;
+
   return (
     <AsyncSelect
-      name="idselect"
+      name="search-select"
       cacheOptions
       defaultOptions
       value={{
@@ -103,7 +106,7 @@ export default function SearchSelect() {
         DropdownIndicator: () => null,
         IndicatorSeparator: () => null,
       }}
-      placeholder={"Type a " + levelSelectData[levels].label + " name"}
+      placeholder={placeholder}
     />
   );
 }

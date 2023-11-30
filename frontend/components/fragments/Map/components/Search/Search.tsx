@@ -80,7 +80,7 @@ export default function Search({ level, handleBounds }: Props) {
 
   return (
     <AsyncSelect
-      name="idselect"
+      name="map-search-select"
       cacheOptions
       defaultOptions
       onChange={(e: Bounds) => handleBounds(e)}

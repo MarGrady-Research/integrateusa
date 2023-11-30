@@ -7,9 +7,7 @@ import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Info from "../components/fragments/Info";
 import Trends from "../components/fragments/Trends";
-import Loader from "../components/fragments/Loader";
 import Page from "../components/layouts/Page";
-import { levelSelectData } from "../components/fragments/Selection/data";
 import {
   selectYear,
   selectGrade,
@@ -34,25 +32,30 @@ export default function InfoPage() {
 
   const getData = () => {
     if (year != undefined && grade != undefined && id != undefined) {
-      let table;
+      let levelTable;
+      let levelId;
 
       switch (level) {
         case Level.School:
-          table = "schools";
+          levelTable = "schools";
+          levelId = "nces_id";
           break;
         case Level.District:
-          table = "districttrends";
+          levelTable = "districttrends";
+          levelId = "dist_id";
           break;
         case Level.County:
-          table = "countytrends";
+          levelTable = "countytrends";
+          levelId = "county_id";
           break;
         case Level.State:
-          table = "statetrends";
+          levelTable = "statetrends";
+          levelId = "state_abb";
           break;
       }
 
-      const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelSelectData[levels].id}=${id}`;
-      const trendUrl = `/api/${table}/?${levelSelectData[levels].id}=${id}`;
+      const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
+      const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
       setIsLoading(true);
 
@@ -83,17 +86,11 @@ export default function InfoPage() {
       </Head>
       <Header />
       <Selection getData={getData} isLoading={isLoading} />
-      <Page>
-        {isLoading ? (
-          <div className="pt-5">
-            <Loader />
-          </div>
-        ) : (
-          <div className="mx-auto mt-5">
-            <Info infoData={infoData} title={infoTitle} />
-            <Trends trendData={trendData} />
-          </div>
-        )}
+      <Page isLoading={isLoading}>
+        <div className="mx-auto mt-5">
+          <Info infoData={infoData} title={infoTitle} />
+          <Trends trendData={trendData} />
+        </div>
       </Page>
     </>
   );

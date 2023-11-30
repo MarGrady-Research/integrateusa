@@ -6,7 +6,6 @@ import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
-import Loader from "../components/fragments/Loader";
 import Segregation from "../components/fragments/Segregation";
 import { selectYear, selectGrade, selectLevel } from "../store/selectSlice";
 import { SegData, Level } from "../interfaces";
@@ -59,16 +58,10 @@ export default function SegregationPage() {
       </Head>
       <Header />
       <Selection getData={getData} isLoading={isLoading} omitSchools />
-      <Page>
-        {isLoading ? (
-          <div className="pt-5">
-            <Loader />
-          </div>
-        ) : (
-          <div className="mx-auto mt-5">
-            <Segregation segData={segData} year={year} />
-          </div>
-        )}
+      <Page isLoading={isLoading}>
+        <div className="mx-auto mt-5">
+          <Segregation segData={segData} year={year} />
+        </div>
       </Page>
     </>
   );
