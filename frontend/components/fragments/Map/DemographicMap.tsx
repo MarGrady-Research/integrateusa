@@ -18,7 +18,7 @@ import Dialog from "./components/Dialog";
 import Popup from "./components/Popup";
 
 import { selectBounds } from "../../../store/selectSlice";
-import { MapData } from "../../../interfaces";
+import { MapData, Level } from "../../../interfaces";
 import {
   asianColor,
   blackColor,
@@ -155,16 +155,16 @@ export default function DemographicMap({ mapData, onSmallerScreen }: Props) {
     } as any,
   };
 
-  const handleVisibility = (level) => {
-    if (level === "District") {
+  const handleVisibility = (level: Level) => {
+    if (level === Level.District) {
       setDistrictVisible("visible");
       setCountyVisible("none");
       setStateVisible("none");
-    } else if (level === "County") {
+    } else if (level === Level.County) {
       setDistrictVisible("none");
       setCountyVisible("visible");
       setStateVisible("none");
-    } else if (level === "State") {
+    } else if (level === Level.State) {
       setDistrictVisible("none");
       setCountyVisible("none");
       setStateVisible("visible");

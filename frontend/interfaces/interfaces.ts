@@ -79,7 +79,12 @@ export type RacialProportion =
   | "prop_wh"
   | "prop_or";
 
-export type Level = "School" | "District" | "County" | "State";
+export enum Level {
+  School,
+  District,
+  County,
+  State,
+}
 
 export interface LineData {
   id: string;

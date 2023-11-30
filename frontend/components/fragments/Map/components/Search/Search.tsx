@@ -10,11 +10,11 @@ interface Props {
 }
 
 const url = (level: Level) => {
-  if (level === "District") {
+  if (level === Level.District) {
     return "/api/districtnames/?q=";
-  } else if (level === "County") {
+  } else if (level === Level.County) {
     return "/api/countynames/?q=";
-  } else if (level === "State") {
+  } else if (level === Level.State) {
     return "/api/statenames/?q=";
   }
 };
@@ -34,19 +34,19 @@ export default function Search({ level, handleBounds }: Props) {
       };
 
       switch (level) {
-        case "District":
+        case Level.District:
           labelData = {
             value: d.dist_id,
             label: d.dist_name,
           };
           break;
-        case "County":
+        case Level.County:
           labelData = {
             value: d.county_id,
             label: d.county_name,
           };
           break;
-        case "State":
+        case Level.State:
           labelData = {
             value: d.state_abb,
             label: d.state_name,
@@ -66,6 +66,18 @@ export default function Search({ level, handleBounds }: Props) {
     return options;
   };
 
+  let placeholder = "";
+
+  switch (level) {
+    case Level.School:
+      placeholder = "Select District, County or State to search";
+      break;
+    default:
+      const levelName = Level[level].toLowerCase();
+      placeholder = `Type a ${levelName} name`;
+      break;
+  }
+
   return (
     <AsyncSelect
       name="idselect"
@@ -73,16 +85,12 @@ export default function Search({ level, handleBounds }: Props) {
       defaultOptions
       onChange={(e: Bounds) => handleBounds(e)}
       loadOptions={loadOptions}
-      isDisabled={level === "School"}
+      isDisabled={level === Level.School}
       components={{
         DropdownIndicator: () => null,
         IndicatorSeparator: () => null,
       }}
-      placeholder={
-        level === "School"
-          ? "Select District, County or State to search"
-          : "Type a " + level + " name"
-      }
+      placeholder={placeholder}
       className="pt-2"
     />
   );

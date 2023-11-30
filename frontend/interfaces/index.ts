@@ -6,7 +6,8 @@ export type {
   Bounds,
   SchoolType,
   RacialProportion,
-  Level,
   SegEntity,
   LineData,
 } from "./interfaces";
+
+export { Level } from "./interfaces";

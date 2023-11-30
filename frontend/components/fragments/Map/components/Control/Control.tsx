@@ -9,10 +9,9 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../constants";
-import { Visibility } from "mapbox-gl";
 
 interface Props {
-  handleVisibility: (s: Visibility) => void;
+  handleVisibility: (l: Level) => void;
   handleBounds: (e: Bounds) => void;
 }
 
@@ -25,11 +24,12 @@ const race = [
 ];
 
 export default function Control({ handleVisibility, handleBounds }: Props) {
-  const [level, setLevel] = useState("School" as Level);
+  const [level, setLevel] = useState(Level.School);
 
   const handleChange = (e) => {
-    setLevel(e.target.value);
-    handleVisibility(e.target.value);
+    const val = parseInt(e.target.value);
+    setLevel(val);
+    handleVisibility(val);
   };
 
   const legend = () =>
@@ -43,30 +43,32 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
       </div>
     ));
 
-  const radio = (l: string, label?: string) => (
-    <div className="inline-flex">
-      <label className="inline-flex items-center">
-        <input
-          type="radio"
-          name={l}
-          value={l}
-          checked={level === l}
-          onChange={handleChange}
-          className="w-4 h-4 mr-2"
-        />
-        {label || l}
-      </label>
-    </div>
-  );
+  const radio = (l: Level, label: string, secondaryLabel?: string) => {
+    return (
+      <div className="inline-flex">
+        <label className="inline-flex items-center">
+          <input
+            type="radio"
+            name={label}
+            value={l}
+            checked={level === l}
+            onChange={handleChange}
+            className="w-4 h-4 mr-2"
+          />
+          {secondaryLabel || label}
+        </label>
+      </div>
+    );
+  };
 
   const boundaries = () => (
     <>
       <p className="text-lg text-gray-900 mb-1">Boundaries</p>
       <div className="flex flex-col mb-4">
-        {radio("School", "No Boundary")}
-        {radio("District")}
-        {radio("County")}
-        {radio("State")}
+        {radio(Level.School, "School", "No Boundary")}
+        {radio(Level.District, "District")}
+        {radio(Level.County, "County")}
+        {radio(Level.State, "State")}
       </div>
       <div>
         <Search level={level} handleBounds={handleBounds} />
