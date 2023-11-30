@@ -46,7 +46,7 @@ const InfoDialog = memo(({ open, mapStatus }: Props) => {
     >
       <DialogContent
         classes={{
-          root: "flex flex-col items-center justify-center h-80 w-80",
+          root: "flex flex-col items-center justify-center h-80 w-full sm:w-80",
         }}
       >
         {!fetchingFailed && <Loader />}

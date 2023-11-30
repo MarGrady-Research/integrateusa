@@ -302,7 +302,11 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     getData();
   }, [onSmallerScreen, initialBounds]);
 
-  const onSourceData = (source) => {
+  const onInitialRender = (source) => {
+    if (renderedFeatures.length > 0) {
+      return;
+    }
+
     if (
       source.isSourceLoaded &&
       source.sourceId === schoolsSourceId &&
@@ -372,7 +376,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         onResize={querySchools}
         onZoomStart={onMouseOut}
         onZoomEnd={querySchools}
-        onSourceData={onSourceData}
+        onSourceData={onInitialRender}
       >
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
