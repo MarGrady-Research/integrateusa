@@ -17,9 +17,21 @@ interface Props {
   getData: () => void;
   isLoading: boolean;
   omitSchools?: boolean;
+  grade: string;
+  year: number;
+  handleGradeChange: (g: string) => void;
+  handleYearChange: (y: number) => void;
 }
 
-export default function Selection({ getData, isLoading, omitSchools }: Props) {
+export default function Selection({
+  getData,
+  isLoading,
+  omitSchools,
+  grade,
+  year,
+  handleGradeChange,
+  handleYearChange,
+}: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
@@ -35,8 +47,8 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
       >
         <LevelSelect omitSchools={omitSchools} />
         <SearchSelect />
-        <YearSelect />
-        <GradeSelect />
+        <YearSelect year={year} handleYearChange={handleYearChange} />
+        <GradeSelect grade={grade} handleGradeChange={handleGradeChange} />
         <div>
           <Button
             onClick={getData}

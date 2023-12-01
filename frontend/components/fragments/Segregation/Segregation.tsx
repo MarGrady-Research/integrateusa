@@ -5,17 +5,14 @@ import { useSelector } from "react-redux";
 import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
 
-import {
-  selectId,
-  selectGrade,
-  selectSelectedName,
-} from "../../../store/selectSlice";
+import { selectId, selectSelectedName } from "../../../store/selectSlice";
 
 import { SegData } from "../../../interfaces";
 
 interface Props {
   segData: SegData;
   year: number;
+  grade: string;
 }
 
 const options = [
@@ -63,8 +60,7 @@ const findFocus = (segData: SegData, idLevel: string, id: string) => {
   return null;
 };
 
-export default function Segregation({ segData, year }: Props) {
-  const grade = useSelector(selectGrade);
+export default function Segregation({ segData, year, grade }: Props) {
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
 

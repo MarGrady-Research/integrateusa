@@ -75,3 +75,6 @@ export const gradesData = [
   { value: "12", label: "Grade 12", label2: "twelvth-grader" },
   { value: "UG", label: "Ungraded", label2: "ungraded student" },
 ];
+
+export const defaultYear = 2022;
+export const defaultGrade = "All";

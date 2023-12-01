@@ -7,13 +7,24 @@ import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
 import Segregation from "../components/fragments/Segregation";
-import { selectYear, selectGrade, selectLevel } from "../store/selectSlice";
+
+import {
+  defaultGrade,
+  defaultYear,
+} from "../components/fragments/Selection/data";
+
+import { selectLevel } from "../store/selectSlice";
+
 import { SegData, Level } from "../interfaces";
 
 export default function SegregationPage() {
   const level = useSelector(selectLevel);
-  const year = useSelector(selectYear);
-  const grade = useSelector(selectGrade);
+
+  const [year, setYear] = useState(defaultYear);
+  const [grade, setGrade] = useState(defaultGrade);
+
+  const handleGradeChange = (g: string) => setGrade(g);
+  const handleYearChange = (y: number) => setYear(y);
 
   const [segData, setSegData] = useState([] as SegData);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,10 +68,18 @@ export default function SegregationPage() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <Selection getData={getData} isLoading={isLoading} omitSchools />
+      <Selection
+        getData={getData}
+        isLoading={isLoading}
+        grade={grade}
+        year={year}
+        handleGradeChange={handleGradeChange}
+        handleYearChange={handleYearChange}
+        omitSchools
+      />
       <Page isLoading={isLoading}>
         <div className="mx-auto mt-5">
-          <Segregation segData={segData} year={year} />
+          <Segregation segData={segData} year={year} grade={grade} />
         </div>
       </Page>
     </>
