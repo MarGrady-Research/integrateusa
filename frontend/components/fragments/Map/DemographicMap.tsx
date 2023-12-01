@@ -204,7 +204,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     const {
       point: { x, y },
       originalEvent: {
-        originalTarget: { height, width },
+        target: { height, width },
       },
     } = event;
 
