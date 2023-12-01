@@ -193,9 +193,7 @@ export default function BarChart({ infoData }: Props) {
           onChange={handleSort}
         />
       </div>
-      <div className="lg:w-5/6 mx-auto">
-        <Bar data={data} options={options as any} plugins={[legendMargin]} />
-      </div>
+      <Bar data={data} options={options as any} plugins={[legendMargin]} />
     </>
   );
 }
