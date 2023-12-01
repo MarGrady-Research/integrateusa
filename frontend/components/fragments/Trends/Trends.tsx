@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";

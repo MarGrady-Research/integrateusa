@@ -39,6 +39,12 @@ export const selectSlice = createSlice({
     setBounds(state, action) {
       state.bounds = action.payload;
     },
+    restoreInitialState(state) {
+      state.level = initialState.level;
+      state.id = initialState.id;
+      state.selectedName = initialState.selectedName;
+      state.bounds = initialState.bounds;
+    },
   },
 
   extraReducers: {
@@ -51,8 +57,13 @@ export const selectSlice = createSlice({
   },
 });
 
-export const { setLevel, setId, setSelectedName, setBounds } =
-  selectSlice.actions;
+export const {
+  setLevel,
+  setId,
+  setSelectedName,
+  setBounds,
+  restoreInitialState,
+} = selectSlice.actions;
 
 export const selectLevel = (state: AppState) => state.select.level as Level;
 export const selectId = (state: AppState) => state.select.id as string;
