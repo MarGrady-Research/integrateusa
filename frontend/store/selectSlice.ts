@@ -2,17 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
+import { yearsData } from "../components/fragments/Selection/data";
+
 import { Bounds, Level } from "../interfaces";
 
 export interface SelectState {
   level: Level;
+  year: number;
+  grade: string;
   id: string;
   selectedName: string;
   bounds: Bounds;
 }
 
+const currentYear = Math.max(...yearsData.map((e) => e.value));
+
 const initialState: SelectState = {
   level: Level.District,
+  year: currentYear,
+  grade: "All",
   id: "3620580",
   selectedName: "New York City Public Schools (NY)",
   bounds: {
@@ -29,6 +37,12 @@ export const selectSlice = createSlice({
   reducers: {
     setLevel(state, action) {
       state.level = action.payload;
+    },
+    setYear(state, action) {
+      state.year = action.payload;
+    },
+    setGrade(state, action) {
+      state.grade = action.payload;
     },
     setId(state, action) {
       state.id = action.payload;
@@ -51,10 +65,18 @@ export const selectSlice = createSlice({
   },
 });
 
-export const { setLevel, setId, setSelectedName, setBounds } =
-  selectSlice.actions;
+export const {
+  setLevel,
+  setYear,
+  setGrade,
+  setId,
+  setSelectedName,
+  setBounds,
+} = selectSlice.actions;
 
 export const selectLevel = (state: AppState) => state.select.level as Level;
+export const selectYear = (state: AppState) => state.select.year as number;
+export const selectGrade = (state: AppState) => state.select.grade as string;
 export const selectId = (state: AppState) => state.select.id as string;
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName as string;

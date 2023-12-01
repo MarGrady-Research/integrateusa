@@ -5,15 +5,18 @@ import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade";
 
+import { selectGrade, selectYear } from "../../../store/selectSlice";
+
 import { TrendData } from "../../../interfaces";
 
 interface Props {
   trendData: TrendData;
-  grade: string;
-  year: number;
 }
 
-export default function Trends({ trendData, grade, year }: Props) {
+export default function Trends({ trendData }: Props) {
+  const grade = useSelector(selectGrade);
+  const year = useSelector(selectYear);
+
   if (trendData.length > 0) {
     return (
       <>

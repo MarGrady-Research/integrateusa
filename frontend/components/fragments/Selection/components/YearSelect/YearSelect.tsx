@@ -1,21 +1,22 @@
 import React from "react";
 import Select from "react-select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { yearsData } from "../../data";
-import { selectLevel } from "../../../../../store/selectSlice";
+import {
+  selectLevel,
+  selectYear,
+  setYear,
+} from "../../../../../store/selectSlice";
 import { Level } from "../../../../../interfaces";
 
-interface Props {
-  year: number;
-  handleYearChange: (y: number) => void;
-}
-
-export default function YearSelect({ year, handleYearChange }: Props) {
+export default function YearSelect() {
   const level = useSelector(selectLevel);
+  const year = useSelector(selectYear);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    handleYearChange(e.value);
+    dispatch(setYear(e.value));
   };
 
   const selectedYear = yearsData.find((y) => y.value === year);

@@ -1,16 +1,16 @@
 import React from "react";
 import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
 
 import { gradesData } from "../../data";
+import { selectGrade, setGrade } from "../../../../../store/selectSlice";
 
-interface Props {
-  grade: string;
-  handleGradeChange: (g: string) => void;
-}
+export default function GradeSelect() {
+  const grade = useSelector(selectGrade);
+  const dispatch = useDispatch();
 
-export default function GradeSelect({ grade, handleGradeChange }: Props) {
   const handleChange = (e) => {
-    handleGradeChange(e.value);
+    dispatch(setGrade(e.value));
   };
 
   const selectedGrade = gradesData.find((g) => g.value === grade);
