@@ -76,11 +76,22 @@ export default function SearchSelect({ level }: Props) {
   );
 
   useEffect(() => {
-    if (level != storeLevel) {
+    if (value && id !== value.value) {
+      setValue({
+        label: selectedName,
+        value: id,
+        lngmin: bounds.lngmin,
+        latmin: bounds.latmin,
+        lngmax: bounds.lngmax,
+        latmax: bounds.latmax,
+      });
+      setInputValue(selectedName);
+    } else if (level != storeLevel) {
       setValue(null);
       setInputValue("");
     }
-  }, [level, selectLevel]);
+    setOptions([]);
+  }, [id, value, selectedName, bounds, level, storeLevel]);
 
   useEffect(() => {
     let active = true;

@@ -28,7 +28,7 @@ export default function LevelSelect({
     : levelSelectData;
 
   const selectedLevel = data.find((l) => l.value === level);
-  const selectedValue = selectedLevel.value.toString();
+  const selectedValue = selectedLevel?.value.toString() || "";
 
   const options = data.map((o) => ({
     value: o.value.toString(),

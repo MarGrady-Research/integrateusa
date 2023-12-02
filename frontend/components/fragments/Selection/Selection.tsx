@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -29,6 +29,10 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
 
   const [level, setLevel] = useState(storeLevel);
   const handleLevelChange = (l: Level) => setLevel(l);
+
+  useEffect(() => {
+    setLevel(storeLevel);
+  }, [storeLevel]);
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded((e) => !e);
