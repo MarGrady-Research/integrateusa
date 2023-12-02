@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
-import AsyncSelect from "react-select/async";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import parse from "autosuggest-highlight/parse";
+import match from "autosuggest-highlight/match";
+import { debounce } from "@mui/material/utils";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import { useSelector, useDispatch } from "react-redux";
+import clsx from "clsx";
 
-import { levelSelectData } from "../../data";
 import {
   selectId,
   selectSelectedName,
+  selectBounds,
   setId,
   setSelectedName,
   setBounds,
   setLevel,
 } from "../../../../../store/selectSlice";
+
+import { levelSelectData } from "../../data";
+
 import { Level } from "../../../../../interfaces";
+// @ts-ignore
+import { inputRoot, inputLabel } from "./SearchSelect.module.scss";
+
+interface SearchResult {
+  value: string;
+  label: string;
+  lngmin: number;
+  latmin: number;
+  lngmax: number;
+  latmax: number;
+}
 
 interface Props {
   level: Level;
@@ -21,96 +42,176 @@ interface Props {
 export default function SearchSelect({ level }: Props) {
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
-
+  const bounds = useSelector(selectBounds);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    dispatch(setId(e.value));
-    dispatch(setSelectedName(e.label));
+  const [value, setValue] = useState<SearchResult | null>({
+    label: selectedName,
+    value: id,
+    lngmin: bounds.lngmin,
+    latmin: bounds.latmin,
+    lngmax: bounds.lngmax,
+    latmax: bounds.latmax,
+  });
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState<readonly SearchResult[]>([]);
+
+  const fetch = useMemo(
+    () =>
+      debounce(
+        (input: string, callback: (results?: readonly any[]) => void) => {
+          const url = `${levelSelectData[level].route}${input}`;
+
+          axios.get(url).then((res: any) => callback(res.data));
+        },
+        100
+      ),
+    []
+  );
+
+  useEffect(() => {
+    let active = true;
+
+    if (inputValue === "") {
+      setOptions(value ? [value] : []);
+      return;
+    }
+
+    if (value && inputValue === value.label) {
+      return;
+    }
+
+    fetch(inputValue, (results?: readonly any[]) => {
+      if (active) {
+        let newOptions: readonly SearchResult[] = [];
+
+        if (value) {
+          newOptions = [value];
+        }
+
+        if (results) {
+          const resultsOptions = results.map((ro) => {
+            let labelData = {
+              value: "",
+              label: "",
+            };
+
+            switch (level) {
+              case Level.School:
+                labelData = {
+                  value: ro.nces_id,
+                  label: ro.sch_name,
+                };
+                break;
+              case Level.District:
+                labelData = {
+                  value: ro.dist_id,
+                  label: ro.dist_name,
+                };
+                break;
+              case Level.County:
+                labelData = {
+                  value: ro.county_id,
+                  label: ro.county_name,
+                };
+                break;
+              case Level.State:
+                labelData = {
+                  value: ro.state_abb,
+                  label: ro.state_name,
+                };
+                break;
+            }
+
+            return {
+              ...labelData,
+              lngmin: ro.lngmin,
+              latmin: ro.latmin,
+              lngmax: ro.lngmax,
+              latmax: ro.latmax,
+            };
+          });
+
+          newOptions = [...newOptions, ...resultsOptions];
+        }
+
+        setOptions(newOptions);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [inputValue, value, fetch]);
+
+  const handleChange = (event: any, newValue: SearchResult | null) => {
+    setOptions(newValue ? [newValue, ...options] : options);
+    setValue(newValue);
+
+    if (!newValue) {
+      return;
+    }
+
+    dispatch(setId(newValue.value));
+    dispatch(setSelectedName(newValue.label));
     dispatch(
       setBounds({
-        lngmin: e.lngmin,
-        latmin: e.latmin,
-        lngmax: e.lngmax,
-        latmax: e.latmax,
+        lngmin: newValue.lngmin,
+        latmin: newValue.latmin,
+        lngmax: newValue.lngmax,
+        latmax: newValue.latmax,
       })
     );
     dispatch(setLevel(level));
   };
 
-  const loadOptions = async (input: string) => {
-    if (input.length === 0) {
-      return null;
-    }
-
-    const url = `${levelSelectData[level].route}${input}`;
-
-    const response = await axios.get(url);
-
-    const options = await response.data.map((d) => {
-      let labelData = {
-        value: "",
-        label: "",
-      };
-
-      switch (level) {
-        case Level.School:
-          labelData = {
-            value: d.nces_id,
-            label: d.sch_name,
-          };
-          break;
-        case Level.District:
-          labelData = {
-            value: d.dist_id,
-            label: d.dist_name,
-          };
-          break;
-        case Level.County:
-          labelData = {
-            value: d.county_id,
-            label: d.county_name,
-          };
-          break;
-        case Level.State:
-          labelData = {
-            value: d.state_abb,
-            label: d.state_name,
-          };
-          break;
-      }
-
-      return {
-        ...labelData,
-        lngmin: d.lngmin,
-        latmin: d.latmin,
-        lngmax: d.lngmax,
-        latmax: d.latmax,
-      };
-    });
-
-    return options;
-  };
-
-  const levelName = Level[level].toLowerCase();
-  const placeholder = `Type a ${levelName} name`;
-
   return (
-    <AsyncSelect
-      name="search-select"
-      cacheOptions
-      defaultOptions
-      value={{
-        label: selectedName,
-        value: id,
-      }}
+    <Autocomplete
+      id="search-select"
+      filterOptions={(x) => x}
+      options={options}
+      autoComplete
+      includeInputInList
+      filterSelectedOptions
+      value={value}
+      noOptionsText="No results"
+      classes={{ inputRoot: clsx(inputRoot, "!py-2"), input: "!p-0" }}
       onChange={handleChange}
-      loadOptions={loadOptions}
-      components={{
-        DropdownIndicator: () => null,
-        IndicatorSeparator: () => null,
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
       }}
-      placeholder={placeholder}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Name"
+          fullWidth
+          InputLabelProps={{
+            className: clsx({ [inputLabel]: inputValue === "" }),
+          }}
+        />
+      )}
+      renderOption={(props, option) => {
+        const matchesArray = match(option.label, inputValue);
+        const parsedOption = parse(option.label, matchesArray);
+
+        const parts = parsedOption.map((part, index) => (
+          <Box
+            key={index}
+            component="span"
+            sx={{ fontWeight: part.highlight ? "bold" : "regular" }}
+          >
+            {part.text}
+          </Box>
+        ));
+
+        return (
+          <li {...props}>
+            <Grid item sx={{ wordWrap: "break-word" }}>
+              {parts}
+            </Grid>
+          </li>
+        );
+      }}
     />
   );
 }

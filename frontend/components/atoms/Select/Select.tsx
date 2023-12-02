@@ -3,6 +3,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import clsx from "clsx";
+
+// @ts-ignore
+import { inputLabel } from "./Select.module.scss";
 
 interface Props {
   id: string;
@@ -15,6 +19,7 @@ interface Props {
     disabled?: boolean;
   }[];
 }
+
 export default function SelectComponent({
   id,
   label,
@@ -22,7 +27,7 @@ export default function SelectComponent({
   onChange,
   options,
 }: Props) {
-  const inputLabel = `${id}-label`;
+  const inputLabelId = `${id}-label`;
 
   const selectOptions = options.map((o) => (
     <MenuItem key={o.value} value={o.value.toString()} disabled={o.disabled}>
@@ -30,11 +35,18 @@ export default function SelectComponent({
     </MenuItem>
   ));
 
+  const emptyInput = value === "";
+
   return (
     <FormControl fullWidth>
-      <InputLabel id={inputLabel}>{label}</InputLabel>
+      <InputLabel
+        id={inputLabel}
+        className={clsx({ [inputLabel]: emptyInput })}
+      >
+        {label}
+      </InputLabel>
       <Select
-        labelId={inputLabel}
+        labelId={inputLabelId}
         id={id}
         value={value}
         label={label}

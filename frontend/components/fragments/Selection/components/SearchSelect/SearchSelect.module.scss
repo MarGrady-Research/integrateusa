@@ -1,0 +1,7 @@
+.inputLabel:not(:global(.Mui-focused)) {
+  transform: translate(14px, 8px) scale(1) !important;
+}
+
+.inputRoot {
+  padding-left: 16.5px !important;
+}
