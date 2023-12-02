@@ -4,11 +4,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Button from "@mui/material/Button";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
 
 import LevelSelect from "./components/LevelSelect";
 import SearchSelect from "./components/SearchSelect";
 import YearSelect from "./components/YearSelect";
 import GradeSelect from "./components/GradeSelect";
+
+import { selectLevel } from "../../../store/selectSlice";
+
+import { Level } from "../../../interfaces";
 
 // @ts-ignore
 import { expandButton } from "./Selection.module.scss";
@@ -20,9 +25,15 @@ interface Props {
 }
 
 export default function Selection({ getData, isLoading, omitSchools }: Props) {
-  const [expanded, setExpanded] = useState(false);
+  const storeLevel = useSelector(selectLevel);
 
+  const [level, setLevel] = useState(storeLevel);
+  const handleLevelChange = (l: Level) => setLevel(l);
+
+  const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded((e) => !e);
+
+  const expandIcon = expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />;
 
   return (
     <div className="shadow relative">
@@ -33,8 +44,12 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
           "hidden lg:grid": !expanded,
         })}
       >
-        <LevelSelect omitSchools={omitSchools} />
-        <SearchSelect />
+        <LevelSelect
+          omitSchools={omitSchools}
+          level={level}
+          handleLevelChange={handleLevelChange}
+        />
+        <SearchSelect level={level} />
         <YearSelect />
         <GradeSelect />
         <div>
@@ -56,7 +71,7 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
         variant="outlined"
         onClick={toggleExpanded}
       >
-        {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        {expandIcon}
       </Button>
     </div>
   );

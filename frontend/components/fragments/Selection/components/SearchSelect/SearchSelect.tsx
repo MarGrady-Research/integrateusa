@@ -5,17 +5,20 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { levelSelectData } from "../../data";
 import {
-  selectLevel,
   selectId,
   selectSelectedName,
   setId,
   setSelectedName,
   setBounds,
+  setLevel,
 } from "../../../../../store/selectSlice";
 import { Level } from "../../../../../interfaces";
 
-export default function SearchSelect() {
-  const level = useSelector(selectLevel);
+interface Props {
+  level: Level;
+}
+
+export default function SearchSelect({ level }: Props) {
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
 
@@ -32,6 +35,7 @@ export default function SearchSelect() {
         latmax: e.latmax,
       })
     );
+    dispatch(setLevel(level));
   };
 
   const loadOptions = async (input: string) => {

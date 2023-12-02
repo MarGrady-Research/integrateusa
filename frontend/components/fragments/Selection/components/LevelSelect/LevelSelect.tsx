@@ -1,21 +1,23 @@
 import React from "react";
 import Select from "react-select";
-import { useDispatch, useSelector } from "react-redux";
 
-import { selectLevel, setLevel } from "../../../../../store/selectSlice";
+import { Level } from "../../../../../interfaces";
 
 import { levelSelectData } from "../../data";
 
 interface Props {
   omitSchools?: boolean;
+  level: Level;
+  handleLevelChange: (l: Level) => void;
 }
 
-export default function LevelSelect({ omitSchools }: Props) {
-  const level = useSelector(selectLevel);
-  const dispatch = useDispatch();
-
+export default function LevelSelect({
+  omitSchools,
+  level,
+  handleLevelChange,
+}: Props) {
   const handleChange = (e) => {
-    dispatch(setLevel(e.value));
+    handleLevelChange(e.value);
   };
 
   const data = omitSchools
