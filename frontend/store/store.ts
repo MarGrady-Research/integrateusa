@@ -16,6 +16,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { getPersistConfig } from "redux-deep-persist";
 
 import { selectSlice } from "./selectSlice";
 
@@ -35,12 +36,13 @@ export const makeStore = () => {
   if (isServer) {
     return makeConfiguredStore();
   } else {
-    const persistConfig = {
-      key: "nextjs",
-      version: 1,
-      whitelist: ["select"],
+    const persistConfig = getPersistConfig({
+      key: "root",
       storage,
-    };
+      version: 1,
+      blacklist: ["select.grade", "select.year"],
+      rootReducer,
+    });
 
     const persistedReducer = persistReducer(persistConfig, rootReducer);
 

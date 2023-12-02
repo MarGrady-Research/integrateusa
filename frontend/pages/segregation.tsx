@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import Head from "../components/fragments/Head";
@@ -7,10 +7,17 @@ import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
 import Segregation from "../components/fragments/Segregation";
-import { selectYear, selectGrade, selectLevel } from "../store/selectSlice";
+import {
+  selectYear,
+  selectGrade,
+  selectLevel,
+  restoreInitialState,
+} from "../store/selectSlice";
 import { SegData, Level } from "../interfaces";
 
 export default function SegregationPage() {
+  const dispatch = useDispatch();
+
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
@@ -22,6 +29,7 @@ export default function SegregationPage() {
     let idlevel;
 
     switch (level) {
+      case Level.School:
       case Level.District:
         idlevel = "district";
         break;
@@ -48,6 +56,10 @@ export default function SegregationPage() {
   };
 
   useEffect(() => {
+    if (level === Level.School) {
+      dispatch(restoreInitialState());
+    }
+
     getData();
   }, []);
 
