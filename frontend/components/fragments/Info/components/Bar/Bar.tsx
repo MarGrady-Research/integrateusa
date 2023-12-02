@@ -9,7 +9,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
-import Select from "react-select";
+
+import Select from "../../../../atoms/Select";
 
 import {
   asianColor,
@@ -18,8 +19,11 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../constants";
+
 import { legendMargin } from "../../../../../charts";
+
 import { InfoData, RacialProportion } from "../../../../../interfaces";
+
 import { sortOnOrder } from "../../../../../utils";
 
 ChartJS.register(
@@ -126,9 +130,9 @@ const options = {
 };
 
 export default function BarChart({ infoData }: Props) {
-  const [sortBy, setSortBy] = useState(null as RacialProportion | null);
+  const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
-  const handleSort = (e) => setSortBy(e.value);
+  const handleSort = (e) => setSortBy(e.target.value as RacialProportion);
 
   const sortedData = [...infoData];
 
@@ -188,9 +192,11 @@ export default function BarChart({ infoData }: Props) {
     <>
       <div className="grid grid-cols-1 lg:grid-cols-5 mb-4">
         <Select
-          placeholder="Sort by..."
-          options={sortOptions}
+          id="sort-select"
+          value={sortBy}
+          label="Sort by"
           onChange={handleSort}
+          options={sortOptions}
         />
       </div>
       <Bar data={data} options={options as any} plugins={[legendMargin]} />

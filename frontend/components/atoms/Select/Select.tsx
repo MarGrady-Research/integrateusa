@@ -10,14 +10,17 @@ import { inputLabel } from "./Select.module.scss";
 
 interface Props {
   id: string;
-  label: string;
+  label?: string;
   value: string;
   onChange: (e: SelectChangeEvent) => void;
+  variant?: "filled" | "outlined" | "standard";
   options: {
     value: string;
     label: string;
     disabled?: boolean;
   }[];
+  classes?: any;
+  menuItemClasses?: any;
 }
 
 export default function SelectComponent({
@@ -26,6 +29,8 @@ export default function SelectComponent({
   value,
   onChange,
   options,
+  variant = "outlined",
+  classes,
 }: Props) {
   const inputLabelId = `${id}-label`;
 
@@ -38,13 +43,15 @@ export default function SelectComponent({
   const emptyInput = value === "";
 
   return (
-    <FormControl fullWidth>
-      <InputLabel
-        id={inputLabel}
-        className={clsx({ [inputLabel]: emptyInput })}
-      >
-        {label}
-      </InputLabel>
+    <FormControl variant={variant}>
+      {label && (
+        <InputLabel
+          id={inputLabel}
+          className={clsx({ [inputLabel]: emptyInput })}
+        >
+          {label}
+        </InputLabel>
+      )}
       <Select
         labelId={inputLabelId}
         id={id}
@@ -53,6 +60,7 @@ export default function SelectComponent({
         onChange={onChange}
         classes={{
           select: "!py-2",
+          ...classes,
         }}
       >
         {selectOptions}

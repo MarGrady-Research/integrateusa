@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
-import Select from "react-select";
+import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
+import Select from "../../atoms/Select";
 
 import {
   selectId,
@@ -70,6 +70,16 @@ export default function Segregation({ segData, year }: Props) {
 
   const [selected, setSelected] = useState(defaultOption);
 
+  const handleChange = (e) => {
+    const selectedValue = e.target.value;
+
+    const option = options.find((o) => o.value === selectedValue);
+
+    if (option) {
+      setSelected(option);
+    }
+  };
+
   const measure = useMemo(
     () => ({
       name: `${selected.label} Normalized Exposure`,
@@ -96,17 +106,18 @@ export default function Segregation({ segData, year }: Props) {
     table = "state";
   }
 
-  const [focus, setFocus] = useState(findFocus(segData, idLevel, id));
-
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
 
-  useEffect(() => {
-    setFocus(findFocus(segData, idLevel, id));
-  }, [segData, idLevel, id]);
+  const focus = useMemo(
+    () => findFocus(segData, idLevel, id),
+    [segData, idLevel, id]
+  );
 
   if (!focus) {
     return null;
   }
+
+  const selectedValue = selected.value;
 
   return (
     <>
@@ -120,19 +131,15 @@ export default function Segregation({ segData, year }: Props) {
           <p className="mb-4 lg:mb-6">
             The typical{" "}
             <Select
+              id="seg-select"
+              value={selectedValue}
+              onChange={handleChange}
               options={options}
-              defaultValue={options[2]}
-              onChange={(e) => setSelected(e)}
-              components={{ IndicatorSeparator: () => null }}
-              isSearchable={false}
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  boxShadow: "none",
-                  border: state.isFocused && "none",
-                }),
+              variant="standard"
+              classes={{
+                root: "!text-md lg:!text-xl mt-px lg:mt-0",
+                select: "!py-0",
               }}
-              className="inline-flex"
             />{" "}
             student in {title} attends a school that is{" "}
             <b>
