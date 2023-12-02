@@ -1,27 +1,36 @@
 import React from "react";
-import Select from "react-select";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
 
+import Select from "../../../../atoms/Select";
+
 import { gradesData } from "../../data";
+
 import { selectGrade, setGrade } from "../../../../../store/selectSlice";
 
 export default function GradeSelect() {
   const grade = useSelector(selectGrade);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    dispatch(setGrade(e.value));
+  const handleChange = (e: SelectChangeEvent) => {
+    dispatch(setGrade(e.target.value as string));
   };
 
   const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedValue = selectedGrade.value;
+
+  const options = gradesData.map((o) => ({
+    value: o.value,
+    label: o.label,
+  }));
 
   return (
     <Select
-      options={gradesData}
+      id="grade-select"
+      value={selectedValue}
+      label="Grade"
       onChange={handleChange}
-      value={selectedGrade}
-      placeholder="Select a grade"
-      name="grades"
+      options={options}
     />
   );
 }
