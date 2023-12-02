@@ -59,14 +59,14 @@ export default function Header() {
           </nav>
         </div>
         <div className="absolute lg:relative w-28 sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
-          <Link href="http://www.margrady.com/">
+          <a href="http://www.margrady.com/" target="_blank">
             <Image
               src="/mg-logo-text.png"
               alt="MarGrady Logo"
               width={250}
               height={57}
             />
-          </Link>
+          </a>
         </div>
       </div>
     </header>

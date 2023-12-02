@@ -60,26 +60,26 @@ const getAreaInfo = (hoverInfo, mapData) => {
     }
   }
 
-  const asianPercentageRaw = (asianTotal / studentsTotal) * 100;
-  const blackPercentageRaw = (blackTotal / studentsTotal) * 100;
-  const hispanicPercentageRaw = (hispanicTotal / studentsTotal) * 100;
-  const whitePercentageRaw = (whiteTotal / studentsTotal) * 100;
-  const otherPercentageRaw = (otherTotal / studentsTotal) * 100;
+  const asianRatio = asianTotal / studentsTotal;
+  const blackRatio = blackTotal / studentsTotal;
+  const hispanicRatio = hispanicTotal / studentsTotal;
+  const whiteRatio = whiteTotal / studentsTotal;
+  const otherRatio = otherTotal / studentsTotal;
 
   const schoolsInArea = schoolsTotal.toLocaleString();
   const studentsEnrolled = studentsTotal.toLocaleString();
-  const asianPercentage = asianPercentageRaw.toFixed(1);
-  const blackPercentage = blackPercentageRaw.toFixed(1);
-  const hispanicPercentage = hispanicPercentageRaw.toFixed(1);
-  const whitePercentage = whitePercentageRaw.toFixed(1);
-  const otherPercentage = otherPercentageRaw.toFixed(1);
+  const asianPercentage = (asianRatio * 100).toFixed(1);
+  const blackPercentage = (blackRatio * 100).toFixed(1);
+  const hispanicPercentage = (hispanicRatio * 100).toFixed(1);
+  const whitePercentage = (whiteRatio * 100).toFixed(1);
+  const otherPercentage = (otherRatio * 100).toFixed(1);
 
   const pieData = [
-    asianPercentageRaw,
-    blackPercentageRaw,
-    hispanicPercentageRaw,
-    whitePercentageRaw,
-    otherPercentageRaw,
+    asianRatio,
+    blackRatio,
+    hispanicRatio,
+    whiteRatio,
+    otherRatio,
   ];
 
   return {

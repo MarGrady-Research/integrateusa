@@ -18,19 +18,11 @@ interface Props {
   small?: boolean;
 }
 
+const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
+
 const getSchoolInfo = (hoverInfo) => {
-  const {
-    dist_name,
-    county_name,
-    year,
-    tot_enr,
-    as,
-    bl,
-    hi,
-    wh,
-    or,
-    sch_name,
-  } = hoverInfo.feature.properties;
+  const { dist_name, county_name, year, tot_enr, as, bl, hi, wh, or } =
+    hoverInfo.feature.properties;
 
   const districtName = dist_name;
   const countyName = county_name;
@@ -77,8 +69,6 @@ const getSchoolInfo = (hoverInfo) => {
     pieData,
   };
 };
-
-const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
 const options = {
   reponsive: true,
