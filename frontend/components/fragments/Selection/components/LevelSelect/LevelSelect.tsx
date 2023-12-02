@@ -1,8 +1,7 @@
 import React from "react";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import { SelectChangeEvent } from "@mui/material/Select";
+
+import Select from "../../../../atoms/Select";
 
 import { Level } from "../../../../../interfaces";
 
@@ -31,27 +30,18 @@ export default function LevelSelect({
   const selectedLevel = data.find((l) => l.value === level);
   const selectedValue = selectedLevel.value.toString();
 
-  const options = data.map((o) => (
-    <MenuItem key={o.value} value={o.value.toString()}>
-      {o.label}
-    </MenuItem>
-  ));
+  const options = data.map((o) => ({
+    value: o.value.toString(),
+    label: o.label,
+  }));
 
   return (
-    <FormControl fullWidth>
-      <InputLabel id="level-select-label">Level</InputLabel>
-      <Select
-        labelId="level-select-label"
-        id="level-select"
-        value={selectedValue}
-        label="Level"
-        onChange={handleChange}
-        classes={{
-          select: "!py-2",
-        }}
-      >
-        {options}
-      </Select>
-    </FormControl>
+    <Select
+      id="level-select"
+      value={selectedValue}
+      label="Level"
+      onChange={handleChange}
+      options={options}
+    />
   );
 }

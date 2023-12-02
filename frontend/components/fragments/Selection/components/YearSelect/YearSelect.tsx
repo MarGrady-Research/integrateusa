@@ -1,13 +1,17 @@
 import React from "react";
-import Select from "react-select";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
 
+import Select from "../../../../atoms/Select";
+
 import { yearsData } from "../../data";
+
 import {
   selectLevel,
   selectYear,
   setYear,
 } from "../../../../../store/selectSlice";
+
 import { Level } from "../../../../../interfaces";
 
 export default function YearSelect() {
@@ -15,23 +19,28 @@ export default function YearSelect() {
   const year = useSelector(selectYear);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    dispatch(setYear(e.value));
+  const handleChange = (e: SelectChangeEvent) => {
+    const value = parseInt(e.target.value as string);
+
+    dispatch(setYear(value));
   };
 
   const selectedYear = yearsData.find((y) => y.value === year);
+  const selectedValue = selectedYear.value.toString();
+
+  const options = yearsData.map((o) => ({
+    value: o.value.toString(),
+    label: o.label,
+    disabled: level == Level.County && o.value >= 2000 && o.value <= 2002,
+  }));
 
   return (
     <Select
-      options={yearsData}
+      id="year-select"
+      value={selectedValue}
+      label="Year"
       onChange={handleChange}
-      value={selectedYear}
-      isOptionDisabled={(e) =>
-        level == Level.County ? e.value >= 2000 && e.value <= 2002 : null
-      }
-      placeholder="Select a year"
-      name="years"
-      isSearchable={false}
+      options={options}
     />
   );
 }
