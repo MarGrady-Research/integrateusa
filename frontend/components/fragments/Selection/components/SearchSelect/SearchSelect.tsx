@@ -15,6 +15,7 @@ import {
   selectId,
   selectSelectedName,
   selectBounds,
+  selectLevel,
   setId,
   setSelectedName,
   setBounds,
@@ -44,6 +45,8 @@ export default function SearchSelect({ level }: Props) {
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
   const bounds = useSelector(selectBounds);
+  const storeLevel = useSelector(selectLevel);
+
   const dispatch = useDispatch();
 
   const [value, setValue] = useState<SearchResult | null>({
@@ -71,6 +74,13 @@ export default function SearchSelect({ level }: Props) {
       ),
     [level]
   );
+
+  useEffect(() => {
+    if (level != storeLevel) {
+      setValue(null);
+      setInputValue("");
+    }
+  }, [level, selectLevel]);
 
   useEffect(() => {
     let active = true;
