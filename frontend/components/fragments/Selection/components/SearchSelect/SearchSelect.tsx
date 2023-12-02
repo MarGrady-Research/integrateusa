@@ -7,6 +7,7 @@ import match from "autosuggest-highlight/match";
 import { debounce } from "@mui/material/utils";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 
@@ -24,7 +25,7 @@ import { levelSelectData } from "../../data";
 
 import { Level } from "../../../../../interfaces";
 // @ts-ignore
-import { inputRoot, inputLabel } from "./SearchSelect.module.scss";
+import { inputLabel } from "./SearchSelect.module.scss";
 
 interface SearchResult {
   value: string;
@@ -56,6 +57,8 @@ export default function SearchSelect({ level }: Props) {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<readonly SearchResult[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const fetch = useMemo(
     () =>
       debounce(
@@ -64,9 +67,9 @@ export default function SearchSelect({ level }: Props) {
 
           axios.get(url).then((res: any) => callback(res.data));
         },
-        100
+        400
       ),
-    []
+    [level]
   );
 
   useEffect(() => {
@@ -74,12 +77,15 @@ export default function SearchSelect({ level }: Props) {
 
     if (inputValue === "") {
       setOptions(value ? [value] : []);
+      setLoading(false);
       return;
     }
 
     if (value && inputValue === value.label) {
       return;
     }
+
+    setLoading(true);
 
     fetch(inputValue, (results?: readonly any[]) => {
       if (active) {
@@ -136,6 +142,7 @@ export default function SearchSelect({ level }: Props) {
         }
 
         setOptions(newOptions);
+        setLoading(false);
       }
     });
 
@@ -174,8 +181,8 @@ export default function SearchSelect({ level }: Props) {
       includeInputInList
       filterSelectedOptions
       value={value}
-      noOptionsText="No results"
-      classes={{ inputRoot: clsx(inputRoot, "!py-2"), input: "!p-0" }}
+      noOptionsText={loading ? "Searching..." : "No results"}
+      classes={{ inputRoot: "!pl-3.5 !py-2", input: "!p-0" }}
       onChange={handleChange}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -187,6 +194,17 @@ export default function SearchSelect({ level }: Props) {
           fullWidth
           InputLabelProps={{
             className: clsx({ [inputLabel]: inputValue === "" }),
+          }}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {loading ? (
+                  <CircularProgress color="inherit" size={14} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
           }}
         />
       )}
@@ -205,7 +223,7 @@ export default function SearchSelect({ level }: Props) {
         ));
 
         return (
-          <li {...props}>
+          <li {...props} key={option.value}>
             <Grid item sx={{ wordWrap: "break-word" }}>
               {parts}
             </Grid>
