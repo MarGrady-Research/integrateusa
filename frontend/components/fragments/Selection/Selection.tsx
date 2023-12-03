@@ -40,7 +40,7 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
   const expandIcon = expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />;
 
   return (
-    <div className="shadow relative">
+    <div className="shadow sticky top-0 z-10 bg-white">
       <div
         className={clsx({
           "grid grid-cols-1 lg:grid-cols-5 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-sans":
