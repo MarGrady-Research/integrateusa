@@ -1,15 +1,17 @@
-import React from "react";
-import AsyncSelect from "react-select/async";
+import React, { useState, useMemo, useEffect, SyntheticEvent } from "react";
 import axios from "axios";
+import { debounce } from "@mui/material/utils";
 
-import { Level, Bounds } from "../../../../../interfaces";
+import Autocomplete from "../../../../atoms/Autocomplete";
+
+import { Level, Bounds, LocationSearchResult } from "../../../../../interfaces";
 
 interface Props {
   level: Level;
   handleBounds: (e: Bounds) => void;
 }
 
-const url = (level: Level) => {
+const getURL = (level: Level) => {
   if (level === Level.District) {
     return "/api/districtnames/?q=";
   } else if (level === Level.County) {
@@ -20,57 +22,147 @@ const url = (level: Level) => {
 };
 
 export default function Search({ level, handleBounds }: Props) {
-  const loadOptions = async (input) => {
-    if (input.length === 0) {
-      return null;
+  const [value, setValue] = useState<LocationSearchResult | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const fetch = useMemo(
+    () =>
+      debounce(
+        (
+          input: string,
+          callback: (results?: readonly any[]) => void,
+          callbackFailure: () => void
+        ) => {
+          const url = `${getURL(level)}${input}`;
+
+          axios
+            .get(url)
+            .then((res: any) => callback(res.data))
+            .catch(() => callbackFailure());
+        },
+        400
+      ),
+    [level]
+  );
+
+  useEffect(() => {
+    let active = true;
+
+    if (inputValue === "") {
+      setOptions(value ? [value] : []);
+      setLoading(false);
+      return;
     }
 
-    const response = await axios.get(url(level) + input);
+    if (value && inputValue === value.label) {
+      return;
+    }
 
-    const options = await response.data.map((d) => {
-      let labelData = {
-        value: "",
-        label: "",
-      };
+    setLoading(true);
 
-      switch (level) {
-        case Level.District:
-          labelData = {
-            value: d.dist_id,
-            label: d.dist_name,
-          };
-          break;
-        case Level.County:
-          labelData = {
-            value: d.county_id,
-            label: d.county_name,
-          };
-          break;
-        case Level.State:
-          labelData = {
-            value: d.state_abb,
-            label: d.state_name,
-          };
-          break;
+    const callback = (results?: readonly any[]) => {
+      if (active) {
+        let newOptions: readonly LocationSearchResult[] = [];
+
+        if (value) {
+          newOptions = [value];
+        }
+
+        if (results) {
+          const resultsOptions = results.map((ro) => {
+            let labelData = {
+              value: "",
+              label: "",
+            };
+
+            switch (level) {
+              case Level.School:
+                labelData = {
+                  value: ro.nces_id,
+                  label: ro.sch_name,
+                };
+                break;
+              case Level.District:
+                labelData = {
+                  value: ro.dist_id,
+                  label: ro.dist_name,
+                };
+                break;
+              case Level.County:
+                labelData = {
+                  value: ro.county_id,
+                  label: ro.county_name,
+                };
+                break;
+              case Level.State:
+                labelData = {
+                  value: ro.state_abb,
+                  label: ro.state_name,
+                };
+                break;
+            }
+
+            return {
+              ...labelData,
+              lngmin: ro.lngmin,
+              latmin: ro.latmin,
+              lngmax: ro.lngmax,
+              latmax: ro.latmax,
+            };
+          });
+
+          newOptions = [...newOptions, ...resultsOptions];
+        }
+
+        setOptions(newOptions);
+        setLoading(false);
       }
+    };
 
-      return {
-        ...labelData,
-        lngmin: d.lngmin,
-        latmin: d.latmin,
-        lngmax: d.lngmax,
-        latmax: d.latmax,
-      };
-    });
+    const callbackFailure = () => {
+      setLoading(false);
+    };
 
-    return options;
+    fetch(inputValue, callback, callbackFailure);
+
+    return () => {
+      active = false;
+    };
+  }, [inputValue, value, fetch]);
+
+  useEffect(() => {
+    setValue(null);
+    setInputValue("");
+    setOptions([]);
+  }, [level]);
+
+  const handleChange = (
+    event: SyntheticEvent<Element, Event>,
+    newValue: LocationSearchResult
+  ) => {
+    setOptions(newValue ? [newValue, ...options] : options);
+    setValue(newValue);
+
+    if (newValue) {
+      handleBounds(newValue);
+    }
+  };
+
+  const handleInputChange = (
+    event: SyntheticEvent<Element, Event>,
+    newInputValue: string
+  ) => {
+    setInputValue(newInputValue);
   };
 
   let placeholder = "";
 
   switch (level) {
     case Level.School:
-      placeholder = "Select District, County or State to search";
+      placeholder = "Select District, County or State";
       break;
     default:
       const levelName = Level[level].toLowerCase();
@@ -78,20 +170,19 @@ export default function Search({ level, handleBounds }: Props) {
       break;
   }
 
+  const isDisabled = level === Level.School;
+
   return (
-    <AsyncSelect
-      name="map-search-select"
-      cacheOptions
-      defaultOptions
-      onChange={(e: Bounds) => handleBounds(e)}
-      loadOptions={loadOptions}
-      isDisabled={level === Level.School}
-      components={{
-        DropdownIndicator: () => null,
-        IndicatorSeparator: () => null,
-      }}
+    <Autocomplete
+      id="map-search-select"
+      value={value}
+      inputValue={inputValue}
+      options={options}
+      loading={loading}
+      handleChange={handleChange}
+      handleInputChange={handleInputChange}
       placeholder={placeholder}
-      className="pt-2"
+      disabled={isDisabled}
     />
   );
 }

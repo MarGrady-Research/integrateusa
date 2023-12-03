@@ -23,6 +23,9 @@ interface Props {
   inputValue: string;
   options: readonly SearchResult[];
   loading: boolean;
+  label?: string;
+  placeholder?: string;
+  disabled?: boolean;
   handleChange: (
     event: SyntheticEvent<Element, Event>,
     newValue: SearchResult
@@ -41,10 +44,14 @@ export default function AutocompleteComponent({
   loading,
   handleChange,
   handleInputChange,
+  label,
+  placeholder,
+  disabled,
 }: Props) {
   return (
     <Autocomplete
       id={id}
+      disabled={disabled}
       filterOptions={(x) => x}
       options={options}
       autoComplete
@@ -58,8 +65,10 @@ export default function AutocompleteComponent({
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Name"
+          X
+          label={label}
           fullWidth
+          placeholder={placeholder}
           InputLabelProps={{
             className: clsx({ [inputLabel]: inputValue === "" }),
           }}

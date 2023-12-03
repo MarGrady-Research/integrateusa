@@ -101,3 +101,12 @@ export enum MapStatus {
   Complete,
   Failed,
 }
+
+export interface LocationSearchResult {
+  value: string;
+  label: string;
+  lngmin: number;
+  latmin: number;
+  lngmax: number;
+  latmax: number;
+}

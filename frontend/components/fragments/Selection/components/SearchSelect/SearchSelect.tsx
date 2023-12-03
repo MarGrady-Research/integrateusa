@@ -18,16 +18,7 @@ import {
 
 import { levelSelectData } from "../../data";
 
-import { Level } from "../../../../../interfaces";
-
-interface LocationSearchResult {
-  value: string;
-  label: string;
-  lngmin: number;
-  latmin: number;
-  lngmax: number;
-  latmax: number;
-}
+import { Level, LocationSearchResult } from "../../../../../interfaces";
 
 interface Props {
   level: Level;
@@ -217,6 +208,7 @@ export default function SearchSelect({ level }: Props) {
       loading={loading}
       handleChange={handleChange}
       handleInputChange={handleInputChange}
+      label="Name"
     />
   );
 }

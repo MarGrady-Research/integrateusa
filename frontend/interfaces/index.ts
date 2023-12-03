@@ -8,6 +8,7 @@ export type {
   RacialProportion,
   SegEntity,
   LineData,
+  LocationSearchResult,
 } from "./interfaces";
 
 export { Level, MapStatus } from "./interfaces";
