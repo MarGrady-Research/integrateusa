@@ -271,16 +271,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
   };
 
-  const querySchools = () => {
-    if (mapRef.current) {
-      const features = (mapRef.current as any).queryRenderedFeatures({
-        layers: ["schools"],
-      });
-
-      setRenderedFeatures(features);
-    }
-  };
-
   const getData = useCallback(() => {
     setMapStatus(MapStatus.Fetching);
 
@@ -301,6 +291,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
     getData();
   }, [onSmallerScreen, initialBounds]);
+
+  const querySchools = () => {
+    if (mapRef.current) {
+      const features = (mapRef.current as any).queryRenderedFeatures({
+        layers: ["schools"],
+      });
+
+      setRenderedFeatures(features);
+    }
+  };
 
   const onInitialRender = (source) => {
     if (renderedFeatures.length > 0) {
