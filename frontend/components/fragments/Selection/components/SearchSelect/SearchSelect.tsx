@@ -1,15 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { SyntheticEvent, useState, useMemo, useEffect } from "react";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import parse from "autosuggest-highlight/parse";
-import match from "autosuggest-highlight/match";
 import { debounce } from "@mui/material/utils";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
-import clsx from "clsx";
+
+import Autocomplete from "../../../../atoms/Autocomplete";
 
 import {
   selectId,
@@ -25,10 +19,8 @@ import {
 import { levelSelectData } from "../../data";
 
 import { Level } from "../../../../../interfaces";
-// @ts-ignore
-import { inputLabel } from "./SearchSelect.module.scss";
 
-interface SearchResult {
+interface LocationSearchResult {
   value: string;
   label: string;
   lngmin: number;
@@ -49,7 +41,7 @@ export default function SearchSelect({ level }: Props) {
 
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState<SearchResult | null>({
+  const [value, setValue] = useState<LocationSearchResult | null>({
     label: selectedName,
     value: id,
     lngmin: bounds.lngmin,
@@ -58,7 +50,7 @@ export default function SearchSelect({ level }: Props) {
     latmax: bounds.latmax,
   });
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState<readonly SearchResult[]>([]);
+  const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -117,7 +109,7 @@ export default function SearchSelect({ level }: Props) {
 
     const callback = (results?: readonly any[]) => {
       if (active) {
-        let newOptions: readonly SearchResult[] = [];
+        let newOptions: readonly LocationSearchResult[] = [];
 
         if (value) {
           newOptions = [value];
@@ -185,7 +177,10 @@ export default function SearchSelect({ level }: Props) {
     };
   }, [inputValue, value, fetch]);
 
-  const handleChange = (event: any, newValue: SearchResult | null) => {
+  const handleChange = (
+    event: SyntheticEvent<Element, Event>,
+    newValue: LocationSearchResult
+  ) => {
     setOptions(newValue ? [newValue, ...options] : options);
     setValue(newValue);
 
@@ -206,64 +201,22 @@ export default function SearchSelect({ level }: Props) {
     dispatch(setLevel(level));
   };
 
+  const handleInputChange = (
+    event: SyntheticEvent<Element, Event>,
+    newInputValue: string
+  ) => {
+    setInputValue(newInputValue);
+  };
+
   return (
     <Autocomplete
       id="search-select"
-      filterOptions={(x) => x}
-      options={options}
-      autoComplete
-      includeInputInList
-      filterSelectedOptions
       value={value}
-      noOptionsText={loading ? "Searching..." : "No results"}
-      classes={{ inputRoot: "!pl-3.5 !py-2", input: "!p-0" }}
-      onChange={handleChange}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Name"
-          fullWidth
-          InputLabelProps={{
-            className: clsx({ [inputLabel]: inputValue === "" }),
-          }}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? (
-                  <CircularProgress color="inherit" size={14} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      )}
-      renderOption={(props, option) => {
-        const matchesArray = match(option.label, inputValue);
-        const parsedOption = parse(option.label, matchesArray);
-
-        const parts = parsedOption.map((part, index) => (
-          <Box
-            key={index}
-            component="span"
-            sx={{ fontWeight: part.highlight ? "bold" : "regular" }}
-          >
-            {part.text}
-          </Box>
-        ));
-
-        return (
-          <li {...props} key={option.value}>
-            <Grid item sx={{ wordWrap: "break-word" }}>
-              {parts}
-            </Grid>
-          </li>
-        );
-      }}
+      inputValue={inputValue}
+      options={options}
+      loading={loading}
+      handleChange={handleChange}
+      handleInputChange={handleInputChange}
     />
   );
 }
