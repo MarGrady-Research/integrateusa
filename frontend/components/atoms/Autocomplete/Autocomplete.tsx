@@ -58,6 +58,7 @@ export default function AutocompleteComponent({
       includeInputInList
       filterSelectedOptions
       value={value}
+      inputValue={inputValue}
       noOptionsText={loading ? "Searching..." : "No results"}
       classes={{ inputRoot: "!pl-3.5 !py-2", input: "!p-0" }}
       onChange={handleChange}

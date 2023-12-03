@@ -40,7 +40,7 @@ export default function SearchSelect({ level }: Props) {
     lngmax: bounds.lngmax,
     latmax: bounds.latmax,
   });
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(selectedName);
   const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
 
   const [loading, setLoading] = useState(false);
