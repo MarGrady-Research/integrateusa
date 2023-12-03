@@ -65,7 +65,6 @@ export default function AutocompleteComponent({
       renderInput={(params) => (
         <TextField
           {...params}
-          X
           label={label}
           fullWidth
           placeholder={placeholder}

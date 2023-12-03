@@ -55,9 +55,20 @@ export default function SearchSelect({ level }: Props) {
         ) => {
           const url = `${levelSelectData[level].route}${input}`;
 
+          const cachedOption = sessionStorage.getItem(url);
+
+          if (cachedOption) {
+            const cachedOptionJSON = JSON.parse(cachedOption);
+            callback(cachedOptionJSON);
+            return;
+          }
+
           axios
             .get(url)
-            .then((res: any) => callback(res.data))
+            .then((res: any) => {
+              sessionStorage.setItem(url, JSON.stringify(res.data));
+              callback(res.data);
+            })
             .catch(() => callbackFailure());
         },
         400
