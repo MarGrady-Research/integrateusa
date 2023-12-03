@@ -39,6 +39,27 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
 
   const expandIcon = expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />;
 
+  const selects = (
+    <>
+      <div className="w-full mb-2 lg:mb-0">
+        <LevelSelect
+          omitSchools={omitSchools}
+          level={level}
+          handleLevelChange={handleLevelChange}
+        />
+      </div>
+      <div className="w-full mb-2 lg:mb-0">
+        <SearchSelect level={level} />
+      </div>
+      <div className="w-full mb-2 lg:mb-0">
+        <YearSelect />
+      </div>
+      <div className="w-full">
+        <GradeSelect />
+      </div>
+    </>
+  );
+
   return (
     <div className="shadow sticky top-0 z-10 bg-white">
       <div
@@ -48,14 +69,7 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
           "hidden lg:grid": !expanded,
         })}
       >
-        <LevelSelect
-          omitSchools={omitSchools}
-          level={level}
-          handleLevelChange={handleLevelChange}
-        />
-        <SearchSelect level={level} />
-        <YearSelect />
-        <GradeSelect />
+        {selects}
         <div>
           <Button
             onClick={getData}

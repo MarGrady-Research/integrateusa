@@ -43,7 +43,7 @@ export default function SelectComponent({
   const emptyInput = value === "";
 
   return (
-    <FormControl variant={variant}>
+    <FormControl variant={variant} className="w-full">
       {label && (
         <InputLabel
           id={inputLabel}
@@ -59,7 +59,7 @@ export default function SelectComponent({
         label={label}
         onChange={onChange}
         classes={{
-          select: "!py-2",
+          select: `!py-2 ${classes?.select}`,
           ...classes,
         }}
       >
