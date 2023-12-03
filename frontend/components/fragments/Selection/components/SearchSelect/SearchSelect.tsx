@@ -65,10 +65,17 @@ export default function SearchSelect({ level }: Props) {
   const fetch = useMemo(
     () =>
       debounce(
-        (input: string, callback: (results?: readonly any[]) => void) => {
+        (
+          input: string,
+          callback: (results?: readonly any[]) => void,
+          callbackFailure: () => void
+        ) => {
           const url = `${levelSelectData[level].route}${input}`;
 
-          axios.get(url).then((res: any) => callback(res.data));
+          axios
+            .get(url)
+            .then((res: any) => callback(res.data))
+            .catch(() => callbackFailure());
         },
         400
       ),
@@ -108,7 +115,7 @@ export default function SearchSelect({ level }: Props) {
 
     setLoading(true);
 
-    fetch(inputValue, (results?: readonly any[]) => {
+    const callback = (results?: readonly any[]) => {
       if (active) {
         let newOptions: readonly SearchResult[] = [];
 
@@ -165,7 +172,13 @@ export default function SearchSelect({ level }: Props) {
         setOptions(newOptions);
         setLoading(false);
       }
-    });
+    };
+
+    const callbackFailure = () => {
+      setLoading(false);
+    };
+
+    fetch(inputValue, callback, callbackFailure);
 
     return () => {
       active = false;
