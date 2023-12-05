@@ -41,6 +41,7 @@ export default function YearSelect() {
       label="Year"
       onChange={handleChange}
       options={options}
+      full
     />
   );
 }

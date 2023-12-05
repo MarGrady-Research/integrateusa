@@ -21,6 +21,7 @@ interface Props {
   }[];
   classes?: any;
   menuItemClasses?: any;
+  full?: boolean;
 }
 
 export default function SelectComponent({
@@ -31,6 +32,7 @@ export default function SelectComponent({
   options,
   variant = "outlined",
   classes,
+  full,
 }: Props) {
   const inputLabelId = `${id}-label`;
 
@@ -43,7 +45,7 @@ export default function SelectComponent({
   const emptyInput = value === "";
 
   return (
-    <FormControl variant={variant} className="w-full">
+    <FormControl variant={variant} className={clsx({ "w-full": full })}>
       {label && (
         <InputLabel
           id={inputLabel}

@@ -42,6 +42,7 @@ export default function LevelSelect({
       label="Level"
       onChange={handleChange}
       options={options}
+      full
     />
   );
 }

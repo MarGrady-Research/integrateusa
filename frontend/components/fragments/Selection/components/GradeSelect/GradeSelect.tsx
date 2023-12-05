@@ -31,6 +31,7 @@ export default function GradeSelect() {
       label="Grade"
       onChange={handleChange}
       options={options}
+      full
     />
   );
 }

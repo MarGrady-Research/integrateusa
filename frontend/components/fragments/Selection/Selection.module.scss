@@ -1,5 +1,9 @@
 @import "styles/constants.scss";
 
-.expandButton {
-  z-index: $drawerZIndex + 2;
+.drawerPaper {
+  padding-top: $navbarMobileHeight + 16px;
+
+  @screen sm {
+    padding-top: $navbarTabletHeight + 16px;
+  }
 }
