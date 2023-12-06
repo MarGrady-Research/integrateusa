@@ -19,7 +19,3 @@ export const unselectedLineColor = "#A9A9A9";
 export const districtBoundaryURL = "mapbox://theokaufman.45uz283x";
 export const countyBoundaryURL = "mapbox://theokaufman.6i9q4by5";
 export const stateBoundaryURL = "mapbox://theokaufman.a7l31auu";
-
-export const navbarDesktopHeight = 84;
-export const navbarTabletHeight = 108;
-export const navbarMobileHeight = 92;

@@ -5,6 +5,8 @@ import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
 import Select from "../../atoms/Select";
 
+import { useBreakpoint } from "../../../hooks";
+
 import {
   selectId,
   selectGrade,
@@ -17,6 +19,10 @@ interface Props {
   segData: SegData;
   year: number;
 }
+
+const navbarDesktopHeight = 84;
+const navbarTabletHeight = 108;
+const navbarMobileHeight = 92;
 
 const options = [
   {
@@ -67,6 +73,24 @@ export default function Segregation({ segData, year }: Props) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
+
+  const breakpoint = useBreakpoint();
+
+  let navbarHeight = 0;
+
+  switch (breakpoint) {
+    case "xs":
+      navbarHeight = navbarMobileHeight;
+      break;
+    case "sm":
+    case "md":
+      navbarHeight = navbarTabletHeight;
+      break;
+    case "lg":
+    case "xl":
+      navbarHeight = navbarDesktopHeight;
+      break;
+  }
 
   const [selected, setSelected] = useState(defaultOption);
 

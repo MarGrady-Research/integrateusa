@@ -17,10 +17,9 @@ import {
   otherColor,
 } from "../../../../../constants";
 
-import { useBreakpoint } from "../../../../../hooks";
-
 interface Props {
   step: ExposureBarStep;
+  onTablet: boolean;
 }
 
 ChartJS.register(
@@ -85,7 +84,7 @@ const barData = [
   },
 ];
 
-export default function ExposureBar({ step }: Props) {
+export default function ExposureBar({ step, onTablet }: Props) {
   const isOnFirstStep = step === ExposureBarStep.StepOne;
 
   const barDataFiltered = isOnFirstStep
@@ -105,10 +104,6 @@ export default function ExposureBar({ step }: Props) {
     labels,
     datasets: barDataFiltered,
   };
-
-  const breakpoint = useBreakpoint();
-  const onTablet =
-    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
 
   const chartLabels = onTablet ? mobileLabels : labels;
 

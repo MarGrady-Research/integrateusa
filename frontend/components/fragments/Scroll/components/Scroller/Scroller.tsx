@@ -11,7 +11,7 @@ import { useBreakpoint } from "../../../../../hooks";
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
 
-const charts = (currentStepIndex) => {
+const charts = (currentStepIndex, onTablet) => {
   const showDistrictPie = currentStepIndex === 0 || currentStepIndex === -1;
   const showDistrictBar = currentStepIndex === 1;
   const showExposureBar = currentStepIndex === 2 || currentStepIndex === 3;
@@ -33,7 +33,7 @@ const charts = (currentStepIndex) => {
         ? ExposureBarStep.StepOne
         : ExposureBarStep.StepTwo;
 
-    return <ExposureBar step={step} />;
+    return <ExposureBar step={step} onTablet={onTablet} />;
   }
   if (showIntegrationLine) {
     let step;
@@ -53,7 +53,7 @@ const charts = (currentStepIndex) => {
         break;
     }
 
-    return <IntegrationLine step={step} />;
+    return <IntegrationLine step={step} onTablet={onTablet} />;
   }
 };
 
@@ -223,7 +223,7 @@ export default function Scroller() {
       </div>
       <div className={graphic}>
         <div className="w-full lg:w-3/4 xl:w-2/3 pl-0 md:pl-10 lg:p-0 h-1/2 md:h-3/5">
-          {charts(currentStepIndex)}
+          {charts(currentStepIndex, onTablet)}
         </div>
       </div>
     </div>

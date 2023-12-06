@@ -15,12 +15,11 @@ import {
   unselectedLineColor,
 } from "../../../../../constants";
 
-import { useBreakpoint } from "../../../../../hooks";
-
 import { fullCompData, compDataNormalized, ids } from "./data";
 
 interface Props {
   step: IntegrationLineStep;
+  onTablet: boolean;
 }
 
 ChartJS.register(
@@ -102,13 +101,10 @@ const getLines = (data, lineWidth = 1) =>
     order: id.dist_id_alt === distAlt ? 0 : 1,
   }));
 
-export default function IntegrationLine({ step }: Props) {
+export default function IntegrationLine({ step, onTablet }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
-  const breakpoint = useBreakpoint();
-  const onTablet =
-    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
   const lineWidth = onTablet ? 1 : 2;
 
   let lineData = [];
