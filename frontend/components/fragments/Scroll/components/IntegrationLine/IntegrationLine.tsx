@@ -15,7 +15,7 @@ import {
   unselectedLineColor,
 } from "../../../../../constants";
 
-import { useDevice } from "../../../../../hooks";
+import { useBreakpoint } from "../../../../../hooks";
 
 import { fullCompData, compDataNormalized, ids } from "./data";
 
@@ -106,8 +106,10 @@ export default function IntegrationLine({ step }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
-  const device = useDevice();
-  const lineWidth = device === "Tablet" ? 1 : 2;
+  const breakpoint = useBreakpoint();
+  const onTablet =
+    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
+  const lineWidth = onTablet ? 1 : 2;
 
   let lineData = [];
 

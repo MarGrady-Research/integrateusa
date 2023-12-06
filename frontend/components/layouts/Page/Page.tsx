@@ -8,7 +8,7 @@ interface Props {
 
 export default function Page({ children, isLoading = false }: Props) {
   return (
-    <div className="container mx-auto p-5 font-sans">
+    <div className="container mx-auto p-5 pt-12 lg:pt-5 font-sans">
       {isLoading ? (
         <div className="pt-5">
           <Loader />

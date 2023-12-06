@@ -1,1 +1,1 @@
-export { useDevice } from "./useDevice";
+export { useBreakpoint } from "./useBreakpoint";

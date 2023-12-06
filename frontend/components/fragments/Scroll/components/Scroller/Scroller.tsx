@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 
 import DistrictPie from "../DistrictPie";
@@ -6,7 +6,7 @@ import DistrictBar from "../DistrictBar";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-import { useDevice } from "../../../../../hooks";
+import { useBreakpoint } from "../../../../../hooks";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
@@ -68,8 +68,10 @@ export default function Scroller() {
     data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
   };
 
-  const device = useDevice();
-  const scrollOffset = device === "Tablet" ? 0.85 : 0.5;
+  const breakpoint = useBreakpoint();
+  const onTablet =
+    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
+  const scrollOffset = onTablet ? 0.85 : 0.5;
 
   return (
     <div className="px-3 sm:px-5 md:px-10 lg:px-15 xl:px-20 flex flex-col md:flex-row">

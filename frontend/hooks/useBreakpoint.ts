@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import resolveConfig from "tailwindcss/resolveConfig";
-import { Config, ScreensConfig } from "tailwindcss/types/config";
+import { Config } from "tailwindcss/types/config";
 
 import tailwindConfig from "../tailwind.config";
 
@@ -14,31 +14,43 @@ const breakpoints = fullConfig?.theme?.screens || {
   xl: "1280px",
 };
 
-const breakpointsNumbers = { md: 0 };
+const breakpointsNumbers = { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 };
 
 for (const bp in breakpoints) {
   breakpointsNumbers[bp] = parseInt(breakpoints[bp].slice(0, -2));
 }
 
-type Device = "Tablet" | "Desktop" | "Initial";
+type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 
-export function useDevice() {
-  const [device, setDevice] = useState("Initial" as Device);
+export function useBreakpoint() {
+  const [breakpoint, setBreakpoint] = useState(null as Breakpoint);
 
-  const { md } = breakpointsNumbers;
+  const { xs, sm, md, lg } = breakpointsNumbers;
 
   useEffect(() => {
-    const returnDevice = (): Device => {
-      if (window.innerWidth < md) {
-        return "Tablet";
+    const returnBreakpoint = (): Breakpoint => {
+      if (window.innerWidth < xs) {
+        return "xs";
       }
 
-      return "Desktop";
+      if (window.innerWidth < sm) {
+        return "sm";
+      }
+
+      if (window.innerWidth < md) {
+        return "md";
+      }
+
+      if (window.innerWidth < lg) {
+        return "lg";
+      }
+
+      return "xl";
     };
 
     const handleResize = () => {
-      const currentDevice = returnDevice();
-      setDevice(currentDevice);
+      const currentBreakpoint = returnBreakpoint();
+      setBreakpoint(currentBreakpoint);
     };
 
     handleResize();
@@ -49,5 +61,5 @@ export function useDevice() {
     };
   }, []);
 
-  return device;
+  return breakpoint;
 }

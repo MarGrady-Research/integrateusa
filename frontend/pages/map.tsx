@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import clsx from "clsx";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
 import DemographicMap from "../components/fragments/Map";
-import { useDevice } from "../hooks";
+
+import { useBreakpoint } from "../hooks";
 
 // @ts-ignore
 import { mapHolder } from "./Map.module.scss";
 
 export default function Map() {
-  const device = useDevice();
-  const onSmallerScreen = device === "Tablet";
+  const breakpoint = useBreakpoint();
+  const onSmallerScreen =
+    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
 
   return (
     <>

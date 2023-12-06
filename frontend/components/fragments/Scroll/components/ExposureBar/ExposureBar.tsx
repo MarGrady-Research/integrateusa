@@ -17,7 +17,7 @@ import {
   otherColor,
 } from "../../../../../constants";
 
-import { useDevice } from "../../../../../hooks";
+import { useBreakpoint } from "../../../../../hooks";
 
 interface Props {
   step: ExposureBarStep;
@@ -106,8 +106,9 @@ export default function ExposureBar({ step }: Props) {
     datasets: barDataFiltered,
   };
 
-  const device = useDevice();
-  const onTablet = device === "Tablet";
+  const breakpoint = useBreakpoint();
+  const onTablet =
+    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
 
   const chartLabels = onTablet ? mobileLabels : labels;
 
