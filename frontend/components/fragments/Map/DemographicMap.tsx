@@ -134,7 +134,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const LayerProps = {
     id: "schools",
     type: "circle" as any,
-    source: "schools-source",
+    source: schoolsSourceId,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
       "circle-color": [
@@ -404,6 +404,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     ) : (
       <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
     );
+
+  console.log(mapboxData);
 
   return (
     <>

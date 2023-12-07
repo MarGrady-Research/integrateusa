@@ -8,6 +8,7 @@ import {
   stateBoundaryURL,
   countyBoundaryURL,
   districtBoundaryURL,
+  defaultMapSchoolColor,
 } from "../../../../../constants";
 
 import { Bounds } from "../../../../../interfaces";
@@ -17,8 +18,28 @@ interface Props {
   bounds: Bounds;
 }
 
+const schoolsSourceId = "schools-source";
+
 export default function InsetMap({ id, bounds }: Props) {
   const mapRef = useRef();
+
+  const { latmin, latmax, lngmin, lngmax } = bounds;
+
+  const lat = (latmin + latmax) / 2;
+  const lng = (lngmin + lngmax) / 2;
+
+  const mapboxData = {
+    type: "FeatureCollection" as "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
+      },
+    ] as any,
+  };
 
   const onLoad = useCallback(() => {
     const mapBounds = [
@@ -65,6 +86,18 @@ export default function InsetMap({ id, bounds }: Props) {
     filter: ["==", "STUSPS", id],
   };
 
+  const LayerProps = {
+    id: "schools",
+    type: "circle" as any,
+    source: schoolsSourceId,
+    paint: {
+      "circle-radius": 3.5,
+      "circle-color": defaultMapSchoolColor,
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "#000",
+    } as any,
+  };
+
   return (
     <Map
       ref={mapRef}
@@ -90,6 +123,9 @@ export default function InsetMap({ id, bounds }: Props) {
       </Source>
       <Source id="state-boundary-source" type="vector" url={stateBoundaryURL}>
         <Layer {...stateLayer} />
+      </Source>
+      <Source id={schoolsSourceId} type="geojson" data={mapboxData} generateId>
+        <Layer {...LayerProps} />
       </Source>
     </Map>
   );

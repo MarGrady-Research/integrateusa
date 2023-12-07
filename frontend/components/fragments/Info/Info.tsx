@@ -6,7 +6,13 @@ import clsx from "clsx";
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
-import { selectId, selectBounds } from "../../../store/selectSlice";
+
+import {
+  selectId,
+  selectBounds,
+  selectLevel,
+} from "../../../store/selectSlice";
+import { Level } from "../../../interfaces";
 
 // @ts-ignore
 import { container } from "./Info.module.scss";
@@ -25,8 +31,10 @@ interface Props {
 export default function Info({ infoData, title }: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
+  const level = useSelector(selectLevel);
 
   const showTitle = infoData.length > 0 && !!title;
+  const isSchool = level === Level.School;
 
   return (
     <>
@@ -43,10 +51,12 @@ export default function Info({ infoData, title }: Props) {
           <PieChart infoData={infoData} />
         </div>
       </div>
-      <div className="mb-10">
-        <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-        <BarChart infoData={infoData} />
-      </div>
+      {!isSchool && (
+        <div className="mb-10">
+          <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
+          <BarChart infoData={infoData} />
+        </div>
+      )}
     </>
   );
 }
