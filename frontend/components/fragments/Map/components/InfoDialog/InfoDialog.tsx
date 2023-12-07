@@ -16,27 +16,55 @@ interface Props {
   handleClose: () => void;
   name: string;
   children: React.ReactNode;
+  infoUrlParams: string;
+  segUrlParams: string;
 }
 
-const InfoDialog = memo(({ open, handleClose, name, children }: Props) => {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+const InfoDialog = memo(
+  ({
+    open,
+    handleClose,
+    name,
+    children,
+    infoUrlParams,
+    segUrlParams,
+  }: Props) => {
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  return (
-    <Dialog
-      onClose={handleClose}
-      open={open}
-      fullWidth
-      fullScreen={fullScreen}
-      classes={{ root: "font-sans", paper }}
-    >
-      <DialogTitle className="text-center !font-semibold">{name}</DialogTitle>
-      <DialogContent>{children}</DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
-  );
-});
+    const infoUrl = `/info${infoUrlParams}`;
+    const segUrl = `/segregation${segUrlParams}`;
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        open={open}
+        fullWidth
+        fullScreen={fullScreen}
+        classes={{ root: "font-sans", paper }}
+      >
+        <DialogTitle className="text-center !font-semibold">{name}</DialogTitle>
+        <DialogContent>
+          {children}
+          <div className="flex pt-10 justify-between">
+            <Link href={infoUrl}>
+              <a className="font-semibold text-primary hover:underline">
+                Demographic Info
+              </a>
+            </Link>
+            <Link href={segUrl}>
+              <a className="font-semibold text-primary hover:underline">
+                Segregation
+              </a>
+            </Link>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+);
 
 export default InfoDialog;

@@ -331,19 +331,79 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const showPopup = entityName && isHovering;
 
-  const pie = (small?: boolean) =>
-    schoolName ? (
-      <SchoolPie hoverInfo={hoverInfo} small={small} />
-    ) : (
-      <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
-    );
-
   const mapboxData = {
     type: "FeatureCollection" as "FeatureCollection",
     features: mapData,
   };
 
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
+
+  let infoUrlParams = "";
+  let segUrlParams = "";
+
+  if (areaName) {
+    const { GEOID, STUSPS, NAME } = hoverInfo.feature.properties;
+
+    let level = "";
+    let id = "";
+
+    if (GEOID.length === 5) {
+      id = GEOID;
+      level = Level.County.toString();
+    } else if (GEOID.length === 7) {
+      id = GEOID;
+      level = Level.District.toString();
+    } else if (STUSPS) {
+      id = STUSPS;
+      level = Level.State.toString();
+    }
+
+    const params = new URLSearchParams({});
+
+    if (id) {
+      params.append("id", id);
+    }
+
+    if (level) {
+      params.append("level", level);
+    }
+
+    if (NAME) {
+      params.append("name", NAME);
+    }
+
+    infoUrlParams = `/?${params.toString()}`;
+    segUrlParams = `/?${params.toString()}`;
+  } else if (schoolName) {
+    const { dist_id, dist_name, state_abb } = hoverInfo.feature.properties;
+
+    const level = Level.District.toString();
+    const distId = dist_id;
+    const distName = `${dist_name} (${state_abb})`;
+
+    const segParams = new URLSearchParams({});
+
+    if (distId) {
+      segParams.append("id", distId);
+    }
+
+    if (level) {
+      segParams.append("level", level);
+    }
+
+    if (distName) {
+      segParams.append("name", distName);
+    }
+
+    segUrlParams = `/?${segParams.toString()}`;
+  }
+
+  const pie = (small?: boolean) =>
+    schoolName ? (
+      <SchoolPie hoverInfo={hoverInfo} small={small} />
+    ) : (
+      <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
+    );
 
   return (
     <>
@@ -419,6 +479,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           name={entityName}
           open={infoDialogOpen}
           handleClose={toggleInfoDialog}
+          infoUrlParams={infoUrlParams}
+          segUrlParams={segUrlParams}
         >
           {pie()}
         </InfoDialog>
