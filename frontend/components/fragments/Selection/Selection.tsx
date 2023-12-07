@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { useSelector } from "react-redux";
+import { useWindowScroll } from "@uidotdev/usehooks";
+import clsx from "clsx";
 
 import LevelSelect from "./components/LevelSelect";
 import SearchSelect from "./components/SearchSelect";
@@ -13,7 +14,12 @@ import GradeSelect from "./components/GradeSelect";
 
 import { selectLevel } from "../../../store/selectSlice";
 
+import { useBreakpoint } from "../../../hooks";
+
 import { Level } from "../../../interfaces";
+
+// @ts-ignore
+import { animate } from "./Selection.module.scss";
 
 interface Props {
   getData: () => void;
@@ -21,7 +27,33 @@ interface Props {
   omitSchools?: boolean;
 }
 
+const navbarDesktopHeight = 84;
+const navbarTabletHeight = 108;
+const navbarMobileHeight = 92;
+
+const selectsHeight = 224;
+
 export default function Selection({ getData, isLoading, omitSchools }: Props) {
+  const [{ y }] = useWindowScroll();
+
+  const breakpoint = useBreakpoint();
+
+  let navbarHeight = 0;
+
+  switch (breakpoint) {
+    case "xs":
+      navbarHeight = navbarMobileHeight;
+      break;
+    case "sm":
+    case "md":
+      navbarHeight = navbarTabletHeight;
+      break;
+    case "lg":
+    case "xl":
+      navbarHeight = navbarDesktopHeight;
+      break;
+  }
+
   const storeLevel = useSelector(selectLevel);
 
   const [level, setLevel] = useState(storeLevel);
@@ -34,7 +66,8 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded((e) => !e);
 
-  const expandIcon = expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />;
+  const topOffset = Math.max(0, navbarHeight - y);
+  const translateY = expanded ? 0 : -selectsHeight;
 
   const selects = (
     <>
@@ -51,7 +84,7 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
       <div className="w-full mb-3 lg:mb-0">
         <YearSelect />
       </div>
-      <div className="w-full mb-3 lg:mb-0">
+      <div className="w-full mb-0">
         <GradeSelect />
       </div>
     </>
@@ -74,10 +107,16 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
           </div>
         </div>
       </div>
-      <div className="lg:hidden shadow bg-white fixed w-full">
+      <div
+        className={clsx("lg:hidden shadow bg-white fixed w-full z-10", animate)}
+        style={{ top: topOffset, transform: `translateY(${translateY}px)` }}
+      >
+        <div className="p-3 pt-5">{selects}</div>
         <div className="flex justify-center p-1">
           <IconButton onClick={toggleExpanded}>
-            <ExpandMoreIcon />
+            <ExpandMoreIcon
+              className={clsx({ "rotate-180": expanded, [animate]: true })}
+            />
           </IconButton>
         </div>
       </div>
