@@ -26,7 +26,7 @@ export default function SchoolInfo({ infoData }: Props) {
         <b>Level:</b> {level}
       </p>
       <p>
-        <b>Total Enrolment:</b> {tot_enr}
+        <b>Enrollment:</b> {tot_enr}
       </p>
       <p>
         <b>State:</b> {state_abb}
