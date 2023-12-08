@@ -28,7 +28,6 @@ export default function InfoPage() {
   const [infoData, setInfoData] = useState([] as InfoData);
   const [trendData, setTrendData] = useState([] as TrendData);
   const [isLoading, setIsLoading] = useState(true);
-  const [infoTitle, setInfoTitle] = useState(title);
 
   const getData = () => {
     if (year != undefined && grade != undefined && id != undefined) {
@@ -66,7 +65,6 @@ export default function InfoPage() {
         .then((values) => {
           setInfoData(values[0].data);
           setTrendData(values[1].data);
-          setInfoTitle(title);
           setIsLoading(false);
         })
         .catch(() => {
@@ -88,7 +86,7 @@ export default function InfoPage() {
       <Selection getData={getData} isLoading={isLoading} />
       <Page isLoading={isLoading}>
         <div className="mx-auto mt-5">
-          <Info infoData={infoData} title={infoTitle} />
+          <Info infoData={infoData} title={title} />
           <Trends trendData={trendData} />
         </div>
       </Page>

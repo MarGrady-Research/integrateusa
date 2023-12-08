@@ -93,18 +93,8 @@ export default function Selection({ getData, isLoading, omitSchools }: Props) {
   return (
     <>
       <div className="hidden lg:block shadow sticky top-0 z-10 bg-white">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-sans hidden lg:grid">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-sans hidden lg:grid">
           {selects}
-          <div>
-            <Button
-              onClick={getData}
-              disabled={isLoading}
-              variant="contained"
-              className="h-full"
-            >
-              <SearchIcon />
-            </Button>
-          </div>
         </div>
       </div>
       <div

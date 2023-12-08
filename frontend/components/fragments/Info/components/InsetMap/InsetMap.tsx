@@ -11,16 +11,17 @@ import {
   defaultMapSchoolColor,
 } from "../../../../../constants";
 
-import { Bounds } from "../../../../../interfaces";
+import { Bounds, Level } from "../../../../../interfaces";
 
 interface Props {
   id: string;
   bounds: Bounds;
+  level: Level;
 }
 
 const schoolsSourceId = "schools-source";
 
-export default function InsetMap({ id, bounds }: Props) {
+export default function InsetMap({ id, bounds, level }: Props) {
   const mapRef = useRef();
 
   const { latmin, latmax, lngmin, lngmax } = bounds;
@@ -40,6 +41,8 @@ export default function InsetMap({ id, bounds }: Props) {
       },
     ] as any,
   };
+
+  const isSchool = level === Level.School;
 
   const onLoad = useCallback(() => {
     const mapBounds = [
@@ -99,34 +102,47 @@ export default function InsetMap({ id, bounds }: Props) {
   };
 
   return (
-    <Map
-      ref={mapRef}
-      initialViewState={{
-        longitude: -100,
-        latitude: 40,
-        zoom: 2.5,
-      }}
-      style={{ width: "100%", height: "100%" }}
-      mapStyle="mapbox://styles/mapbox/light-v10"
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      onLoad={onLoad}
-    >
-      <Source
-        id="district-boundary-source"
-        type="vector"
-        url={districtBoundaryURL}
+    <div className="h-full w-full shadow border border-gray-200">
+      <Map
+        ref={mapRef}
+        initialViewState={{
+          longitude: -100,
+          latitude: 40,
+          zoom: 2.5,
+        }}
+        style={{ width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/light-v10"
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        onLoad={onLoad}
       >
-        <Layer {...districtLayer} />
-      </Source>
-      <Source id="county-boundary-source" type="vector" url={countyBoundaryURL}>
-        <Layer {...countyLayer} />
-      </Source>
-      <Source id="state-boundary-source" type="vector" url={stateBoundaryURL}>
-        <Layer {...stateLayer} />
-      </Source>
-      <Source id={schoolsSourceId} type="geojson" data={mapboxData} generateId>
-        <Layer {...LayerProps} />
-      </Source>
-    </Map>
+        <Source
+          id="district-boundary-source"
+          type="vector"
+          url={districtBoundaryURL}
+        >
+          <Layer {...districtLayer} />
+        </Source>
+        <Source
+          id="county-boundary-source"
+          type="vector"
+          url={countyBoundaryURL}
+        >
+          <Layer {...countyLayer} />
+        </Source>
+        <Source id="state-boundary-source" type="vector" url={stateBoundaryURL}>
+          <Layer {...stateLayer} />
+        </Source>
+        {isSchool && (
+          <Source
+            id={schoolsSourceId}
+            type="geojson"
+            data={mapboxData}
+            generateId
+          >
+            <Layer {...LayerProps} />
+          </Source>
+        )}
+      </Map>
+    </div>
   );
 }
