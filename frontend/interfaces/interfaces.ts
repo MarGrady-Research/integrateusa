@@ -16,6 +16,7 @@ interface School {
   hispanic: number;
   white: number;
   other: number;
+  state_abb: string;
   level: SchoolType;
 }
 

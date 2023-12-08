@@ -89,6 +89,14 @@ export default function SchoolLevelTable({ infoData }: Props) {
     );
   };
 
+  if (infoData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full shadow border border-gray-200">
+        No data available
+      </div>
+    );
+  }
+
   return (
     <div className="shadow overflow-x-auto border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200">

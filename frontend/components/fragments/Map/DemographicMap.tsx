@@ -405,8 +405,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
     );
 
-  console.log(mapboxData);
-
   return (
     <>
       <Map

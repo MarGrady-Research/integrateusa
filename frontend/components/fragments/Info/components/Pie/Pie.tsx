@@ -72,6 +72,14 @@ const options = {
 };
 
 export default function PieChart({ infoData }: Props) {
+  if (infoData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        No data available
+      </div>
+    );
+  }
+
   const pieData = getPieData(infoData);
 
   const data = {

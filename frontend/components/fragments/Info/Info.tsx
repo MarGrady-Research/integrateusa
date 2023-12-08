@@ -6,6 +6,7 @@ import clsx from "clsx";
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
+import SchoolInfo from "./components/SchoolInfo";
 
 import {
   selectId,
@@ -45,7 +46,11 @@ export default function Info({ infoData, title }: Props) {
           <InsetMap id={id} bounds={bounds} />
         </div>
         <div className={clsx(container, "col-span-2")}>
-          <SchoolLevelTable infoData={infoData} />
+          {isSchool ? (
+            <SchoolInfo infoData={infoData} />
+          ) : (
+            <SchoolLevelTable infoData={infoData} />
+          )}
         </div>
         <div className={container}>
           <PieChart infoData={infoData} />
