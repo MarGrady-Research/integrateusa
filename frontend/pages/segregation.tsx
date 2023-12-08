@@ -69,7 +69,7 @@ export default function SegregationPage() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <Selection getData={getData} omitSchools />
+      <Selection omitSchools />
       <Page isLoading={isLoading}>
         <div className="mx-auto mt-5">
           <Segregation segData={segData} year={year} />

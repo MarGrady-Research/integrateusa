@@ -20,7 +20,6 @@ import { Level } from "../../../interfaces";
 import { animate } from "./Selection.module.scss";
 
 interface Props {
-  getData: () => void;
   omitSchools?: boolean;
 }
 
@@ -30,7 +29,7 @@ const navbarMobileHeight = 92;
 
 const selectsHeight = 224;
 
-export default function Selection({ getData, omitSchools }: Props) {
+export default function Selection({ omitSchools }: Props) {
   const [{ y }] = useWindowScroll();
 
   const breakpoint = useBreakpoint();

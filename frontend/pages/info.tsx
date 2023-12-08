@@ -30,9 +30,52 @@ export default function InfoPage() {
   const [isInfoDataLoading, setIsInfoDataLoading] = useState(true);
   const [isTrendDataLoading, setIsTrendDataLoading] = useState(true);
 
-  const getData = () => {
-    let levelTable;
-    let levelId;
+  useEffect(() => {
+    let active = true;
+
+    let levelId = "";
+
+    switch (level) {
+      case Level.School:
+        levelId = "nces_id";
+        break;
+      case Level.District:
+        levelId = "dist_id";
+        break;
+      case Level.County:
+        levelId = "county_id";
+        break;
+      case Level.State:
+        levelId = "state_abb";
+        break;
+    }
+
+    const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
+
+    setIsInfoDataLoading(true);
+
+    axios
+      .get(infoUrl)
+      .then((res) => {
+        if (active) {
+          setInfoData(res.data);
+          setIsInfoDataLoading(false);
+        }
+      })
+      .catch(() => {
+        setIsInfoDataLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [id, level, grade, year]);
+
+  useEffect(() => {
+    let active = true;
+
+    let levelTable = "";
+    let levelId = "";
 
     switch (level) {
       case Level.School:
@@ -53,36 +96,26 @@ export default function InfoPage() {
         break;
     }
 
-    const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
-    setIsInfoDataLoading(true);
     setIsTrendDataLoading(true);
-
-    axios
-      .get(infoUrl)
-      .then((res) => {
-        setInfoData(res.data);
-        setIsInfoDataLoading(false);
-      })
-      .catch(() => {
-        setIsInfoDataLoading(false);
-      });
 
     axios
       .get(trendUrl)
       .then((res) => {
-        setTrendData(res.data);
-        setIsTrendDataLoading(false);
+        if (active) {
+          setTrendData(res.data);
+          setIsTrendDataLoading(false);
+        }
       })
       .catch(() => {
         setIsTrendDataLoading(false);
       });
-  };
 
-  useEffect(() => {
-    getData();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [id, level]);
 
   return (
     <>
@@ -90,7 +123,7 @@ export default function InfoPage() {
         <link rel="icon" href="/mg_logo_cropped.png" />
       </Head>
       <Header />
-      <Selection getData={getData} />
+      <Selection />
       <Page>
         <div className="mx-auto mt-5">
           <Info
