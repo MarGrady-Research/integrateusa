@@ -13,7 +13,7 @@ import {
   setId,
   setSelectedName,
   setBounds,
-  setLevel,
+  setLevelAndId,
 } from "../../../../../store/selectSlice";
 
 import { levelSelectData } from "../../data";
@@ -190,7 +190,7 @@ export default function SearchSelect({ level }: Props) {
       return;
     }
 
-    dispatch(setId(newValue.value));
+    dispatch(setLevelAndId({ level, id: newValue.value }));
     dispatch(setSelectedName(newValue.label));
     dispatch(
       setBounds({
@@ -200,7 +200,6 @@ export default function SearchSelect({ level }: Props) {
         latmax: newValue.latmax,
       })
     );
-    dispatch(setLevel(level));
   };
 
   const handleInputChange = (

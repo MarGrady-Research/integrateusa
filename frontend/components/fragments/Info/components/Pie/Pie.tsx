@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import Skeleton from "@mui/material/Skeleton";
 import { Pie } from "react-chartjs-2";
 
 import { legendMargin } from "../../../../../charts";
+
 import {
   asianColor,
   blackColor,
@@ -10,12 +12,17 @@ import {
   whiteColor,
   otherColor,
 } from "../../../../../constants";
+
 import { InfoData } from "../../../../../interfaces";
+
+// @ts-ignore
+import { pieLegendSkeleton } from "./Pie.module.scss";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
   infoData: InfoData;
+  isLoading: boolean;
 }
 
 const getPieData = (infoData: InfoData) => {
@@ -55,6 +62,7 @@ const getPieData = (infoData: InfoData) => {
 const labels = ["Asian", "Black", "Hispanic", "White", "Other"];
 
 const options = {
+  animation: false,
   reponsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -71,7 +79,54 @@ const options = {
   },
 };
 
-export default function PieChart({ infoData }: Props) {
+export default function PieChart({ infoData, isLoading }: Props) {
+  const ref = useRef(null);
+
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    setWidth(ref.current.clientWidth);
+    setHeight(ref.current.clientHeight);
+  }, []);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      if (!ref.current) {
+        return;
+      }
+
+      setWidth(ref.current.clientWidth);
+      setHeight(ref.current.clientHeight);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
+  if (isLoading) {
+    const circleDiameter = Math.min(height, width);
+    return (
+      <div className="flex flex-col  items-center h-full">
+        <Skeleton variant="rectangular" className={pieLegendSkeleton} />
+        <div className="flex-1 w-full flex justify-center" ref={ref}>
+          <Skeleton
+            variant="circular"
+            width={circleDiameter}
+            height={circleDiameter}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (infoData.length === 0) {
     return (
       <div className="flex items-center justify-center h-full">

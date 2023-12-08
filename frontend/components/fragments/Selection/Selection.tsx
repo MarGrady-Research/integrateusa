@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { useSelector } from "react-redux";
 import { useWindowScroll } from "@uidotdev/usehooks";
@@ -23,7 +21,6 @@ import { animate } from "./Selection.module.scss";
 
 interface Props {
   getData: () => void;
-  isLoading: boolean;
   omitSchools?: boolean;
 }
 
@@ -33,7 +30,7 @@ const navbarMobileHeight = 92;
 
 const selectsHeight = 224;
 
-export default function Selection({ getData, isLoading, omitSchools }: Props) {
+export default function Selection({ getData, omitSchools }: Props) {
   const [{ y }] = useWindowScroll();
 
   const breakpoint = useBreakpoint();

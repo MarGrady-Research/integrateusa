@@ -35,8 +35,9 @@ export const selectSlice = createSlice({
   name: "select",
   initialState,
   reducers: {
-    setLevel(state, action) {
-      state.level = action.payload;
+    setLevelAndId(state, action) {
+      state.level = action.payload.level;
+      state.id = action.payload.id;
     },
     setYear(state, action) {
       state.year = action.payload;
@@ -71,7 +72,7 @@ export const selectSlice = createSlice({
 });
 
 export const {
-  setLevel,
+  setLevelAndId,
   setYear,
   setGrade,
   setId,

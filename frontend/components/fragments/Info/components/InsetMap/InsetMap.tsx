@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import Map, { Source, Layer } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -44,7 +44,11 @@ export default function InsetMap({ id, bounds, level }: Props) {
 
   const isSchool = level === Level.School;
 
-  const onLoad = useCallback(() => {
+  const zoomToLocation = useCallback(() => {
+    if (!mapRef.current as any) {
+      return;
+    }
+
     const mapBounds = [
       [bounds.lngmin, bounds.latmin],
       [bounds.lngmax, bounds.latmax],
@@ -54,6 +58,10 @@ export default function InsetMap({ id, bounds, level }: Props) {
       padding: 25,
       duration: 2000,
     });
+  }, [bounds]);
+
+  useEffect(() => {
+    zoomToLocation();
   }, [bounds]);
 
   const districtLayer = {
@@ -113,7 +121,7 @@ export default function InsetMap({ id, bounds, level }: Props) {
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/light-v10"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        onLoad={onLoad}
+        onLoad={zoomToLocation}
       >
         <Source
           id="district-boundary-source"
