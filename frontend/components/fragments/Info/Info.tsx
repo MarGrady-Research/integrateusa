@@ -48,10 +48,7 @@ export default function Info({ infoData, title, isLoading }: Props) {
         </div>
         <div className={clsx(tableContainer, "col-span-2")}>
           {isLoading ? (
-            <Skeleton
-              variant="rectangular"
-              className="!h-full w-full shadow border border-gray-200"
-            />
+            <Skeleton variant="rectangular" className="!h-full w-full" />
           ) : isSchool ? (
             <SchoolInfo infoData={infoData} />
           ) : (

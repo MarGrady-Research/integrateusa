@@ -48,6 +48,7 @@ export default function Trends({ trendData, isLoading }: Props) {
         trendData={trendData}
         selectedGrade={grade}
         selectedYear={year}
+        isLoading={isLoading}
       />
     </>
   );

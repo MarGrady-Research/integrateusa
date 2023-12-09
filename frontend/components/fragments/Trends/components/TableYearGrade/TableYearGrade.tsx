@@ -1,25 +1,32 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
 import { TrendData } from "../../../../../interfaces";
 
 // @ts-ignore
-import { headRow, contentRow } from "./TableYearGrade.module.scss";
+import { headRow, contentRow, container } from "./TableYearGrade.module.scss";
 
 interface Props {
   trendData: TrendData;
   selectedGrade: string;
   selectedYear: number;
+  isLoading: boolean;
 }
 
 export default function TableYearGrade({
   trendData,
   selectedGrade,
   selectedYear,
+  isLoading,
 }: Props) {
+  if (isLoading) {
+    return <Skeleton variant="rectangular" className={container} />;
+  }
+
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
