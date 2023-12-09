@@ -31,7 +31,7 @@ export default function InfoPage() {
   const [isTrendDataLoading, setIsTrendDataLoading] = useState(true);
 
   useEffect(() => {
-    let active = true;
+    const abortController = new AbortController();
 
     let levelId = "";
 
@@ -55,24 +55,24 @@ export default function InfoPage() {
     setIsInfoDataLoading(true);
 
     axios
-      .get(infoUrl)
+      .get(infoUrl, { signal: abortController.signal })
       .then((res) => {
-        if (active) {
-          setInfoData(res.data);
+        setInfoData(res.data);
+        setIsInfoDataLoading(false);
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
           setIsInfoDataLoading(false);
         }
-      })
-      .catch(() => {
-        setIsInfoDataLoading(false);
       });
 
     return () => {
-      active = false;
+      abortController.abort();
     };
   }, [id, level, grade, year]);
 
   useEffect(() => {
-    let active = true;
+    const abortController = new AbortController();
 
     let levelTable = "";
     let levelId = "";
@@ -103,17 +103,17 @@ export default function InfoPage() {
     axios
       .get(trendUrl)
       .then((res) => {
-        if (active) {
-          setTrendData(res.data);
+        setTrendData(res.data);
+        setIsTrendDataLoading(false);
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
           setIsTrendDataLoading(false);
         }
-      })
-      .catch(() => {
-        setIsTrendDataLoading(false);
       });
 
     return () => {
-      active = false;
+      abortController.abort();
     };
   }, [id, level]);
 
