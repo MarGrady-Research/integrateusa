@@ -25,7 +25,13 @@ export default function SegregationPage() {
   const [segData, setSegData] = useState([] as SegData);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getData = () => {
+  useEffect(() => {
+    if (level === Level.School) {
+      dispatch(restoreInitialState());
+    }
+
+    const abortController = new AbortController();
+
     let idlevel;
 
     switch (level) {
@@ -50,18 +56,16 @@ export default function SegregationPage() {
         setSegData(res.data);
         setIsLoading(false);
       })
-      .catch(() => {
-        setIsLoading(false);
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          setIsLoading(false);
+        }
       });
-  };
 
-  useEffect(() => {
-    if (level === Level.School) {
-      dispatch(restoreInitialState());
-    }
-
-    getData();
-  }, []);
+    return () => {
+      abortController.abort();
+    };
+  }, [level, year, grade]);
 
   return (
     <>
