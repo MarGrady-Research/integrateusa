@@ -9,6 +9,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
+import clsx from "clsx";
+import Skeleton from "@mui/material/Skeleton";
 
 import Select from "../../../../atoms/Select";
 
@@ -26,6 +28,9 @@ import { InfoData, RacialProportion } from "../../../../../interfaces";
 
 import { sortOnOrder } from "../../../../../utils";
 
+// @ts-ignore
+import { container } from "./Bar.module.scss";
+
 ChartJS.register(
   LinearScale,
   BarElement,
@@ -37,6 +42,7 @@ ChartJS.register(
 
 interface Props {
   infoData: InfoData;
+  isLoading: boolean;
 }
 
 const sortOptions = [
@@ -79,6 +85,7 @@ const getBarData = (data: InfoData) => {
 };
 
 const options = {
+  animation: false,
   plugins: {
     legend: {
       labels: {
@@ -115,6 +122,7 @@ const options = {
     },
   },
   responsive: true,
+  maintainAspectRatio: false,
   scales: {
     x: {
       ticks: false,
@@ -129,7 +137,11 @@ const options = {
   },
 };
 
-export default function BarChart({ infoData }: Props) {
+export default function BarChart({ infoData, isLoading }: Props) {
+  if (isLoading) {
+    return <Skeleton variant="rectangular" className={container} />;
+  }
+
   const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
   const handleSort = (e) => setSortBy(e.target.value as RacialProportion);
@@ -189,7 +201,7 @@ export default function BarChart({ infoData }: Props) {
   };
 
   return (
-    <>
+    <div className={clsx(container, "flex flex-col")}>
       <div className="grid grid-cols-1 lg:grid-cols-4 mb-4">
         <Select
           id="sort-select"
@@ -199,7 +211,9 @@ export default function BarChart({ infoData }: Props) {
           options={sortOptions}
         />
       </div>
-      <Bar data={data} options={options as any} plugins={[legendMargin]} />
-    </>
+      <div className="flex-1">
+        <Bar data={data} options={options as any} plugins={[legendMargin]} />
+      </div>
+    </div>
   );
 }

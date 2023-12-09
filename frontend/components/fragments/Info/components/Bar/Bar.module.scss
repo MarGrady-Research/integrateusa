@@ -1,0 +1,7 @@
+.container {
+  height: 400px !important;
+
+  @screen lg {
+    height: 600px !important;
+  }
+}

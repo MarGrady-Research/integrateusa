@@ -65,7 +65,7 @@ export default function Info({ infoData, title, isLoading }: Props) {
       {!isSchool && (
         <div className="mb-10">
           <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-          <BarChart infoData={infoData} />
+          <BarChart infoData={infoData} isLoading={isLoading} />
         </div>
       )}
     </>
