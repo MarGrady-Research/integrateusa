@@ -17,7 +17,7 @@ import {
 import { Level } from "../../../interfaces";
 
 // @ts-ignore
-import { container } from "./Info.module.scss";
+import { container, tableContainer } from "./Info.module.scss";
 
 import { InfoData } from "../../../interfaces";
 
@@ -42,11 +42,11 @@ export default function Info({ infoData, title, isLoading }: Props) {
     <>
       <h1 className="text-4xl font-bold mb-5">{title}</h1>
       <h2 className="text-2xl mb-4">Overview</h2>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-5 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>
           <InsetMap id={id} bounds={bounds} level={level} />
         </div>
-        <div className={clsx(container, "col-span-2 mb-10 lg:mb-0")}>
+        <div className={clsx(tableContainer, "col-span-2")}>
           {isLoading ? (
             <Skeleton
               variant="rectangular"
@@ -62,12 +62,12 @@ export default function Info({ infoData, title, isLoading }: Props) {
           {<PieChart infoData={infoData} isLoading={isLoading} />}
         </div>
       </div>
-      {/*!isSchool && (
+      {!isSchool && (
         <div className="mb-10">
           <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
           <BarChart infoData={infoData} />
         </div>
-      )*/}
+      )}
     </>
   );
 }

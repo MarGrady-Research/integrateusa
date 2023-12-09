@@ -1,3 +1,11 @@
+.tableContainer {
+  height: 387px;
+
+  @screen md {
+    height: 354px;
+  }
+}
+
 .container {
-  min-height: 354px;
+  height: 354px;
 }

@@ -190,7 +190,7 @@ export default function BarChart({ infoData }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-5 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 mb-4">
         <Select
           id="sort-select"
           value={sortBy}
