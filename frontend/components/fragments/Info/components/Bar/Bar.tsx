@@ -85,7 +85,6 @@ const getBarData = (data: InfoData) => {
 };
 
 const options = {
-  animation: false,
   plugins: {
     legend: {
       labels: {

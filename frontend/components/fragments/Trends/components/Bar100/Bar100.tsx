@@ -9,8 +9,10 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import Skeleton from "@mui/material/Skeleton";
 
 import { legendMargin } from "../../../../../charts";
+
 import {
   asianColor,
   blackColor,
@@ -19,7 +21,11 @@ import {
   otherColor,
   primaryColor,
 } from "../../../../../constants";
+
 import { TrendData } from "../../../../../interfaces";
+
+// @ts-ignore
+import { container } from "../Bar/Bar.module.scss";
 
 ChartJS.register(
   CategoryScale,
@@ -34,6 +40,7 @@ interface Props {
   trendData: TrendData;
   grade: string;
   year: number;
+  isLoading: boolean;
 }
 
 const sortTrendData = (trendData: TrendData, grade: string) =>
@@ -76,7 +83,16 @@ const getBarData = (data: TrendData) => {
   };
 };
 
-export default function BarChart100({ trendData, grade, year }: Props) {
+export default function BarChart100({
+  trendData,
+  grade,
+  year,
+  isLoading,
+}: Props) {
+  if (isLoading) {
+    return <Skeleton variant="rectangular" className={container} />;
+  }
+
   const sortedData = useMemo(
     () => sortTrendData(trendData, grade),
     [trendData, grade]
@@ -118,6 +134,7 @@ export default function BarChart100({ trendData, grade, year }: Props) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as any,
@@ -158,5 +175,9 @@ export default function BarChart100({ trendData, grade, year }: Props) {
     },
   };
 
-  return <Bar options={options} data={data} plugins={[legendMargin]} />;
+  return (
+    <div className={container}>
+      <Bar options={options} data={data} plugins={[legendMargin]} />
+    </div>
+  );
 }

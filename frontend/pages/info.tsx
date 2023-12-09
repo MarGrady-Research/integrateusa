@@ -126,12 +126,12 @@ export default function InfoPage() {
       <Selection />
       <Page>
         <div className="mx-auto mt-5">
-          <Info
+          {/*<Info
             infoData={infoData}
             title={title}
             isLoading={isInfoDataLoading}
-          />
-          {/*<Trends trendData={trendData} />*/}
+  />*/}
+          <Trends trendData={trendData} isLoading={isTrendDataLoading} />
         </div>
       </Page>
     </>
