@@ -157,22 +157,35 @@ export default function Comparison({
     setLinesData(newLinesData);
   };
 
-  const getLinesData = () => {
-    const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`)
-    );
+  const getLinesData = (id?: string) => {
+    if (id) {
+      axios
+        .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`)
+        .then((res) => {
+          const linesData = [];
 
-    Promise.all(promises).then((values) => {
-      const linesData = [];
+          const newLineData = processLineData(res.data, id);
 
-      for (const [index, res] of values.entries()) {
-        const newLineData = processLineData(res.data, lines[index]);
+          linesData.push(newLineData);
+          setLinesData(linesData);
+        });
+    } else {
+      const promises = lines.map((l) =>
+        axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`)
+      );
 
-        linesData.push(newLineData);
-      }
+      Promise.all(promises).then((values) => {
+        const linesData = [];
 
-      setLinesData(linesData);
-    });
+        for (const [index, res] of values.entries()) {
+          const newLineData = processLineData(res.data, lines[index]);
+
+          linesData.push(newLineData);
+        }
+
+        setLinesData(linesData);
+      });
+    }
   };
 
   const updateLineState = (line) => {
@@ -189,6 +202,12 @@ export default function Comparison({
     setLinesData([]);
     getLinesData();
   }, [measure]);
+
+  useEffect(() => {
+    setLines([id]);
+    setLinesData([]);
+    getLinesData(id);
+  }, [id]);
 
   const [min, setMin] = useState({
     num_schools: 1,
