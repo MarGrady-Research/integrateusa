@@ -8,6 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import Skeleton from "@mui/material/Skeleton";
 
 import { SegEntity } from "../../../../../interfaces";
 import {
@@ -18,10 +19,14 @@ import {
   whiteColor,
 } from "../../../../../constants";
 
+// @ts-ignore
+import { container } from "./Bar.module.scss";
+
 ChartJS.register(LinearScale, BarElement, CategoryScale, Tooltip, Legend);
 
 interface Props {
   focus: SegEntity;
+  isLoading: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
@@ -66,7 +71,19 @@ const options = {
   } as any,
 };
 
-export default function SegBar({ focus }: Props) {
+export default function SegBar({ focus, isLoading }: Props) {
+  if (!isLoading && !focus) {
+    return null;
+  }
+
+  if (isLoading) {
+    return (
+      <div className={container}>
+        <Skeleton className="!h-full w-full" variant="rectangular" />
+      </div>
+    );
+  }
+
   const {
     exp_as_as,
     exp_bl_as,
@@ -164,7 +181,7 @@ export default function SegBar({ focus }: Props) {
   };
 
   return (
-    <div>
+    <div className={container}>
       <Bar options={options} data={data} />
     </div>
   );

@@ -127,7 +127,7 @@ export default function Segregation({ segData, year, isLoading }: Props) {
           title={title}
           isLoading={isLoading}
         />
-        {/*<SegBar focus={focus} />*/}
+        <SegBar focus={focus} isLoading={isLoading} />
       </div>
       {/*<Comparison
         id={id}
