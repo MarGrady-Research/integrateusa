@@ -129,7 +129,7 @@ export default function Segregation({ segData, year, isLoading }: Props) {
         />
         <SegBar focus={focus} isLoading={isLoading} />
       </div>
-      {/*<Comparison
+      <Comparison
         id={id}
         grade={grade}
         segData={segData}
@@ -139,7 +139,8 @@ export default function Segregation({ segData, year, isLoading }: Props) {
         measure={measure}
         maxSchools={maxSchools}
         year={year}
-            />*/}
+        isLoading={isLoading}
+      />
     </>
   );
 }

@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import Skeleton from "@mui/material/Skeleton";
 
 import { yearsData } from "../../../Selection/data";
 import { legendMargin } from "../../../../../charts";
@@ -19,6 +20,9 @@ import {
   unselectedLineColor,
 } from "../../../../../constants";
 import { LineData } from "../../../../../interfaces";
+
+// @ts-ignore
+import { container } from "./Line.module.scss";
 
 ChartJS.register(
   CategoryScale,
@@ -34,6 +38,7 @@ interface Props {
   linesData: LineData[];
   id: string;
   year: number;
+  isLoading: boolean;
 }
 
 const labels = yearsData
@@ -42,10 +47,18 @@ const labels = yearsData
     return a - b;
   });
 
-export default function LineGraph({ linesData, id, year }: Props) {
+export default function LineGraph({ linesData, id, year, isLoading }: Props) {
+  if (isLoading) {
+    return (
+      <div className={container}>
+        <Skeleton className="!h-full w-full" variant="rectangular" />
+      </div>
+    );
+  }
+
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as "top",
@@ -89,5 +102,9 @@ export default function LineGraph({ linesData, id, year }: Props) {
     datasets: lineData,
   };
 
-  return <Line options={options} data={data} plugins={[legendMargin]} />;
+  return (
+    <div className={container}>
+      <Line options={options} data={data} plugins={[legendMargin]} />
+    </div>
+  );
 }

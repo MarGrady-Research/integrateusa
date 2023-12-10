@@ -23,6 +23,7 @@ interface Props {
   };
   maxSchools: number;
   year: number;
+  isLoading: boolean;
 }
 
 export default function Comparison({
@@ -35,6 +36,7 @@ export default function Comparison({
   measure,
   maxSchools,
   year,
+  isLoading,
 }: Props) {
   const columns = [
     { accessor: "checkbox", label: "" },
@@ -443,7 +445,7 @@ export default function Comparison({
 
   return (
     <>
-      <div className="mb-10">
+      {/*<div className="mb-10">
         <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
           {tableRows(columns)}
         </div>
@@ -452,10 +454,13 @@ export default function Comparison({
           totalPages={totalPages}
           handleActivePage={handleActivePage}
         />
-      </div>
-      <div className="w-full">
-        <LineGraph linesData={linesData} id={id} year={year} />
-      </div>
+  </div>*/}
+      <LineGraph
+        linesData={linesData}
+        id={id}
+        year={year}
+        isLoading={isLoading}
+      />
     </>
   );
 }
