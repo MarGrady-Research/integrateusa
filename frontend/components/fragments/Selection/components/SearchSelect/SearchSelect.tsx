@@ -10,7 +10,6 @@ import {
   selectSelectedName,
   selectBounds,
   selectLevel,
-  setId,
   setSelectedName,
   setBounds,
   setLevelAndId,

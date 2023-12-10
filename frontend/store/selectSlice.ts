@@ -45,9 +45,6 @@ export const selectSlice = createSlice({
     setGrade(state, action) {
       state.grade = action.payload;
     },
-    setId(state, action) {
-      state.id = action.payload;
-    },
     setSelectedName(state, action) {
       state.selectedName = action.payload;
     },
@@ -75,7 +72,6 @@ export const {
   setLevelAndId,
   setYear,
   setGrade,
-  setId,
   setSelectedName,
   setBounds,
   restoreInitialState,

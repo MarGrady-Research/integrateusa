@@ -101,7 +101,7 @@ export default function InfoPage() {
     setIsTrendDataLoading(true);
 
     axios
-      .get(trendUrl)
+      .get(trendUrl, { signal: abortController.signal })
       .then((res) => {
         setTrendData(res.data);
         setIsTrendDataLoading(false);

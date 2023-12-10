@@ -33,6 +33,7 @@ export default function Search({ level, handleBounds }: Props) {
       debounce(
         (
           input: string,
+          abortController: AbortController,
           callback: (results?: readonly any[]) => void,
           callbackFailure: () => void
         ) => {
@@ -47,7 +48,7 @@ export default function Search({ level, handleBounds }: Props) {
           }
 
           axios
-            .get(url)
+            .get(url, { signal: abortController.signal })
             .then((res: any) => {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
@@ -60,7 +61,7 @@ export default function Search({ level, handleBounds }: Props) {
   );
 
   useEffect(() => {
-    let active = true;
+    const abortController = new AbortController();
 
     if (inputValue === "") {
       setOptions(value ? [value] : []);
@@ -75,72 +76,70 @@ export default function Search({ level, handleBounds }: Props) {
     setLoading(true);
 
     const callback = (results?: readonly any[]) => {
-      if (active) {
-        let newOptions: readonly LocationSearchResult[] = [];
+      let newOptions: readonly LocationSearchResult[] = [];
 
-        if (value) {
-          newOptions = [value];
-        }
-
-        if (results) {
-          const resultsOptions = results.map((ro) => {
-            let labelData = {
-              value: "",
-              label: "",
-            };
-
-            switch (level) {
-              case Level.School:
-                labelData = {
-                  value: ro.nces_id,
-                  label: ro.sch_name,
-                };
-                break;
-              case Level.District:
-                labelData = {
-                  value: ro.dist_id,
-                  label: ro.dist_name,
-                };
-                break;
-              case Level.County:
-                labelData = {
-                  value: ro.county_id,
-                  label: ro.county_name,
-                };
-                break;
-              case Level.State:
-                labelData = {
-                  value: ro.state_abb,
-                  label: ro.state_name,
-                };
-                break;
-            }
-
-            return {
-              ...labelData,
-              lngmin: ro.lngmin,
-              latmin: ro.latmin,
-              lngmax: ro.lngmax,
-              latmax: ro.latmax,
-            };
-          });
-
-          newOptions = [...newOptions, ...resultsOptions];
-        }
-
-        setOptions(newOptions);
-        setLoading(false);
+      if (value) {
+        newOptions = [value];
       }
+
+      if (results) {
+        const resultsOptions = results.map((ro) => {
+          let labelData = {
+            value: "",
+            label: "",
+          };
+
+          switch (level) {
+            case Level.School:
+              labelData = {
+                value: ro.nces_id,
+                label: ro.sch_name,
+              };
+              break;
+            case Level.District:
+              labelData = {
+                value: ro.dist_id,
+                label: ro.dist_name,
+              };
+              break;
+            case Level.County:
+              labelData = {
+                value: ro.county_id,
+                label: ro.county_name,
+              };
+              break;
+            case Level.State:
+              labelData = {
+                value: ro.state_abb,
+                label: ro.state_name,
+              };
+              break;
+          }
+
+          return {
+            ...labelData,
+            lngmin: ro.lngmin,
+            latmin: ro.latmin,
+            lngmax: ro.lngmax,
+            latmax: ro.latmax,
+          };
+        });
+
+        newOptions = [...newOptions, ...resultsOptions];
+      }
+
+      setOptions(newOptions);
+      setLoading(false);
     };
 
     const callbackFailure = () => {
       setLoading(false);
     };
 
-    fetch(inputValue, callback, callbackFailure);
+    fetch(inputValue, abortController, callback, callbackFailure);
 
     return () => {
-      active = false;
+      abortController.abort();
     };
   }, [inputValue, value, fetch]);
 
