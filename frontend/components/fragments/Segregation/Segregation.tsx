@@ -17,6 +17,7 @@ import { SegData } from "../../../interfaces";
 interface Props {
   segData: SegData;
   year: number;
+  isLoading: boolean;
 }
 
 const options = [
@@ -64,7 +65,7 @@ const findFocus = (segData: SegData, idLevel: string, id: string) => {
   return null;
 };
 
-export default function Segregation({ segData, year }: Props) {
+export default function Segregation({ segData, year, isLoading }: Props) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
@@ -114,10 +115,6 @@ export default function Segregation({ segData, year }: Props) {
     [segData, idLevel, id]
   );
 
-  if (!focus) {
-    return null;
-  }
-
   return (
     <>
       <h1 className="text-4xl font-bold mb-5">{title}</h1>
@@ -128,6 +125,7 @@ export default function Segregation({ segData, year }: Props) {
           handleChange={handleChange}
           options={options}
           title={title}
+          isLoading={isLoading}
         />
         {/*<SegBar focus={focus} />*/}
       </div>
