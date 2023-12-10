@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import clsx from "clsx";
+import Skeleton from "@mui/material/Skeleton";
 
 import LineGraph from "../Line";
 import Pagination from "../Pagination";
@@ -445,16 +446,24 @@ export default function Comparison({
 
   return (
     <>
-      {/*<div className="mb-10">
-        <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
-          {tableRows(columns)}
+      {
+        <div className="mb-10">
+          {isLoading ? (
+            <Skeleton className="w-full" height={683} variant="rectangular" />
+          ) : (
+            <>
+              <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
+                {tableRows(columns)}
+              </div>
+              <Pagination
+                activePage={activePage}
+                totalPages={totalPages}
+                handleActivePage={handleActivePage}
+              />
+            </>
+          )}
         </div>
-        <Pagination
-          activePage={activePage}
-          totalPages={totalPages}
-          handleActivePage={handleActivePage}
-        />
-  </div>*/}
+      }
       <LineGraph
         linesData={linesData}
         id={id}
