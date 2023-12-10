@@ -163,5 +163,9 @@ export default function SegBar({ focus }: Props) {
     datasets: dataset,
   };
 
-  return <Bar options={options} data={data} />;
+  return (
+    <div>
+      <Bar options={options} data={data} />
+    </div>
+  );
 }

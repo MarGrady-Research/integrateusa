@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { SelectChangeEvent } from "@mui/material";
 
 import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
-import Select from "../../atoms/Select";
+import Info from "./components/Info";
 
 import {
   selectId,
@@ -70,7 +71,7 @@ export default function Segregation({ segData, year }: Props) {
 
   const [selected, setSelected] = useState(defaultOption);
 
-  const handleChange = (e) => {
+  const handleChange = (e: SelectChangeEvent) => {
     const selectedValue = e.target.value;
 
     const option = options.find((o) => o.value === selectedValue);
@@ -117,54 +118,20 @@ export default function Segregation({ segData, year }: Props) {
     return null;
   }
 
-  const selectedValue = selected.value;
-
   return (
     <>
       <h1 className="text-4xl font-bold mb-5">{title}</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 mb-10">
-        <div className="text-justify text-md lg:text-xl">
-          <p className="mb-4 lg:mb-6">
-            We can measure segregation by comparing the makeup of schools
-            attended by students in different racial groups.
-          </p>
-          <p className="mb-4 lg:mb-6">
-            The typical{" "}
-            <Select
-              id="seg-select"
-              value={selectedValue}
-              onChange={handleChange}
-              options={options}
-              variant="standard"
-              classes={{
-                root: "!text-md lg:!text-xl mt-px lg:mt-0",
-                select: "!py-0",
-              }}
-            />{" "}
-            student in {title} attends a school that is{" "}
-            <b>
-              {focus[selected.iso].toFixed(1)}% {selected.label}
-            </b>
-            .
-          </p>
-          <p className="mb-4 lg:mb-6">
-            The typical non-{selected.label} student attends a school that is{" "}
-            <b>
-              {focus[selected.non].toFixed(1)}% {selected.label}
-            </b>
-            .
-          </p>
-          <p className="mb-4 lg:mb-6">
-            The difference between these two numbers,{" "}
-            <b>{focus[selected.value].toFixed(1)}%</b> is a measure of
-            segregation for <b>{selected.label}</b> students.
-          </p>
-        </div>
-        <div>
-          <SegBar focus={focus} />
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-y-0 lg:gap-x-5 mb-10">
+        <Info
+          focus={focus}
+          selected={selected}
+          handleChange={handleChange}
+          options={options}
+          title={title}
+        />
+        {/*<SegBar focus={focus} />*/}
       </div>
-      <Comparison
+      {/*<Comparison
         id={id}
         grade={grade}
         segData={segData}
@@ -174,7 +141,7 @@ export default function Segregation({ segData, year }: Props) {
         measure={measure}
         maxSchools={maxSchools}
         year={year}
-      />
+            />*/}
     </>
   );
 }
