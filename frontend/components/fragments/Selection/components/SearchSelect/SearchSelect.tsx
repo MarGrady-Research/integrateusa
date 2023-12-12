@@ -10,9 +10,11 @@ import {
   selectSelectedName,
   selectBounds,
   selectLevel,
+  selectSchoolCoordinates,
   setSelectedName,
   setBounds,
   setLevelAndId,
+  setSchoolCoordinates,
 } from "../../../../../store/selectSlice";
 
 import { levelSelectData } from "../../data";
@@ -27,6 +29,7 @@ export default function SearchSelect({ level }: Props) {
   const id = useSelector(selectId);
   const selectedName = useSelector(selectSelectedName);
   const bounds = useSelector(selectBounds);
+  const coordinates = useSelector(selectSchoolCoordinates);
   const storeLevel = useSelector(selectLevel);
 
   const dispatch = useDispatch();
@@ -38,6 +41,8 @@ export default function SearchSelect({ level }: Props) {
     latmin: bounds.latmin,
     lngmax: bounds.lngmax,
     latmax: bounds.latmax,
+    lat_new: coordinates.lat_new,
+    lon_new: coordinates.lon_new,
   });
   const [inputValue, setInputValue] = useState(selectedName);
   const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
@@ -85,6 +90,8 @@ export default function SearchSelect({ level }: Props) {
         latmin: bounds.latmin,
         lngmax: bounds.lngmax,
         latmax: bounds.latmax,
+        lat_new: coordinates.lat_new,
+        lon_new: coordinates.lon_new,
       });
       setInputValue(selectedName);
     } else if (level != storeLevel) {
@@ -156,6 +163,8 @@ export default function SearchSelect({ level }: Props) {
             latmin: ro.latmin,
             lngmax: ro.lngmax,
             latmax: ro.latmax,
+            lat_new: ro.lat_new || null,
+            lon_new: ro.lon_new || null,
           };
         });
 
@@ -196,6 +205,12 @@ export default function SearchSelect({ level }: Props) {
         latmin: newValue.latmin,
         lngmax: newValue.lngmax,
         latmax: newValue.latmax,
+      })
+    );
+    dispatch(
+      setSchoolCoordinates({
+        lat_new: newValue.lat_new,
+        lon_new: newValue.lon_new,
       })
     );
   };

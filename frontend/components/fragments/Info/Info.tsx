@@ -13,6 +13,7 @@ import {
   selectId,
   selectBounds,
   selectLevel,
+  selectSchoolCoordinates,
 } from "../../../store/selectSlice";
 import { Level } from "../../../interfaces";
 
@@ -34,6 +35,7 @@ interface Props {
 export default function Info({ infoData, title, isLoading }: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
+  const coordinates = useSelector(selectSchoolCoordinates);
   const level = useSelector(selectLevel);
 
   const isSchool = level === Level.School;
@@ -44,7 +46,12 @@ export default function Info({ infoData, title, isLoading }: Props) {
       <h2 className="text-2xl mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>
-          <InsetMap id={id} bounds={bounds} level={level} />
+          <InsetMap
+            id={id}
+            bounds={bounds}
+            level={level}
+            coordinates={coordinates}
+          />
         </div>
         <div className={clsx(tableContainer, "col-span-2")}>
           {isLoading ? (

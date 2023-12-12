@@ -5,6 +5,7 @@ export type {
   SegData,
   Bounds,
   SchoolType,
+  SchoolCoordinates,
   RacialProportion,
   SegEntity,
   LineData,

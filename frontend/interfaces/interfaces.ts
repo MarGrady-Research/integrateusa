@@ -103,7 +103,12 @@ export enum MapStatus {
   Failed,
 }
 
-export interface LocationSearchResult {
+export interface SchoolCoordinates {
+  lat_new: number | null;
+  lon_new: number | null;
+}
+
+export interface LocationSearchResult extends SchoolCoordinates {
   value: string;
   label: string;
   lngmin: number;

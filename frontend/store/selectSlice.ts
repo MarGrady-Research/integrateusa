@@ -4,7 +4,7 @@ import { HYDRATE } from "next-redux-wrapper";
 
 import { yearsData } from "../components/fragments/Selection/data";
 
-import { Bounds, Level } from "../interfaces";
+import { Bounds, Level, SchoolCoordinates } from "../interfaces";
 
 export interface SelectState {
   level: Level;
@@ -13,6 +13,7 @@ export interface SelectState {
   id: string;
   selectedName: string;
   bounds: Bounds;
+  schoolCoordinates: SchoolCoordinates;
 }
 
 const currentYear = Math.max(...yearsData.map((e) => e.value));
@@ -28,6 +29,10 @@ const initialState: SelectState = {
     latmin: 40.496094,
     lngmax: -73.70017,
     latmax: 40.915276,
+  },
+  schoolCoordinates: {
+    lat_new: null,
+    lon_new: null,
   },
 };
 
@@ -50,6 +55,9 @@ export const selectSlice = createSlice({
     },
     setBounds(state, action) {
       state.bounds = action.payload;
+    },
+    setSchoolCoordinates(state, action) {
+      state.schoolCoordinates = action.payload;
     },
     restoreInitialState(state) {
       state.level = initialState.level;
@@ -74,6 +82,7 @@ export const {
   setGrade,
   setSelectedName,
   setBounds,
+  setSchoolCoordinates,
   restoreInitialState,
 } = selectSlice.actions;
 
@@ -81,6 +90,8 @@ export const selectLevel = (state: AppState) => state.select.level as Level;
 export const selectYear = (state: AppState) => state.select.year as number;
 export const selectGrade = (state: AppState) => state.select.grade as string;
 export const selectId = (state: AppState) => state.select.id as string;
+export const selectSchoolCoordinates = (state: AppState) =>
+  state.select.schoolCoordinates as SchoolCoordinates;
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName as string;
 export const selectBounds = (state: AppState) => state.select.bounds as Bounds;

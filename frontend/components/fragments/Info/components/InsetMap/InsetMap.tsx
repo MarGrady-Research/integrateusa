@@ -11,23 +11,28 @@ import {
   defaultMapSchoolColor,
 } from "../../../../../constants";
 
-import { Bounds, Level } from "../../../../../interfaces";
+import { Bounds, Level, SchoolCoordinates } from "../../../../../interfaces";
 
 interface Props {
   id: string;
   bounds: Bounds;
   level: Level;
+  coordinates: SchoolCoordinates;
 }
 
 const schoolsSourceId = "schools-source";
 
-export default function InsetMap({ id, bounds, level }: Props) {
+export default function InsetMap({ id, bounds, level, coordinates }: Props) {
   const mapRef = useRef();
 
   const { latmin, latmax, lngmin, lngmax } = bounds;
 
-  const lat = (latmin + latmax) / 2;
-  const lng = (lngmin + lngmax) / 2;
+  const { lat_new, lon_new } = coordinates;
+
+  const latBackup = (latmin + latmax) / 2;
+  const lngBackup = (lngmin + lngmax) / 2;
+
+  const pointCoordinates = [lon_new || lngBackup, lat_new || latBackup];
 
   const mapboxData = {
     type: "FeatureCollection" as "FeatureCollection",
@@ -36,7 +41,7 @@ export default function InsetMap({ id, bounds, level }: Props) {
         type: "Feature",
         geometry: {
           type: "Point",
-          coordinates: [lng, lat],
+          coordinates: pointCoordinates,
         },
       },
     ] as any,
