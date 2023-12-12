@@ -91,6 +91,8 @@ class SchoolNames(models.Model):
     latmin = models.FloatField()
     lngmax = models.FloatField()
     latmax = models.FloatField()
+    lat_new = models.FloatField()
+    lon_new = models.FloatField()
 
     class Meta:
         db_table = 'school_names'
