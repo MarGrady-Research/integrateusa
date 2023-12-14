@@ -32,20 +32,36 @@
 
 .buttonAsian {
   background-color: $asianColor;
+
+  &:hover {
+    background-color: darken($asianColor, 10%);
+  }
 }
 
 .buttonBlack {
   background-color: $blackColor;
+  &:hover {
+    background-color: darken($blackColor, 10%);
+  }
 }
 
 .buttonHispanic {
   background-color: $hispanicColor;
+  &:hover {
+    background-color: darken($hispanicColor, 10%);
+  }
 }
 
 .buttonWhite {
   background-color: $whiteColor;
+  &:hover {
+    background-color: darken($whiteColor, 10%);
+  }
 }
 
 .buttonOther {
   background-color: $otherColor;
+  &:hover {
+    background-color: darken($otherColor, 10%);
+  }
 }
