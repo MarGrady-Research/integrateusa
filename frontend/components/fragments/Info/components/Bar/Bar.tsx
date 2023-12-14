@@ -12,8 +12,6 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
 
-import Select from "../../../../atoms/Select";
-
 import {
   asianColor,
   blackColor,
@@ -28,8 +26,22 @@ import { InfoData, RacialProportion } from "../../../../../interfaces";
 
 import { sortOnOrder } from "../../../../../utils";
 
-// @ts-ignore
-import { container } from "./Bar.module.scss";
+import {
+  // @ts-ignore
+  container,
+  // @ts-ignore
+  buttons,
+  // @ts-ignore
+  buttonAsian,
+  // @ts-ignore
+  buttonBlack,
+  // @ts-ignore
+  buttonHispanic,
+  // @ts-ignore
+  buttonWhite,
+  // @ts-ignore
+  buttonOther,
+} from "./Bar.module.scss";
 
 ChartJS.register(
   LinearScale,
@@ -87,9 +99,7 @@ const getBarData = (data: InfoData) => {
 const options = {
   plugins: {
     legend: {
-      labels: {
-        sort: (a, b) => sortOnOrder(a.text, b.text, labelOrder),
-      },
+      display: false,
     },
     tooltip: {
       enabled: true,
@@ -143,7 +153,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
-  const handleSort = (e) => setSortBy(e.target.value as RacialProportion);
+  const handleSort = (v: RacialProportion) => setSortBy(v);
 
   const sortedData = [...infoData];
 
@@ -201,14 +211,42 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   return (
     <div className={clsx(container, "flex flex-col")}>
-      <div className="grid grid-cols-1 lg:grid-cols-4 mb-4">
-        <Select
-          id="sort-select"
-          value={sortBy}
-          label="Sort by"
-          onChange={handleSort}
-          options={sortOptions}
-        />
+      <div className={clsx("flex flex-wrap justify-center", buttons)}>
+        <div className={clsx({ "text-primary": sortBy === "prop_as" })}>
+          <button
+            className={buttonAsian}
+            onClick={() => handleSort("prop_as")}
+          />
+          Asian
+        </div>
+        <div>
+          <button
+            className={buttonBlack}
+            onClick={() => handleSort("prop_bl")}
+          />
+          Black
+        </div>
+        <div>
+          <button
+            className={buttonHispanic}
+            onClick={() => handleSort("prop_hi")}
+          />
+          Hispanic
+        </div>
+        <div>
+          <button
+            className={buttonWhite}
+            onClick={() => handleSort("prop_wh")}
+          />
+          White
+        </div>
+        <div>
+          <button
+            className={buttonOther}
+            onClick={() => handleSort("prop_or")}
+          />
+          Other
+        </div>
       </div>
       <div className="flex-1">
         <Bar data={data} options={options as any} plugins={[legendMargin]} />

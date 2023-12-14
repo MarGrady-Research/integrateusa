@@ -1,7 +1,51 @@
+@import "styles/colors.scss";
+
 .container {
   height: 400px !important;
 
   @screen lg {
     height: 600px !important;
   }
+}
+
+.buttons {
+  > div {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    margin: {
+      right: 8px;
+      bottom: 2px;
+    }
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    > button {
+      width: 40px;
+      height: 12px;
+      margin-right: 4px;
+    }
+  }
+}
+
+.buttonAsian {
+  background-color: $asianColor;
+}
+
+.buttonBlack {
+  background-color: $blackColor;
+}
+
+.buttonHispanic {
+  background-color: $hispanicColor;
+}
+
+.buttonWhite {
+  background-color: $whiteColor;
+}
+
+.buttonOther {
+  background-color: $otherColor;
 }
