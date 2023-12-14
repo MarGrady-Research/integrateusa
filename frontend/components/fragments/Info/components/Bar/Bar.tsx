@@ -166,41 +166,47 @@ export default function BarChart({ infoData, isLoading }: Props) {
   const { asianData, blackData, hispanicData, whiteData, otherData, labels } =
     getBarData(sortedData);
 
+  const sortedByAsian = sortBy === "prop_as";
+  const sortedByBlack = sortBy === "prop_bl";
+  const sortedByHispanic = sortBy === "prop_hi";
+  const sortedByWhite = sortBy === "prop_wh";
+  const sortedByOther = sortBy === "prop_or";
+
   const barData = [
     {
       label: "Asian",
       id: "prop_as",
       data: asianData,
       backgroundColor: asianColor,
-      order: sortBy === "prop_as" ? 0 : 1,
+      order: sortedByAsian ? 0 : 1,
     },
     {
       label: "Black",
       id: "prop_bl",
       data: blackData,
       backgroundColor: blackColor,
-      order: sortBy === "prop_bl" ? 0 : 1,
+      order: sortedByBlack ? 0 : 1,
     },
     {
       label: "Hispanic",
       id: "prop_hi",
       data: hispanicData,
       backgroundColor: hispanicColor,
-      order: sortBy === "prop_hi" ? 0 : 1,
+      order: sortedByHispanic ? 0 : 1,
     },
     {
       label: "White",
       id: "prop_wh",
       data: whiteData,
       backgroundColor: whiteColor,
-      order: sortBy === "prop_wh" ? 0 : 1,
+      order: sortedByWhite ? 0 : 1,
     },
     {
       label: "Other",
       id: "prop_or",
       data: otherData,
       backgroundColor: otherColor,
-      order: sortBy === "prop_or" ? 0 : 1,
+      order: sortedByOther ? 0 : 1,
     },
   ];
 
@@ -212,35 +218,35 @@ export default function BarChart({ infoData, isLoading }: Props) {
   return (
     <div className={clsx(container, "flex flex-col")}>
       <div className={clsx("flex flex-wrap justify-center", buttons)}>
-        <div className={clsx({ "text-primary": sortBy === "prop_as" })}>
+        <div className={clsx({ "text-primary": sortedByAsian })}>
           <button
             className={buttonAsian}
             onClick={() => handleSort("prop_as")}
           />
           Asian
         </div>
-        <div>
+        <div className={clsx({ "text-primary": sortedByBlack })}>
           <button
             className={buttonBlack}
             onClick={() => handleSort("prop_bl")}
           />
           Black
         </div>
-        <div>
+        <div className={clsx({ "text-primary": sortedByHispanic })}>
           <button
             className={buttonHispanic}
             onClick={() => handleSort("prop_hi")}
           />
           Hispanic
         </div>
-        <div>
+        <div className={clsx({ "text-primary": sortedByWhite })}>
           <button
             className={buttonWhite}
             onClick={() => handleSort("prop_wh")}
           />
           White
         </div>
-        <div>
+        <div className={clsx({ "text-primary": sortedByOther })}>
           <button
             className={buttonOther}
             onClick={() => handleSort("prop_or")}
