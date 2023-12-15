@@ -217,6 +217,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   return (
     <div className={clsx(container, "flex flex-col")}>
+      <p className="text-center text-sm mb-1">Sort By</p>
       <div className={clsx("flex flex-wrap justify-center", buttons)}>
         <div className={clsx({ "text-primary": sortedByAsian })}>
           <button
