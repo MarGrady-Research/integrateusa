@@ -95,6 +95,10 @@ interface LineDataLoading extends LineDataBase {
   status: "loading";
 }
 
+interface LineDataFailed extends LineDataBase {
+  status: "failed";
+}
+
 export interface LineDataLoaded extends LineDataBase {
   status: "loaded";
   name: string;
@@ -104,7 +108,7 @@ export interface LineDataLoaded extends LineDataBase {
   }[];
 }
 
-export type LineData = LineDataLoading | LineDataLoaded;
+export type LineData = LineDataLoading | LineDataLoaded | LineDataFailed;
 
 export enum MapStatus {
   Fetching,

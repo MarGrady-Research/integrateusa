@@ -12,6 +12,7 @@ import {
 import { Line } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
 import CircularProgress from "@mui/material/CircularProgress";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { yearsData } from "../../../Selection/data";
 import { legendMargin } from "../../../../../charts";
@@ -109,15 +110,17 @@ const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
     <div className="flex flex-wrap justify-center text-sm">
       {linesData.map((l) => {
         const isLoading = l.status === "loading";
+        const hasFailed = l.status === "failed";
 
-        const bgColor = isLoading
-          ? "transparent"
-          : l.id === id
-          ? selectedLineColor
-          : unselectedLineColor;
+        const bgColor =
+          isLoading || hasFailed
+            ? "transparent"
+            : l.id === id
+            ? selectedLineColor
+            : unselectedLineColor;
 
         return (
-          <div key={l.id} className="flex items-center">
+          <div key={l.id} className="flex items-center mr-2 last:mr-0">
             <div
               className="w-10 h-3 mr-2 flex items-center justify-center"
               style={{
@@ -125,8 +128,9 @@ const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
               }}
             >
               {isLoading && <CircularProgress color="inherit" size={14} />}
+              {hasFailed && <ErrorIcon color="error" fontSize="medium" />}
             </div>
-            {id}
+            {l.id}
           </div>
         );
       })}

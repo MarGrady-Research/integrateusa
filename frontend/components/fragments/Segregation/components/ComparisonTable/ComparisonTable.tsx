@@ -145,10 +145,31 @@ export default function Comparison({
     const url =
       "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
 
+    const newLineDataLoading = {
+      id: lineId,
+      status: "loading" as "loading",
+    };
+
+    setLinesData((ld) => [...ld, newLineDataLoading]);
+
     axios.get(url).then((res) => {
       const newLineData = processLineData(res.data, lineId);
 
-      setLinesData((ld) => [...ld, newLineData]);
+      setLinesData((ld) => {
+        const lineIdx = ld.findIndex((l) => l.id === lineId);
+
+        if (lineIdx != -1) {
+          const newLinesData = [
+            ...ld.slice(0, lineIdx),
+            newLineData,
+            ...ld.slice(lineIdx + 1),
+          ];
+
+          return newLinesData;
+        } else {
+          return [...ld, newLineData];
+        }
+      });
     });
   };
 
@@ -184,17 +205,28 @@ export default function Comparison({
       })
     );
 
-    Promise.all(promises).then((values) => {
-      const linesData = [];
+    Promise.all(promises)
+      .then((values) => {
+        const linesData = [];
 
-      for (const [index, res] of values.entries()) {
-        const newLineData = processLineData(res.data, lines[index]);
+        for (const [index, res] of values.entries()) {
+          const newLineData = processLineData(res.data, lines[index]);
 
-        linesData.push(newLineData);
-      }
+          linesData.push(newLineData);
+        }
 
-      setLinesData(linesData);
-    });
+        setLinesData(linesData);
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          const failedLinesData = lines.map((l) => ({
+            id: l,
+            status: "failed" as "failed",
+          }));
+
+          setLinesData(failedLinesData);
+        }
+      });
 
     return () => {
       abortController.abort();
@@ -218,12 +250,15 @@ export default function Comparison({
 
         linesData.push(newLineData);
         setLinesData(linesData);
-      });
+      }).catch(() => {});
+;
 
     return () => {
       abortController.abort();
     };*/
   }, [id]);
+
+  useEffect(() => {}, [lines]);
 
   const [min, setMin] = useState({
     num_schools: 1,
