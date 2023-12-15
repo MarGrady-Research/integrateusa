@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -48,7 +48,7 @@ const labels = yearsData
     return a - b;
   });
 
-export default function LineGraph({ linesData, id, year, isLoading }: Props) {
+const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
   if (isLoading) {
     return (
       <div className={container}>
@@ -139,4 +139,6 @@ export default function LineGraph({ linesData, id, year, isLoading }: Props) {
       <Line options={options} data={data} plugins={[legendMargin]} />
     </div>
   );
-}
+});
+
+export default LineGraph;
