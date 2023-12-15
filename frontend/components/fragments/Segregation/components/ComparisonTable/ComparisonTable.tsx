@@ -9,7 +9,7 @@ import Pagination from "../Pagination";
 import { sortRows, filterRows, paginateRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
 
-import { SegData, LineData } from "../../../../../interfaces";
+import { SegData, LineData, LineDataLoaded } from "../../../../../interfaces";
 
 interface Props {
   id: string;
@@ -135,7 +135,8 @@ export default function Comparison({
       id,
       name,
       data: finalData,
-    } as LineData;
+      status: "loaded",
+    } as LineDataLoaded;
 
     return newLine;
   };
@@ -157,37 +158,6 @@ export default function Comparison({
     setLinesData(newLinesData);
   };
 
-  const getLinesData = (id?: string) => {
-    if (id) {
-      axios
-        .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`)
-        .then((res) => {
-          const linesData = [];
-
-          const newLineData = processLineData(res.data, id);
-
-          linesData.push(newLineData);
-          setLinesData(linesData);
-        });
-    } else {
-      const promises = lines.map((l) =>
-        axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`)
-      );
-
-      Promise.all(promises).then((values) => {
-        const linesData = [];
-
-        for (const [index, res] of values.entries()) {
-          const newLineData = processLineData(res.data, lines[index]);
-
-          linesData.push(newLineData);
-        }
-
-        setLinesData(linesData);
-      });
-    }
-  };
-
   const updateLineState = (line) => {
     if (!lines.includes(line)) {
       setLines((currentLines) => [...currentLines, line]);
@@ -199,14 +169,60 @@ export default function Comparison({
   };
 
   useEffect(() => {
-    setLinesData([]);
-    getLinesData();
+    const abortController = new AbortController();
+
+    const loadingLinesData = lines.map((l) => ({
+      id: l,
+      status: "loading" as "loading",
+    }));
+
+    setLinesData(loadingLinesData);
+
+    const promises = lines.map((l) =>
+      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`, {
+        signal: abortController.signal,
+      })
+    );
+
+    Promise.all(promises).then((values) => {
+      const linesData = [];
+
+      for (const [index, res] of values.entries()) {
+        const newLineData = processLineData(res.data, lines[index]);
+
+        linesData.push(newLineData);
+      }
+
+      setLinesData(linesData);
+    });
+
+    return () => {
+      abortController.abort();
+    };
   }, [measure]);
 
   useEffect(() => {
+    /*const abortController = new AbortController();
+
     setLines([id]);
     setLinesData([]);
-    getLinesData(id);
+
+    axios
+      .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
+        signal: abortController.signal,
+      })
+      .then((res) => {
+        const linesData = [];
+
+        const newLineData = processLineData(res.data, id);
+
+        linesData.push(newLineData);
+        setLinesData(linesData);
+      });
+
+    return () => {
+      abortController.abort();
+    };*/
   }, [id]);
 
   const [min, setMin] = useState({

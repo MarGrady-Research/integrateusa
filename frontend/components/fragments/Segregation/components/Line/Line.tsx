@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { yearsData } from "../../../Selection/data";
 import { legendMargin } from "../../../../../charts";
@@ -19,7 +20,7 @@ import {
   selectedLineColor,
   unselectedLineColor,
 } from "../../../../../constants";
-import { LineData } from "../../../../../interfaces";
+import { LineData, LineDataLoaded } from "../../../../../interfaces";
 
 // @ts-ignore
 import { container } from "./Line.module.scss";
@@ -61,7 +62,7 @@ export default function LineGraph({ linesData, id, year, isLoading }: Props) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as "top",
+        display: false,
       },
     },
     scales: {
@@ -90,20 +91,51 @@ export default function LineGraph({ linesData, id, year, isLoading }: Props) {
     },
   };
 
-  const lineData = linesData.map((e) => ({
-    label: e.name,
-    data: e.data.map((e) => e.seg),
-    borderColor: e.id === id ? selectedLineColor : unselectedLineColor,
-    backgroundColor: e.id === id ? selectedLineColor : unselectedLineColor,
-  }));
+  const lineData = linesData
+    .filter((l) => l.status === "loaded")
+    .map((l: LineDataLoaded) => ({
+      label: l.name,
+      data: l.data.map((li) => li.seg),
+      borderColor: l.id === id ? selectedLineColor : unselectedLineColor,
+      backgroundColor: l.id === id ? selectedLineColor : unselectedLineColor,
+    }));
 
   const data = {
     labels,
     datasets: lineData,
   };
 
+  const legend = (
+    <div className="flex flex-wrap justify-center text-sm">
+      {linesData.map((l) => {
+        const isLoading = l.status === "loading";
+
+        const bgColor = isLoading
+          ? "transparent"
+          : l.id === id
+          ? selectedLineColor
+          : unselectedLineColor;
+
+        return (
+          <div key={l.id} className="flex items-center">
+            <div
+              className="w-10 h-3 mr-2 flex items-center justify-center"
+              style={{
+                backgroundColor: bgColor,
+              }}
+            >
+              {isLoading && <CircularProgress color="inherit" size={14} />}
+            </div>
+            {id}
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className={container}>
+      {legend}
       <Line options={options} data={data} plugins={[legendMargin]} />
     </div>
   );

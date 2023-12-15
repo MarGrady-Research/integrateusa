@@ -87,14 +87,24 @@ export enum Level {
   State,
 }
 
-export interface LineData {
+interface LineDataBase {
   id: string;
+}
+
+interface LineDataLoading extends LineDataBase {
+  status: "loading";
+}
+
+export interface LineDataLoaded extends LineDataBase {
+  status: "loaded";
   name: string;
   data: {
     seg: number;
     year: number;
   }[];
 }
+
+export type LineData = LineDataLoading | LineDataLoaded;
 
 export enum MapStatus {
   Fetching,
