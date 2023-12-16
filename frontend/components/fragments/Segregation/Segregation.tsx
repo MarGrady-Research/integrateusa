@@ -53,7 +53,7 @@ const options = [
   },
 ];
 
-const defaultOption = options[2];
+const defaultOption = options[1];
 
 const findFocus = (segData: SegData, idLevel: string, id: string) => {
   const posIdx = segData.findIndex((d) => d[idLevel] && d[idLevel] === id);
