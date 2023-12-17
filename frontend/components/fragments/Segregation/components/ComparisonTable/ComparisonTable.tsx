@@ -227,7 +227,17 @@ export default function Comparison({
     }
   };
 
+  const stopAllLineDataRequests = () => {
+    const abortControllers = abortControllersRef.current;
+
+    for (const id in abortControllers) {
+      abortControllers[id].abort();
+    }
+  };
+
   useEffect(() => {
+    stopAllLineDataRequests();
+
     const abortController = new AbortController();
 
     const loadingLinesData = lines.map((l) => ({
@@ -272,6 +282,8 @@ export default function Comparison({
   }, [measure]);
 
   useEffect(() => {
+    stopAllLineDataRequests();
+
     const abortController = new AbortController();
 
     setLines([id]);
