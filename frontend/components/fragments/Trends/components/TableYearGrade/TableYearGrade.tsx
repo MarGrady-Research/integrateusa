@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
@@ -15,6 +21,14 @@ interface Props {
   selectedGrade: string;
   selectedYear: number;
   isLoading: boolean;
+}
+
+function TableHolder({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shadow border border-gray-200 overflow-x-auto mb-4">
+      {children}
+    </div>
+  );
 }
 
 export default function TableYearGrade({
@@ -34,14 +48,14 @@ export default function TableYearGrade({
   const toggleExpanded = () => setExpanded((e) => !e);
 
   const tableHeader = (grades) => (
-    <tr className={headRow}>
-      <th scope="col" />
+    <TableRow className={headRow}>
+      <TableCell scope="col" />
       {grades.map((grade) => (
-        <th scope="col" key={grade.value}>
+        <TableCell scope="col" key={grade.value}>
           {grade.label}
-        </th>
+        </TableCell>
       ))}
-    </tr>
+    </TableRow>
   );
 
   const renderCell = (grade, year) => {
@@ -62,9 +76,9 @@ export default function TableYearGrade({
     const isSelected = isSelectedGrade || isSelectedYear;
 
     return (
-      <td className={clsx({ "bg-gray-100": isSelected })} key={grade}>
+      <TableCell className={clsx({ "bg-gray-100": isSelected })} key={grade}>
         {content}
-      </td>
+      </TableCell>
     );
   };
 
@@ -75,16 +89,16 @@ export default function TableYearGrade({
 
   const tableBody = () => {
     return yearsToDisplay.map((year) => (
-      <tr key={year.value} className={contentRow}>
-        <td
+      <TableRow key={year.value} className={contentRow}>
+        <TableCell
           className={clsx({
             "bg-gray-100": year.value === selectedYear,
           })}
         >
           {year.label}
-        </td>
+        </TableCell>
         {gradesTableData.map((grade) => renderCell(grade.value, year.value))}
-      </tr>
+      </TableRow>
     ));
   };
 
@@ -92,14 +106,14 @@ export default function TableYearGrade({
 
   return (
     <>
-      <div className="shadow border border-gray-200 overflow-x-auto mb-4">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-200">{tableHeader(gradesTableData)}</thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {tableBody()}
-          </tbody>
-        </table>
-      </div>
+      <TableContainer component={TableHolder}>
+        <Table>
+          <TableHead className="bg-gray-200">
+            {tableHeader(gradesTableData)}
+          </TableHead>
+          <TableBody>{tableBody()}</TableBody>
+        </Table>
+      </TableContainer>
       {isInDecade && (
         <div className="flex justify-end" onClick={toggleExpanded}>
           <Button variant="outlined">{buttonMsg}</Button>
