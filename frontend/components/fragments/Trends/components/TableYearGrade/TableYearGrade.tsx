@@ -24,7 +24,9 @@ export default function TableYearGrade({
   isLoading,
 }: Props) {
   if (isLoading) {
-    return <Skeleton variant="rectangular" className={container} />;
+    return (
+      <Skeleton variant="rectangular" className={clsx(container, "mb-4")} />
+    );
   }
 
   const [expanded, setExpanded] = useState(false);
