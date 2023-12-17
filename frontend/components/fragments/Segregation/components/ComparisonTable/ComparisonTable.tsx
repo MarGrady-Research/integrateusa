@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import axios from "axios";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
@@ -141,6 +141,8 @@ export default function Comparison({
     return newLine;
   };
 
+  const abortControllersRef = useRef({});
+
   const getLineData = (lineId: string) => {
     const url =
       "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
@@ -152,28 +154,64 @@ export default function Comparison({
 
     setLinesData((ld) => [...ld, newLineDataLoading]);
 
-    axios.get(url).then((res) => {
-      const newLineData = processLineData(res.data, lineId);
+    abortControllersRef.current = {
+      ...abortControllersRef.current,
+      [lineId]: new AbortController(),
+    };
 
-      setLinesData((ld) => {
-        const lineIdx = ld.findIndex((l) => l.id === lineId);
+    const currentAbortController = abortControllersRef.current[lineId];
 
-        if (lineIdx != -1) {
-          const newLinesData = [
-            ...ld.slice(0, lineIdx),
-            newLineData,
-            ...ld.slice(lineIdx + 1),
-          ];
+    axios
+      .get(url, { signal: currentAbortController.signal })
+      .then((res) => {
+        const newLineData = processLineData(res.data, lineId);
 
-          return newLinesData;
-        } else {
-          return [...ld, newLineData];
+        setLinesData((ld) => {
+          const lineIdx = ld.findIndex((l) => l.id === lineId);
+
+          if (lineIdx != -1) {
+            const newLinesData = [
+              ...ld.slice(0, lineIdx),
+              newLineData,
+              ...ld.slice(lineIdx + 1),
+            ];
+
+            return newLinesData;
+          } else {
+            return [...ld, newLineData];
+          }
+        });
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          const failedLineData = {
+            id: lineId,
+            status: "failed" as "failed",
+          };
+
+          setLinesData((ld) => {
+            const lineIdx = ld.findIndex((l) => l.id === lineId);
+
+            if (lineIdx != -1) {
+              const newLinesData = [
+                ...ld.slice(0, lineIdx),
+                failedLineData,
+                ...ld.slice(lineIdx + 1),
+              ];
+
+              return newLinesData;
+            } else {
+              return [...ld, failedLineData];
+            }
+          });
         }
       });
-    });
   };
 
   const removeLineData = (lineId: string) => {
+    const currentAbortController = abortControllersRef.current[lineId];
+    currentAbortController.abort();
+
     const newLinesData = linesData.filter((l) => l.id !== lineId);
 
     setLinesData(newLinesData);
