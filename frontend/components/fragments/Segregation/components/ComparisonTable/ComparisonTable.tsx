@@ -272,10 +272,15 @@ export default function Comparison({
   }, [measure]);
 
   useEffect(() => {
-    /*const abortController = new AbortController();
+    const abortController = new AbortController();
 
     setLines([id]);
-    setLinesData([]);
+    setLinesData([
+      {
+        id,
+        status: "loading" as "loading",
+      },
+    ]);
 
     axios
       .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
@@ -288,12 +293,20 @@ export default function Comparison({
 
         linesData.push(newLineData);
         setLinesData(linesData);
-      }).catch(() => {});
-;
-
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          setLinesData([
+            {
+              id,
+              status: "failed" as "failed",
+            },
+          ]);
+        }
+      });
     return () => {
       abortController.abort();
-    };*/
+    };
   }, [id]);
 
   useEffect(() => {}, [lines]);
