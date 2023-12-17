@@ -33,6 +33,8 @@ interface Props {
   isLoading: boolean;
 }
 
+const ROWS_PER_PAGE = 10;
+
 export default function Comparison({
   id,
   name,
@@ -101,13 +103,12 @@ export default function Comparison({
   );
 
   const [activePage, setActivePage] = useState(1);
-  const handleActivePage = (p) => setActivePage(p);
+  const handleActivePage = (p: number) => setActivePage(p);
 
-  const rowsPerPage = 10;
   const count = filteredRows.length;
-  const totalPages = Math.ceil(count / rowsPerPage);
+  const totalPages = Math.ceil(count / ROWS_PER_PAGE);
 
-  const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
+  const calculatedRows = paginateRows(sortedRows, activePage, ROWS_PER_PAGE);
 
   const [lines, setLines] = useState([{ id, name }] as LineDataBase[]);
   const [linesData, setLinesData] = useState([] as LineData[]);
