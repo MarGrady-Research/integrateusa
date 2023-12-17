@@ -342,8 +342,6 @@ export default function Comparison({
     };
   }, [id]);
 
-  useEffect(() => {}, [lines]);
-
   const [min, setMin] = useState({
     num_schools: 1,
     enr_prop_as: 0,

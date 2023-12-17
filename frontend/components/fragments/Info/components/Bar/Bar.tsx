@@ -11,6 +11,7 @@ import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import {
   asianColor,
@@ -23,8 +24,6 @@ import {
 import { legendMargin } from "../../../../../charts";
 
 import { InfoData, RacialProportion } from "../../../../../interfaces";
-
-import { sortOnOrder } from "../../../../../utils";
 
 import {
   // @ts-ignore
@@ -56,16 +55,6 @@ interface Props {
   infoData: InfoData;
   isLoading: boolean;
 }
-
-const sortOptions = [
-  { value: "prop_as", label: "Asian" },
-  { value: "prop_bl", label: "Black" },
-  { value: "prop_hi", label: "Hispanic" },
-  { value: "prop_wh", label: "White" },
-  { value: "prop_or", label: "Other" },
-] as { value: RacialProportion; label: string }[];
-
-const labelOrder = ["Asian", "Black", "Hispanic", "White", "Other"];
 
 const getBarData = (data: InfoData) => {
   const asianData = [];
@@ -217,42 +206,45 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   return (
     <div className={clsx(container, "flex flex-col")}>
-      <p className="text-center text-sm mb-1">Sort By</p>
-      <div className={clsx("flex flex-wrap justify-center", buttons)}>
-        <div className={clsx({ "text-primary": sortedByAsian })}>
-          <button
-            className={buttonAsian}
-            onClick={() => handleSort("prop_as")}
-          />
-          Asian
-        </div>
-        <div className={clsx({ "text-primary": sortedByBlack })}>
-          <button
-            className={buttonBlack}
-            onClick={() => handleSort("prop_bl")}
-          />
-          Black
-        </div>
-        <div className={clsx({ "text-primary": sortedByHispanic })}>
-          <button
-            className={buttonHispanic}
-            onClick={() => handleSort("prop_hi")}
-          />
-          Hispanic
-        </div>
-        <div className={clsx({ "text-primary": sortedByWhite })}>
-          <button
-            className={buttonWhite}
-            onClick={() => handleSort("prop_wh")}
-          />
-          White
-        </div>
-        <div className={clsx({ "text-primary": sortedByOther })}>
-          <button
-            className={buttonOther}
-            onClick={() => handleSort("prop_or")}
-          />
-          Other
+      <div className="flex justify-center items-center flex-col sm:flex-row">
+        <p className="text-sm mr-1 sm:mr-0 sm:mb-1 -mt-1">Click to sort</p>
+        <ArrowForwardIcon className="mr-1 !hidden sm:!inline-block" />
+        <div className={clsx("flex flex-wrap justify-center", buttons)}>
+          <div className={clsx({ "text-primary": sortedByAsian })}>
+            <button
+              className={buttonAsian}
+              onClick={() => handleSort("prop_as")}
+            />
+            Asian
+          </div>
+          <div className={clsx({ "text-primary": sortedByBlack })}>
+            <button
+              className={buttonBlack}
+              onClick={() => handleSort("prop_bl")}
+            />
+            Black
+          </div>
+          <div className={clsx({ "text-primary": sortedByHispanic })}>
+            <button
+              className={buttonHispanic}
+              onClick={() => handleSort("prop_hi")}
+            />
+            Hispanic
+          </div>
+          <div className={clsx({ "text-primary": sortedByWhite })}>
+            <button
+              className={buttonWhite}
+              onClick={() => handleSort("prop_wh")}
+            />
+            White
+          </div>
+          <div className={clsx({ "text-primary": sortedByOther })}>
+            <button
+              className={buttonOther}
+              onClick={() => handleSort("prop_or")}
+            />
+            Other
+          </div>
         </div>
       </div>
       <div className="flex-1">
