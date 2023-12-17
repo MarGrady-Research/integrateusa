@@ -9,6 +9,7 @@ import Info from "./components/Info";
 import {
   selectId,
   selectGrade,
+  selectYear,
   selectSelectedName,
 } from "../../../store/selectSlice";
 
@@ -16,7 +17,6 @@ import { SegData } from "../../../interfaces";
 
 interface Props {
   segData: SegData;
-  year: number;
   isLoading: boolean;
 }
 
@@ -65,8 +65,9 @@ const findFocus = (segData: SegData, idLevel: string, id: string) => {
   return null;
 };
 
-export default function Segregation({ segData, year, isLoading }: Props) {
+export default function Segregation({ segData, isLoading }: Props) {
   const grade = useSelector(selectGrade);
+  const year = useSelector(selectYear);
   const id = useSelector(selectId);
   const name = useSelector(selectSelectedName);
 
@@ -126,6 +127,8 @@ export default function Segregation({ segData, year, isLoading }: Props) {
           options={options}
           title={name}
           isLoading={isLoading}
+          year={year}
+          grade={grade}
         />
         <SegBar focus={focus} isLoading={isLoading} />
       </div>

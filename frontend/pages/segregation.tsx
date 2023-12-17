@@ -76,7 +76,7 @@ export default function SegregationPage() {
       <Selection omitSchools />
       <Page>
         <div className="mx-auto mt-5">
-          <Segregation segData={segData} year={year} isLoading={isLoading} />
+          <Segregation segData={segData} isLoading={isLoading} />
         </div>
       </Page>
     </>

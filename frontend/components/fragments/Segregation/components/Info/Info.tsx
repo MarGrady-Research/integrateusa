@@ -3,6 +3,9 @@ import { SelectChangeEvent } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 
 import { SegEntity } from "../../../../../interfaces";
+
+import { yearsData, gradesData } from "../../../Selection/data";
+
 import Select from "../../../../atoms/Select";
 
 interface Props {
@@ -20,6 +23,8 @@ interface Props {
   title: string;
   focus: SegEntity;
   isLoading: boolean;
+  year: number;
+  grade: string;
 }
 
 export default function Info({
@@ -29,6 +34,8 @@ export default function Info({
   title,
   focus,
   isLoading,
+  year,
+  grade,
 }: Props) {
   if (!isLoading && !focus) {
     return null;
@@ -82,6 +89,12 @@ export default function Info({
     selected.label
   );
 
+  const selectedYear = yearsData.find((y) => y.value === year);
+  const selectedYearString = selectedYear?.label;
+
+  const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedGradeString = selectedGrade?.label2;
+
   return (
     <div className="text-md lg:text-xl">
       <p className="mb-4 lg:mb-6">
@@ -89,11 +102,11 @@ export default function Info({
         by students in different racial groups.
       </p>
       <p className="mb-4 lg:mb-6">
-        {`The typical `}
+        {`In ${selectedYearString}, the typical `}
         {raceDropdown}
-        {` student in `}
+        {` ${selectedGradeString} in `}
         {entityName}
-        {` attends a school that is `}
+        {` attended a school that was `}
         {selectedIso}
         {` `}
         {selectedLabel}.
@@ -101,7 +114,7 @@ export default function Info({
       <p className="mb-4 lg:mb-6">
         {`The typical non-`}
         {selectedLabel}
-        {` student attends a school that is `}
+        {` ${selectedGradeString} attended a school that was `}
         {selectedNon}
         {` `}
         {selectedLabel}.
@@ -109,9 +122,9 @@ export default function Info({
       <p className="mb-4 lg:mb-6">
         {`The difference between these two numbers, `}
         {segValue}
-        {` is a measure of segregation for `}
+        {`, is a measure of segregation for `}
         {selectedLabel}
-        {` students.`}
+        {` ${selectedGradeString}s.`}
       </p>
     </div>
   );

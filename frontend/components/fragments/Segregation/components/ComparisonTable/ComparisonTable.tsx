@@ -262,7 +262,7 @@ export default function Comparison({
     setLinesData(loadingLinesData);
 
     const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l}`, {
+      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
         signal: abortController.signal,
       })
     );
