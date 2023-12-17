@@ -1,5 +1,12 @@
 import React from "react";
 import clsx from "clsx";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableFooter from "@mui/material/TableFooter";
+import TableRow from "@mui/material/TableRow";
 
 import { InfoData, SchoolType } from "../../../../../interfaces";
 
@@ -57,6 +64,14 @@ const getSchoolLevel = (infoData: InfoData) => {
   return schoolLevel;
 };
 
+function TableHolder({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shadow overflow-x-auto border border-gray-200">
+      {children}
+    </div>
+  );
+}
+
 export default function SchoolLevelTable({ infoData }: Props) {
   const schoolLevel = getSchoolLevel(infoData);
 
@@ -79,13 +94,13 @@ export default function SchoolLevelTable({ infoData }: Props) {
     const noOfStudentsString = noOfStudents.toLocaleString();
 
     return (
-      <tr key={schoolType} className={contentRow}>
-        <td>{schoolType}</td>
-        <td>{noOfSchoolsString}</td>
-        <td>{percentageOfSchools}</td>
-        <td>{noOfStudentsString}</td>
-        <td>{percentageOfStudents}</td>
-      </tr>
+      <TableRow className={contentRow}>
+        <TableCell>{schoolType}</TableCell>
+        <TableCell>{noOfSchoolsString}</TableCell>
+        <TableCell>{percentageOfSchools}</TableCell>
+        <TableCell>{noOfStudentsString}</TableCell>
+        <TableCell>{percentageOfStudents}</TableCell>
+      </TableRow>
     );
   };
 
@@ -98,18 +113,18 @@ export default function SchoolLevelTable({ infoData }: Props) {
   }
 
   return (
-    <div className="shadow overflow-x-auto border border-gray-200">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-200">
-          <tr className={headRow}>
-            <th scope="col">School Type</th>
-            <th scope="col"># of Schools</th>
-            <th scope="col">% of Schools</th>
-            <th scope="col"># of Students</th>
-            <th scope="col">% of Students</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+    <TableContainer component={TableHolder}>
+      <Table>
+        <TableHead className="bg-gray-200">
+          <TableRow className={headRow}>
+            <TableCell>School Type</TableCell>
+            <TableCell># of Schools</TableCell>
+            <TableCell>% of Schools</TableCell>
+            <TableCell># of Students</TableCell>
+            <TableCell>% of Students</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {tableRow("ES")}
           {tableRow("ESMS")}
           {tableRow("MS")}
@@ -117,17 +132,17 @@ export default function SchoolLevelTable({ infoData }: Props) {
           {tableRow("HS")}
           {tableRow("K12")}
           {tableRow("Other")}
-        </tbody>
-        <tfoot>
-          <tr className={clsx(contentRow, footerRow)}>
-            <td scope="col">Total</td>
-            <td scope="col">{totalSchoolsString}</td>
-            <td scope="col">100</td>
-            <td scope="col">{totalStudentsString}</td>
-            <td scope="col">100</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+        </TableBody>
+        <TableFooter>
+          <TableRow className={clsx(contentRow, footerRow)}>
+            <TableCell>Total</TableCell>
+            <TableCell>{totalSchoolsString}</TableCell>
+            <TableCell>100</TableCell>
+            <TableCell>{totalStudentsString}</TableCell>
+            <TableCell>100</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
   );
 }

@@ -207,7 +207,9 @@ export default function BarChart({ infoData, isLoading }: Props) {
   return (
     <div className={clsx(container, "flex flex-col")}>
       <div className="flex justify-center items-center flex-col sm:flex-row">
-        <p className="text-sm mr-1 sm:mr-0 sm:mb-1 -mt-1">Click to sort</p>
+        <p className="text-sm mr-1 sm:-mt-0.5 sm:mr-0 mb-1 sm:mb-0">
+          Click to sort
+        </p>
         <ArrowForwardIcon className="mr-1 !hidden sm:!inline-block" />
         <div className={clsx("flex flex-wrap justify-center", buttons)}>
           <div className={clsx({ "text-primary": sortedByAsian })}>
