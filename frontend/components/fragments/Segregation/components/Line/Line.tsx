@@ -130,7 +130,7 @@ const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
               {isLoading && <CircularProgress color="inherit" size={14} />}
               {hasFailed && <ErrorIcon color="error" fontSize="medium" />}
             </div>
-            {l.id}
+            {l.name}
           </div>
         );
       })}

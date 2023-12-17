@@ -10,6 +10,7 @@ export type {
   SegEntity,
   LineData,
   LineDataLoaded,
+  LineDataBase,
   LocationSearchResult,
 } from "./interfaces";
 

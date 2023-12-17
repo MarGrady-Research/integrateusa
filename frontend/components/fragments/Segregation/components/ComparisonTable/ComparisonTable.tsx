@@ -9,10 +9,16 @@ import Pagination from "../Pagination";
 import { sortRows, filterRows, paginateRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
 
-import { SegData, LineData, LineDataLoaded } from "../../../../../interfaces";
+import {
+  SegData,
+  LineData,
+  LineDataLoaded,
+  LineDataBase,
+} from "../../../../../interfaces";
 
 interface Props {
   id: string;
+  name: string;
   grade: string;
   segData: SegData;
   idLevel: string;
@@ -29,6 +35,7 @@ interface Props {
 
 export default function Comparison({
   id,
+  name,
   grade,
   segData,
   nameLevel,
@@ -102,7 +109,7 @@ export default function Comparison({
 
   const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
 
-  const [lines, setLines] = useState([id]);
+  const [lines, setLines] = useState([{ id, name }] as LineDataBase[]);
   const [linesData, setLinesData] = useState([] as LineData[]);
 
   const labels = yearsData
@@ -111,7 +118,7 @@ export default function Comparison({
       return a - b;
     });
 
-  const processLineData = (data, id: string) => {
+  const processLineData = (data, id: string, name: string) => {
     let finalData = data.map((d) => ({
       seg: d[measure.accessor],
       year: d.year,
@@ -129,8 +136,6 @@ export default function Comparison({
       }
     });
 
-    const name = data[0][nameLevel];
-
     const newLine = {
       id,
       name,
@@ -143,12 +148,13 @@ export default function Comparison({
 
   const abortControllersRef = useRef({});
 
-  const getLineData = (lineId: string) => {
+  const getLineData = (lineId: string, lineName: string) => {
     const url =
       "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
 
     const newLineDataLoading = {
       id: lineId,
+      name: lineName,
       status: "loading" as "loading",
     };
 
@@ -164,7 +170,7 @@ export default function Comparison({
     axios
       .get(url, { signal: currentAbortController.signal })
       .then((res) => {
-        const newLineData = processLineData(res.data, lineId);
+        const newLineData = processLineData(res.data, lineId, lineName);
 
         setLinesData((ld) => {
           const lineIdx = ld.findIndex((l) => l.id === lineId);
@@ -186,6 +192,7 @@ export default function Comparison({
         if (error.name !== "CanceledError") {
           const failedLineData = {
             id: lineId,
+            name: lineName,
             status: "failed" as "failed",
           };
 
@@ -215,17 +222,20 @@ export default function Comparison({
       currentAbortController.abort();
     }
 
-    const newLinesData = linesData.filter((l) => l.id !== lineId);
-
-    setLinesData(newLinesData);
+    setLinesData((linesData) => linesData.filter((l) => l.id !== lineId));
   };
 
   const updateLineState = (lineId: string, lineName: string) => {
-    if (!lines.includes(lineId)) {
-      setLines((currentLines) => [...currentLines, lineId]);
-      getLineData(lineId);
+    const isLineAbsent = lines.findIndex((l) => l.id === lineId) === -1;
+
+    if (isLineAbsent) {
+      setLines((currentLines) => [
+        ...currentLines,
+        { id: lineId, name: lineName },
+      ]);
+      getLineData(lineId, lineName);
     } else {
-      setLines((currentLines) => currentLines.filter((l) => l !== lineId));
+      setLines((currentLines) => currentLines.filter((l) => l.id !== lineId));
       removeLineData(lineId);
     }
   };
@@ -244,7 +254,8 @@ export default function Comparison({
     const abortController = new AbortController();
 
     const loadingLinesData = lines.map((l) => ({
-      id: l,
+      id: l.id,
+      name: l.name,
       status: "loading" as "loading",
     }));
 
@@ -261,7 +272,11 @@ export default function Comparison({
         const linesData = [];
 
         for (const [index, res] of values.entries()) {
-          const newLineData = processLineData(res.data, lines[index]);
+          const newLineData = processLineData(
+            res.data,
+            lines[index].id,
+            lines[index].name
+          );
 
           linesData.push(newLineData);
         }
@@ -271,7 +286,8 @@ export default function Comparison({
       .catch((error) => {
         if (error.name !== "CanceledError") {
           const failedLinesData = lines.map((l) => ({
-            id: l,
+            id: l.id,
+            name: l.name,
             status: "failed" as "failed",
           }));
 
@@ -289,10 +305,11 @@ export default function Comparison({
 
     const abortController = new AbortController();
 
-    setLines([id]);
+    setLines([{ id, name }]);
     setLinesData([
       {
         id,
+        name,
         status: "loading" as "loading",
       },
     ]);
@@ -304,7 +321,7 @@ export default function Comparison({
       .then((res) => {
         const linesData = [];
 
-        const newLineData = processLineData(res.data, id);
+        const newLineData = processLineData(res.data, id, name);
 
         linesData.push(newLineData);
         setLinesData(linesData);
@@ -314,6 +331,7 @@ export default function Comparison({
           setLinesData([
             {
               id,
+              name,
               status: "failed" as "failed",
             },
           ]);
@@ -397,7 +415,6 @@ export default function Comparison({
                       className="form-check-input items-center "
                       id="master"
                       onClick={() => {
-                        console.log(calculatedRows);
                         calculatedRows.forEach((e) =>
                           updateLineState(e[idLevel], e[nameLevel])
                         );
@@ -536,7 +553,8 @@ export default function Comparison({
                           checked={
                             row[idLevel] === "" + id
                               ? true
-                              : lines.includes(row[idLevel])
+                              : lines.findIndex((l) => l.id === row[idLevel]) !=
+                                -1
                           }
                           disabled={row[idLevel] === "" + id ? true : false}
                           onClick={() =>

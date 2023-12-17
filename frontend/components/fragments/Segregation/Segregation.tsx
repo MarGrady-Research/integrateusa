@@ -68,7 +68,7 @@ const findFocus = (segData: SegData, idLevel: string, id: string) => {
 export default function Segregation({ segData, year, isLoading }: Props) {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
-  const title = useSelector(selectSelectedName);
+  const name = useSelector(selectSelectedName);
 
   const [selected, setSelected] = useState(defaultOption);
 
@@ -117,20 +117,21 @@ export default function Segregation({ segData, year, isLoading }: Props) {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-5">{title}</h1>
+      <h1 className="text-4xl font-bold mb-5">{name}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-y-0 lg:gap-x-5 mb-10">
         <Info
           focus={focus}
           selected={selected}
           handleChange={handleChange}
           options={options}
-          title={title}
+          title={name}
           isLoading={isLoading}
         />
         <SegBar focus={focus} isLoading={isLoading} />
       </div>
       <Comparison
         id={id}
+        name={name}
         grade={grade}
         segData={segData}
         idLevel={idLevel}

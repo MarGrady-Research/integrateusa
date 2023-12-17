@@ -87,8 +87,9 @@ export enum Level {
   State,
 }
 
-interface LineDataBase {
+export interface LineDataBase {
   id: string;
+  name: string;
 }
 
 interface LineDataLoading extends LineDataBase {
@@ -101,7 +102,6 @@ interface LineDataFailed extends LineDataBase {
 
 export interface LineDataLoaded extends LineDataBase {
   status: "loaded";
-  name: string;
   data: {
     seg: number;
     year: number;
