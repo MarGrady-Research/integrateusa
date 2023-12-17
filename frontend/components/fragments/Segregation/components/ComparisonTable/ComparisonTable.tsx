@@ -210,20 +210,23 @@ export default function Comparison({
 
   const removeLineData = (lineId: string) => {
     const currentAbortController = abortControllersRef.current[lineId];
-    currentAbortController.abort();
+
+    if (currentAbortController) {
+      currentAbortController.abort();
+    }
 
     const newLinesData = linesData.filter((l) => l.id !== lineId);
 
     setLinesData(newLinesData);
   };
 
-  const updateLineState = (line) => {
-    if (!lines.includes(line)) {
-      setLines((currentLines) => [...currentLines, line]);
-      getLineData(line);
+  const updateLineState = (lineId: string, lineName: string) => {
+    if (!lines.includes(lineId)) {
+      setLines((currentLines) => [...currentLines, lineId]);
+      getLineData(lineId);
     } else {
-      setLines((currentLines) => currentLines.filter((l) => l !== line));
-      removeLineData(line);
+      setLines((currentLines) => currentLines.filter((l) => l !== lineId));
+      removeLineData(lineId);
     }
   };
 
@@ -394,9 +397,10 @@ export default function Comparison({
                       className="form-check-input items-center "
                       id="master"
                       onClick={() => {
-                        calculatedRows
-                          .map((e) => e[idLevel])
-                          .forEach((e) => updateLineState(e));
+                        console.log(calculatedRows);
+                        calculatedRows.forEach((e) =>
+                          updateLineState(e[idLevel], e[nameLevel])
+                        );
                       }}
                     />
                   </th>
@@ -529,14 +533,15 @@ export default function Comparison({
                         <input
                           type="checkbox"
                           className="form-check-input"
-                          id={row[idLevel]}
                           checked={
                             row[idLevel] === "" + id
                               ? true
                               : lines.includes(row[idLevel])
                           }
                           disabled={row[idLevel] === "" + id ? true : false}
-                          onClick={(e) => updateLineState((e.target as any).id)}
+                          onClick={() =>
+                            updateLineState(row[idLevel], row[nameLevel])
+                          }
                           readOnly={false}
                         />
                       </th>
