@@ -28,6 +28,7 @@ interface Props {
     accessor: string;
     name: string;
   };
+  minSchools: number;
   maxSchools: number;
   year: number;
   isLoading: boolean;
@@ -44,10 +45,19 @@ export default function Comparison({
   idLevel,
   table,
   measure,
+  minSchools,
   maxSchools,
   year,
   isLoading,
 }: Props) {
+  if (isLoading) {
+    return (
+      <div className="mb-10">
+        <Skeleton className="w-full" height={683} variant="rectangular" />
+      </div>
+    );
+  }
+
   const columns = [
     { accessor: "checkbox", label: "" },
     { accessor: nameLevel, label: "Name" },
@@ -344,7 +354,7 @@ export default function Comparison({
   }, [id]);
 
   const [min, setMin] = useState({
-    num_schools: 1,
+    num_schools: minSchools,
     enr_prop_as: 0,
     enr_prop_bl: 0,
     enr_prop_hi: 0,
@@ -429,10 +439,10 @@ export default function Comparison({
                       className="px-2 py-2 whitespace-wrap border border-gray-700 rounded-md"
                       key={`${column.accessor}-search`}
                       type="search"
-                      value={filters[column.accessor]}
-                      placeholder={`Search Name`}
+                      value={filters[nameLevel]}
+                      placeholder="Search Name"
                       onChange={(event) =>
-                        handleSearch(event.target.value, column.accessor)
+                        handleSearch(event.target.value, nameLevel)
                       }
                     />
                   </td>
@@ -443,7 +453,7 @@ export default function Comparison({
                     e.target.value === "" || e.target.value === undefined
                       ? setMin((oldmin) => ({
                           ...oldmin,
-                          [column.accessor]: 1,
+                          [column.accessor]: minSchools,
                         }))
                       : setMin((oldmin) => ({
                           ...oldmin,
@@ -619,12 +629,12 @@ export default function Comparison({
           )}
         </div>
       }
-      <LineGraph
+      {/*<LineGraph
         linesData={linesData}
         id={id}
         year={year}
         isLoading={isLoading}
-      />
+    />*/}
     </>
   );
 }
