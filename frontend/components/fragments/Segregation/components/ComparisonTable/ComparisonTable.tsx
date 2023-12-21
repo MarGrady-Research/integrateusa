@@ -444,7 +444,7 @@ export default function ComparisonTable({
   const tableSearchRowCheckbox = () => (
     <Checkbox
       onClick={() => {
-        filteredRows.forEach((e) => updateLineState(e[idLevel], e[nameLevel]));
+        visibleRows.forEach((e) => updateLineState(e[idLevel], e[nameLevel]));
       }}
     />
   );
