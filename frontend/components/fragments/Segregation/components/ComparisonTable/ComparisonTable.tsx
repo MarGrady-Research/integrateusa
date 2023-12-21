@@ -5,7 +5,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableFooter from "@mui/material/TableFooter";
 import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
@@ -16,7 +15,7 @@ import clsx from "clsx";
 import LineGraph from "../Line";
 import Pagination from "../Pagination";
 
-import { sortRows, filterRows, paginateRows } from "../../helpers";
+import { sortRows, filterRows } from "../../helpers";
 import { yearsData } from "../../../Selection/data";
 
 import {
@@ -43,6 +42,8 @@ interface Props {
 }
 
 const ROWS_PER_PAGE = 10;
+const ROW_HEIGHT = 55;
+const TABLE_HEIGHT = 696;
 
 function TableHolder({ children }: { children: React.ReactNode }) {
   return (
@@ -78,11 +79,13 @@ export default function ComparisonTable({
 
   const [filters, setFilters] = useState({});
 
-  const [activePage, setActivePage] = useState(1);
-  const handleActivePage = (p: number) => setActivePage(p);
+  const [page, setPage] = useState(0);
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
   const handleSearch = (value, accessor) => {
-    setActivePage(1);
+    setPage(0);
 
     if (value) {
       setFilters((prevFilters) => ({
@@ -102,7 +105,8 @@ export default function ComparisonTable({
   const [sort, setSort] = useState({ orderDesc: true, orderBy: "num_schools" });
 
   const handleSort = (accessor) => {
-    setActivePage(1);
+    setPage(0);
+
     setSort((prevSort) => ({
       orderDesc: !prevSort.orderDesc && prevSort.orderBy === accessor,
       orderBy: accessor,
@@ -114,15 +118,19 @@ export default function ComparisonTable({
     [segData, filters]
   );
 
-  const sortedRows = useMemo(
-    () => sortRows(filteredRows, sort),
-    [filteredRows, sort]
+  const emptyRows = Math.max(
+    0,
+    (1 + page) * ROWS_PER_PAGE - filteredRows.length
   );
 
-  const count = filteredRows.length;
-  const totalPages = Math.ceil(count / ROWS_PER_PAGE);
+  const visibleRows = useMemo(() => {
+    const sortedRows = sortRows(filteredRows, sort);
 
-  const calculatedRows = paginateRows(sortedRows, activePage, ROWS_PER_PAGE);
+    return sortedRows.slice(
+      page * ROWS_PER_PAGE,
+      page * ROWS_PER_PAGE + ROWS_PER_PAGE
+    );
+  }, [page, sort, filteredRows]);
 
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
   const minSchools = Math.min(...segData.map((e) => e["num_schools"]));
@@ -436,9 +444,7 @@ export default function ComparisonTable({
   const tableSearchRowCheckbox = () => (
     <Checkbox
       onClick={() => {
-        calculatedRows.forEach((e) =>
-          updateLineState(e[idLevel], e[nameLevel])
-        );
+        filteredRows.forEach((e) => updateLineState(e[idLevel], e[nameLevel]));
       }}
     />
   );
@@ -574,7 +580,7 @@ export default function ComparisonTable({
   );
 
   const tableContentRows = () =>
-    calculatedRows.map((row) => (
+    visibleRows.map((row) => (
       <TableRow key={row[idLevel]}>
         {columns.map((column) => {
           const isSelectedRow = row[idLevel] === `${id}`;
@@ -615,11 +621,26 @@ export default function ComparisonTable({
       </TableRow>
     ));
 
+  const tableEmptyRows = () =>
+    emptyRows > 0 && (
+      <TableRow
+        style={{
+          height: ROW_HEIGHT * emptyRows,
+        }}
+      >
+        <TableCell colSpan={8} />
+      </TableRow>
+    );
+
   return (
     <>
       <div className="mb-10">
         {isLoading ? (
-          <Skeleton className="w-full" height={644} variant="rectangular" />
+          <Skeleton
+            className="w-full"
+            height={TABLE_HEIGHT}
+            variant="rectangular"
+          />
         ) : (
           <>
             <TableContainer component={TableHolder}>
@@ -628,13 +649,15 @@ export default function ComparisonTable({
                 <TableBody>
                   {tableSearchRow()}
                   {tableContentRows()}
+                  {tableEmptyRows()}
                 </TableBody>
               </Table>
             </TableContainer>
             <Pagination
-              activePage={activePage}
-              totalPages={totalPages}
-              handleActivePage={handleActivePage}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={ROWS_PER_PAGE}
+              count={filteredRows.length}
             />
           </>
         )}

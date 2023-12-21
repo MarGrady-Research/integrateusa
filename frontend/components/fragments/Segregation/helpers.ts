@@ -70,10 +70,3 @@ export const filterRows = (rows, filters) => {
     });
   });
 };
-
-export function paginateRows(sortedRows, activePage, rowsPerPage) {
-  return [...sortedRows].slice(
-    (activePage - 1) * rowsPerPage,
-    activePage * rowsPerPage
-  );
-}

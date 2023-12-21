@@ -1,63 +1,115 @@
 import React from "react";
+import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import TablePagination from "@mui/material/TablePagination";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import Box from "@mui/material/Box";
+
+interface TablePaginationActionsProps {
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number
+  ) => void;
+}
+
+function TablePaginationActions(props: TablePaginationActionsProps) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
 
 interface Props {
-  activePage: number;
-  totalPages: number;
-  handleActivePage: (page: number) => void;
+  page: number;
+  count: number;
+  rowsPerPage: number;
+  onPageChange: (event: unknown, newPage: number) => void;
 }
 
 export default function Pagination({
-  activePage,
-  totalPages,
-  handleActivePage,
+  page,
+  onPageChange,
+  count,
+  rowsPerPage,
 }: Props) {
-  const goToFirstPage = () => handleActivePage(1);
-  const goToNextPage = () => handleActivePage(activePage + 1);
-  const goToPrevPage = () => handleActivePage(activePage - 1);
-  const goToLastPage = () => handleActivePage(totalPages);
-
-  const onFirstPage = activePage === 1;
-  const onLastPage = activePage === totalPages;
-
   return (
-    <div className="mt-4 hidden sm:flex sm:items-center sm:justify-between">
-      <p className="text-sm text-gray-700">
-        Page <span className="font-medium">{activePage}</span> of{" "}
-        <span className="font-medium">{totalPages}</span>
-      </p>
-      <nav
-        className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-        aria-label="Pagination"
-      >
-        <button
-          disabled={onFirstPage}
-          onClick={goToFirstPage}
-          className="paginate-btn rounded-l-md"
-        >
-          First
-        </button>
-        <button
-          disabled={onFirstPage}
-          onClick={goToPrevPage}
-          className="paginate-btn"
-        >
-          &laquo;
-        </button>
-        <button
-          disabled={onLastPage}
-          onClick={goToNextPage}
-          className="paginate-btn"
-        >
-          &raquo;
-        </button>
-        <button
-          disabled={onLastPage}
-          onClick={goToLastPage}
-          className="paginate-btn rounded-r-md"
-        >
-          Last
-        </button>
-      </nav>
-    </div>
+    <TablePagination
+      component="div"
+      count={count}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onPageChange={onPageChange}
+      rowsPerPageOptions={[rowsPerPage]}
+      ActionsComponent={TablePaginationActions}
+    />
   );
 }
