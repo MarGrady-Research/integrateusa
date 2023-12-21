@@ -1,7 +1,17 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
+import IconButton from "@mui/material/IconButton";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableFooter from "@mui/material/TableFooter";
+import TableRow from "@mui/material/TableRow";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
+import Skeleton from "@mui/material/Skeleton";
 import axios from "axios";
 import clsx from "clsx";
-import Skeleton from "@mui/material/Skeleton";
 
 import LineGraph from "../Line";
 import Pagination from "../Pagination";
@@ -28,15 +38,21 @@ interface Props {
     accessor: string;
     name: string;
   };
-  minSchools: number;
-  maxSchools: number;
   year: number;
   isLoading: boolean;
 }
 
 const ROWS_PER_PAGE = 10;
 
-export default function Comparison({
+function TableHolder({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="shadow overflow-x-auto border border-gray-200">
+      {children}
+    </div>
+  );
+}
+
+export default function ComparisonTable({
   id,
   name,
   grade,
@@ -45,19 +61,9 @@ export default function Comparison({
   idLevel,
   table,
   measure,
-  minSchools,
-  maxSchools,
   year,
   isLoading,
 }: Props) {
-  if (isLoading) {
-    return (
-      <div className="mb-10">
-        <Skeleton className="w-full" height={683} variant="rectangular" />
-      </div>
-    );
-  }
-
   const columns = [
     { accessor: "checkbox", label: "" },
     { accessor: nameLevel, label: "Name" },
@@ -71,6 +77,9 @@ export default function Comparison({
   ];
 
   const [filters, setFilters] = useState({});
+
+  const [activePage, setActivePage] = useState(1);
+  const handleActivePage = (p: number) => setActivePage(p);
 
   const handleSearch = (value, accessor) => {
     setActivePage(1);
@@ -90,15 +99,12 @@ export default function Comparison({
     }
   };
 
-  const [sort, setSort] = useState({ order: "desc", orderBy: "num_schools" });
+  const [sort, setSort] = useState({ orderDesc: true, orderBy: "num_schools" });
 
   const handleSort = (accessor) => {
     setActivePage(1);
     setSort((prevSort) => ({
-      order:
-        prevSort.order === "asc" && prevSort.orderBy === accessor
-          ? "desc"
-          : "asc",
+      orderDesc: !prevSort.orderDesc && prevSort.orderBy === accessor,
       orderBy: accessor,
     }));
   };
@@ -107,18 +113,47 @@ export default function Comparison({
     () => filterRows(segData, filters),
     [segData, filters]
   );
+
   const sortedRows = useMemo(
     () => sortRows(filteredRows, sort),
     [filteredRows, sort]
   );
 
-  const [activePage, setActivePage] = useState(1);
-  const handleActivePage = (p: number) => setActivePage(p);
-
   const count = filteredRows.length;
   const totalPages = Math.ceil(count / ROWS_PER_PAGE);
 
   const calculatedRows = paginateRows(sortedRows, activePage, ROWS_PER_PAGE);
+
+  const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
+  const minSchools = Math.min(...segData.map((e) => e["num_schools"]));
+
+  const [min, setMin] = useState({
+    num_schools: minSchools,
+    enr_prop_as: 0,
+    enr_prop_bl: 0,
+    enr_prop_hi: 0,
+    enr_prop_or: 0,
+    enr_prop_wh: 0,
+    [measure.accessor]: 0,
+  });
+
+  const [max, setMax] = useState({
+    num_schools: maxSchools,
+    enr_prop_as: 100,
+    enr_prop_bl: 100,
+    enr_prop_hi: 100,
+    enr_prop_or: 100,
+    enr_prop_wh: 100,
+    [measure.accessor]: 100,
+  });
+
+  useEffect(() => {
+    setMax((oldMax) => ({ ...oldMax, num_schools: maxSchools }));
+  }, [maxSchools]);
+
+  useEffect(() => {
+    setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
+  }, [minSchools]);
 
   const [lines, setLines] = useState([{ id, name }] as LineDataBase[]);
   const [linesData, setLinesData] = useState([] as LineData[]);
@@ -353,288 +388,263 @@ export default function Comparison({
     };
   }, [id]);
 
-  const [min, setMin] = useState({
-    num_schools: minSchools,
-    enr_prop_as: 0,
-    enr_prop_bl: 0,
-    enr_prop_hi: 0,
-    enr_prop_or: 0,
-    enr_prop_wh: 0,
-    [measure.accessor]: 0,
-  });
-
-  const [max, setMax] = useState({
-    num_schools: maxSchools,
-    enr_prop_as: 100,
-    enr_prop_bl: 100,
-    enr_prop_hi: 100,
-    enr_prop_or: 100,
-    enr_prop_wh: 100,
-    [measure.accessor]: 1,
-  });
-
-  const tableRows = (columns) => {
-    return (
-      <table className="min-w-full table-fixed">
-        <thead className="border-b bg-gray-200">
-          <tr>
-            {columns.map((column) => {
-              const sortIcon = () => {
-                if (column.accessor === sort.orderBy) {
-                  if (sort.order === "asc") {
-                    return "\u2191";
-                  }
-                  return "\u2193";
-                } else {
-                  return "\u2195";
-                }
-              };
-              return (
-                <th
-                  key={column.accessor}
-                  scope="col"
-                  className="px-2 py-3 text-center text-xs font-medium text-gray-900 uppercase tracking-wider"
-                >
-                  <div
-                    className={clsx({
-                      "flex flex-row": true,
-                      "justify-center": column.accessor != nameLevel,
-                    })}
-                  >
-                    <span className="px-1">{column.label}</span>
-                    {column.accessor !== "checkbox" && (
-                      <button onClick={() => handleSort(column.accessor)}>
-                        {sortIcon()}
-                      </button>
-                    )}
-                  </div>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          <tr>
-            {columns.map((column) => {
-              if (column.accessor === "checkbox") {
-                return (
-                  <th scope="row" className="px-2 py-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      className="form-check-input items-center "
-                      id="master"
-                      onClick={() => {
-                        calculatedRows.forEach((e) =>
-                          updateLineState(e[idLevel], e[nameLevel])
-                        );
-                      }}
-                    />
-                  </th>
-                );
+  const tableHeader = () => (
+    <TableHead className="bg-gray-200">
+      <TableRow>
+        {columns.map((column) => {
+          const sortIcon = () => {
+            if (column.accessor === sort.orderBy) {
+              if (!sort.orderDesc) {
+                return "\u2191";
               }
-              if (column.accessor === nameLevel) {
-                return (
-                  <td className="px-2 py-1">
-                    <input
-                      className="px-2 py-2 whitespace-wrap border border-gray-700 rounded-md"
-                      key={`${column.accessor}-search`}
-                      type="search"
-                      value={filters[nameLevel]}
-                      placeholder="Search Name"
-                      onChange={(event) =>
-                        handleSearch(event.target.value, nameLevel)
-                      }
-                    />
-                  </td>
-                );
-              } else {
-                const minSearch = (e) => {
-                  if (column.accessor === "num_schools") {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: minSchools,
-                        }))
-                      : setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: 0,
-                        }))
-                      : setMin((oldmin) => ({
-                          ...oldmin,
-                          [column.accessor]: e.target.value,
-                        }));
-                  }
+              return "\u2193";
+            } else {
+              return "\u2195";
+            }
+          };
 
-                  let searchVal = e.target.value === "" ? 0 : e.target.value;
-                  handleSearch(
-                    [searchVal, max[column.accessor]],
-                    column.accessor
-                  );
-                };
-
-                const maxSearch = (e) => {
-                  if (column.accessor === "num_schools") {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: maxSchools,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else if (column.accessor === measure.accessor) {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: 1,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  } else {
-                    e.target.value === "" || e.target.value === undefined
-                      ? setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: 100,
-                        }))
-                      : setMax((oldmax) => ({
-                          ...oldmax,
-                          [column.accessor]: e.target.value,
-                        }));
-                  }
-
-                  let searchVal = e.target.value === "" ? 100 : e.target.value;
-                  handleSearch(
-                    [min[column.accessor], searchVal],
-                    column.accessor
-                  );
-                };
-
-                return (
-                  <td>
-                    <div className="w-full px-2 py-1 flex flex-row justify-center">
-                      <input
-                        type="text"
-                        className="w-10 bg-gray-200 border rounded-md text-xs text-center mr-2"
-                        placeholder={
-                          min[column.accessor]
-                            ? min[column.accessor].toString()
-                            : ""
-                        }
-                        readOnly={false}
-                        onChange={(e) => minSearch(e)}
-                      />
-                      <input
-                        type="text"
-                        className="w-10 bg-gray-200 border rounded-md text-xs text-center"
-                        placeholder={
-                          max[column.accessor]
-                            ? max[column.accessor].toString()
-                            : ""
-                        }
-                        readOnly={false}
-                        onChange={(e) => maxSearch(e)}
-                      />
-                    </div>
-                  </td>
-                );
-              }
-            })}
-          </tr>
-          {calculatedRows.map((row) => {
-            return (
-              <tr key={row[idLevel]}>
-                {columns.map((column) => {
-                  if (column.accessor == "checkbox") {
-                    return (
-                      <th scope="row">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          checked={
-                            row[idLevel] === "" + id
-                              ? true
-                              : lines.findIndex((l) => l.id === row[idLevel]) !=
-                                -1
-                          }
-                          disabled={row[idLevel] === "" + id ? true : false}
-                          onClick={() =>
-                            updateLineState(row[idLevel], row[nameLevel])
-                          }
-                          readOnly={false}
-                        />
-                      </th>
-                    );
-                  } else if (column.accessor === nameLevel) {
-                    return (
-                      <td
-                        key={column.accessor}
-                        className={`text-sm text-left text-gray-900 font-light px-2 py-4 ${
-                          row[idLevel] === "" + id
-                            ? "text-line-red font-semibold"
-                            : ""
-                        }`}
-                      >
-                        {row[column.accessor]}
-                      </td>
-                    );
-                  } else {
-                    return (
-                      <td
-                        key={column.accessor}
-                        className={`text-sm text-center text-gray-900 font-light px-2 py-4 ${
-                          row[idLevel] === "" + id
-                            ? "text-line-red font-semibold"
-                            : ""
-                        }`}
-                      >
-                        {row[column.accessor]}
-                      </td>
-                    );
-                  }
+          return (
+            <TableCell
+              key={column.accessor}
+              className="!text-center !text-xs font-medium text-gray-900 uppercase tracking-wider"
+            >
+              <div
+                className={clsx({
+                  "flex flex-row items-center": true,
+                  "justify-center": column.accessor != nameLevel,
                 })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              >
+                <span className="px-1">{column.label}</span>
+                {column.accessor !== "checkbox" && (
+                  <IconButton
+                    onClick={() => handleSort(column.accessor)}
+                    size="small"
+                    className="!text-xs h-6 w-6"
+                    aria-label="sort"
+                  >
+                    {sortIcon()}
+                  </IconButton>
+                )}
+              </div>
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    </TableHead>
+  );
+
+  const tableSearchRowCheckbox = () => (
+    <Checkbox
+      onClick={() => {
+        calculatedRows.forEach((e) =>
+          updateLineState(e[idLevel], e[nameLevel])
+        );
+      }}
+    />
+  );
+
+  const tableSearchRowNameSearch = () => (
+    <TextField
+      variant="standard"
+      placeholder="Search Name"
+      value={filters[nameLevel]}
+      onChange={(event) => handleSearch(event.target.value, nameLevel)}
+      className="!min-w-max"
+    />
+  );
+
+  const tableSearchRowNameOther = (accessor: string) => {
+    const minSearch = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { value } = e.target;
+
+      const useDefaultValue = value === "" || value === undefined;
+
+      let newValue: number;
+
+      if (useDefaultValue) {
+        const isNumSchoolsAccessor = accessor === "num_schools";
+        newValue = isNumSchoolsAccessor ? minSchools : 0;
+      } else {
+        newValue = parseInt(value);
+      }
+
+      setMin((oldmin) => ({
+        ...oldmin,
+        [accessor]: newValue,
+      }));
+
+      handleSearch([newValue, max[accessor]], accessor);
+    };
+
+    const maxSearch = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { value } = e.target;
+
+      const useDefaultValue = value === "" || value === undefined;
+
+      let newValue: number;
+
+      if (useDefaultValue) {
+        const isNumSchoolsAccessor = accessor === "num_schools";
+        newValue = isNumSchoolsAccessor ? maxSchools : 100;
+      } else {
+        newValue = parseInt(value);
+      }
+
+      setMax((oldmax) => ({
+        ...oldmax,
+        [accessor]: newValue,
+      }));
+
+      handleSearch([min[accessor], newValue], accessor);
+    };
+
+    return (
+      <div className="w-full flex flex-row justify-center">
+        <TextField
+          variant="outlined"
+          className="w-10 !mr-2 "
+          placeholder={min[accessor].toString()}
+          onChange={(e) => minSearch(e)}
+          InputProps={{
+            classes: {
+              input: "!px-0 !py-0.5 !text-xs text-center",
+            },
+          }}
+        />
+        <TextField
+          variant="outlined"
+          className="w-10"
+          placeholder={max[accessor].toString()}
+          onChange={(e) => maxSearch(e)}
+          InputProps={{
+            classes: {
+              input: "!px-0 !py-0.5 !text-xs text-center",
+            },
+          }}
+        />
+      </div>
     );
   };
 
+  const tableSearchRow = () => (
+    <TableRow>
+      {columns.map((column) => {
+        switch (column.accessor) {
+          case "checkbox":
+            return (
+              <TableCell scope="row" key={column.accessor}>
+                {tableSearchRowCheckbox()}
+              </TableCell>
+            );
+
+          case nameLevel:
+            return (
+              <TableCell scope="row" key={column.accessor}>
+                {tableSearchRowNameSearch()}
+              </TableCell>
+            );
+
+          default:
+            return (
+              <TableCell key={column.accessor}>
+                {tableSearchRowNameOther(column.accessor)}
+              </TableCell>
+            );
+        }
+      })}
+    </TableRow>
+  );
+
+  const tableContentRowCheckbox = (row, isSelectedRow) => (
+    <Checkbox
+      onClick={() => {
+        updateLineState(row[idLevel], row[nameLevel]);
+      }}
+      disabled={isSelectedRow}
+      checked={
+        isSelectedRow
+          ? true
+          : lines.findIndex((l) => l.id === row[idLevel]) != -1
+      }
+    />
+  );
+
+  const tableContentRows = () =>
+    calculatedRows.map((row) => (
+      <TableRow key={row[idLevel]}>
+        {columns.map((column) => {
+          const isSelectedRow = row[idLevel] === `${id}`;
+
+          switch (column.accessor) {
+            case "checkbox":
+              return (
+                <TableCell scope="row" key={column.accessor}>
+                  {tableContentRowCheckbox(row, isSelectedRow)}
+                </TableCell>
+              );
+            case nameLevel:
+              return (
+                <TableCell
+                  key={column.accessor}
+                  className={clsx({
+                    "text-sm text-left text-gray-900 font-light": true,
+                    "!text-line-red !font-semibold": isSelectedRow,
+                  })}
+                >
+                  {row[column.accessor]}
+                </TableCell>
+              );
+            default:
+              return (
+                <TableCell
+                  key={column.accessor}
+                  className={clsx({
+                    "text-sm !text-center text-gray-900 font-light": true,
+                    "!text-line-red !font-semibold": isSelectedRow,
+                  })}
+                >
+                  {row[column.accessor].toLocaleString("en-US")}
+                </TableCell>
+              );
+          }
+        })}
+      </TableRow>
+    ));
+
   return (
     <>
-      {
-        <div className="mb-10">
-          {isLoading ? (
-            <Skeleton className="w-full" height={683} variant="rectangular" />
-          ) : (
-            <>
-              <div className="overflow-x-auto shadow border border-gray-200 sm:rounded-lg mb-4">
-                {tableRows(columns)}
-              </div>
-              <Pagination
-                activePage={activePage}
-                totalPages={totalPages}
-                handleActivePage={handleActivePage}
-              />
-            </>
-          )}
-        </div>
-      }
-      {/*<LineGraph
+      <div className="mb-10">
+        {isLoading ? (
+          <Skeleton className="w-full" height={644} variant="rectangular" />
+        ) : (
+          <>
+            <TableContainer component={TableHolder}>
+              <Table size="small">
+                {tableHeader()}
+                <TableBody>
+                  {tableSearchRow()}
+                  {tableContentRows()}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Pagination
+              activePage={activePage}
+              totalPages={totalPages}
+              handleActivePage={handleActivePage}
+            />
+          </>
+        )}
+      </div>
+      <LineGraph
         linesData={linesData}
         id={id}
         year={year}
         isLoading={isLoading}
-    />*/}
+      />
     </>
   );
 }

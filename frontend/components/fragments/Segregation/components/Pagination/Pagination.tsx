@@ -20,7 +20,7 @@ export default function Pagination({
   const onLastPage = activePage === totalPages;
 
   return (
-    <div className="hidden sm:flex sm:items-center sm:justify-between">
+    <div className="mt-4 hidden sm:flex sm:items-center sm:justify-between">
       <p className="text-sm text-gray-700">
         Page <span className="font-medium">{activePage}</span> of{" "}
         <span className="font-medium">{totalPages}</span>

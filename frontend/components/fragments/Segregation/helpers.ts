@@ -31,7 +31,7 @@ export function convertType(value) {
 
 export const sortRows = (rows, sort) => {
   return rows.sort((a, b) => {
-    const { order, orderBy } = sort;
+    const { orderDesc, orderBy } = sort;
 
     if (isNil(a[orderBy])) return 1;
     if (isNil(b[orderBy])) return -1;
@@ -39,7 +39,7 @@ export const sortRows = (rows, sort) => {
     const alocale = convertType(a[orderBy]);
     const blocale = convertType(b[orderBy]);
 
-    if (order == "asc") {
+    if (!orderDesc) {
       return alocale.localeCompare(blocale, "en", {
         numeric: isNumber(b[orderBy]),
       });

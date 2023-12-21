@@ -101,7 +101,7 @@ export default function Info({
         We can measure segregation by comparing the makeup of schools attended
         by students in different racial groups.
       </p>
-      <p className="mb-4 lg:mb-6">
+      <div className="mb-4 lg:mb-6">
         {`In ${selectedYearString}, the typical `}
         {raceDropdown}
         {` ${selectedGradeString} in `}
@@ -110,22 +110,22 @@ export default function Info({
         {selectedIso}
         {` `}
         {selectedLabel}.
-      </p>
-      <p className="mb-4 lg:mb-6">
+      </div>
+      <div className="mb-4 lg:mb-6">
         {`The typical non-`}
         {selectedLabel}
         {` ${selectedGradeString} attended a school that was `}
         {selectedNon}
         {` `}
         {selectedLabel}.
-      </p>
-      <p className="mb-4 lg:mb-6">
+      </div>
+      <div className="mb-4 lg:mb-6">
         {`The difference between these two numbers, `}
         {segValue}
         {`, is a measure of segregation for `}
         {selectedLabel}
         {` ${selectedGradeString}s.`}
-      </p>
+      </div>
     </div>
   );
 }

@@ -2,10 +2,9 @@ import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 
-import Comparison from "./components/ComparisonTable";
 import SegBar from "./components/Bar";
 import Info from "./components/Info";
-import Table from "./components/Table";
+import ComparisonTable from "./components/ComparisonTable";
 
 import {
   selectId,
@@ -134,7 +133,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         />
         <SegBar focus={focus} isLoading={isLoading} />
       </div>
-      <Comparison
+      <ComparisonTable
         id={id}
         name={name}
         grade={grade}
@@ -143,22 +142,6 @@ export default function Segregation({ segData, isLoading }: Props) {
         nameLevel={nameLevel}
         table={table}
         measure={measure}
-        minSchools={minSchools}
-        maxSchools={maxSchools}
-        year={year}
-        isLoading={isLoading}
-      />
-      <Table
-        id={id}
-        name={name}
-        grade={grade}
-        segData={segData}
-        idLevel={idLevel}
-        nameLevel={nameLevel}
-        table={table}
-        measure={measure}
-        minSchools={minSchools}
-        maxSchools={maxSchools}
         year={year}
         isLoading={isLoading}
       />
