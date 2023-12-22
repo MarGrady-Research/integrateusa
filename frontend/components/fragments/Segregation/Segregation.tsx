@@ -11,6 +11,7 @@ import {
   selectGrade,
   selectYear,
   selectSelectedName,
+  selectLevel,
 } from "../../../store/selectSlice";
 
 import { SegData } from "../../../interfaces";
@@ -70,6 +71,7 @@ export default function Segregation({ segData, isLoading }: Props) {
   const year = useSelector(selectYear);
   const id = useSelector(selectId);
   const name = useSelector(selectSelectedName);
+  const level = useSelector(selectLevel);
 
   const [selected, setSelected] = useState(defaultOption);
 
@@ -109,9 +111,6 @@ export default function Segregation({ segData, isLoading }: Props) {
     table = "state";
   }
 
-  const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
-  const minSchools = Math.min(...segData.map((e) => e["num_schools"]));
-
   const focus = useMemo(
     () => findFocus(segData, idLevel, id),
     [segData, idLevel, id]
@@ -137,6 +136,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         id={id}
         name={name}
         grade={grade}
+        level={level}
         segData={segData}
         idLevel={idLevel}
         nameLevel={nameLevel}

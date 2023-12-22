@@ -23,6 +23,7 @@ import {
   LineData,
   LineDataLoaded,
   LineDataBase,
+  Level,
 } from "../../../../../interfaces";
 
 interface Props {
@@ -33,6 +34,7 @@ interface Props {
   idLevel: string;
   nameLevel: string;
   table: string;
+  level: Level;
   measure: {
     accessor: string;
     name: string;
@@ -57,6 +59,7 @@ export default function ComparisonTable({
   id,
   name,
   grade,
+  level,
   segData,
   nameLevel,
   idLevel,
@@ -163,7 +166,9 @@ export default function ComparisonTable({
     setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
   }, [minSchools]);
 
-  const [lines, setLines] = useState([{ id, name }] as LineDataBase[]);
+  const [lines, setLines] = useState([
+    { id, name: level === Level.State ? id : name },
+  ] as LineDataBase[]);
   const [linesData, setLinesData] = useState([] as LineData[]);
 
   const labels = yearsData
@@ -359,11 +364,13 @@ export default function ComparisonTable({
 
     const abortController = new AbortController();
 
-    setLines([{ id, name }]);
+    const entityName = level === Level.State ? id : name;
+
+    setLines([{ id, name: entityName }]);
     setLinesData([
       {
         id,
-        name,
+        name: entityName,
         status: "loading" as "loading",
       },
     ]);
@@ -375,7 +382,7 @@ export default function ComparisonTable({
       .then((res) => {
         const linesData = [];
 
-        const newLineData = processLineData(res.data, id, name);
+        const newLineData = processLineData(res.data, id, entityName);
 
         linesData.push(newLineData);
         setLinesData(linesData);
@@ -385,7 +392,7 @@ export default function ComparisonTable({
           setLinesData([
             {
               id,
-              name,
+              name: entityName,
               status: "failed" as "failed",
             },
           ]);
