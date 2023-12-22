@@ -13,6 +13,7 @@ import { Line } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
 import CircularProgress from "@mui/material/CircularProgress";
 import ErrorIcon from "@mui/icons-material/Error";
+import clsx from "clsx";
 
 import { yearsData } from "../../../Selection/data";
 import { legendMargin } from "../../../../../charts";
@@ -52,7 +53,7 @@ const labels = yearsData
 const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
   if (isLoading) {
     return (
-      <div className={container}>
+      <div className={clsx(container, "mb-2")}>
         <Skeleton className="!h-full w-full" variant="rectangular" />
       </div>
     );
@@ -138,7 +139,7 @@ const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
   );
 
   return (
-    <div className={container}>
+    <div className={clsx(container, "mb-2")}>
       {legend}
       <Line options={options} data={data} plugins={[legendMargin]} />
     </div>
