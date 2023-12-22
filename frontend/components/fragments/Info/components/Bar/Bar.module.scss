@@ -1,5 +1,13 @@
 @import "styles/colors.scss";
 
+.legend {
+  height: 60px !important;
+
+  @screen sm {
+    height: 24px !important;
+  }
+}
+
 .container {
   height: 400px !important;
 

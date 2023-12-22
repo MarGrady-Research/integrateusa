@@ -40,6 +40,8 @@ import {
   buttonWhite,
   // @ts-ignore
   buttonOther,
+  // @ts-ignore
+  legend,
 } from "./Bar.module.scss";
 
 ChartJS.register(
@@ -137,7 +139,12 @@ const options = {
 
 export default function BarChart({ infoData, isLoading }: Props) {
   if (isLoading) {
-    return <Skeleton variant="rectangular" className={container} />;
+    return (
+      <>
+        <Skeleton variant="rectangular" className={clsx(legend, "mb-1")} />
+        <Skeleton variant="rectangular" className={container} />
+      </>
+    );
   }
 
   const [sortBy, setSortBy] = useState("" as RacialProportion | "");
@@ -205,8 +212,13 @@ export default function BarChart({ infoData, isLoading }: Props) {
   };
 
   return (
-    <div className={clsx(container, "flex flex-col")}>
-      <div className="flex justify-center items-center flex-col sm:flex-row">
+    <div className="flex flex-col">
+      <div
+        className={clsx(
+          "flex justify-center items-center flex-col sm:flex-row mb-1",
+          legend
+        )}
+      >
         <p className="text-sm mr-1 sm:-mt-0.5 sm:mr-0 mb-1 sm:mb-0">
           Click to sort
         </p>
@@ -249,7 +261,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
           </div>
         </div>
       </div>
-      <div className="flex-1">
+      <div className={container}>
         <Bar data={data} options={options as any} plugins={[legendMargin]} />
       </div>
     </div>
