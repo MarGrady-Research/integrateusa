@@ -52,9 +52,10 @@ export default function Header() {
             </a>
           </Link>
           <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
+            <NavLink url="/" title="Home" />
             <NavLink url="/info" title="Demographic Info" />
             <NavLink url="/segregation" title="Segregation" />
-            <NavLink url="/map" title="Map" />
+            <NavLink url="/research" title="Research" />
             <NavLink url="/about" title="About" />
           </nav>
         </div>

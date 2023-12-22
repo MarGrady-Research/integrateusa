@@ -2,40 +2,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 
 import Scroller from "./components/Scroller";
-
-function WelcomeScreen() {
-  return (
-    <div className="h-screen flex flex-col space-y-20 items-center justify-center text-lg lg:text-xl px-5 text-center">
-      <Link href="/info">
-        <Image
-          src="/IntegrateUSALogo.png"
-          alt="IntegrateUSA Logo"
-          width={300}
-          height={80}
-          className="hover:cursor-pointer"
-        />
-      </Link>
-      <Link href="/info">
-        <a className="hover:text-gray-500 inline-flex items-center">
-          Explore the dashboard
-          <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
-        </a>
-      </Link>
-      <div className="flex flex-col items-center">
-        <p className="mb-4">
-          Scroll down for a case study of New York City&#39;s District 15
-        </p>
-        <KeyboardDoubleArrowDownIcon
-          fontSize="large"
-          className="animate-bounce"
-        />
-      </div>
-    </div>
-  );
-}
 
 function EndScreen() {
   return (
@@ -73,7 +41,6 @@ function EndScreen() {
 export default function Scroll() {
   return (
     <div className="font-sans">
-      <WelcomeScreen />
       <Scroller />
       <EndScreen />
     </div>

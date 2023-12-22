@@ -1,21 +1,13 @@
 import React from "react";
-import Loader from "../../fragments/Loader";
 
 interface Props {
   children: React.ReactNode;
-  isLoading?: boolean;
 }
 
-export default function Page({ children, isLoading = false }: Props) {
+export default function Page({ children }: Props) {
   return (
     <div className="container mx-auto p-5 pt-12 lg:pt-5 font-sans">
-      {isLoading ? (
-        <div className="pt-5">
-          <Loader />
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </div>
   );
 }
