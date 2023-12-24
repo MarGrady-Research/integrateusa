@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -403,6 +404,20 @@ export default function ComparisonTable({
     };
   }, [id]);
 
+  const clearSelection = () => {
+    segData.forEach((r) => {
+      const isSelectedRow = r[idLevel] === `${id}`;
+
+      const isLineRendered = lines.findIndex((l) => l.id === r[idLevel]) != -1;
+
+      const shouldRemove = !isSelectedRow && isLineRendered;
+
+      if (shouldRemove) {
+        updateLineState(r[idLevel], r[nameLevel]);
+      }
+    });
+  };
+
   const tableHeader = () => (
     <TableHead className="bg-gray-200">
       <TableRow>
@@ -448,10 +463,29 @@ export default function ComparisonTable({
     </TableHead>
   );
 
+  const linesIds = lines.map((l) => l.id);
+  const visibleRowsIds = visibleRows.map((r) => r[idLevel]);
+
+  const allVisibleSelected = visibleRowsIds.every((i) => linesIds.includes(i));
+
   const tableSearchRowCheckbox = () => (
     <Checkbox
+      checked={allVisibleSelected}
       onClick={() => {
-        visibleRows.forEach((e) => updateLineState(e[idLevel], e[nameLevel]));
+        visibleRows.forEach((r) => {
+          const isSelectedRow = r[idLevel] === `${id}`;
+
+          const isLineRendered =
+            lines.findIndex((l) => l.id === r[idLevel]) != -1;
+
+          const shouldAdd = !isLineRendered && !allVisibleSelected;
+          const shouldRemove = isLineRendered && allVisibleSelected;
+          const shouldChange = !isSelectedRow && (shouldAdd || shouldRemove);
+
+          if (shouldChange) {
+            updateLineState(r[idLevel], r[nameLevel]);
+          }
+        });
       }}
     />
   );
@@ -660,12 +694,17 @@ export default function ComparisonTable({
                 </TableBody>
               </Table>
             </TableContainer>
-            <Pagination
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={ROWS_PER_PAGE}
-              count={filteredRows.length}
-            />
+            <div className="flex items-center justify-between">
+              <Button variant="outlined" onClick={clearSelection}>
+                Clear Selection
+              </Button>
+              <Pagination
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={ROWS_PER_PAGE}
+                count={filteredRows.length}
+              />
+            </div>
           </>
         )}
       </div>

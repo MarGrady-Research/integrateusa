@@ -115,8 +115,10 @@ export default function TableYearGrade({
         </Table>
       </TableContainer>
       {isInDecade && (
-        <div className="flex justify-end" onClick={toggleExpanded}>
-          <Button variant="outlined">{buttonMsg}</Button>
+        <div className="flex justify-end">
+          <Button variant="outlined" onClick={toggleExpanded}>
+            {buttonMsg}
+          </Button>
         </div>
       )}
     </>
