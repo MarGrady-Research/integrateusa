@@ -146,7 +146,11 @@ export default function ComparisonTable({
     enr_prop_hi: 0,
     enr_prop_or: 0,
     enr_prop_wh: 0,
-    [measure.accessor]: 0,
+    norm_exp_as: 0,
+    norm_exp_bl: 0,
+    norm_exp_hi: 0,
+    norm_exp_or: 0,
+    norm_exp_wh: 0,
   });
 
   const [max, setMax] = useState({
@@ -156,7 +160,11 @@ export default function ComparisonTable({
     enr_prop_hi: 100,
     enr_prop_or: 100,
     enr_prop_wh: 100,
-    [measure.accessor]: 100,
+    norm_exp_as: 100,
+    norm_exp_bl: 100,
+    norm_exp_hi: 100,
+    norm_exp_or: 100,
+    norm_exp_wh: 100,
   });
 
   useEffect(() => {
@@ -442,6 +450,7 @@ export default function ComparisonTable({
                 className={clsx({
                   "flex flex-row items-center": true,
                   "justify-center": column.accessor != nameLevel,
+                  "w-72": column.accessor === measure.accessor,
                 })}
               >
                 <span className="px-1">{column.label}</span>
