@@ -695,7 +695,11 @@ export default function ComparisonTable({
               </Table>
             </TableContainer>
             <div className="flex items-center justify-between">
-              <Button variant="outlined" onClick={clearSelection}>
+              <Button
+                variant="outlined"
+                className="!normal-case"
+                onClick={clearSelection}
+              >
                 Clear Selection
               </Button>
               <Pagination
