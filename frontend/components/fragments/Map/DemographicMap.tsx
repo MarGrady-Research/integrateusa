@@ -79,7 +79,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "state-boundary",
     type: "fill" as any,
     source: "state-boundary-source",
-    "source-layer": "cb_2018_us_state_500k-8q06w5",
+    "source-layer": "state-crknb3",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -98,7 +98,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "county-boundary",
     type: "fill" as any,
     source: "county-boundary-source",
-    "source-layer": "cb_2018_us_county_500k-6dd9y3",
+    "source-layer": "county-cuo5pm",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -451,14 +451,14 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         <Source
           id="county-boundary-source"
           type="vector"
-          url="mapbox://theokaufman.6i9q4by5"
+          url="mapbox://theokaufman.8kf5u4hc"
         >
           <Layer {...countyLayer} />
         </Source>
         <Source
           id="state-boundary-source"
           type="vector"
-          url="mapbox://theokaufman.a7l31auu"
+          url="mapbox://theokaufman.1wqhz2or"
         >
           <Layer {...stateLayer} />
         </Source>
