@@ -1,4 +1,8 @@
 .containerBase {
+  @screen sm {
+    height: 355px !important;
+  }
+
   @screen lg {
     height: 371px !important;
   }
@@ -15,7 +19,7 @@
 }
 
 .container {
-  height: 354px;
+  height: 355px;
 
   @extend .containerBase;
 }
