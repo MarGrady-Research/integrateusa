@@ -27,6 +27,9 @@ import {
   Level,
 } from "../../../../../interfaces";
 
+// @ts-ignore
+import { container } from "./ComparisonTable.module.scss";
+
 interface Props {
   id: string;
   name: string;
@@ -46,7 +49,6 @@ interface Props {
 
 const ROWS_PER_PAGE = 10;
 const ROW_HEIGHT = 55;
-const TABLE_HEIGHT = 696;
 
 function TableHolder({ children }: { children: React.ReactNode }) {
   return (
@@ -687,8 +689,7 @@ export default function ComparisonTable({
       <div className="mb-10">
         {isLoading ? (
           <Skeleton
-            className="w-full"
-            height={TABLE_HEIGHT}
+            className={clsx("w-full", container)}
             variant="rectangular"
           />
         ) : (
