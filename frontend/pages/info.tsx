@@ -17,10 +17,13 @@ import {
   selectSelectedName,
   setStateFromParams,
 } from "../store/selectSlice";
+import { selectInfoData, setInfoData } from "../store/apiCacheSlice";
 
 import { InfoData, TrendData, Level } from "../interfaces";
 
 export default function InfoPage() {
+  const dispatch = useDispatch();
+
   const searchParams = useSearchParams();
 
   const [infoUsedParams, setInfoUsedParams] = useState(false);
@@ -31,12 +34,36 @@ export default function InfoPage() {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
+  const infoDataCache = useSelector(selectInfoData);
 
-  const dispatch = useDispatch();
+  let levelTable = "";
+  let levelId = "";
 
-  const [infoData, setInfoData] = useState([] as InfoData);
+  switch (level) {
+    case Level.School:
+      levelTable = "schools";
+      levelId = "nces_id";
+      break;
+    case Level.District:
+      levelTable = "districttrends";
+      levelId = "dist_id";
+      break;
+    case Level.County:
+      levelTable = "countytrends";
+      levelId = "county_id";
+      break;
+    case Level.State:
+      levelTable = "statetrends";
+      levelId = "state_abb";
+      break;
+  }
+
+  const infoDataKey = `${year}-${grade}-${levelId}-${id}`;
+  const infoData = infoDataCache[infoDataKey];
+  const isInfoDataCached = typeof infoData !== "undefined";
+  const isInfoDataLoading = !isInfoDataCached;
+
   const [trendData, setTrendData] = useState([] as TrendData);
-  const [isInfoDataLoading, setIsInfoDataLoading] = useState(true);
   const [isTrendDataLoading, setIsTrendDataLoading] = useState(true);
 
   useEffect(() => {
@@ -77,38 +104,14 @@ export default function InfoPage() {
 
     const abortController = new AbortController();
 
-    let levelId = "";
-
-    switch (level) {
-      case Level.School:
-        levelId = "nces_id";
-        break;
-      case Level.District:
-        levelId = "dist_id";
-        break;
-      case Level.County:
-        levelId = "county_id";
-        break;
-      case Level.State:
-        levelId = "state_abb";
-        break;
-    }
-
     const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
-
-    setIsInfoDataLoading(true);
 
     axios
       .get(infoUrl, { signal: abortController.signal })
       .then((res) => {
-        setInfoData(res.data);
-        setIsInfoDataLoading(false);
+        dispatch(setInfoData({ [infoDataKey]: res.data }));
       })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          setIsInfoDataLoading(false);
-        }
-      });
+      .catch(() => {});
 
     return () => {
       abortController.abort();
@@ -153,28 +156,6 @@ export default function InfoPage() {
 
     const abortController = new AbortController();
 
-    let levelTable = "";
-    let levelId = "";
-
-    switch (level) {
-      case Level.School:
-        levelTable = "schools";
-        levelId = "nces_id";
-        break;
-      case Level.District:
-        levelTable = "districttrends";
-        levelId = "dist_id";
-        break;
-      case Level.County:
-        levelTable = "countytrends";
-        levelId = "county_id";
-        break;
-      case Level.State:
-        levelTable = "statetrends";
-        levelId = "state_abb";
-        break;
-    }
-
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
     setIsTrendDataLoading(true);
@@ -206,7 +187,7 @@ export default function InfoPage() {
       <Page>
         <div className="mx-auto mt-5">
           <Info
-            infoData={infoData}
+            infoData={infoData || []}
             title={title}
             isLoading={isInfoDataLoading}
           />
