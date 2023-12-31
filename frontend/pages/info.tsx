@@ -17,9 +17,14 @@ import {
   selectSelectedName,
   setStateFromParams,
 } from "../store/selectSlice";
-import { selectInfoData, setInfoData } from "../store/apiCacheSlice";
+import {
+  selectInfoData,
+  setInfoData,
+  selectTrendData,
+  setTrendData,
+} from "../store/apiCacheSlice";
 
-import { InfoData, TrendData, Level } from "../interfaces";
+import { Level } from "../interfaces";
 
 export default function InfoPage() {
   const dispatch = useDispatch();
@@ -35,6 +40,7 @@ export default function InfoPage() {
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
   const infoDataCache = useSelector(selectInfoData);
+  const trendDataCache = useSelector(selectTrendData);
 
   let levelTable = "";
   let levelId = "";
@@ -63,8 +69,10 @@ export default function InfoPage() {
   const isInfoDataCached = typeof infoData !== "undefined";
   const isInfoDataLoading = !isInfoDataCached;
 
-  const [trendData, setTrendData] = useState([] as TrendData);
-  const [isTrendDataLoading, setIsTrendDataLoading] = useState(true);
+  const trendDataKey = `${levelTable}-${id}`;
+  const trendData = trendDataCache[trendDataKey];
+  const isTrendDataCached = typeof trendData !== "undefined";
+  const isTrendDataLoading = !isTrendDataCached;
 
   useEffect(() => {
     const paramsId = searchParams.get("id");
@@ -158,19 +166,12 @@ export default function InfoPage() {
 
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
-    setIsTrendDataLoading(true);
-
     axios
       .get(trendUrl, { signal: abortController.signal })
       .then((res) => {
-        setTrendData(res.data);
-        setIsTrendDataLoading(false);
+        dispatch(setTrendData({ [trendDataKey]: res.data }));
       })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          setIsTrendDataLoading(false);
-        }
-      });
+      .catch(() => {});
 
     return () => {
       abortController.abort();
@@ -191,7 +192,7 @@ export default function InfoPage() {
             title={title}
             isLoading={isInfoDataLoading}
           />
-          <Trends trendData={trendData} isLoading={isTrendDataLoading} />
+          <Trends trendData={trendData || []} isLoading={isTrendDataLoading} />
         </div>
       </Page>
     </>

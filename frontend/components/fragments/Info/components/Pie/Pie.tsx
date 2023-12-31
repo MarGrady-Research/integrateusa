@@ -62,6 +62,7 @@ const getPieData = (infoData: InfoData) => {
 const labels = ["Asian", "Black", "Hispanic", "White", "Other"];
 
 const options = {
+  animation: false,
   reponsive: true,
   maintainAspectRatio: false,
   plugins: {
