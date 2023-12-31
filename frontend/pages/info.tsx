@@ -16,6 +16,8 @@ import {
   selectId,
   selectSelectedName,
   setStateFromParams,
+  setInfoDataRequestingApi,
+  selectInfoDataRequestingApi,
 } from "../store/selectSlice";
 import {
   selectInfoData,
@@ -41,6 +43,7 @@ export default function InfoPage() {
   const title = useSelector(selectSelectedName);
   const infoDataCache = useSelector(selectInfoData);
   const trendDataCache = useSelector(selectTrendData);
+  const infoDataRequestingApi = useSelector(selectInfoDataRequestingApi);
 
   let levelTable = "";
   let levelId = "";
@@ -67,12 +70,16 @@ export default function InfoPage() {
   const infoDataKey = `${year}-${grade}-${levelId}-${id}`;
   const infoData = infoDataCache[infoDataKey];
   const isInfoDataCached = typeof infoData !== "undefined";
-  const isInfoDataLoading = !isInfoDataCached;
+  const isInfoDataLoading = !isInfoDataCached && infoDataRequestingApi;
 
   const trendDataKey = `${levelTable}-${id}`;
   const trendData = trendDataCache[trendDataKey];
   const isTrendDataCached = typeof trendData !== "undefined";
-  const isTrendDataLoading = !isTrendDataCached;
+
+  const [isTrendDataRequestingApi, setIsTrendDataRequestingApi] =
+    useState(true);
+
+  const isTrendDataLoading = !isTrendDataCached || isTrendDataRequestingApi;
 
   useEffect(() => {
     const paramsId = searchParams.get("id");
@@ -118,8 +125,13 @@ export default function InfoPage() {
       .get(infoUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setInfoData({ [infoDataKey]: res.data }));
+        dispatch(setInfoDataRequestingApi(false));
       })
-      .catch(() => {});
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          dispatch(setInfoDataRequestingApi(false));
+        }
+      });
 
     return () => {
       abortController.abort();
@@ -166,12 +178,19 @@ export default function InfoPage() {
 
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
+    setIsTrendDataRequestingApi(true);
+
     axios
       .get(trendUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setTrendData({ [trendDataKey]: res.data }));
+        setIsTrendDataRequestingApi(false);
       })
-      .catch(() => {});
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          setIsTrendDataRequestingApi(false);
+        }
+      });
 
     return () => {
       abortController.abort();
