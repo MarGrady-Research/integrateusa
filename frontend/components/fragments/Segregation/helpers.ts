@@ -30,7 +30,7 @@ export function convertType(value) {
 }
 
 export const sortRows = (rows, sort) => {
-  return rows.sort((a, b) => {
+  return [...rows].sort((a, b) => {
     const { orderDesc, orderBy } = sort;
 
     if (isNil(a[orderBy])) return 1;
@@ -52,7 +52,7 @@ export const sortRows = (rows, sort) => {
 };
 
 export const filterRows = (rows, filters) => {
-  if (isEmpty(filters)) return rows;
+  if (isEmpty(filters)) return [...rows];
 
   return rows.filter((row) => {
     return Object.keys(filters).every((accessor) => {

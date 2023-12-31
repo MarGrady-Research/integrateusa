@@ -722,12 +722,7 @@ export default function ComparisonTable({
           </>
         )}
       </div>
-      <LineGraph
-        linesData={linesData}
-        id={id}
-        year={year}
-        isLoading={isLoading}
-      />
+      <LineGraph linesData={linesData} id={id} year={year} />
     </>
   );
 }

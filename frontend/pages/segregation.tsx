@@ -13,7 +13,8 @@ import {
   selectLevel,
   restoreInitialState,
 } from "../store/selectSlice";
-import { SegData, Level } from "../interfaces";
+import { selectSegData, setSegData } from "../store/apiCacheSlice";
+import { Level } from "../interfaces";
 
 export default function SegregationPage() {
   const dispatch = useDispatch();
@@ -21,9 +22,27 @@ export default function SegregationPage() {
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
+  const segDataCache = useSelector(selectSegData);
 
-  const [segData, setSegData] = useState([] as SegData);
-  const [isLoading, setIsLoading] = useState(true);
+  let idlevel = "";
+
+  switch (level) {
+    case Level.School:
+    case Level.District:
+      idlevel = "district";
+      break;
+    case Level.County:
+      idlevel = "county";
+      break;
+    case Level.State:
+      idlevel = "state";
+      break;
+  }
+
+  const segDataKey = `${idlevel}-${year}-${grade}`;
+  const segData = segDataCache[segDataKey];
+  const isSegDataCached = typeof segData !== "undefined";
+  const isLoading = !isSegDataCached;
 
   useEffect(() => {
     if (level === Level.School) {
@@ -32,35 +51,14 @@ export default function SegregationPage() {
 
     const abortController = new AbortController();
 
-    let idlevel;
-
-    switch (level) {
-      case Level.School:
-      case Level.District:
-        idlevel = "district";
-        break;
-      case Level.County:
-        idlevel = "county";
-        break;
-      case Level.State:
-        idlevel = "state";
-        break;
-    }
-
     const url = `/api/${idlevel}/?year=${year}&grade=${grade}`;
 
-    setIsLoading(true);
     axios
       .get(url)
       .then((res) => {
-        setSegData(res.data);
-        setIsLoading(false);
+        dispatch(setSegData({ [segDataKey]: res.data }));
       })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          setIsLoading(false);
-        }
-      });
+      .catch(() => {});
 
     return () => {
       abortController.abort();
@@ -76,7 +74,7 @@ export default function SegregationPage() {
       <Selection omitSchools />
       <Page>
         <div className="mx-auto mt-5">
-          <Segregation segData={segData} isLoading={isLoading} />
+          <Segregation segData={segData || []} isLoading={isLoading} />
         </div>
       </Page>
     </>

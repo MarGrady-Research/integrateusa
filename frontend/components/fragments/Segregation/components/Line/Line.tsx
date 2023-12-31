@@ -10,7 +10,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import Skeleton from "@mui/material/Skeleton";
 import CircularProgress from "@mui/material/CircularProgress";
 import ErrorIcon from "@mui/icons-material/Error";
 import clsx from "clsx";
@@ -41,7 +40,6 @@ interface Props {
   linesData: LineData[];
   id: string;
   year: number;
-  isLoading: boolean;
 }
 
 const labels = yearsData
@@ -50,15 +48,7 @@ const labels = yearsData
     return a - b;
   });
 
-const LineGraph = memo(({ linesData, id, year, isLoading }: Props) => {
-  if (isLoading) {
-    return (
-      <div className={clsx(container, "mb-2")}>
-        <Skeleton className="!h-full w-full" variant="rectangular" />
-      </div>
-    );
-  }
-
+const LineGraph = memo(({ linesData, id, year }: Props) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
