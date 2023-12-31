@@ -79,7 +79,7 @@ export default function InfoPage() {
   const [isTrendDataRequestingApi, setIsTrendDataRequestingApi] =
     useState(true);
 
-  const isTrendDataLoading = !isTrendDataCached || isTrendDataRequestingApi;
+  const isTrendDataLoading = !isTrendDataCached && isTrendDataRequestingApi;
 
   useEffect(() => {
     const paramsId = searchParams.get("id");

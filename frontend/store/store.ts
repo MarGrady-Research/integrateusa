@@ -45,7 +45,7 @@ export const makeStore = () => {
       blacklist: [
         "select.grade",
         "select.year",
-        "select.isInfoDataRequestingApi",
+        "select.infoDataRequestingApi",
         "apiCache",
       ],
       rootReducer,

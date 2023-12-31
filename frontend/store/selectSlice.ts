@@ -72,12 +72,14 @@ export const selectSlice = createSlice({
       state.id = initialState.id;
       state.selectedName = initialState.selectedName;
       state.bounds = initialState.bounds;
+      state.infoDataRequestingApi = true;
     },
     setStateFromParams(state, action) {
       state.level = action.payload.level;
       state.id = action.payload.id;
       state.selectedName = action.payload.selectedName;
       state.bounds = action.payload.bounds;
+      state.infoDataRequestingApi = true;
     },
   },
   extraReducers: (builder) => {
