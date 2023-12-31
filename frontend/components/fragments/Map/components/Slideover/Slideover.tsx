@@ -10,10 +10,10 @@ import Control from "../Control";
 
 // @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
-import { Bounds, Level } from "../../../../../interfaces";
+import { Bounds, MapLevel } from "../../../../../interfaces";
 
 interface Props {
-  handleVisibility: (l: Level) => void;
+  handleVisibility: (l: MapLevel) => void;
   handleBounds: (e: Bounds) => void;
 }
 

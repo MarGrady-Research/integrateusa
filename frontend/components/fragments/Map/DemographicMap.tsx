@@ -20,7 +20,7 @@ import LoadingDialog from "./components/LoadingDialog";
 import Popup from "./components/Popup";
 
 import { selectBounds } from "../../../store/selectSlice";
-import { MapData, Level, MapStatus } from "../../../interfaces";
+import { MapData, Level, MapLevel, MapStatus } from "../../../interfaces";
 import {
   asianColor,
   blackColor,
@@ -71,7 +71,12 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const [stateVisible, setStateVisible] = useState("none" as Visibility);
   const [countyVisible, setCountyVisible] = useState("none" as Visibility);
-  const [districtVisible, setDistrictVisible] = useState("none" as Visibility);
+  const [elementaryDistrictVisible, setElementaryDistrictVisible] = useState(
+    "none" as Visibility
+  );
+  const [secondaryDistrictVisible, setSecondaryDistrictVisible] = useState(
+    "none" as Visibility
+  );
 
   const [renderedFeatures, setRenderedFeatures] = useState([]);
 
@@ -79,7 +84,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "state-boundary",
     type: "fill" as any,
     source: "state-boundary-source",
-    "source-layer": "state-crknb3",
+    "source-layer": "state-8eamta",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -98,7 +103,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "county-boundary",
     type: "fill" as any,
     source: "county-boundary-source",
-    "source-layer": "county-cuo5pm",
+    "source-layer": "county-57tl1x",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -113,10 +118,11 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     },
   };
 
-  const districtLayer = {
-    id: "district-boundary",
+  const elementaryDistrictLayer = {
+    id: "elementary-district-boundary",
     type: "fill" as any,
-    "source-layer": "2021_sd_unified-4mqqrn",
+    source: "elementary-district-boundary-source",
+    "source-layer": "ElementaryUnified-3r40o5",
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -127,7 +133,26 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       ],
     } as any,
     layout: {
-      visibility: districtVisible,
+      visibility: elementaryDistrictVisible,
+    },
+  };
+
+  const secondaryDistrictLayer = {
+    id: "secondary-district-boundary",
+    type: "fill" as any,
+    source: "secondary-district-boundary-source",
+    "source-layer": "SecondaryUnified-8dtbl8",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,0.4)",
+      "fill-color": [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        selectedAreaColor,
+        unselectedAreaColor,
+      ],
+    } as any,
+    layout: {
+      visibility: secondaryDistrictVisible,
     },
   };
 
@@ -161,25 +186,22 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     } as any,
   };
 
-  const handleVisibility = (level: Level) => {
-    if (level === Level.District) {
-      setDistrictVisible("visible");
-      setCountyVisible("none");
-      setStateVisible("none");
-    } else if (level === Level.County) {
-      setDistrictVisible("none");
-      setCountyVisible("visible");
-      setStateVisible("none");
-    } else if (level === Level.State) {
-      setDistrictVisible("none");
-      setCountyVisible("none");
-      setStateVisible("visible");
-    } else {
-      setDistrictVisible("none");
-      setCountyVisible("none");
-      setStateVisible("none");
-    }
+  const handleVisibility = (mapLevel: MapLevel) => {
+    const elementaryDistrictVisibility =
+      mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none";
+    const secondaryDistrictVisibility =
+      mapLevel === MapLevel.UnifiedSecondaryDistrict ? "visible" : "none";
+    const countyVisibility = mapLevel === MapLevel.County ? "visible" : "none";
+    const stateVisibility = mapLevel === MapLevel.State ? "visible" : "none";
+
+    setElementaryDistrictVisible(elementaryDistrictVisibility);
+    setSecondaryDistrictVisible(secondaryDistrictVisibility);
+    setCountyVisible(countyVisibility);
+    setStateVisible(stateVisibility);
   };
+
+  console.log("XXXXXXXXXXX");
+  console.log(stateVisible);
 
   const updateBounds = useCallback((e) => {
     if (mapRef.current) {
@@ -420,7 +442,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         attributionControl={true}
         interactiveLayerIds={[
           "schools",
-          "district-boundary",
+          "elementary-district-boundary",
+          "secondary-district-boundary",
           "county-boundary",
           "state-boundary",
         ]}
@@ -442,23 +465,30 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         <FullscreenControl position="top-left" />
         <NavigationControl position="top-left" />
         <Source
-          id="district-boundary-source"
+          id="elementary-district-boundary-source"
           type="vector"
-          url="mapbox://theokaufman.45uz283x"
+          url="mapbox://margrady.0rwet47j"
         >
-          <Layer {...districtLayer} />
+          <Layer {...elementaryDistrictLayer} />
+        </Source>
+        <Source
+          id="secondary-district-boundary-source"
+          type="vector"
+          url="mapbox://margrady.a1ltfgy8"
+        >
+          <Layer {...secondaryDistrictLayer} />
         </Source>
         <Source
           id="county-boundary-source"
           type="vector"
-          url="mapbox://theokaufman.8kf5u4hc"
+          url="mapbox://margrady.b4j76wmt"
         >
           <Layer {...countyLayer} />
         </Source>
         <Source
           id="state-boundary-source"
           type="vector"
-          url="mapbox://theokaufman.1wqhz2or"
+          url="mapbox://margrady.9j8mklpq"
         >
           <Layer {...stateLayer} />
         </Source>

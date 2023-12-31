@@ -4,24 +4,32 @@ import { debounce } from "@mui/material/utils";
 
 import Autocomplete from "../../../../atoms/Autocomplete";
 
-import { Level, Bounds, LocationSearchResult } from "../../../../../interfaces";
+import {
+  MapLevel,
+  Bounds,
+  LocationSearchResult,
+} from "../../../../../interfaces";
 
 interface Props {
-  level: Level;
+  mapLevel: MapLevel;
   handleBounds: (e: Bounds) => void;
 }
 
-const getURL = (level: Level) => {
-  if (level === Level.District) {
-    return "/api/districtnames/?q=";
-  } else if (level === Level.County) {
-    return "/api/countynames/?q=";
-  } else if (level === Level.State) {
-    return "/api/statenames/?q=";
+const getURL = (mapLevel: MapLevel) => {
+  switch (mapLevel) {
+    case MapLevel.UnifiedElementaryDistrict:
+    case MapLevel.UnifiedSecondaryDistrict:
+      return "/api/districtnames/?q=";
+    case MapLevel.County:
+      return "/api/countynames/?q=";
+    case MapLevel.State:
+      return "/api/statenames/?q=";
   }
+
+  return "";
 };
 
-export default function Search({ level, handleBounds }: Props) {
+export default function Search({ mapLevel, handleBounds }: Props) {
   const [value, setValue] = useState<LocationSearchResult | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
@@ -37,7 +45,7 @@ export default function Search({ level, handleBounds }: Props) {
           callback: (results?: readonly any[]) => void,
           callbackFailure: () => void
         ) => {
-          const url = `${getURL(level)}${input}`;
+          const url = `${getURL(mapLevel)}${input}`;
 
           const cachedOption = sessionStorage.getItem(url);
 
@@ -57,7 +65,7 @@ export default function Search({ level, handleBounds }: Props) {
         },
         400
       ),
-    [level]
+    [mapLevel]
   );
 
   useEffect(() => {
@@ -89,26 +97,27 @@ export default function Search({ level, handleBounds }: Props) {
             label: "",
           };
 
-          switch (level) {
-            case Level.School:
+          switch (mapLevel) {
+            case MapLevel.School:
               labelData = {
                 value: ro.nces_id,
                 label: ro.sch_name,
               };
               break;
-            case Level.District:
+            case MapLevel.UnifiedElementaryDistrict:
+            case MapLevel.UnifiedSecondaryDistrict:
               labelData = {
                 value: ro.dist_id,
                 label: ro.dist_name,
               };
               break;
-            case Level.County:
+            case MapLevel.County:
               labelData = {
                 value: ro.county_id,
                 label: ro.county_name,
               };
               break;
-            case Level.State:
+            case MapLevel.State:
               labelData = {
                 value: ro.state_abb,
                 label: ro.state_name,
@@ -122,6 +131,8 @@ export default function Search({ level, handleBounds }: Props) {
             latmin: ro.latmin,
             lngmax: ro.lngmax,
             latmax: ro.latmax,
+            lat_new: ro.lat_new || null,
+            lon_new: ro.lon_new || null,
           };
         });
 
@@ -147,7 +158,7 @@ export default function Search({ level, handleBounds }: Props) {
     setValue(null);
     setInputValue("");
     setOptions([]);
-  }, [level]);
+  }, [mapLevel]);
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
@@ -170,17 +181,23 @@ export default function Search({ level, handleBounds }: Props) {
 
   let placeholder = "";
 
-  switch (level) {
-    case Level.School:
+  switch (mapLevel) {
+    case MapLevel.School:
       placeholder = "Select District, County or State";
       break;
+    case MapLevel.UnifiedElementaryDistrict:
+      placeholder = "Type an elementary district name";
+      break;
+    case MapLevel.UnifiedSecondaryDistrict:
+      placeholder = "Type a secondary district name";
+      break;
     default:
-      const levelName = Level[level].toLowerCase();
+      const levelName = MapLevel[mapLevel].toLowerCase();
       placeholder = `Type a ${levelName} name`;
       break;
   }
 
-  const isDisabled = level === Level.School;
+  const isDisabled = mapLevel === MapLevel.School;
 
   return (
     <Autocomplete

@@ -87,6 +87,14 @@ export enum Level {
   State,
 }
 
+export enum MapLevel {
+  School,
+  UnifiedElementaryDistrict,
+  UnifiedSecondaryDistrict,
+  County,
+  State,
+}
+
 export interface LineDataBase {
   id: string;
   name: string;

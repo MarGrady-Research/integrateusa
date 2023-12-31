@@ -7,7 +7,7 @@ import FormLabel from "@mui/material/FormLabel";
 
 import Search from "../Search";
 
-import { Bounds, Level } from "../../../../../interfaces";
+import { Bounds, MapLevel } from "../../../../../interfaces";
 
 import {
   asianColor,
@@ -18,7 +18,7 @@ import {
 } from "../../../../../constants";
 
 interface Props {
-  handleVisibility: (l: Level) => void;
+  handleVisibility: (l: MapLevel) => void;
   handleBounds: (e: Bounds) => void;
 }
 
@@ -31,11 +31,11 @@ const race = [
 ];
 
 export default function Control({ handleVisibility, handleBounds }: Props) {
-  const [level, setLevel] = useState(Level.School);
+  const [mapLevel, setMapLevel] = useState(MapLevel.School);
 
   const handleChange = (e) => {
     const val = parseInt(e.target.value);
-    setLevel(val);
+    setMapLevel(val);
     handleVisibility(val);
   };
 
@@ -50,11 +50,11 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
       </div>
     ));
 
-  const radio = (l: Level, label?: string) => (
+  const radio = (l: MapLevel, label?: string) => (
     <FormControlLabel
       value={l}
       control={<Radio classes={{ root: "!p-0 !mr-1.5" }} size="small" />}
-      label={label || Level[l]}
+      label={label || MapLevel[l]}
       classes={{ root: "!-ml-0.5" }}
     />
   );
@@ -70,18 +70,25 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
         </FormLabel>
         <RadioGroup
           aria-labelledby="level-radio-buttons-group-label"
-          value={level}
+          value={mapLevel}
           name="level-radio-buttons-group"
           onChange={handleChange}
           classes={{ root: "mb-4" }}
         >
-          {radio(Level.School, "No Boundary")}
-          {radio(Level.District)}
-          {radio(Level.County)}
-          {radio(Level.State)}
+          {radio(MapLevel.School, "No Boundary")}
+          {radio(
+            MapLevel.UnifiedElementaryDistrict,
+            "Unified + Elementary District"
+          )}
+          {radio(
+            MapLevel.UnifiedSecondaryDistrict,
+            "Unified + Secondary District"
+          )}
+          {radio(MapLevel.County)}
+          {radio(MapLevel.State)}
         </RadioGroup>
       </FormControl>
-      <Search level={level} handleBounds={handleBounds} />
+      <Search mapLevel={mapLevel} handleBounds={handleBounds} />
     </>
   );
 
