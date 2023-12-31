@@ -116,6 +116,14 @@ export interface LineDataLoaded extends LineDataBase {
   }[];
 }
 
+export interface LineDataRawLoaded extends LineDataBase {
+  status: "loaded";
+  data: {
+    [key: string]: any;
+  }[];
+}
+
+export type LineDataRaw = LineDataLoading | LineDataRawLoaded | LineDataFailed;
 export type LineData = LineDataLoading | LineDataLoaded | LineDataFailed;
 
 export enum MapStatus {

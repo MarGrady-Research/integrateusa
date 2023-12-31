@@ -23,6 +23,8 @@ import {
   SegData,
   LineData,
   LineDataLoaded,
+  LineDataRaw,
+  LineDataRawLoaded,
   LineDataBase,
   Level,
 } from "../../../../../interfaces";
@@ -177,18 +179,17 @@ export default function ComparisonTable({
     setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
   }, [minSchools]);
 
-  const [lines, setLines] = useState([
-    { id, name: level === Level.State ? id : name },
-  ] as LineDataBase[]);
-  const [linesData, setLinesData] = useState([] as LineData[]);
-
   const labels = yearsData
     .map((e) => e.value)
     .sort((a, b) => {
       return a - b;
     });
 
-  const processLineData = (data, id: string, name: string) => {
+  const processLineData = (
+    data: {
+      [key: string]: any;
+    }[]
+  ) => {
     let finalData = data.map((d) => ({
       seg: d[measure.accessor],
       year: d.year,
@@ -206,15 +207,23 @@ export default function ComparisonTable({
       }
     });
 
-    const newLine = {
-      id,
-      name,
-      data: finalData,
-      status: "loaded",
-    } as LineDataLoaded;
-
-    return newLine;
+    return finalData;
   };
+
+  const [lines, setLines] = useState([
+    { id, name: level === Level.State ? id : name },
+  ] as LineDataBase[]);
+
+  const [linesDataRaw, setLinesDataRaw] = useState([] as LineDataRaw[]);
+  const linesData: LineData[] = linesDataRaw.map((ldr) => {
+    if (ldr.status === "loaded") {
+      return {
+        ...ldr,
+        data: processLineData(ldr.data),
+      };
+    }
+    return ldr;
+  });
 
   const abortControllersRef = useRef({});
 
@@ -228,7 +237,7 @@ export default function ComparisonTable({
       status: "loading" as "loading",
     };
 
-    setLinesData((ld) => [...ld, newLineDataLoading]);
+    setLinesDataRaw((ld) => [...ld, newLineDataLoading]);
 
     abortControllersRef.current = {
       ...abortControllersRef.current,
@@ -240,9 +249,14 @@ export default function ComparisonTable({
     axios
       .get(url, { signal: currentAbortController.signal })
       .then((res) => {
-        const newLineData = processLineData(res.data, lineId, lineName);
+        const newLineData = {
+          id: lineId,
+          name: lineName,
+          data: res.data,
+          status: "loaded",
+        } as LineDataRawLoaded;
 
-        setLinesData((ld) => {
+        setLinesDataRaw((ld) => {
           const lineIdx = ld.findIndex((l) => l.id === lineId);
 
           if (lineIdx != -1) {
@@ -266,7 +280,7 @@ export default function ComparisonTable({
             status: "failed" as "failed",
           };
 
-          setLinesData((ld) => {
+          setLinesDataRaw((ld) => {
             const lineIdx = ld.findIndex((l) => l.id === lineId);
 
             if (lineIdx != -1) {
@@ -292,7 +306,7 @@ export default function ComparisonTable({
       currentAbortController.abort();
     }
 
-    setLinesData((linesData) => linesData.filter((l) => l.id !== lineId));
+    setLinesDataRaw((linesData) => linesData.filter((l) => l.id !== lineId));
   };
 
   const updateLineState = (lineId: string, lineName: string) => {
@@ -323,62 +337,10 @@ export default function ComparisonTable({
 
     const abortController = new AbortController();
 
-    const loadingLinesData = lines.map((l) => ({
-      id: l.id,
-      name: l.name,
-      status: "loading" as "loading",
-    }));
-
-    setLinesData(loadingLinesData);
-
-    const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
-        signal: abortController.signal,
-      })
-    );
-
-    Promise.all(promises)
-      .then((values) => {
-        const linesData = [];
-
-        for (const [index, res] of values.entries()) {
-          const newLineData = processLineData(
-            res.data,
-            lines[index].id,
-            lines[index].name
-          );
-
-          linesData.push(newLineData);
-        }
-
-        setLinesData(linesData);
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          const failedLinesData = lines.map((l) => ({
-            id: l.id,
-            name: l.name,
-            status: "failed" as "failed",
-          }));
-
-          setLinesData(failedLinesData);
-        }
-      });
-
-    return () => {
-      abortController.abort();
-    };
-  }, [measure]);
-
-  useEffect(() => {
-    stopAllLineDataRequests();
-
-    const abortController = new AbortController();
-
     const entityName = level === Level.State ? id : name;
 
     setLines([{ id, name: entityName }]);
-    setLinesData([
+    setLinesDataRaw([
       {
         id,
         name: entityName,
@@ -391,16 +353,21 @@ export default function ComparisonTable({
         signal: abortController.signal,
       })
       .then((res) => {
-        const linesData = [];
+        const lDataRaw = [] as LineDataRaw[];
 
-        const newLineData = processLineData(res.data, id, entityName);
+        const newLineData = {
+          id,
+          name: entityName,
+          data: res.data,
+          status: "loaded",
+        } as LineDataRawLoaded;
 
-        linesData.push(newLineData);
-        setLinesData(linesData);
+        lDataRaw.push(newLineData);
+        setLinesDataRaw(lDataRaw);
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          setLinesData([
+          setLinesDataRaw([
             {
               id,
               name: entityName,
