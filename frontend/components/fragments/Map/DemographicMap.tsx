@@ -200,9 +200,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     setStateVisible(stateVisibility);
   };
 
-  console.log("XXXXXXXXXXX");
-  console.log(stateVisible);
-
   const updateBounds = useCallback((e) => {
     if (mapRef.current) {
       (mapRef.current as any).fitBounds(
