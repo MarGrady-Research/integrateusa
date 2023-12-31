@@ -39,15 +39,17 @@ const InfoDialog = memo(
         <DialogContent>
           {children}
           <div className="flex pt-10 justify-between">
-            <Link href={infoUrl}>
-              <a className="font-semibold text-primary hover:underline">
-                Demographic Info
-              </a>
+            <Link
+              href={infoUrl}
+              className="font-semibold text-primary hover:underline"
+            >
+              Demographic Info
             </Link>
-            <Link href={segUrl}>
-              <a className="font-semibold text-primary hover:underline">
-                Segregation
-              </a>
+            <Link
+              href={segUrl}
+              className="font-semibold text-primary hover:underline"
+            >
+              Segregation
             </Link>
           </div>
         </DialogContent>

@@ -18,21 +18,15 @@ function EndScreen() {
           levels in different areas over time
         </p>
       </div>
-      <Link href="/info">
-        <a className="hover:text-gray-500  inline-flex items-center">
-          Explore the dashboard
-          <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
-        </a>
+      <Link
+        href="/info"
+        className="hover:text-gray-500  inline-flex items-center"
+      >
+        Explore the dashboard
+        <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
       </Link>
       <Link href="http://www.margrady.com/">
-        <a>
-          <Image
-            src="/mg-logo.png"
-            alt="MarGrady Logo"
-            width={350}
-            height={80}
-          />
-        </a>
+        <Image src="/mg-logo.png" alt="MarGrady Logo" width={350} height={80} />
       </Link>
     </div>
   );

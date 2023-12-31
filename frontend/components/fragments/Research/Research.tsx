@@ -14,13 +14,11 @@ export default function Research() {
         Publications, projects, and other resources appear below.
       </h2>
       <div className="bg-gray-100 p-5 flex flex-col md:flex-row">
-        <Image src={district15Img} objectFit="contain" />
+        <Image src={district15Img} objectFit="contain" alt="" />
         <div className="mt-4 md:mt-0 md:ml-4">
           <h3 className="font-semibold mb-2">
-            <Link href="/research/district15">
-              <a className="hover:text-primary">
-                A case study of New York City&#39;s District 15
-              </a>
+            <Link href="/research/district15" className="hover:text-primary">
+              A case study of New York City&#39;s District 15
             </Link>
           </h3>
           <h4 className="text-secondary mb-2">Jesse Margolis</h4>
@@ -28,10 +26,11 @@ export default function Research() {
           <p>
             This study, commissioned by the Carnegie Corporation of New York,
             provides a comprehensive review of District 15.{" "}
-            <Link href="/research/district15">
-              <a className="text-primary hover:text-secondary">
-                Read the full report.
-              </a>
+            <Link
+              href="/research/district15"
+              className="text-primary hover:text-secondary"
+            >
+              Read the full report.
             </Link>
           </p>
         </div>

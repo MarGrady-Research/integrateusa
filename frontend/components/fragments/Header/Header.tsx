@@ -18,15 +18,14 @@ function NavLink({ url, title }: NavLinkProps) {
   const isActiveURL = router.pathname === url;
 
   return (
-    <Link href={url}>
-      <a
-        className={clsx({
-          "mr-3 sm:mr-5 last:mr-0 hover:text-secondary ": true,
-          "text-primary hover:text-primary": isActiveURL,
-        })}
-      >
-        {title}
-      </a>
+    <Link
+      href={url}
+      className={clsx({
+        "mr-3 sm:mr-5 last:mr-0 hover:text-secondary ": true,
+        "text-primary hover:text-primary": isActiveURL,
+      })}
+    >
+      {title}
     </Link>
   );
 }
@@ -41,15 +40,16 @@ export default function Header() {
     >
       <div className="container p-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
         <div className="flex items-center flex-col lg:flex-row">
-          <Link href="/">
-            <a className="flex items-center text-black w-40 sm:w-auto">
-              <Image
-                src="/IntegrateUSALogo.png"
-                alt="IntegrateUSA logo"
-                width={200}
-                height={60}
-              />
-            </a>
+          <Link
+            href="/"
+            className="flex items-center text-black w-40 sm:w-auto"
+          >
+            <Image
+              src="/IntegrateUSALogo.png"
+              alt="IntegrateUSA logo"
+              width={200}
+              height={60}
+            />
           </Link>
           <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
             <NavLink url="/" title="Home" />
