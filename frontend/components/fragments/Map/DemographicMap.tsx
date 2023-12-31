@@ -8,7 +8,7 @@ import Map, {
   FullscreenControl,
 } from "react-map-gl";
 import { Visibility } from "mapbox-gl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import Slideover from "./components/Slideover";
@@ -20,7 +20,8 @@ import LoadingDialog from "./components/LoadingDialog";
 import Popup from "./components/Popup";
 
 import { selectBounds } from "../../../store/selectSlice";
-import { MapData, Level, MapLevel, MapStatus } from "../../../interfaces";
+import { selectMapData, setMapData } from "../../../store/apiCacheSlice";
+import { Level, MapLevel, MapStatus } from "../../../interfaces";
 import {
   asianColor,
   blackColor,
@@ -48,8 +49,14 @@ interface Props {
 const schoolsSourceId = "schools-source";
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
-  const [mapStatus, setMapStatus] = useState(MapStatus.Fetching);
-  const [mapData, setMapData] = useState([] as MapData);
+  const dispatch = useDispatch();
+
+  const mapData = useSelector(selectMapData);
+  const mapDataExists = mapData !== null;
+
+  const [mapStatus, setMapStatus] = useState(
+    mapDataExists ? MapStatus.Cached : MapStatus.Fetching
+  );
 
   const mapRef = useRef();
 
@@ -291,16 +298,25 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   };
 
   const getData = useCallback(() => {
-    setMapStatus(MapStatus.Fetching);
+    const mapDataExistsOnStore = mapData !== null;
+
+    if (!mapDataExistsOnStore) {
+      setMapStatus(MapStatus.Fetching);
+    }
 
     axios
       .get("/api/mapschools/?q=2022")
       .then((res) => {
-        setMapData(res.data.map((d) => d.map_data));
-        setMapStatus(MapStatus.Rendering);
+        dispatch(setMapData(res.data.map((d) => d.map_data)));
+
+        if (!mapDataExistsOnStore) {
+          setMapStatus(MapStatus.Rendering);
+        }
       })
       .catch(() => {
-        setMapStatus(MapStatus.Failed);
+        if (!mapDataExistsOnStore) {
+          setMapStatus(MapStatus.Failed);
+        }
       });
   }, []);
 
@@ -329,6 +345,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     if (
       source.isSourceLoaded &&
       source.sourceId === schoolsSourceId &&
+      source.sourceCacheId === `other:${schoolsSourceId}` &&
       source.source.data.features.length > 0
     ) {
       querySchools();
@@ -352,10 +369,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const mapboxData = {
     type: "FeatureCollection" as "FeatureCollection",
-    features: mapData,
+    features: mapData || [],
   };
 
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
+  const mapRenderingCached = mapStatus === MapStatus.Cached;
+  const mapRenderingCompleteOrCached =
+    mapRenderingComplete || mapRenderingCached;
 
   let urlParams = "";
 
@@ -436,7 +456,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     schoolName ? (
       <SchoolPie hoverInfo={hoverInfo} small={small} />
     ) : (
-      <AreaPie hoverInfo={hoverInfo} mapData={mapData} small={small} />
+      <AreaPie hoverInfo={hoverInfo} mapData={mapData || []} small={small} />
     );
 
   return (
@@ -529,7 +549,10 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         {mapRenderingComplete && (
           <ViewDialog renderedFeatures={renderedFeatures} />
         )}
-        <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
+        <LoadingDialog
+          open={!mapRenderingCompleteOrCached}
+          mapStatus={mapStatus}
+        />
       </Map>
       <Slideover
         handleVisibility={handleVisibility}

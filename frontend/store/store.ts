@@ -19,9 +19,11 @@ import storage from "redux-persist/lib/storage";
 import { getPersistConfig } from "redux-deep-persist";
 
 import { selectSlice } from "./selectSlice";
+import { apiCacheSlice } from "./apiCacheSlice";
 
 const rootReducer = combineReducers({
   [selectSlice.name]: selectSlice.reducer,
+  [apiCacheSlice.name]: apiCacheSlice.reducer,
 });
 
 const makeConfiguredStore = () =>
