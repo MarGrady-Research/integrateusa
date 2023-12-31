@@ -16,24 +16,16 @@ interface Props {
   handleClose: () => void;
   name: string;
   children: React.ReactNode;
-  infoUrlParams: string;
-  segUrlParams: string;
+  urlParams: string;
 }
 
 const InfoDialog = memo(
-  ({
-    open,
-    handleClose,
-    name,
-    children,
-    infoUrlParams,
-    segUrlParams,
-  }: Props) => {
+  ({ open, handleClose, name, children, urlParams }: Props) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-    const infoUrl = `/info${infoUrlParams}`;
-    const segUrl = `/segregation${segUrlParams}`;
+    const infoUrl = `/info${urlParams}`;
+    const segUrl = `/segregation${urlParams}`;
 
     return (
       <Dialog

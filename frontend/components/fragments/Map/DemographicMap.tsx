@@ -357,8 +357,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
-  let infoUrlParams = "";
-  let segUrlParams = "";
+  let urlParams = "";
 
   if (areaName) {
     const { GEOID, STUSPS, NAME } = hoverInfo.feature.properties;
@@ -391,30 +390,46 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       params.append("name", NAME);
     }
 
-    infoUrlParams = `/?${params.toString()}`;
-    segUrlParams = `/?${params.toString()}`;
+    urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
-    const { dist_id, dist_name, state_abb } = hoverInfo.feature.properties;
+    const { dist_id, dist_name, state_abb, xmin, xmax, ymin, ymax } =
+      hoverInfo.feature.properties;
 
     const level = Level.District.toString();
     const distId = dist_id;
     const distName = `${dist_name} (${state_abb})`;
 
-    const segParams = new URLSearchParams({});
+    const params = new URLSearchParams({});
 
     if (distId) {
-      segParams.append("id", distId);
+      params.append("id", distId);
     }
 
     if (level) {
-      segParams.append("level", level);
+      params.append("level", level);
     }
 
     if (distName) {
-      segParams.append("name", distName);
+      params.append("name", distName);
     }
 
-    segUrlParams = `/?${segParams.toString()}`;
+    if (xmin) {
+      params.append("xmin", xmin);
+    }
+
+    if (xmax) {
+      params.append("xmax", xmax);
+    }
+
+    if (ymin) {
+      params.append("ymin", ymin);
+    }
+
+    if (ymax) {
+      params.append("ymax", ymax);
+    }
+
+    urlParams = `/?${params.toString()}`;
   }
 
   const pie = (small?: boolean) =>
@@ -506,8 +521,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           name={entityName}
           open={infoDialogOpen}
           handleClose={toggleInfoDialog}
-          infoUrlParams={infoUrlParams}
-          segUrlParams={segUrlParams}
+          urlParams={urlParams}
         >
           {pie()}
         </InfoDialog>
