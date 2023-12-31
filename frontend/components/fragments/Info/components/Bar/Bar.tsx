@@ -132,6 +132,7 @@ const options = {
     },
     y: {
       stacked: true,
+      min: 0,
       max: 100,
     },
   },
