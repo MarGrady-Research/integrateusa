@@ -17,10 +17,11 @@ interface Props {
   name: string;
   children: React.ReactNode;
   urlParams: string;
+  hideSegLink?: boolean;
 }
 
 const InfoDialog = memo(
-  ({ open, handleClose, name, children, urlParams }: Props) => {
+  ({ open, handleClose, name, children, urlParams, hideSegLink }: Props) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -45,12 +46,14 @@ const InfoDialog = memo(
             >
               Demographic Info
             </Link>
-            <Link
-              href={segUrl}
-              className="font-semibold text-primary hover:underline"
-            >
-              Segregation
-            </Link>
+            {!hideSegLink && (
+              <Link
+                href={segUrl}
+                className="font-semibold text-primary hover:underline"
+              >
+                Segregation
+              </Link>
+            )}
           </div>
         </DialogContent>
         <DialogActions>

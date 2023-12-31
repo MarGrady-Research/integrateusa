@@ -65,6 +65,12 @@ export const selectSlice = createSlice({
       state.selectedName = initialState.selectedName;
       state.bounds = initialState.bounds;
     },
+    setStateFromParams(state, action) {
+      state.level = action.payload.level;
+      state.id = action.payload.id;
+      state.selectedName = action.payload.selectedName;
+      state.bounds = action.payload.bounds;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(HYDRATE, (state, action) => {
@@ -84,6 +90,7 @@ export const {
   setBounds,
   setSchoolCoordinates,
   restoreInitialState,
+  setStateFromParams,
 } = selectSlice.actions;
 
 export const selectLevel = (state: AppState) => state.select.level as Level;

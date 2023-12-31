@@ -392,25 +392,23 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
-    const { dist_id, dist_name, state_abb, xmin, xmax, ymin, ymax } =
+    const { nces_id, sch_name, xmin, xmax, ymin, ymax } =
       hoverInfo.feature.properties;
 
-    const level = Level.District.toString();
-    const distId = dist_id;
-    const distName = `${dist_name} (${state_abb})`;
+    const level = Level.School.toString();
 
     const params = new URLSearchParams({});
 
-    if (distId) {
-      params.append("id", distId);
+    if (nces_id) {
+      params.append("id", nces_id);
     }
 
     if (level) {
       params.append("level", level);
     }
 
-    if (distName) {
-      params.append("name", distName);
+    if (sch_name) {
+      params.append("name", sch_name);
     }
 
     if (xmin) {
@@ -431,6 +429,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     urlParams = `/?${params.toString()}`;
   }
+
+  const hideSegLink = typeof schoolName != "undefined";
 
   const pie = (small?: boolean) =>
     schoolName ? (
@@ -522,6 +522,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           open={infoDialogOpen}
           handleClose={toggleInfoDialog}
           urlParams={urlParams}
+          hideSegLink={hideSegLink}
         >
           {pie()}
         </InfoDialog>

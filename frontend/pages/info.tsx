@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
@@ -14,16 +15,24 @@ import {
   selectLevel,
   selectId,
   selectSelectedName,
+  setStateFromParams,
 } from "../store/selectSlice";
 
 import { InfoData, TrendData, Level } from "../interfaces";
 
 export default function InfoPage() {
+  const searchParams = useSearchParams();
+
+  const [infoUsedParams, setInfoUsedParams] = useState(false);
+  const [trendUsedParams, setTrendUsedParams] = useState(false);
+
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
+
+  const dispatch = useDispatch();
 
   const [infoData, setInfoData] = useState([] as InfoData);
   const [trendData, setTrendData] = useState([] as TrendData);
@@ -31,6 +40,41 @@ export default function InfoPage() {
   const [isTrendDataLoading, setIsTrendDataLoading] = useState(true);
 
   useEffect(() => {
+    const paramsId = searchParams.get("id");
+    const paramsName = searchParams.get("name");
+    const paramsLevel = searchParams.get("level");
+    const paramsXMin = searchParams.get("xmin");
+    const paramsXMax = searchParams.get("xmax");
+    const paramsYMin = searchParams.get("ymin");
+    const paramsYMax = searchParams.get("ymax");
+
+    const completeParams =
+      !!paramsId &&
+      !!paramsName &&
+      !!paramsLevel &&
+      !!paramsXMin &&
+      !!paramsXMax &&
+      !!paramsYMin &&
+      !!paramsYMax;
+
+    if (completeParams && !infoUsedParams) {
+      const newState = {
+        id: paramsId,
+        selectedName: paramsName,
+        level: parseInt(paramsLevel),
+        bounds: {
+          lngmin: parseFloat(paramsXMin),
+          lngmax: parseFloat(paramsXMax),
+          latmin: parseFloat(paramsYMin),
+          latmax: parseFloat(paramsYMax),
+        },
+      };
+
+      dispatch(setStateFromParams(newState));
+      setInfoUsedParams(true);
+      return;
+    }
+
     const abortController = new AbortController();
 
     let levelId = "";
@@ -69,9 +113,44 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, grade, year]);
+  }, [id, level, grade, year, searchParams, infoUsedParams]);
 
   useEffect(() => {
+    const paramsId = searchParams.get("id");
+    const paramsName = searchParams.get("name");
+    const paramsLevel = searchParams.get("level");
+    const paramsXMin = searchParams.get("xmin");
+    const paramsXMax = searchParams.get("xmax");
+    const paramsYMin = searchParams.get("ymin");
+    const paramsYMax = searchParams.get("ymax");
+
+    const completeParams =
+      !!paramsId &&
+      !!paramsName &&
+      !!paramsLevel &&
+      !!paramsXMin &&
+      !!paramsXMax &&
+      !!paramsYMin &&
+      !!paramsYMax;
+
+    if (completeParams && !trendUsedParams) {
+      const newState = {
+        id: paramsId,
+        selectedName: paramsName,
+        level: parseInt(paramsLevel),
+        bounds: {
+          lngmin: parseFloat(paramsXMin),
+          lngmax: parseFloat(paramsXMax),
+          latmin: parseFloat(paramsYMin),
+          latmax: parseFloat(paramsYMax),
+        },
+      };
+
+      dispatch(setStateFromParams(newState));
+      setTrendUsedParams(true);
+      return;
+    }
+
     const abortController = new AbortController();
 
     let levelTable = "";
@@ -115,7 +194,7 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level]);
+  }, [id, level, searchParams, trendUsedParams]);
 
   return (
     <>
