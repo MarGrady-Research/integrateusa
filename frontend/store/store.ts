@@ -42,7 +42,7 @@ export const makeStore = () => {
       key: "root",
       storage,
       version: 1,
-      blacklist: ["select.grade", "select.year"],
+      blacklist: ["select.grade", "select.year", "apiCache"],
       rootReducer,
     });
 

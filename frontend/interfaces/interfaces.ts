@@ -123,7 +123,6 @@ export enum MapStatus {
   Rendering,
   Complete,
   Failed,
-  Cached,
 }
 
 export interface SchoolCoordinates {

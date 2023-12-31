@@ -55,10 +55,12 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const mapDataExists = mapData !== null;
 
   const [mapStatus, setMapStatus] = useState(
-    mapDataExists ? MapStatus.Cached : MapStatus.Fetching
+    mapDataExists ? MapStatus.Rendering : MapStatus.Fetching
   );
 
   const mapRef = useRef();
+
+  const [hasMapLoaded, setHasMapLoaded] = useState(false);
 
   const initialBounds = useSelector(selectBounds);
 
@@ -320,13 +322,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       });
   }, []);
 
-  const onLoad = useCallback(() => {
-    if (onSmallerScreen) {
-      updateBounds(initialBounds);
-    }
-    getData();
-  }, [onSmallerScreen, initialBounds]);
-
   const querySchools = () => {
     if (mapRef.current) {
       const features = (mapRef.current as any).queryRenderedFeatures({
@@ -353,6 +348,15 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
   };
 
+  const onLoad = useCallback(() => {
+    setHasMapLoaded(true);
+
+    if (onSmallerScreen) {
+      updateBounds(initialBounds);
+    }
+    getData();
+  }, [onSmallerScreen, initialBounds]);
+
   const coordinates = {
     x: hoverInfo?.x,
     y: hoverInfo?.y,
@@ -373,9 +377,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   };
 
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
-  const mapRenderingCached = mapStatus === MapStatus.Cached;
-  const mapRenderingCompleteOrCached =
-    mapRenderingComplete || mapRenderingCached;
 
   let urlParams = "";
 
@@ -496,42 +497,46 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
         <NavigationControl position="top-left" />
-        <Source
-          id="elementary-district-boundary-source"
-          type="vector"
-          url="mapbox://margrady.0rwet47j"
-        >
-          <Layer {...elementaryDistrictLayer} />
-        </Source>
-        <Source
-          id="secondary-district-boundary-source"
-          type="vector"
-          url="mapbox://margrady.a1ltfgy8"
-        >
-          <Layer {...secondaryDistrictLayer} />
-        </Source>
-        <Source
-          id="county-boundary-source"
-          type="vector"
-          url="mapbox://margrady.b4j76wmt"
-        >
-          <Layer {...countyLayer} />
-        </Source>
-        <Source
-          id="state-boundary-source"
-          type="vector"
-          url="mapbox://margrady.9j8mklpq"
-        >
-          <Layer {...stateLayer} />
-        </Source>
-        <Source
-          id={schoolsSourceId}
-          type="geojson"
-          data={mapboxData}
-          generateId
-        >
-          <Layer {...LayerProps} />
-        </Source>
+        {hasMapLoaded && (
+          <>
+            <Source
+              id="elementary-district-boundary-source"
+              type="vector"
+              url="mapbox://margrady.0rwet47j"
+            >
+              <Layer {...elementaryDistrictLayer} />
+            </Source>
+            <Source
+              id="secondary-district-boundary-source"
+              type="vector"
+              url="mapbox://margrady.a1ltfgy8"
+            >
+              <Layer {...secondaryDistrictLayer} />
+            </Source>
+            <Source
+              id="county-boundary-source"
+              type="vector"
+              url="mapbox://margrady.b4j76wmt"
+            >
+              <Layer {...countyLayer} />
+            </Source>
+            <Source
+              id="state-boundary-source"
+              type="vector"
+              url="mapbox://margrady.9j8mklpq"
+            >
+              <Layer {...stateLayer} />
+            </Source>
+            <Source
+              id={schoolsSourceId}
+              type="geojson"
+              data={mapboxData}
+              generateId
+            >
+              <Layer {...LayerProps} />
+            </Source>
+          </>
+        )}
         {showPopup && (
           <Popup name={entityName} coordinates={coordinates}>
             {pie(true)}
@@ -549,10 +554,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         {mapRenderingComplete && (
           <ViewDialog renderedFeatures={renderedFeatures} />
         )}
-        <LoadingDialog
-          open={!mapRenderingCompleteOrCached}
-          mapStatus={mapStatus}
-        />
+        <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>
       <Slideover
         handleVisibility={handleVisibility}
