@@ -22,7 +22,6 @@ import { yearsData } from "../../../Selection/data";
 import {
   SegData,
   LineData,
-  LineDataLoaded,
   LineDataRaw,
   LineDataRawLoaded,
   LineDataBase,
