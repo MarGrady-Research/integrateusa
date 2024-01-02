@@ -36,9 +36,6 @@ interface Props {
   name: string;
   grade: string;
   segData: SegData;
-  idLevel: string;
-  nameLevel: string;
-  table: string;
   level: Level;
   measure: {
     accessor: string;
@@ -65,13 +62,28 @@ export default function ComparisonTable({
   grade,
   level,
   segData,
-  nameLevel,
-  idLevel,
-  table,
   measure,
   year,
   isLoading,
 }: Props) {
+  let idLevel: string;
+  let nameLevel: string;
+  let table: string;
+
+  if (id.length === 7) {
+    idLevel = "dist_id";
+    nameLevel = "dist_name";
+    table = "district";
+  } else if (id.length === 5) {
+    idLevel = "county_id";
+    nameLevel = "county_name";
+    table = "county";
+  } else {
+    idLevel = "state_abb";
+    nameLevel = "state_abb";
+    table = "state";
+  }
+
   const columns = [
     { accessor: "checkbox", label: "" },
     { accessor: nameLevel, label: "Name" },
@@ -224,6 +236,10 @@ export default function ComparisonTable({
     return ldr;
   });
 
+  console.log("xxxxxxxxxxxxx");
+  console.log(linesDataRaw);
+  console.log(linesData);
+
   const abortControllersRef = useRef({});
 
   const getLineData = (lineId: string, lineName: string) => {
@@ -330,6 +346,59 @@ export default function ComparisonTable({
       abortControllers[id].abort();
     }
   };
+
+  useEffect(() => {
+    stopAllLineDataRequests();
+
+    const abortController = new AbortController();
+
+    const loadingLinesData = lines.map((l) => ({
+      id: l.id,
+      name: l.name,
+      status: "loading" as "loading",
+    }));
+
+    setLinesDataRaw(loadingLinesData);
+
+    const promises = lines.map((l) =>
+      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
+        signal: abortController.signal,
+      })
+    );
+
+    Promise.all(promises)
+      .then((values) => {
+        const lDataRaw = [] as LineDataRaw[];
+
+        for (const [index, res] of values.entries()) {
+          const newLineData = {
+            id: lines[index].id,
+            name: lines[index].name,
+            data: res.data,
+            status: "loaded",
+          } as LineDataRawLoaded;
+
+          lDataRaw.push(newLineData);
+        }
+
+        setLinesDataRaw(lDataRaw);
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          const failedLinesData = lines.map((l) => ({
+            id: l.id,
+            name: l.name,
+            status: "failed" as "failed",
+          }));
+
+          setLinesDataRaw(failedLinesData);
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [grade]);
 
   useEffect(() => {
     stopAllLineDataRequests();

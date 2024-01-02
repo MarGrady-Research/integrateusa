@@ -56,7 +56,17 @@ const options = [
 
 const defaultOption = options[1];
 
-const findFocus = (segData: SegData, idLevel: string, id: string) => {
+const findFocus = (segData: SegData, id: string) => {
+  let idLevel: string;
+
+  if (id.length === 7) {
+    idLevel = "dist_id";
+  } else if (id.length === 5) {
+    idLevel = "county_id";
+  } else {
+    idLevel = "state_abb";
+  }
+
   const posIdx = segData.findIndex((d) => d[idLevel] && d[idLevel] === id);
 
   if (posIdx != -1) {
@@ -111,10 +121,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     table = "state";
   }
 
-  const focus = useMemo(
-    () => findFocus(segData, idLevel, id),
-    [segData, idLevel, id]
-  );
+  const focus = useMemo(() => findFocus(segData, id), [segData, id]);
 
   return (
     <>
@@ -138,9 +145,6 @@ export default function Segregation({ segData, isLoading }: Props) {
         grade={grade}
         level={level}
         segData={segData}
-        idLevel={idLevel}
-        nameLevel={nameLevel}
-        table={table}
         measure={measure}
         year={year}
         isLoading={isLoading}
