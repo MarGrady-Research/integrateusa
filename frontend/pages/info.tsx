@@ -40,7 +40,7 @@ export default function InfoPage() {
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
   const infoDataStore = useSelector(selectInfoData);
-  const trendDataCache = useSelector(selectTrendData);
+  const trendDataStore = useSelector(selectTrendData);
 
   let levelTable = "";
   let levelId = "";
@@ -74,13 +74,17 @@ export default function InfoPage() {
   const infoData = infoDataRequestingApi ? infoDataCache || [] : infoDataState;
   const isInfoDataLoading = !isInfoDataCached && infoDataRequestingApi;
 
-  const trendDataKey = `${levelTable}-${id}`;
-  const trendData = trendDataCache[trendDataKey];
-  const isTrendDataCached = typeof trendData !== "undefined";
-
+  const [trendDataState, setTrendDataState] = useState([]);
   const [isTrendDataRequestingApi, setIsTrendDataRequestingApi] =
     useState(true);
 
+  const trendDataKey = `${levelTable}-${id}`;
+  const trendDataCache = trendDataStore[trendDataKey];
+  const isTrendDataCached = typeof trendDataCache !== "undefined";
+
+  const trendData = isTrendDataRequestingApi
+    ? trendDataCache || []
+    : trendDataState;
   const isTrendDataLoading = !isTrendDataCached && isTrendDataRequestingApi;
 
   useEffect(() => {
@@ -195,11 +199,18 @@ export default function InfoPage() {
       .get(trendUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setTrendData({ [trendDataKey]: res.data }));
+        setTrendDataState(res.data);
         setIsTrendDataRequestingApi(false);
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
           setIsTrendDataRequestingApi(false);
+        }
+
+        if (isTrendDataCached) {
+          setTrendDataState(trendDataCache);
+        } else {
+          setTrendDataState([]);
         }
       });
 
