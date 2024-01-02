@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
+import axios from "axios";
 
 import SegBar from "./components/Bar";
 import Info from "./components/Info";
 import ComparisonTable from "./components/ComparisonTable";
+import LineGraph from "./components/Line";
 
 import {
   selectId,
@@ -14,7 +16,9 @@ import {
   selectLevel,
 } from "../../../store/selectSlice";
 
-import { SegData } from "../../../interfaces";
+import { SegData, LineDataBase, Level } from "../../../interfaces";
+
+import { yearsData } from "../Selection/data";
 
 interface Props {
   segData: SegData;
@@ -56,6 +60,12 @@ const options = [
 
 const defaultOption = options[1];
 
+const labels = yearsData
+  .map((e) => e.value)
+  .sort((a, b) => {
+    return a - b;
+  });
+
 const findFocus = (segData: SegData, id: string) => {
   let idLevel: string;
 
@@ -74,6 +84,35 @@ const findFocus = (segData: SegData, id: string) => {
   }
 
   return null;
+};
+
+const processLineData = (
+  data: {
+    [key: string]: any;
+  }[],
+  measure: {
+    name: string;
+    accessor: string;
+  }
+) => {
+  let finalData = data.map((d) => ({
+    seg: d[measure.accessor],
+    year: d.year,
+  }));
+
+  labels.forEach((l) => {
+    const yearInData = finalData.findIndex((d) => d.year === l) != -1;
+
+    if (!yearInData) {
+      let tempData = [...finalData, { seg: null, year: l }];
+
+      finalData = tempData.sort((a, b) => {
+        return a.year - b.year;
+      });
+    }
+  });
+
+  return finalData;
 };
 
 export default function Segregation({ segData, isLoading }: Props) {
@@ -103,6 +142,8 @@ export default function Segregation({ segData, isLoading }: Props) {
     [selected]
   );
 
+  const focus = useMemo(() => findFocus(segData, id), [segData, id]);
+
   let idLevel: string;
   let nameLevel: string;
   let table: string;
@@ -121,7 +162,131 @@ export default function Segregation({ segData, isLoading }: Props) {
     table = "state";
   }
 
-  const focus = useMemo(() => findFocus(segData, id), [segData, id]);
+  const [lines, setLines] = useState([
+    { id, name: level === Level.State ? id : name },
+  ] as LineDataBase[]);
+
+  const abortControllersRef = useRef({});
+
+  const getLineData = (lineId: string, lineName: string) => {
+    const url =
+      "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
+
+    abortControllersRef.current = {
+      ...abortControllersRef.current,
+      [lineId]: new AbortController(),
+    };
+
+    const currentAbortController = abortControllersRef.current[lineId];
+
+    axios
+      .get(url, { signal: currentAbortController.signal })
+      .then((res) => {
+        //do stuff here
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          const failedLineData = {
+            id: lineId,
+            name: lineName,
+            status: "failed" as "failed",
+          };
+
+          //do stuff here
+        }
+      });
+  };
+
+  const stopLineRequest = (lineId: string) => {
+    const currentAbortController = abortControllersRef.current[lineId];
+
+    if (currentAbortController) {
+      currentAbortController.abort();
+    }
+  };
+
+  const updateLine = (lineId: string, lineName: string) => {
+    const isLineAbsent = lines.findIndex((l) => l.id === lineId) === -1;
+
+    if (isLineAbsent) {
+      setLines((currentLines) => [
+        ...currentLines,
+        { id: lineId, name: lineName },
+      ]);
+      getLineData(lineId, lineName);
+    } else {
+      setLines((currentLines) => currentLines.filter((l) => l.id !== lineId));
+      stopLineRequest(lineId);
+    }
+  };
+
+  const stopAllLineDataRequests = () => {
+    const abortControllers = abortControllersRef.current;
+
+    for (const id in abortControllers) {
+      abortControllers[id].abort();
+    }
+  };
+
+  useEffect(() => {
+    stopAllLineDataRequests();
+
+    const abortController = new AbortController();
+
+    const promises = lines.map((l) =>
+      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
+        signal: abortController.signal,
+      })
+    );
+
+    Promise.all(promises)
+      .then((values) => {
+        for (const [index, res] of values.entries()) {
+          //do stuff here
+        }
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          //do stuff here
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [grade]);
+
+  useEffect(() => {
+    stopAllLineDataRequests();
+
+    const abortController = new AbortController();
+
+    const entityName = level === Level.State ? id : name;
+
+    setLines([{ id, name: entityName }]);
+
+    axios
+      .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
+        signal: abortController.signal,
+      })
+      .then((res) => {
+        //do stuff here
+      })
+      .catch((error) => {
+        if (error.name !== "CanceledError") {
+          //do stuff here
+        }
+      });
+    return () => {
+      abortController.abort();
+    };
+  }, [id]);
+
+  const clearSelection = () => {
+    const entityName = level === Level.State ? id : name;
+
+    setLines([{ id, name: entityName }]);
+  };
 
   return (
     <>
@@ -141,14 +306,14 @@ export default function Segregation({ segData, isLoading }: Props) {
       </div>
       <ComparisonTable
         id={id}
-        name={name}
-        grade={grade}
-        level={level}
         segData={segData}
         measure={measure}
-        year={year}
         isLoading={isLoading}
+        lines={lines}
+        updateLine={updateLine}
+        clearSelection={clearSelection}
       />
+      {/*<LineGraph linesData={linesData} id={id} year={year} />*/}
     </>
   );
 }

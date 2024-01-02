@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -10,39 +10,28 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Skeleton from "@mui/material/Skeleton";
-import axios from "axios";
 import clsx from "clsx";
 
-import LineGraph from "../Line";
 import Pagination from "../Pagination";
 
 import { sortRows, filterRows } from "../../helpers";
-import { yearsData } from "../../../Selection/data";
 
-import {
-  SegData,
-  LineData,
-  LineDataRaw,
-  LineDataRawLoaded,
-  LineDataBase,
-  Level,
-} from "../../../../../interfaces";
+import { SegData, LineDataBase, Level } from "../../../../../interfaces";
 
 // @ts-ignore
 import { container } from "./ComparisonTable.module.scss";
 
 interface Props {
   id: string;
-  name: string;
-  grade: string;
   segData: SegData;
-  level: Level;
   measure: {
     accessor: string;
     name: string;
   };
-  year: number;
   isLoading: boolean;
+  lines: LineDataBase[];
+  updateLine: (id: string, name: string) => void;
+  clearSelection: () => void;
 }
 
 const ROWS_PER_PAGE = 10;
@@ -58,13 +47,12 @@ function TableHolder({ children }: { children: React.ReactNode }) {
 
 export default function ComparisonTable({
   id,
-  name,
-  grade,
-  level,
   segData,
   measure,
-  year,
   isLoading,
+  lines,
+  updateLine,
+  clearSelection,
 }: Props) {
   let idLevel: string;
   let nameLevel: string;
@@ -190,279 +178,6 @@ export default function ComparisonTable({
     setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
   }, [minSchools]);
 
-  const labels = yearsData
-    .map((e) => e.value)
-    .sort((a, b) => {
-      return a - b;
-    });
-
-  const processLineData = (
-    data: {
-      [key: string]: any;
-    }[]
-  ) => {
-    let finalData = data.map((d) => ({
-      seg: d[measure.accessor],
-      year: d.year,
-    }));
-
-    labels.forEach((l) => {
-      const yearInData = finalData.findIndex((d) => d.year === l) != -1;
-
-      if (!yearInData) {
-        let tempData = [...finalData, { seg: null, year: l }];
-
-        finalData = tempData.sort((a, b) => {
-          return a.year - b.year;
-        });
-      }
-    });
-
-    return finalData;
-  };
-
-  const [lines, setLines] = useState([
-    { id, name: level === Level.State ? id : name },
-  ] as LineDataBase[]);
-
-  const [linesDataRaw, setLinesDataRaw] = useState([] as LineDataRaw[]);
-  const linesData: LineData[] = linesDataRaw.map((ldr) => {
-    if (ldr.status === "loaded") {
-      return {
-        ...ldr,
-        data: processLineData(ldr.data),
-      };
-    }
-    return ldr;
-  });
-
-  console.log("xxxxxxxxxxxxx");
-  console.log(linesDataRaw);
-  console.log(linesData);
-
-  const abortControllersRef = useRef({});
-
-  const getLineData = (lineId: string, lineName: string) => {
-    const url =
-      "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
-
-    const newLineDataLoading = {
-      id: lineId,
-      name: lineName,
-      status: "loading" as "loading",
-    };
-
-    setLinesDataRaw((ld) => [...ld, newLineDataLoading]);
-
-    abortControllersRef.current = {
-      ...abortControllersRef.current,
-      [lineId]: new AbortController(),
-    };
-
-    const currentAbortController = abortControllersRef.current[lineId];
-
-    axios
-      .get(url, { signal: currentAbortController.signal })
-      .then((res) => {
-        const newLineData = {
-          id: lineId,
-          name: lineName,
-          data: res.data,
-          status: "loaded",
-        } as LineDataRawLoaded;
-
-        setLinesDataRaw((ld) => {
-          const lineIdx = ld.findIndex((l) => l.id === lineId);
-
-          if (lineIdx != -1) {
-            const newLinesData = [
-              ...ld.slice(0, lineIdx),
-              newLineData,
-              ...ld.slice(lineIdx + 1),
-            ];
-
-            return newLinesData;
-          } else {
-            return [...ld, newLineData];
-          }
-        });
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          const failedLineData = {
-            id: lineId,
-            name: lineName,
-            status: "failed" as "failed",
-          };
-
-          setLinesDataRaw((ld) => {
-            const lineIdx = ld.findIndex((l) => l.id === lineId);
-
-            if (lineIdx != -1) {
-              const newLinesData = [
-                ...ld.slice(0, lineIdx),
-                failedLineData,
-                ...ld.slice(lineIdx + 1),
-              ];
-
-              return newLinesData;
-            } else {
-              return [...ld, failedLineData];
-            }
-          });
-        }
-      });
-  };
-
-  const removeLineData = (lineId: string) => {
-    const currentAbortController = abortControllersRef.current[lineId];
-
-    if (currentAbortController) {
-      currentAbortController.abort();
-    }
-
-    setLinesDataRaw((linesData) => linesData.filter((l) => l.id !== lineId));
-  };
-
-  const updateLineState = (lineId: string, lineName: string) => {
-    const isLineAbsent = lines.findIndex((l) => l.id === lineId) === -1;
-
-    if (isLineAbsent) {
-      setLines((currentLines) => [
-        ...currentLines,
-        { id: lineId, name: lineName },
-      ]);
-      getLineData(lineId, lineName);
-    } else {
-      setLines((currentLines) => currentLines.filter((l) => l.id !== lineId));
-      removeLineData(lineId);
-    }
-  };
-
-  const stopAllLineDataRequests = () => {
-    const abortControllers = abortControllersRef.current;
-
-    for (const id in abortControllers) {
-      abortControllers[id].abort();
-    }
-  };
-
-  useEffect(() => {
-    stopAllLineDataRequests();
-
-    const abortController = new AbortController();
-
-    const loadingLinesData = lines.map((l) => ({
-      id: l.id,
-      name: l.name,
-      status: "loading" as "loading",
-    }));
-
-    setLinesDataRaw(loadingLinesData);
-
-    const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
-        signal: abortController.signal,
-      })
-    );
-
-    Promise.all(promises)
-      .then((values) => {
-        const lDataRaw = [] as LineDataRaw[];
-
-        for (const [index, res] of values.entries()) {
-          const newLineData = {
-            id: lines[index].id,
-            name: lines[index].name,
-            data: res.data,
-            status: "loaded",
-          } as LineDataRawLoaded;
-
-          lDataRaw.push(newLineData);
-        }
-
-        setLinesDataRaw(lDataRaw);
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          const failedLinesData = lines.map((l) => ({
-            id: l.id,
-            name: l.name,
-            status: "failed" as "failed",
-          }));
-
-          setLinesDataRaw(failedLinesData);
-        }
-      });
-
-    return () => {
-      abortController.abort();
-    };
-  }, [grade]);
-
-  useEffect(() => {
-    stopAllLineDataRequests();
-
-    const abortController = new AbortController();
-
-    const entityName = level === Level.State ? id : name;
-
-    setLines([{ id, name: entityName }]);
-    setLinesDataRaw([
-      {
-        id,
-        name: entityName,
-        status: "loading" as "loading",
-      },
-    ]);
-
-    axios
-      .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
-        signal: abortController.signal,
-      })
-      .then((res) => {
-        const lDataRaw = [] as LineDataRaw[];
-
-        const newLineData = {
-          id,
-          name: entityName,
-          data: res.data,
-          status: "loaded",
-        } as LineDataRawLoaded;
-
-        lDataRaw.push(newLineData);
-        setLinesDataRaw(lDataRaw);
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          setLinesDataRaw([
-            {
-              id,
-              name: entityName,
-              status: "failed" as "failed",
-            },
-          ]);
-        }
-      });
-    return () => {
-      abortController.abort();
-    };
-  }, [id]);
-
-  const clearSelection = () => {
-    segData.forEach((r) => {
-      const isSelectedRow = r[idLevel] === `${id}`;
-
-      const isLineRendered = lines.findIndex((l) => l.id === r[idLevel]) != -1;
-
-      const shouldRemove = !isSelectedRow && isLineRendered;
-
-      if (shouldRemove) {
-        updateLineState(r[idLevel], r[nameLevel]);
-      }
-    });
-  };
-
   const tableHeader = () => (
     <TableHead className="bg-gray-200">
       <TableRow>
@@ -529,7 +244,7 @@ export default function ComparisonTable({
           const shouldChange = !isSelectedRow && (shouldAdd || shouldRemove);
 
           if (shouldChange) {
-            updateLineState(r[idLevel], r[nameLevel]);
+            updateLine(r[idLevel], r[nameLevel]);
           }
         });
       }}
@@ -655,7 +370,7 @@ export default function ComparisonTable({
   const tableContentRowCheckbox = (row, isSelectedRow) => (
     <Checkbox
       onClick={() => {
-        updateLineState(row[idLevel], row[nameLevel]);
+        updateLine(row[idLevel], row[nameLevel]);
       }}
       disabled={isSelectedRow}
       checked={
@@ -720,44 +435,38 @@ export default function ComparisonTable({
     );
 
   return (
-    <>
-      <div className="mb-10">
-        {isLoading ? (
-          <Skeleton
-            className={clsx("w-full", container)}
-            variant="rectangular"
-          />
-        ) : (
-          <>
-            <TableContainer component={TableHolder}>
-              <Table size="small">
-                {tableHeader()}
-                <TableBody>
-                  {tableSearchRow()}
-                  {tableContentRows()}
-                  {tableEmptyRows()}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div className="flex items-center justify-between">
-              <Button
-                variant="outlined"
-                className="!normal-case"
-                onClick={clearSelection}
-              >
-                Clear Selection
-              </Button>
-              <Pagination
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={ROWS_PER_PAGE}
-                count={filteredRows.length}
-              />
-            </div>
-          </>
-        )}
-      </div>
-      <LineGraph linesData={linesData} id={id} year={year} />
-    </>
+    <div className="mb-10">
+      {isLoading ? (
+        <Skeleton className={clsx("w-full", container)} variant="rectangular" />
+      ) : (
+        <>
+          <TableContainer component={TableHolder}>
+            <Table size="small">
+              {tableHeader()}
+              <TableBody>
+                {tableSearchRow()}
+                {tableContentRows()}
+                {tableEmptyRows()}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outlined"
+              className="!normal-case"
+              onClick={clearSelection}
+            >
+              Clear Selection
+            </Button>
+            <Pagination
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={ROWS_PER_PAGE}
+              count={filteredRows.length}
+            />
+          </div>
+        </>
+      )}
+    </div>
   );
 }
