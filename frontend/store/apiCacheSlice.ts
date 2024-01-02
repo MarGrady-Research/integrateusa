@@ -7,6 +7,7 @@ import {
   InfoData,
   TrendData,
   SegData,
+  LineData,
   ApiStatus,
 } from "../interfaces";
 
@@ -31,11 +32,19 @@ interface TrendDataCache {
   };
 }
 
+interface LineDataCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: LineData;
+  };
+}
+
 export interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
   trendData: TrendDataCache;
   segData: SegDataCache;
+  lineData: LineDataCache;
 }
 
 const initialState: ApiCacheState = {
@@ -43,6 +52,7 @@ const initialState: ApiCacheState = {
   infoData: {},
   trendData: {},
   segData: {},
+  lineData: {},
 };
 
 export const apiCacheSlice = createSlice({
@@ -151,6 +161,39 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
+    setLineDataRequest(state, action) {
+      const key = action.payload;
+
+      state.lineData = {
+        ...state.lineData,
+        [key]: {
+          ...state.lineData[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setLineDataSuccess(state, action) {
+      const { key, data } = action.payload;
+
+      state.lineData = {
+        ...state.lineData,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setLineDataFailure(state, action) {
+      const key = action.payload;
+
+      state.lineData = {
+        ...state.lineData,
+        [key]: {
+          ...state.lineData[key],
+          status: ApiStatus.Failure,
+        },
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(HYDRATE, (state, action) => {
@@ -173,6 +216,9 @@ export const {
   setSegDataRequest,
   setSegDataSuccess,
   setSegDataFailure,
+  setLineDataRequest,
+  setLineDataSuccess,
+  setLineDataFailure,
 } = apiCacheSlice.actions;
 
 export const selectMapData = (state: AppState) =>
@@ -186,5 +232,8 @@ export const selectTrendData = (state: AppState) =>
 
 export const selectSegData = (state: AppState) =>
   state.apiCache.segData as SegDataCache;
+
+export const selectLineData = (state: AppState) =>
+  state.apiCache.lineData as LineDataCache;
 
 export default apiCacheSlice.reducer;

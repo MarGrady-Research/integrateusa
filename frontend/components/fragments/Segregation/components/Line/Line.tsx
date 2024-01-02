@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { useSelector } from "react-redux";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,7 +22,9 @@ import {
   selectedLineColor,
   unselectedLineColor,
 } from "../../../../../constants";
-import { LineData, LineDataLoaded } from "../../../../../interfaces";
+import { ApiStatus, LineDataBase } from "../../../../../interfaces";
+
+import { selectLineData } from "../../../../../store/apiCacheSlice";
 
 // @ts-ignore
 import { container } from "./Line.module.scss";
@@ -37,9 +40,10 @@ ChartJS.register(
 );
 
 interface Props {
-  linesData: LineData[];
+  lines: LineDataBase[];
   id: string;
   year: number;
+  grade: string;
 }
 
 const labels = yearsData
@@ -48,7 +52,9 @@ const labels = yearsData
     return a - b;
   });
 
-const LineGraph = memo(({ linesData, id, year }: Props) => {
+const LineGraph = memo(({ lines, id, year, grade }: Props) => {
+  const lineDataStore = useSelector(selectLineData);
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -83,25 +89,45 @@ const LineGraph = memo(({ linesData, id, year }: Props) => {
     },
   };
 
-  const lineData = linesData
-    .filter((l) => l.status === "loaded")
-    .map((l: LineDataLoaded) => ({
-      label: l.name,
-      data: l.data.map((li) => li.seg),
-      borderColor: l.id === id ? selectedLineColor : unselectedLineColor,
-      backgroundColor: l.id === id ? selectedLineColor : unselectedLineColor,
-    }));
+  const graphData = [];
+
+  lines.forEach((line) => {
+    const lineKey = `${grade}-${line.id}`;
+    const lineKeyCache = lineDataStore[lineKey];
+    const isLineKeyCached = typeof lineKeyCache !== "undefined";
+    const lineDataCache = isLineKeyCached ? lineKeyCache.data : null;
+    const isLineDataCached = typeof lineDataCache !== "undefined";
+
+    if (isLineDataCached && lineDataCache) {
+      graphData.push({
+        label: line.name,
+        data: lineDataCache.map((li) => li.seg),
+        borderColor: line.id === id ? selectedLineColor : unselectedLineColor,
+        backgroundColor:
+          line.id === id ? selectedLineColor : unselectedLineColor,
+      });
+    }
+  });
 
   const data = {
     labels,
-    datasets: lineData,
+    datasets: graphData,
   };
 
   const legend = (
     <div className="flex flex-wrap justify-center text-sm">
-      {linesData.map((l) => {
-        const isLoading = l.status === "loading";
-        const hasFailed = l.status === "failed";
+      {lines.map((l) => {
+        const lineKey = `${grade}-${l.id}`;
+        const lineKeyCache = lineDataStore[lineKey];
+        const isLineKeyCached = typeof lineKeyCache !== "undefined";
+        const lineDataCache = isLineKeyCached ? lineKeyCache.data : null;
+        const isLineDataCached = typeof lineDataCache !== "undefined";
+
+        const isLoading =
+          !isLineKeyCached ||
+          (!isLineDataCached && lineKeyCache.status !== ApiStatus.Failure);
+        const hasFailed =
+          !isLineDataCached && lineKeyCache.status === ApiStatus.Failure;
 
         const bgColor =
           isLoading || hasFailed

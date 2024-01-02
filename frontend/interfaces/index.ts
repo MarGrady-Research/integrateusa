@@ -9,9 +9,6 @@ export type {
   RacialProportion,
   SegEntity,
   LineData,
-  LineDataLoaded,
-  LineDataRaw,
-  LineDataRawLoaded,
   LineDataBase,
   LocationSearchResult,
 } from "./interfaces";

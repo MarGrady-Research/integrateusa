@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 import axios from "axios";
 
@@ -15,6 +15,12 @@ import {
   selectSelectedName,
   selectLevel,
 } from "../../../store/selectSlice";
+
+import {
+  setLineDataRequest,
+  setLineDataSuccess,
+  setLineDataFailure,
+} from "../../../store/apiCacheSlice";
 
 import { SegData, LineDataBase, Level } from "../../../interfaces";
 
@@ -116,6 +122,8 @@ const processLineData = (
 };
 
 export default function Segregation({ segData, isLoading }: Props) {
+  const dispatch = useDispatch();
+
   const grade = useSelector(selectGrade);
   const year = useSelector(selectYear);
   const id = useSelector(selectId);
@@ -145,20 +153,16 @@ export default function Segregation({ segData, isLoading }: Props) {
   const focus = useMemo(() => findFocus(segData, id), [segData, id]);
 
   let idLevel: string;
-  let nameLevel: string;
   let table: string;
 
   if (id.length === 7) {
     idLevel = "dist_id";
-    nameLevel = "dist_name";
     table = "district";
   } else if (id.length === 5) {
     idLevel = "county_id";
-    nameLevel = "county_name";
     table = "county";
   } else {
     idLevel = "state_abb";
-    nameLevel = "state_abb";
     table = "state";
   }
 
@@ -168,7 +172,7 @@ export default function Segregation({ segData, isLoading }: Props) {
 
   const abortControllersRef = useRef({});
 
-  const getLineData = (lineId: string, lineName: string) => {
+  const getLineData = (lineId: string) => {
     const url =
       "/api/" + table + "/?grade=" + grade + "&" + idLevel + "=" + lineId;
 
@@ -179,20 +183,19 @@ export default function Segregation({ segData, isLoading }: Props) {
 
     const currentAbortController = abortControllersRef.current[lineId];
 
+    const lineKey = `${grade}-${lineId}`;
+
+    dispatch(setLineDataRequest(lineKey));
+
     axios
       .get(url, { signal: currentAbortController.signal })
       .then((res) => {
-        //do stuff here
+        const data = processLineData(res.data, measure);
+        dispatch(setLineDataSuccess({ key: lineKey, data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          const failedLineData = {
-            id: lineId,
-            name: lineName,
-            status: "failed" as "failed",
-          };
-
-          //do stuff here
+          dispatch(setLineDataFailure(lineKey));
         }
       });
   };
@@ -213,7 +216,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         ...currentLines,
         { id: lineId, name: lineName },
       ]);
-      getLineData(lineId, lineName);
+      getLineData(lineId);
     } else {
       setLines((currentLines) => currentLines.filter((l) => l.id !== lineId));
       stopLineRequest(lineId);
@@ -239,15 +242,28 @@ export default function Segregation({ segData, isLoading }: Props) {
       })
     );
 
+    lines.forEach((l) => {
+      const lineKey = `${grade}-${l.id}`;
+
+      dispatch(setLineDataRequest(lineKey));
+    });
+
     Promise.all(promises)
       .then((values) => {
         for (const [index, res] of values.entries()) {
-          //do stuff here
+          const lineKey = `${grade}-${lines[index].id}`;
+
+          const data = processLineData(res.data, measure);
+          dispatch(setLineDataSuccess({ key: lineKey, data }));
         }
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          //do stuff here
+          lines.forEach((l) => {
+            const lineKey = `${grade}-${l.id}`;
+
+            dispatch(setLineDataFailure(lineKey));
+          });
         }
       });
 
@@ -259,22 +275,27 @@ export default function Segregation({ segData, isLoading }: Props) {
   useEffect(() => {
     stopAllLineDataRequests();
 
-    const abortController = new AbortController();
-
     const entityName = level === Level.State ? id : name;
 
     setLines([{ id, name: entityName }]);
+
+    const abortController = new AbortController();
+
+    const lineKey = `${grade}-${id}`;
+
+    dispatch(setLineDataRequest(lineKey));
 
     axios
       .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
         signal: abortController.signal,
       })
       .then((res) => {
-        //do stuff here
+        const data = processLineData(res.data, measure);
+        dispatch(setLineDataSuccess({ key: lineKey, data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          //do stuff here
+          dispatch(setLineDataFailure(lineKey));
         }
       });
     return () => {
@@ -313,7 +334,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         updateLine={updateLine}
         clearSelection={clearSelection}
       />
-      {/*<LineGraph linesData={linesData} id={id} year={year} />*/}
+      <LineGraph lines={lines} id={id} year={year} grade={grade} />
     </>
   );
 }

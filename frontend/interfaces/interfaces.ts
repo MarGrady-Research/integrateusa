@@ -2,6 +2,7 @@ export type InfoData = School[];
 export type TrendData = Trend[];
 export type MapData = Feature[];
 export type SegData = SegEntity[];
+export type LineData = LineEntity[];
 
 interface School {
   sch_name: string;
@@ -64,6 +65,11 @@ interface Feature {
   properties: any;
 }
 
+interface LineEntity {
+  seg: number;
+  year: number;
+}
+
 export type SchoolType = "ES" | "ESMS" | "MS" | "MSHS" | "HS" | "K12" | "Other";
 
 export interface Bounds {
@@ -99,32 +105,6 @@ export interface LineDataBase {
   id: string;
   name: string;
 }
-
-interface LineDataLoading extends LineDataBase {
-  status: "loading";
-}
-
-interface LineDataFailed extends LineDataBase {
-  status: "failed";
-}
-
-export interface LineDataLoaded extends LineDataBase {
-  status: "loaded";
-  data: {
-    seg: number;
-    year: number;
-  }[];
-}
-
-export interface LineDataRawLoaded extends LineDataBase {
-  status: "loaded";
-  data: {
-    [key: string]: any;
-  }[];
-}
-
-export type LineDataRaw = LineDataLoading | LineDataRawLoaded | LineDataFailed;
-export type LineData = LineDataLoading | LineDataLoaded | LineDataFailed;
 
 export enum MapStatus {
   Fetching,
