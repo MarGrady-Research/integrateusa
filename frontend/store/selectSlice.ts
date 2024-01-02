@@ -14,7 +14,6 @@ export interface SelectState {
   selectedName: string;
   bounds: Bounds;
   schoolCoordinates: SchoolCoordinates;
-  infoDataRequestingApi: boolean;
 }
 
 const currentYear = Math.max(...yearsData.map((e) => e.value));
@@ -35,7 +34,6 @@ const initialState: SelectState = {
     lat_new: null,
     lon_new: null,
   },
-  infoDataRequestingApi: true,
 };
 
 export const selectSlice = createSlice({
@@ -45,15 +43,12 @@ export const selectSlice = createSlice({
     setLevelAndId(state, action) {
       state.level = action.payload.level;
       state.id = action.payload.id;
-      state.infoDataRequestingApi = true;
     },
     setYear(state, action) {
       state.year = action.payload;
-      state.infoDataRequestingApi = true;
     },
     setGrade(state, action) {
       state.grade = action.payload;
-      state.infoDataRequestingApi = true;
     },
     setSelectedName(state, action) {
       state.selectedName = action.payload;
@@ -64,22 +59,17 @@ export const selectSlice = createSlice({
     setSchoolCoordinates(state, action) {
       state.schoolCoordinates = action.payload;
     },
-    setInfoDataRequestingApi(state, action) {
-      state.infoDataRequestingApi = action.payload;
-    },
     restoreInitialState(state) {
       state.level = initialState.level;
       state.id = initialState.id;
       state.selectedName = initialState.selectedName;
       state.bounds = initialState.bounds;
-      state.infoDataRequestingApi = true;
     },
     setStateFromParams(state, action) {
       state.level = action.payload.level;
       state.id = action.payload.id;
       state.selectedName = action.payload.selectedName;
       state.bounds = action.payload.bounds;
-      state.infoDataRequestingApi = true;
     },
   },
   extraReducers: (builder) => {
@@ -101,7 +91,6 @@ export const {
   setSchoolCoordinates,
   restoreInitialState,
   setStateFromParams,
-  setInfoDataRequestingApi,
 } = selectSlice.actions;
 
 export const selectLevel = (state: AppState) => state.select.level as Level;
@@ -113,7 +102,5 @@ export const selectSchoolCoordinates = (state: AppState) =>
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName as string;
 export const selectBounds = (state: AppState) => state.select.bounds as Bounds;
-export const selectInfoDataRequestingApi = (state: AppState) =>
-  state.select.infoDataRequestingApi as boolean;
 
 export default selectSlice.reducer;

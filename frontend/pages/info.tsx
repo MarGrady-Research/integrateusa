@@ -16,8 +16,6 @@ import {
   selectId,
   selectSelectedName,
   setStateFromParams,
-  setInfoDataRequestingApi,
-  selectInfoDataRequestingApi,
 } from "../store/selectSlice";
 import {
   selectInfoData,
@@ -41,9 +39,8 @@ export default function InfoPage() {
   const grade = useSelector(selectGrade);
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
-  const infoDataCache = useSelector(selectInfoData);
+  const infoDataStore = useSelector(selectInfoData);
   const trendDataCache = useSelector(selectTrendData);
-  const infoDataRequestingApi = useSelector(selectInfoDataRequestingApi);
 
   let levelTable = "";
   let levelId = "";
@@ -67,9 +64,14 @@ export default function InfoPage() {
       break;
   }
 
+  const [infoDataState, setInfoDataState] = useState([]);
+  const [infoDataRequestingApi, setInfoDataRequestingApi] = useState(true);
+
   const infoDataKey = `${year}-${grade}-${levelId}-${id}`;
-  const infoData = infoDataCache[infoDataKey];
-  const isInfoDataCached = typeof infoData !== "undefined";
+  const infoDataCache = infoDataStore[infoDataKey];
+  const isInfoDataCached = typeof infoDataCache !== "undefined";
+
+  const infoData = infoDataRequestingApi ? infoDataCache || [] : infoDataState;
   const isInfoDataLoading = !isInfoDataCached && infoDataRequestingApi;
 
   const trendDataKey = `${levelTable}-${id}`;
@@ -121,15 +123,24 @@ export default function InfoPage() {
 
     const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
 
+    setInfoDataRequestingApi(true);
+
     axios
       .get(infoUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setInfoData({ [infoDataKey]: res.data }));
-        dispatch(setInfoDataRequestingApi(false));
+        setInfoDataState(res.data);
+        setInfoDataRequestingApi(false);
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          dispatch(setInfoDataRequestingApi(false));
+          setInfoDataRequestingApi(false);
+
+          if (isInfoDataCached) {
+            setInfoDataState(infoDataCache);
+          } else {
+            setInfoDataState([]);
+          }
         }
       });
 
@@ -207,7 +218,7 @@ export default function InfoPage() {
       <Page>
         <div className="mx-auto mt-5">
           <Info
-            infoData={infoData || []}
+            infoData={infoData}
             title={title}
             isLoading={isInfoDataLoading}
           />
