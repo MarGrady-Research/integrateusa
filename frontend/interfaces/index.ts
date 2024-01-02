@@ -16,4 +16,4 @@ export type {
   LocationSearchResult,
 } from "./interfaces";
 
-export { Level, MapStatus, MapLevel } from "./interfaces";
+export { Level, MapStatus, MapLevel, ApiStatus } from "./interfaces";

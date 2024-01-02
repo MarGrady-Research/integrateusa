@@ -2,13 +2,26 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
-import { MapData, InfoData, TrendData, SegData } from "../interfaces";
+import {
+  MapData,
+  InfoData,
+  TrendData,
+  SegData,
+  ApiStatus,
+} from "../interfaces";
+
+interface SegDataCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: SegData;
+  };
+}
 
 export interface ApiCacheState {
   mapData: MapData | null;
   infoData: { [key: string]: InfoData };
   trendData: { [key: string]: TrendData };
-  segData: { [key: string]: SegData };
+  segData: SegDataCache;
 }
 
 const initialState: ApiCacheState = {
@@ -37,10 +50,37 @@ export const apiCacheSlice = createSlice({
         ...action.payload,
       };
     },
-    setSegData(state, action) {
+    setSegDataRequest(state, action) {
+      const key = action.payload;
+
       state.segData = {
         ...state.segData,
-        ...action.payload,
+        [key]: {
+          ...state.segData[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setSegDataSuccess(state, action) {
+      const { key, data } = action.payload;
+
+      state.segData = {
+        ...state.segData,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setSegDataFailure(state, action) {
+      const key = action.payload;
+
+      state.segData = {
+        ...state.segData,
+        [key]: {
+          ...state.segData[key],
+          status: ApiStatus.Failure,
+        },
       };
     },
   },
@@ -54,8 +94,14 @@ export const apiCacheSlice = createSlice({
   },
 });
 
-export const { setMapData, setInfoData, setTrendData, setSegData } =
-  apiCacheSlice.actions;
+export const {
+  setMapData,
+  setInfoData,
+  setTrendData,
+  setSegDataRequest,
+  setSegDataSuccess,
+  setSegDataFailure,
+} = apiCacheSlice.actions;
 
 export const selectMapData = (state: AppState) =>
   state.apiCache.mapData as MapData;
@@ -67,6 +113,6 @@ export const selectTrendData = (state: AppState) =>
   state.apiCache.trendData as { [key: string]: TrendData };
 
 export const selectSegData = (state: AppState) =>
-  state.apiCache.segData as { [key: string]: SegData };
+  state.apiCache.segData as SegDataCache;
 
 export default apiCacheSlice.reducer;

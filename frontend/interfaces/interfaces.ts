@@ -146,3 +146,9 @@ export interface LocationSearchResult extends SchoolCoordinates {
   lngmax: number;
   latmax: number;
 }
+
+export enum ApiStatus {
+  Fetching,
+  Success,
+  Failure,
+}
