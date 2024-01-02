@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -18,6 +18,9 @@ import {
   setSegDataRequest,
   setSegDataSuccess,
   setSegDataFailure,
+  setInfoDataRequest,
+  setInfoDataSuccess,
+  setInfoDataFailure,
 } from "../store/apiCacheSlice";
 import { ApiStatus, Level } from "../interfaces";
 

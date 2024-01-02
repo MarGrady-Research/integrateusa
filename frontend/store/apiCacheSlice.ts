@@ -17,9 +17,16 @@ interface SegDataCache {
   };
 }
 
+interface InfoDataCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: InfoData;
+  };
+}
+
 export interface ApiCacheState {
   mapData: MapData | null;
-  infoData: { [key: string]: InfoData };
+  infoData: InfoDataCache;
   trendData: { [key: string]: TrendData };
   segData: SegDataCache;
 }
@@ -38,10 +45,37 @@ export const apiCacheSlice = createSlice({
     setMapData(state, action) {
       state.mapData = action.payload;
     },
-    setInfoData(state, action) {
+    setInfoDataRequest(state, action) {
+      const key = action.payload;
+
       state.infoData = {
         ...state.infoData,
-        ...action.payload,
+        [key]: {
+          ...state.infoData[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setInfoDataSuccess(state, action) {
+      const { key, data } = action.payload;
+
+      state.infoData = {
+        ...state.infoData,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setInfoDataFailure(state, action) {
+      const key = action.payload;
+
+      state.infoData = {
+        ...state.infoData,
+        [key]: {
+          ...state.infoData[key],
+          status: ApiStatus.Failure,
+        },
       };
     },
     setTrendData(state, action) {
@@ -96,7 +130,9 @@ export const apiCacheSlice = createSlice({
 
 export const {
   setMapData,
-  setInfoData,
+  setInfoDataRequest,
+  setInfoDataSuccess,
+  setInfoDataFailure,
   setTrendData,
   setSegDataRequest,
   setSegDataSuccess,
@@ -107,7 +143,7 @@ export const selectMapData = (state: AppState) =>
   state.apiCache.mapData as MapData;
 
 export const selectInfoData = (state: AppState) =>
-  state.apiCache.infoData as { [key: string]: InfoData };
+  state.apiCache.infoData as InfoDataCache;
 
 export const selectTrendData = (state: AppState) =>
   state.apiCache.trendData as { [key: string]: TrendData };

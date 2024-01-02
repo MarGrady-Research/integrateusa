@@ -148,7 +148,7 @@ export interface LocationSearchResult extends SchoolCoordinates {
 }
 
 export enum ApiStatus {
-  Fetching,
-  Success,
-  Failure,
+  Fetching = "fetching",
+  Success = "success",
+  Failure = "failure",
 }

@@ -19,12 +19,14 @@ import {
 } from "../store/selectSlice";
 import {
   selectInfoData,
-  setInfoData,
+  setInfoDataRequest,
+  setInfoDataSuccess,
+  setInfoDataFailure,
   selectTrendData,
   setTrendData,
 } from "../store/apiCacheSlice";
 
-import { Level } from "../interfaces";
+import { Level, ApiStatus } from "../interfaces";
 
 export default function InfoPage() {
   const dispatch = useDispatch();
@@ -64,15 +66,17 @@ export default function InfoPage() {
       break;
   }
 
-  const [infoDataState, setInfoDataState] = useState([]);
-  const [infoDataRequestingApi, setInfoDataRequestingApi] = useState(true);
-
-  const infoDataKey = `${year}-${grade}-${levelId}-${id}`;
-  const infoDataCache = infoDataStore[infoDataKey];
+  const infoKey = `${year}-${grade}-${levelId}-${id}`;
+  const infoKeyCache = infoDataStore[infoKey];
+  const isInfoKeyCached = typeof infoKeyCache !== "undefined";
+  const infoDataCache = isInfoKeyCached ? infoKeyCache.data : null;
   const isInfoDataCached = typeof infoDataCache !== "undefined";
 
-  const infoData = infoDataRequestingApi ? infoDataCache || [] : infoDataState;
-  const isInfoDataLoading = !isInfoDataCached && infoDataRequestingApi;
+  const infoData = isInfoDataCached ? infoDataCache || [] : [];
+
+  const isInfoDataLoading =
+    !isInfoKeyCached ||
+    (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure);
 
   const [trendDataState, setTrendDataState] = useState([]);
   const [isTrendDataRequestingApi, setIsTrendDataRequestingApi] =
@@ -127,24 +131,16 @@ export default function InfoPage() {
 
     const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
 
-    setInfoDataRequestingApi(true);
+    dispatch(setInfoDataRequest(infoKey));
 
     axios
       .get(infoUrl, { signal: abortController.signal })
       .then((res) => {
-        dispatch(setInfoData({ [infoDataKey]: res.data }));
-        setInfoDataState(res.data);
-        setInfoDataRequestingApi(false);
+        dispatch(setInfoDataSuccess({ key: infoKey, data: res.data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          setInfoDataRequestingApi(false);
-
-          if (isInfoDataCached) {
-            setInfoDataState(infoDataCache);
-          } else {
-            setInfoDataState([]);
-          }
+          dispatch(setInfoDataFailure(infoKey));
         }
       });
 
