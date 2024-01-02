@@ -24,10 +24,17 @@ interface InfoDataCache {
   };
 }
 
+interface TrendDataCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: TrendData;
+  };
+}
+
 export interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
-  trendData: { [key: string]: TrendData };
+  trendData: TrendDataCache;
   segData: SegDataCache;
 }
 
@@ -78,10 +85,37 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendData(state, action) {
+    setTrendDataRequest(state, action) {
+      const key = action.payload;
+
       state.trendData = {
         ...state.trendData,
-        ...action.payload,
+        [key]: {
+          ...state.trendData[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setTrendDataSuccess(state, action) {
+      const { key, data } = action.payload;
+
+      state.trendData = {
+        ...state.trendData,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setTrendDataFailure(state, action) {
+      const key = action.payload;
+
+      state.trendData = {
+        ...state.trendData,
+        [key]: {
+          ...state.trendData[key],
+          status: ApiStatus.Failure,
+        },
       };
     },
     setSegDataRequest(state, action) {
@@ -133,7 +167,9 @@ export const {
   setInfoDataRequest,
   setInfoDataSuccess,
   setInfoDataFailure,
-  setTrendData,
+  setTrendDataRequest,
+  setTrendDataSuccess,
+  setTrendDataFailure,
   setSegDataRequest,
   setSegDataSuccess,
   setSegDataFailure,
@@ -146,7 +182,7 @@ export const selectInfoData = (state: AppState) =>
   state.apiCache.infoData as InfoDataCache;
 
 export const selectTrendData = (state: AppState) =>
-  state.apiCache.trendData as { [key: string]: TrendData };
+  state.apiCache.trendData as TrendDataCache;
 
 export const selectSegData = (state: AppState) =>
   state.apiCache.segData as SegDataCache;

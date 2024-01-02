@@ -23,7 +23,9 @@ import {
   setInfoDataSuccess,
   setInfoDataFailure,
   selectTrendData,
-  setTrendData,
+  setTrendDataRequest,
+  setTrendDataSuccess,
+  setTrendDataFailure,
 } from "../store/apiCacheSlice";
 
 import { Level, ApiStatus } from "../interfaces";
@@ -78,18 +80,17 @@ export default function InfoPage() {
     !isInfoKeyCached ||
     (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure);
 
-  const [trendDataState, setTrendDataState] = useState([]);
-  const [isTrendDataRequestingApi, setIsTrendDataRequestingApi] =
-    useState(true);
-
-  const trendDataKey = `${levelTable}-${id}`;
-  const trendDataCache = trendDataStore[trendDataKey];
+  const trendKey = `${levelTable}-${id}`;
+  const trendKeyCache = trendDataStore[trendKey];
+  const isTrendKeyCached = typeof trendKeyCache !== "undefined";
+  const trendDataCache = isTrendKeyCached ? trendKeyCache.data : null;
   const isTrendDataCached = typeof trendDataCache !== "undefined";
 
-  const trendData = isTrendDataRequestingApi
-    ? trendDataCache || []
-    : trendDataState;
-  const isTrendDataLoading = !isTrendDataCached && isTrendDataRequestingApi;
+  const trendData = isTrendDataCached ? trendDataCache || [] : [];
+
+  const isTrendDataLoading =
+    !isTrendKeyCached ||
+    (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure);
 
   useEffect(() => {
     const paramsId = searchParams.get("id");
@@ -189,24 +190,16 @@ export default function InfoPage() {
 
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
 
-    setIsTrendDataRequestingApi(true);
+    dispatch(setTrendDataRequest(trendKey));
 
     axios
       .get(trendUrl, { signal: abortController.signal })
       .then((res) => {
-        dispatch(setTrendData({ [trendDataKey]: res.data }));
-        setTrendDataState(res.data);
-        setIsTrendDataRequestingApi(false);
+        dispatch(setTrendDataSuccess({ key: trendKey, data: res.data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
-          setIsTrendDataRequestingApi(false);
-        }
-
-        if (isTrendDataCached) {
-          setTrendDataState(trendDataCache);
-        } else {
-          setTrendDataState([]);
+          dispatch(setTrendDataFailure(trendKey));
         }
       });
 
