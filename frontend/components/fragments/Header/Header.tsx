@@ -7,6 +7,9 @@ import { useRouter } from "next/router";
 // @ts-ignore
 import { root } from "./Header.module.scss";
 
+import MarGradyLogoText from "../../../public/MarGradyLogoText.png";
+import IntegrateUSALogo from "../../../public/IntegrateUSALogo.png";
+
 interface NavLinkProps {
   url: string;
   title: string;
@@ -44,12 +47,7 @@ export default function Header() {
             href="/"
             className="flex items-center text-black w-40 sm:w-auto"
           >
-            <Image
-              src="/IntegrateUSALogo.png"
-              alt="IntegrateUSA logo"
-              width={200}
-              height={60}
-            />
+            <Image src={IntegrateUSALogo} alt="IntegrateUSA logo" width={200} />
           </Link>
           <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
             <NavLink url="/" title="Home" />
@@ -61,12 +59,7 @@ export default function Header() {
         </div>
         <div className="absolute lg:relative w-28 sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
           <a href="http://www.margrady.com/" target="_blank">
-            <Image
-              src="/mg-logo-text.png"
-              alt="MarGrady Logo"
-              width={250}
-              height={57}
-            />
+            <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
           </a>
         </div>
       </div>

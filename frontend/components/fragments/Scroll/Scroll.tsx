@@ -5,6 +5,8 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 
 import Scroller from "./components/Scroller";
 
+import MarGradyLogo from "../../../public/MarGradyLogo.png";
+
 function EndScreen() {
   return (
     <div className="sticky h-screen flex flex-col py-10 items-center justify-between text-lg lg:text-xl px-5">
@@ -26,7 +28,7 @@ function EndScreen() {
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
       </Link>
       <Link href="http://www.margrady.com/">
-        <Image src="/mg-logo.png" alt="MarGrady Logo" width={350} height={80} />
+        <Image src={MarGradyLogo} alt="MarGrady Logo" width={350} />
       </Link>
     </div>
   );

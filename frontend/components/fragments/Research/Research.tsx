@@ -13,7 +13,7 @@ export default function Research() {
       <h2 className="text-lg mb-10">
         Publications, projects, and other resources appear below.
       </h2>
-      <div className="bg-gray-100 p-5 flex flex-col md:flex-row">
+      <div className="bg-gray-100 p-5 flex flex-col items-center md:flex-row md:items-start">
         <Image src={district15Img} objectFit="contain" alt="" />
         <div className="mt-4 md:mt-0 md:ml-4">
           <h3 className="font-semibold mb-2">
