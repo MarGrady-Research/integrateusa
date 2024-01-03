@@ -22,7 +22,7 @@ export default function AppHead({ title, desc, children }: Props) {
       <link
         href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500&display=swap"
         rel="stylesheet"
-      ></link>
+      />
       {children}
     </Head>
   );
