@@ -5,7 +5,6 @@ export {
   hispanicColor,
   whiteColor,
   otherColor,
-  defaultFont,
   selectedAreaColor,
   unselectedAreaColor,
   districtBoundaryURL,

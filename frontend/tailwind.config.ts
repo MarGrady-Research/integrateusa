@@ -7,7 +7,6 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-  defaultFont,
 } from "./constants";
 
 const tailwindConfig = {
@@ -18,7 +17,7 @@ const tailwindConfig = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [defaultFont, "sans-serif"],
+        sans: ["var(--font-libre)"],
       },
       colors: {
         primary: primaryColor,

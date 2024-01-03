@@ -8,13 +8,18 @@ import axios from "axios";
 
 import { wrapper, makeStore } from "../store/store";
 import { theme } from "../styles/materialTheme";
-import { defaultFont } from "../constants";
+import { Libre_Franklin } from "next/font/google";
 
 import Loader from "../components/fragments/Loader";
 
 import "../styles/global.scss";
 
-ChartJS.defaults.font.family = defaultFont;
+const libre = Libre_Franklin({
+  subsets: ["latin"],
+  variable: "--font-libre",
+});
+
+ChartJS.defaults.font.family = "var(--font-libre)";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -36,7 +41,9 @@ function MyApp({ Component, ...rest }: AppProps) {
         }
       >
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <main className={`${libre.variable} font-sans`}>
+            <Component {...pageProps} />
+          </main>
         </ThemeProvider>
       </PersistGate>
     </Provider>

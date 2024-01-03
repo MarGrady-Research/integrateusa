@@ -1,5 +1,3 @@
-export const defaultFont = "Libre Franklin";
-
 export const primaryColor = "#4278C4";
 
 export const asianColor = "#FF5050";

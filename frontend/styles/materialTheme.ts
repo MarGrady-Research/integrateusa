@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-import { primaryColor, defaultFont } from "../constants";
+import { primaryColor } from "../constants";
 
 export const theme = createTheme({
   palette: {
@@ -9,6 +9,6 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: [defaultFont].join(","),
+    fontFamily: "var(--font-libre)",
   },
 });
