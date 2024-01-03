@@ -17,7 +17,7 @@ const tailwindConfig = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-libre)"],
+        sans: [`var(--font-libre)`],
       },
       colors: {
         primary: primaryColor,

@@ -7,7 +7,6 @@ const nextConfig = {
 
 module.exports = {
   ...nextConfig,
-  output: "standalone",
   webpack: (config) => {
     config.watchOptions = {
       poll: 1000,

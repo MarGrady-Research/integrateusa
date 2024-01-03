@@ -6,20 +6,17 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Chart as ChartJS } from "chart.js";
 import axios from "axios";
 
+import { libre } from "@/typography";
+
 import { wrapper, makeStore } from "../store/store";
 import { theme } from "../styles/materialTheme";
-import { Libre_Franklin } from "next/font/google";
 
 import Loader from "../components/fragments/Loader";
 
 import "../styles/global.scss";
 
-const libre = Libre_Franklin({
-  subsets: ["latin"],
-  variable: "--font-libre",
-});
-
-//ChartJS.defaults.font.family = "var(--font-libre)";
+ChartJS.defaults.font.family = "Libre Franklin";
+ChartJS.defaults.font.weight = "500";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";

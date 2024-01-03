@@ -8,6 +8,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 
+import { libre } from "@/typography";
+
 // @ts-ignore
 import { paper } from "./InfoDialog.module.scss";
 
@@ -34,7 +36,7 @@ const InfoDialog = memo(
         open={open}
         fullWidth
         fullScreen={fullScreen}
-        classes={{ root: "font-sans", paper }}
+        classes={{ root: `${libre.variable} font-sans`, paper }}
       >
         <DialogTitle className="text-center !font-semibold">{name}</DialogTitle>
         <DialogContent>
