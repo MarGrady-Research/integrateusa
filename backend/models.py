@@ -56,6 +56,7 @@ class CountyNames(models.Model):
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
     dist_name = models.TextField()
+    dist_type = models.TextField()
     lngmin = models.FloatField()
     latmin = models.FloatField()
     lngmax = models.FloatField()
