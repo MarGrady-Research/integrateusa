@@ -6,9 +6,7 @@ import Header from "../components/fragments/Header";
 export default function About() {
   return (
     <>
-      <Head title="About" desc="About IntegrateUSA">
-        <link rel="icon" href="/mg_logo_cropped.png" />
-      </Head>
+      <Head title="About" desc="About IntegrateUSA" />
       <Header />
       <div className="container mx-auto p-10 font-sans">
         <h1 className="text-3xl text-center mb-6 text-semibold">About</h1>

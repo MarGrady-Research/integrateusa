@@ -85,9 +85,7 @@ export default function SegregationPage() {
 
   return (
     <>
-      <Head title="Segregation" desc="Segregation Metrics">
-        <link rel="icon" href="/mg_logo_cropped.png" />
-      </Head>
+      <Head title="Segregation" desc="Segregation Metrics" />
       <Header />
       <Selection omitSchools />
       <Page>

@@ -17,9 +17,7 @@ export default function Map() {
 
   return (
     <>
-      <Head title="Map" desc="Mapping segregation">
-        <link rel="icon" href="/mg_logo_cropped.png" />
-      </Head>
+      <Head title="Map" desc="Mapping segregation" />
       <Header />
       <div className={clsx("absolute w-full", mapHolder)}>
         <DemographicMap onSmallerScreen={onSmallerScreen} />

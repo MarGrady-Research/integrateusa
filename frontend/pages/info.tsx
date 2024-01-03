@@ -210,9 +210,7 @@ export default function InfoPage() {
 
   return (
     <>
-      <Head title="Info" desc="Demographic Information">
-        <link rel="icon" href="/mg_logo_cropped.png" />
-      </Head>
+      <Head title="Info" desc="Demographic Information" />
       <Header />
       <Selection />
       <Page>

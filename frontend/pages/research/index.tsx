@@ -8,9 +8,7 @@ import Page from "../../components/layouts/Page";
 export default function Home() {
   return (
     <>
-      <Head title="IntegrateUSA" desc="Research">
-        <link rel="icon" href="/Image Only.png" />
-      </Head>
+      <Head title="IntegrateUSA" desc="Research" />
       <Header />
       <Page>
         <Research />

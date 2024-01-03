@@ -12,6 +12,7 @@ export default function AppHead({ title, desc, children }: Props) {
     <Head>
       <title>{title}</title>
       <meta name="description" content={desc} />
+      <link rel="icon" href="/logo.svg" />
       {children}
     </Head>
   );
