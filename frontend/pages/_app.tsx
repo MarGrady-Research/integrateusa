@@ -19,7 +19,7 @@ const libre = Libre_Franklin({
   variable: "--font-libre",
 });
 
-ChartJS.defaults.font.family = "var(--font-libre)";
+//ChartJS.defaults.font.family = "var(--font-libre)";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
