@@ -125,7 +125,7 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
   return (
     <Paper
       className={clsx(
-        "absolute bottom-10 left-2.5 p-3 w-60 h-80 text-center text-sm font-sans hidden lg:block font-normal",
+        "absolute bottom-10 left-2.5 p-3 w-60 h-80 text-center text-sm hidden lg:block font-normal",
         root
       )}
     >

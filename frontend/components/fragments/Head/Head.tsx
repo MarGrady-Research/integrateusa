@@ -13,16 +13,6 @@ export default function AppHead({ title, desc, children }: Props) {
       <title>{title}</title>
       <meta name="description" content={desc} />
       <link rel="icon" href="/logo.svg" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="use-credentials"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500&display=swap"
-        rel="stylesheet"
-      />
       {children}
     </Head>
   );

@@ -3,8 +3,6 @@ import clsx from "clsx";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 
-import { libre } from "@/typography";
-
 import Loader from "../../../Loader";
 
 // @ts-ignore
@@ -40,7 +38,7 @@ const InfoDialog = memo(({ open, mapStatus }: Props) => {
     <Dialog
       open={open}
       classes={{
-        root: `${libre.variable} font-sans !absolute !bottom-auto !right-auto !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !z-10`,
+        root: "!absolute !bottom-auto !right-auto !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !z-10",
         paper,
       }}
       hideBackdrop

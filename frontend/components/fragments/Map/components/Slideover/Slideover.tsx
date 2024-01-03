@@ -54,7 +54,7 @@ export default function Slideover({ handleVisibility, handleBounds }: Props) {
           </IconButton>
         </div>
         <Divider />
-        <div className="p-4 font-sans">
+        <div className="p-4">
           <h1 className="text-xl mb-4">Map Options</h1>
           <Control
             handleVisibility={handleVisibility}

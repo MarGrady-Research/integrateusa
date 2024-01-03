@@ -34,7 +34,7 @@ export default function Popup({ name, coordinates, children }: Props) {
         maxWidth: "300px",
       }}
       className={clsx(
-        "bg-white p-3 w-60 font-sans font-normal p-1 text-center text-sm ",
+        "bg-white p-3 w-60 font-normal p-1 text-center text-sm ",
         root
       )}
     >

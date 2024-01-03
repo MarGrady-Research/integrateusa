@@ -8,7 +8,7 @@ export default function About() {
     <>
       <Head title="About" desc="About IntegrateUSA" />
       <Header />
-      <div className="container mx-auto p-10 font-sans">
+      <div className="container mx-auto p-10">
         <h1 className="text-3xl text-center mb-6 text-semibold">About</h1>
         <div className="md:w-4/5 mx-auto text-lg">
           <p className="mb-3">

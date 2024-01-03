@@ -6,8 +6,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Chart as ChartJS } from "chart.js";
 import axios from "axios";
 
-import { libre } from "@/typography";
-
 import { wrapper, makeStore } from "../store/store";
 import { theme } from "../styles/materialTheme";
 
@@ -38,9 +36,7 @@ function MyApp({ Component, ...rest }: AppProps) {
         }
       >
         <ThemeProvider theme={theme}>
-          <main className={`${libre.variable} font-sans`}>
-            <Component {...pageProps} />
-          </main>
+          <Component {...pageProps} />
         </ThemeProvider>
       </PersistGate>
     </Provider>

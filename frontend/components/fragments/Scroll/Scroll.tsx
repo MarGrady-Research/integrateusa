@@ -36,9 +36,9 @@ function EndScreen() {
 
 export default function Scroll() {
   return (
-    <div className="font-sans">
+    <>
       <Scroller />
       <EndScreen />
-    </div>
+    </>
   );
 }

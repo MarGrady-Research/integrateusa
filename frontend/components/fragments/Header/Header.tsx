@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <header
       className={clsx(
-        "text-black bg-white font-sans shadow text-sm sm:text-base lg:text-lg relative",
+        "text-black bg-white shadow text-sm sm:text-base lg:text-lg relative",
         root
       )}
     >

@@ -89,7 +89,7 @@ export default function Selection({ omitSchools }: Props) {
   return (
     <>
       <div className="hidden lg:block shadow sticky top-0 z-10 bg-white">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 container mx-auto p-5 pb-10 lg:pb-5 font-sans hidden lg:grid">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 container mx-auto p-5 pb-10 lg:pb-5 hidden lg:grid">
           {selects}
         </div>
       </div>
