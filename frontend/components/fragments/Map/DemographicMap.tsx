@@ -31,6 +31,14 @@ import {
   defaultMapSchoolColor,
   selectedAreaColor,
   unselectedAreaColor,
+  stateBoundaryURL,
+  countyBoundaryURL,
+  elementaryDistrictBoundaryURL,
+  secondaryDistrictBoundaryURL,
+  stateSourceLayer,
+  countySourceLayer,
+  elementaryDistrictSourceLayer,
+  secondaryDistrictSourceLayer,
 } from "../../../constants";
 
 const prop_array = [
@@ -93,7 +101,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "state-boundary",
     type: "fill" as any,
     source: "state-boundary-source",
-    "source-layer": "state-8eamta",
+    "source-layer": stateSourceLayer,
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -112,7 +120,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "county-boundary",
     type: "fill" as any,
     source: "county-boundary-source",
-    "source-layer": "county-57tl1x",
+    "source-layer": countySourceLayer,
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -131,7 +139,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "elementary-district-boundary",
     type: "fill" as any,
     source: "elementary-district-boundary-source",
-    "source-layer": "ElementaryUnified-3r40o5",
+    "source-layer": elementaryDistrictSourceLayer,
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -150,7 +158,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     id: "secondary-district-boundary",
     type: "fill" as any,
     source: "secondary-district-boundary-source",
-    "source-layer": "SecondaryUnified-8dtbl8",
+    "source-layer": secondaryDistrictSourceLayer,
     paint: {
       "fill-outline-color": "rgba(0,0,0,0.4)",
       "fill-color": [
@@ -381,7 +389,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   let urlParams = "";
 
   if (areaName) {
-    const { GEOID, STUSPS, NAME } = hoverInfo.feature.properties;
+    const { GEOID, STUSPS, NAME, latmin, latmax, lngmin, lngmax } =
+      hoverInfo.feature.properties;
 
     let level = "";
     let id = "";
@@ -409,6 +418,22 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     if (NAME) {
       params.append("name", NAME);
+    }
+
+    if (lngmin) {
+      params.append("xmin", lngmin);
+    }
+
+    if (lngmax) {
+      params.append("xmax", lngmax);
+    }
+
+    if (latmin) {
+      params.append("ymin", latmin);
+    }
+
+    if (latmax) {
+      params.append("ymax", latmax);
     }
 
     urlParams = `/?${params.toString()}`;
@@ -502,28 +527,28 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
             <Source
               id="elementary-district-boundary-source"
               type="vector"
-              url="mapbox://margrady.0rwet47j"
+              url={elementaryDistrictBoundaryURL}
             >
               <Layer {...elementaryDistrictLayer} />
             </Source>
             <Source
               id="secondary-district-boundary-source"
               type="vector"
-              url="mapbox://margrady.a1ltfgy8"
+              url={secondaryDistrictBoundaryURL}
             >
               <Layer {...secondaryDistrictLayer} />
             </Source>
             <Source
               id="county-boundary-source"
               type="vector"
-              url="mapbox://margrady.b4j76wmt"
+              url={countyBoundaryURL}
             >
               <Layer {...countyLayer} />
             </Source>
             <Source
               id="state-boundary-source"
               type="vector"
-              url="mapbox://margrady.9j8mklpq"
+              url={stateBoundaryURL}
             >
               <Layer {...stateLayer} />
             </Source>

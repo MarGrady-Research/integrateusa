@@ -7,7 +7,12 @@ import {
   selectedAreaColor,
   stateBoundaryURL,
   countyBoundaryURL,
-  districtBoundaryURL,
+  elementaryDistrictBoundaryURL,
+  secondaryDistrictBoundaryURL,
+  stateSourceLayer,
+  countySourceLayer,
+  elementaryDistrictSourceLayer,
+  secondaryDistrictSourceLayer,
   defaultMapSchoolColor,
 } from "../../../../../constants";
 
@@ -19,8 +24,6 @@ interface Props {
   level: Level;
   coordinates: SchoolCoordinates;
 }
-
-const schoolsSourceId = "schools-source";
 
 export default function InsetMap({ id, bounds, level, coordinates }: Props) {
   const mapRef = useRef();
@@ -69,10 +72,21 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
     zoomToLocation();
   }, [bounds]);
 
-  const districtLayer = {
-    id: "district-boundary",
+  const elementaryDistrictLayer = {
+    id: "elementary-district-boundary",
     type: "fill" as any,
-    "source-layer": "2021_sd_unified-4mqqrn",
+    "source-layer": elementaryDistrictSourceLayer,
+    paint: {
+      "fill-outline-color": selectedAreaColor,
+      "fill-color": selectedAreaColor,
+    },
+    filter: ["==", "GEOID", id],
+  };
+
+  const secondaryDistrictLayer = {
+    id: "secondary-district-boundary",
+    type: "fill" as any,
+    "source-layer": secondaryDistrictSourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
@@ -81,9 +95,9 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
   };
 
   const countyLayer = {
-    id: "boundary",
+    id: "county-boundary",
     type: "fill" as any,
-    "source-layer": "cb_2018_us_county_500k-6dd9y3",
+    "source-layer": countySourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
@@ -94,7 +108,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
   const stateLayer = {
     id: "state-boundary",
     type: "fill" as any,
-    "source-layer": "cb_2018_us_state_500k-8q06w5",
+    "source-layer": stateSourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
       "fill-color": selectedAreaColor,
@@ -105,7 +119,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
   const LayerProps = {
     id: "schools",
     type: "circle" as any,
-    source: schoolsSourceId,
+    source: "schools-source",
     paint: {
       "circle-radius": 3.5,
       "circle-color": defaultMapSchoolColor,
@@ -129,11 +143,18 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
         onLoad={zoomToLocation}
       >
         <Source
-          id="district-boundary-source"
+          id="elementary-district-boundary-source"
           type="vector"
-          url={districtBoundaryURL}
+          url={elementaryDistrictBoundaryURL}
         >
-          <Layer {...districtLayer} />
+          <Layer {...elementaryDistrictLayer} />
+        </Source>
+        <Source
+          id="secondary-district-boundary-source"
+          type="vector"
+          url={secondaryDistrictBoundaryURL}
+        >
+          <Layer {...secondaryDistrictLayer} />
         </Source>
         <Source
           id="county-boundary-source"
@@ -147,7 +168,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
         </Source>
         {isSchool && (
           <Source
-            id={schoolsSourceId}
+            id="schools-source"
             type="geojson"
             data={mapboxData}
             generateId

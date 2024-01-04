@@ -132,3 +132,9 @@ export enum ApiStatus {
   Success = "success",
   Failure = "failure",
 }
+
+export enum DistrictType {
+  Unified = "U",
+  Elementary = "E",
+  Secondary = "S",
+}

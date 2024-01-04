@@ -13,4 +13,10 @@ export type {
   LocationSearchResult,
 } from "./interfaces";
 
-export { Level, MapStatus, MapLevel, ApiStatus } from "./interfaces";
+export {
+  Level,
+  MapStatus,
+  MapLevel,
+  ApiStatus,
+  DistrictType,
+} from "./interfaces";

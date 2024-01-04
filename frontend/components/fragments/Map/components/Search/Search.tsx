@@ -8,6 +8,7 @@ import {
   MapLevel,
   Bounds,
   LocationSearchResult,
+  DistrictType,
 } from "../../../../../interfaces";
 
 interface Props {
@@ -91,7 +92,19 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       }
 
       if (results) {
-        const resultsOptions = results.map((ro) => {
+        let filteredResults = [...results];
+
+        if (mapLevel === MapLevel.UnifiedElementaryDistrict) {
+          filteredResults = results.filter(
+            (r) => r.dist_type !== DistrictType.Secondary
+          );
+        } else if (mapLevel === MapLevel.UnifiedSecondaryDistrict) {
+          filteredResults = results.filter(
+            (r) => r.dist_type !== DistrictType.Elementary
+          );
+        }
+
+        const resultsOptions = filteredResults.map((ro) => {
           let labelData = {
             value: "",
             label: "",
