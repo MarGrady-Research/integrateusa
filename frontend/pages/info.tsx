@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
 
 import Head from "../components/fragments/Head";
 import Header from "../components/fragments/Header";
@@ -9,6 +8,7 @@ import Selection from "../components/fragments/Selection";
 import Info from "../components/fragments/Info";
 import Trends from "../components/fragments/Trends";
 import Page from "../components/layouts/Page";
+
 import {
   selectYear,
   selectGrade,
@@ -30,13 +30,12 @@ import {
 
 import { Level, ApiStatus } from "../interfaces";
 
+import { getParamsInfo } from "../utils";
+
 export default function InfoPage() {
   const dispatch = useDispatch();
 
-  const searchParams = useSearchParams();
-
-  const [infoUsedParams, setInfoUsedParams] = useState(false);
-  const [trendUsedParams, setTrendUsedParams] = useState(false);
+  const [paramsChecked, setParamsChecked] = useState(false);
 
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
@@ -78,7 +77,8 @@ export default function InfoPage() {
 
   const isInfoDataLoading =
     !isInfoKeyCached ||
-    (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure);
+    (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure) ||
+    !paramsChecked;
 
   const trendKey = `${levelTable}-${id}`;
   const trendKeyCache = trendDataStore[trendKey];
@@ -90,44 +90,23 @@ export default function InfoPage() {
 
   const isTrendDataLoading =
     !isTrendKeyCached ||
-    (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure);
+    (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure) ||
+    !paramsChecked;
 
   useEffect(() => {
-    const paramsId = searchParams.get("id");
-    const paramsName = searchParams.get("name");
-    const paramsLevel = searchParams.get("level");
-    const paramsXMin = searchParams.get("xmin");
-    const paramsXMax = searchParams.get("xmax");
-    const paramsYMin = searchParams.get("ymin");
-    const paramsYMax = searchParams.get("ymax");
-
-    const completeParams =
-      !!paramsId &&
-      !!paramsName &&
-      !!paramsLevel &&
-      !!paramsXMin &&
-      !!paramsXMax &&
-      !!paramsYMin &&
-      !!paramsYMax;
-
-    if (completeParams && !infoUsedParams) {
-      const newState = {
-        id: paramsId,
-        selectedName: paramsName,
-        level: parseInt(paramsLevel),
-        bounds: {
-          lngmin: parseFloat(paramsXMin),
-          lngmax: parseFloat(paramsXMax),
-          latmin: parseFloat(paramsYMin),
-          latmax: parseFloat(paramsYMax),
-        },
-      };
-
-      dispatch(setStateFromParams(newState));
-      setInfoUsedParams(true);
+    if (paramsChecked) {
       return;
     }
 
+    const paramsInfo = getParamsInfo(window.location.href);
+
+    if (paramsInfo) {
+      dispatch(setStateFromParams(paramsInfo));
+    }
+    setParamsChecked(true);
+  }, [window.location.href, paramsChecked]);
+
+  useEffect(() => {
     const abortController = new AbortController();
 
     const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
@@ -148,44 +127,9 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, grade, year, searchParams, infoUsedParams]);
+  }, [id, level, grade, year]);
 
   useEffect(() => {
-    const paramsId = searchParams.get("id");
-    const paramsName = searchParams.get("name");
-    const paramsLevel = searchParams.get("level");
-    const paramsXMin = searchParams.get("xmin");
-    const paramsXMax = searchParams.get("xmax");
-    const paramsYMin = searchParams.get("ymin");
-    const paramsYMax = searchParams.get("ymax");
-
-    const completeParams =
-      !!paramsId &&
-      !!paramsName &&
-      !!paramsLevel &&
-      !!paramsXMin &&
-      !!paramsXMax &&
-      !!paramsYMin &&
-      !!paramsYMax;
-
-    if (completeParams && !trendUsedParams) {
-      const newState = {
-        id: paramsId,
-        selectedName: paramsName,
-        level: parseInt(paramsLevel),
-        bounds: {
-          lngmin: parseFloat(paramsXMin),
-          lngmax: parseFloat(paramsXMax),
-          latmin: parseFloat(paramsYMin),
-          latmax: parseFloat(paramsYMax),
-        },
-      };
-
-      dispatch(setStateFromParams(newState));
-      setTrendUsedParams(true);
-      return;
-    }
-
     const abortController = new AbortController();
 
     const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
@@ -206,7 +150,7 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, searchParams, trendUsedParams]);
+  }, [id, level]);
 
   return (
     <>

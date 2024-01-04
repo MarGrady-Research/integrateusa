@@ -1,1 +1,1 @@
-export { sortOnOrder, getAllUrlParams } from "./utils";
+export { sortOnOrder, getParamsInfo } from "./utils";

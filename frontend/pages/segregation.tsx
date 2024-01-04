@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -7,11 +7,13 @@ import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Page from "../components/layouts/Page";
 import Segregation from "../components/fragments/Segregation";
+
 import {
   selectYear,
   selectGrade,
   selectLevel,
   restoreInitialState,
+  setStateFromParams,
 } from "../store/selectSlice";
 import {
   selectSegData,
@@ -19,10 +21,15 @@ import {
   setSegDataSuccess,
   setSegDataFailure,
 } from "../store/apiCacheSlice";
+
 import { ApiStatus, Level } from "../interfaces";
+
+import { getParamsInfo } from "../utils";
 
 export default function SegregationPage() {
   const dispatch = useDispatch();
+
+  const [paramsChecked, setParamsChecked] = useState(false);
 
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
@@ -54,7 +61,21 @@ export default function SegregationPage() {
 
   const isLoading =
     !isSegKeyCached ||
-    (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure);
+    (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure) ||
+    !paramsChecked;
+
+  useEffect(() => {
+    if (paramsChecked) {
+      return;
+    }
+
+    const paramsInfo = getParamsInfo(window.location.href);
+
+    if (paramsInfo) {
+      dispatch(setStateFromParams(paramsInfo));
+    }
+    setParamsChecked(true);
+  }, [window.location.href, paramsChecked]);
 
   useEffect(() => {
     if (level === Level.School) {
