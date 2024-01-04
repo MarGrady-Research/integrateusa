@@ -17,7 +17,7 @@ export default function Map() {
 
   return (
     <>
-      <Head title="Map" desc="Mapping segregation" />
+      <Head title="Integrate USA" desc="Mapping segregation" />
       <Header />
       <div className={clsx("absolute w-full", mapHolder)}>
         <DemographicMap onSmallerScreen={onSmallerScreen} />
