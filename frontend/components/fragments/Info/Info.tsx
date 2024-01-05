@@ -1,13 +1,17 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
 
-import BarChart from "./components/Bar";
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
 import SchoolInfo from "./components/SchoolInfo";
+
+const BarChart = dynamic(() => import("./components/Bar"), {
+  ssr: false,
+});
 
 import {
   selectId,

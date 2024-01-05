@@ -26,16 +26,19 @@ const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 const getAreaInfo = (hoverInfo, mapData) => {
   const { GEOID, STUSPS } = hoverInfo.feature.properties;
 
-  const layerProp = STUSPS || GEOID;
+  let layerProp;
 
   let areaId = "";
 
   if (GEOID.length === 5) {
     areaId = "county_id";
+    layerProp = GEOID;
   } else if (GEOID.length === 7) {
     areaId = "dist_id";
+    layerProp = GEOID;
   } else if (STUSPS) {
     areaId = "state_abb";
+    layerProp = STUSPS;
   }
 
   let schoolsTotal = 0;
