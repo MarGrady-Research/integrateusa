@@ -139,6 +139,8 @@ const options = {
 };
 
 export default function BarChart({ infoData, isLoading }: Props) {
+  const [sortBy, setSortBy] = useState("" as RacialProportion | "");
+
   if (isLoading) {
     return (
       <>
@@ -147,8 +149,6 @@ export default function BarChart({ infoData, isLoading }: Props) {
       </>
     );
   }
-
-  const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
   const handleSort = (v: RacialProportion) => setSortBy(v);
 

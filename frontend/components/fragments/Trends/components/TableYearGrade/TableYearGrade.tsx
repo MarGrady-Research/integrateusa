@@ -37,13 +37,13 @@ export default function TableYearGrade({
   selectedYear,
   isLoading,
 }: Props) {
+  const [expanded, setExpanded] = useState(false);
+
   if (isLoading) {
     return (
       <Skeleton variant="rectangular" className={clsx(container, "mb-4")} />
     );
   }
-
-  const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((e) => !e);
 

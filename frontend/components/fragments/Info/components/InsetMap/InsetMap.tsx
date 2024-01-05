@@ -70,7 +70,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   useEffect(() => {
     zoomToLocation();
-  }, [bounds]);
+  }, [bounds, zoomToLocation]);
 
   const elementaryDistrictLayer = {
     id: "elementary-district-boundary",

@@ -134,4 +134,6 @@ const ViewInfo = memo(({ renderedFeatures }: Props) => {
   );
 });
 
+ViewInfo.displayName = "ViewInfo";
+
 export default ViewInfo;

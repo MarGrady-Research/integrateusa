@@ -165,7 +165,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch]);
+  }, [inputValue, value, fetch, mapLevel]);
 
   useEffect(() => {
     setValue(null);

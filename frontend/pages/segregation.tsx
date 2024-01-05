@@ -75,7 +75,7 @@ export default function SegregationPage() {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [window.location.href, paramsChecked]);
+  }, [paramsChecked, dispatch]);
 
   useEffect(() => {
     if (level === Level.School) {
@@ -102,7 +102,7 @@ export default function SegregationPage() {
     return () => {
       abortController.abort();
     };
-  }, [level, year, grade]);
+  }, [level, year, grade, dispatch, idlevel, segKey]);
 
   return (
     <>

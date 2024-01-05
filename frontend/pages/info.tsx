@@ -104,7 +104,7 @@ export default function InfoPage() {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [window.location.href, paramsChecked]);
+  }, [dispatch, paramsChecked]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -127,7 +127,7 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, grade, year]);
+  }, [id, level, grade, year, dispatch, infoKey, levelId]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -150,7 +150,7 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level]);
+  }, [id, level, dispatch, levelId, levelTable, trendKey]);
 
   return (
     <>

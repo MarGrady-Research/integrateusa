@@ -64,4 +64,6 @@ const InfoDialog = memo(
   }
 );
 
+InfoDialog.displayName = "InfoDialog";
+
 export default InfoDialog;

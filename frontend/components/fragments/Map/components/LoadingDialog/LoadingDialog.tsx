@@ -14,7 +14,7 @@ interface Props {
   mapStatus: MapStatus;
 }
 
-const InfoDialog = memo(({ open, mapStatus }: Props) => {
+const LoadingDialog = memo(({ open, mapStatus }: Props) => {
   let message = " ";
 
   switch (mapStatus) {
@@ -63,4 +63,6 @@ const InfoDialog = memo(({ open, mapStatus }: Props) => {
   );
 });
 
-export default InfoDialog;
+LoadingDialog.displayName = "LoadingDialog";
+
+export default LoadingDialog;
