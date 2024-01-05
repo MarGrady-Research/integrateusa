@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import axios from "axios";
 import Map, {
   Layer,
@@ -12,12 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import Slideover from "./components/Slideover";
-import ViewDialog from "./components/ViewDialog";
-import SchoolPie from "./components/SchoolPie";
-import AreaPie from "./components/AreaPie";
-import InfoDialog from "./components/InfoDialog";
 import LoadingDialog from "./components/LoadingDialog";
-import Popup from "./components/Popup";
+
+const InfoDialog = dynamic(() => import("./components/InfoDialog"));
+const Popup = dynamic(() => import("./components/Popup"));
+const ViewInfo = dynamic(() => import("./components/ViewInfo"));
+const SchoolPie = dynamic(() => import("./components/SchoolPie"));
+const AreaPie = dynamic(() => import("./components/AreaPie"));
 
 import { selectBounds } from "../../../store/selectSlice";
 import { selectMapData, setMapData } from "../../../store/apiCacheSlice";
@@ -577,7 +579,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           {pie()}
         </InfoDialog>
         {mapRenderingComplete && (
-          <ViewDialog renderedFeatures={renderedFeatures} />
+          <ViewInfo renderedFeatures={renderedFeatures} />
         )}
         <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>

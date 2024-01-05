@@ -1,12 +1,16 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Divider from "@mui/material/Divider";
 
-import Control from "../Control";
+const Drawer = dynamic(() => import("@mui/material/Drawer"));
+const IconButton = dynamic(() => import("@mui/material/IconButton"));
+const ChevronRightIcon = dynamic(
+  () => import("@mui/icons-material/ChevronRight")
+);
+const Divider = dynamic(() => import("@mui/material/Divider"));
+
+const Control = dynamic(() => import("../Control"));
 
 // @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";

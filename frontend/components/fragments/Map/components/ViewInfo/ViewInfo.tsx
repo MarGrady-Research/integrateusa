@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import SummaryPie from "../SummaryPie";
 // @ts-ignore
-import { root } from "./ViewDialog.module.scss";
+import { root } from "./ViewInfo.module.scss";
 
 interface Props {
   renderedFeatures: any[];
@@ -61,7 +61,7 @@ const getViewInfo = (renderedFeatures) => {
   };
 };
 
-const ViewDialog = memo(({ renderedFeatures }: Props) => {
+const ViewInfo = memo(({ renderedFeatures }: Props) => {
   const {
     studentsEnrolled,
     asianPercentage,
@@ -134,4 +134,4 @@ const ViewDialog = memo(({ renderedFeatures }: Props) => {
   );
 });
 
-export default ViewDialog;
+export default ViewInfo;

@@ -78,11 +78,11 @@ export default function Control({ handleVisibility, handleBounds }: Props) {
           {radio(MapLevel.School, "No Boundary")}
           {radio(
             MapLevel.UnifiedElementaryDistrict,
-            "Unified + Elementary District"
+            "District (Unified & Elementary)"
           )}
           {radio(
             MapLevel.UnifiedSecondaryDistrict,
-            "Unified + Secondary District"
+            "District (Unified & Secondary)"
           )}
           {radio(MapLevel.County)}
           {radio(MapLevel.State)}
