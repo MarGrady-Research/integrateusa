@@ -44,6 +44,10 @@ interface Props {
   id: string;
   year: number;
   grade: string;
+  measure: {
+    accessor: string;
+    name: string;
+  };
 }
 
 const labels = yearsData
@@ -52,7 +56,36 @@ const labels = yearsData
     return a - b;
   });
 
-const LineGraph = memo(({ lines, id, year, grade }: Props) => {
+const processLineData = (
+  data: {
+    [key: string]: any;
+  }[],
+  measure: {
+    name: string;
+    accessor: string;
+  }
+) => {
+  let finalData = data.map((d) => ({
+    seg: d[measure.accessor],
+    year: d.year,
+  }));
+
+  labels.forEach((l) => {
+    const yearInData = finalData.findIndex((d) => d.year === l) != -1;
+
+    if (!yearInData) {
+      let tempData = [...finalData, { seg: null, year: l }];
+
+      finalData = tempData.sort((a, b) => {
+        return a.year - b.year;
+      });
+    }
+  });
+
+  return finalData;
+};
+
+const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
   const lineDataStore = useSelector(selectLineData);
 
   const options = {
@@ -99,9 +132,11 @@ const LineGraph = memo(({ lines, id, year, grade }: Props) => {
     const isLineDataCached = typeof lineDataCache !== "undefined";
 
     if (isLineDataCached && lineDataCache) {
+      const lineDataForMeasure = processLineData(lineDataCache, measure);
+
       graphData.push({
         label: line.name,
-        data: lineDataCache.map((li) => li.seg),
+        data: lineDataForMeasure.map((li) => li.seg),
         borderColor: line.id === id ? selectedLineColor : unselectedLineColor,
         backgroundColor:
           line.id === id ? selectedLineColor : unselectedLineColor,

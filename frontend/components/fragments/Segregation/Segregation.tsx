@@ -24,8 +24,6 @@ import {
 
 import { SegData, LineDataBase, Level } from "../../../interfaces";
 
-import { yearsData } from "../Selection/data";
-
 interface Props {
   segData: SegData;
   isLoading: boolean;
@@ -66,12 +64,6 @@ const options = [
 
 const defaultOption = options[1];
 
-const labels = yearsData
-  .map((e) => e.value)
-  .sort((a, b) => {
-    return a - b;
-  });
-
 const findFocus = (segData: SegData, id: string) => {
   let idLevel: string;
 
@@ -90,35 +82,6 @@ const findFocus = (segData: SegData, id: string) => {
   }
 
   return null;
-};
-
-const processLineData = (
-  data: {
-    [key: string]: any;
-  }[],
-  measure: {
-    name: string;
-    accessor: string;
-  }
-) => {
-  let finalData = data.map((d) => ({
-    seg: d[measure.accessor],
-    year: d.year,
-  }));
-
-  labels.forEach((l) => {
-    const yearInData = finalData.findIndex((d) => d.year === l) != -1;
-
-    if (!yearInData) {
-      let tempData = [...finalData, { seg: null, year: l }];
-
-      finalData = tempData.sort((a, b) => {
-        return a.year - b.year;
-      });
-    }
-  });
-
-  return finalData;
 };
 
 export default function Segregation({ segData, isLoading }: Props) {
@@ -190,8 +153,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     axios
       .get(url, { signal: currentAbortController.signal })
       .then((res) => {
-        const data = processLineData(res.data, measure);
-        dispatch(setLineDataSuccess({ key: lineKey, data }));
+        dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
@@ -253,8 +215,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         for (const [index, res] of values.entries()) {
           const lineKey = `${grade}-${lines[index].id}`;
 
-          const data = processLineData(res.data, measure);
-          dispatch(setLineDataSuccess({ key: lineKey, data }));
+          dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
         }
       })
       .catch((error) => {
@@ -290,8 +251,7 @@ export default function Segregation({ segData, isLoading }: Props) {
         signal: abortController.signal,
       })
       .then((res) => {
-        const data = processLineData(res.data, measure);
-        dispatch(setLineDataSuccess({ key: lineKey, data }));
+        dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
       .catch((error) => {
         if (error.name !== "CanceledError") {
@@ -334,7 +294,13 @@ export default function Segregation({ segData, isLoading }: Props) {
         updateLine={updateLine}
         clearSelection={clearSelection}
       />
-      <LineGraph lines={lines} id={id} year={year} grade={grade} />
+      <LineGraph
+        lines={lines}
+        measure={measure}
+        id={id}
+        year={year}
+        grade={grade}
+      />
     </>
   );
 }
