@@ -2,11 +2,11 @@ import React from "react";
 import { SelectChangeEvent } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
 
-import { SegEntity } from "../../../../../interfaces";
+import { SegEntity } from "interfaces";
 
 import { yearsData, gradesData } from "../../../Selection/data";
 
-import Select from "../../../../atoms/Select";
+import Select from "components/atoms/Select";
 
 interface Props {
   selected: {

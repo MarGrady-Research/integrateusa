@@ -14,15 +14,15 @@ import {
   selectYear,
   selectSelectedName,
   selectLevel,
-} from "../../../store/selectSlice";
+} from "store/selectSlice";
 
 import {
   setLineDataRequest,
   setLineDataSuccess,
   setLineDataFailure,
-} from "../../../store/apiCacheSlice";
+} from "store/apiCacheSlice";
 
-import { SegData, Line, Level } from "../../../interfaces";
+import { SegData, Line, Level } from "interfaces";
 
 interface Props {
   segData: SegData;

@@ -10,10 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-import {
-  selectedLineColor,
-  unselectedLineColor,
-} from "../../../../../constants";
+import { selectedLineColor, unselectedLineColor } from "constants/";
 
 import { fullCompData, compDataNormalized, ids } from "./data";
 

@@ -9,7 +9,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

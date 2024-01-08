@@ -18,13 +18,11 @@ import {
   selectBounds,
   selectLevel,
   selectSchoolCoordinates,
-} from "../../../store/selectSlice";
-import { Level } from "../../../interfaces";
+} from "store/selectSlice";
+import { Level, InfoData } from "interfaces";
 
 // @ts-ignore
 import { container, tableContainer } from "./Info.module.scss";
-
-import { InfoData } from "../../../interfaces";
 
 interface Props {
   title: string;

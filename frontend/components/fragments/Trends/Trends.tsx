@@ -5,9 +5,9 @@ import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade";
 
-import { selectGrade, selectYear } from "../../../store/selectSlice";
+import { selectGrade, selectYear } from "store/selectSlice";
 
-import { TrendData } from "../../../interfaces";
+import { TrendData } from "interfaces";
 
 interface Props {
   trendData: TrendData;

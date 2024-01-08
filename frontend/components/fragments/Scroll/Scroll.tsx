@@ -5,7 +5,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 
 import Scroller from "./components/Scroller";
 
-import MarGradyLogo from "../../../public/MarGradyLogo.png";
+import MarGradyLogo from "public/MarGradyLogo.png";
 
 function EndScreen() {
   return (

@@ -14,9 +14,9 @@ import {
   elementaryDistrictSourceLayer,
   secondaryDistrictSourceLayer,
   defaultMapSchoolColor,
-} from "../../../../../constants";
+} from "constants/";
 
-import { Bounds, Level, SchoolCoordinates } from "../../../../../interfaces";
+import { Bounds, Level, SchoolCoordinates } from "interfaces";
 
 interface Props {
   id: string;

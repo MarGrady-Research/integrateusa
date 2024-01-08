@@ -3,7 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import Skeleton from "@mui/material/Skeleton";
 import { Pie } from "react-chartjs-2";
 
-import { legendMargin } from "../../../../../charts";
+import { legendMargin } from "charts";
 
 import {
   asianColor,
@@ -11,9 +11,9 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
-import { InfoData } from "../../../../../interfaces";
+import { InfoData } from "interfaces";
 
 // @ts-ignore
 import { pieLegendSkeleton } from "./Pie.module.scss";

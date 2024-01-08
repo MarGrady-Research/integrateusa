@@ -2,11 +2,11 @@ import React from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
 
-import Select from "../../../../atoms/Select";
+import Select from "components/atoms/Select";
 
 import { gradesData } from "../../data";
 
-import { selectGrade, setGrade } from "../../../../../store/selectSlice";
+import { selectGrade, setGrade } from "store/selectSlice";
 
 export default function GradeSelect() {
   const grade = useSelector(selectGrade);

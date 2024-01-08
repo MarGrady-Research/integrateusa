@@ -2,17 +2,13 @@ import React from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
 
-import Select from "../../../../atoms/Select";
+import Select from "components/atoms/Select";
 
 import { yearsData } from "../../data";
 
-import {
-  selectLevel,
-  selectYear,
-  setYear,
-} from "../../../../../store/selectSlice";
+import { selectLevel, selectYear, setYear } from "store/selectSlice";
 
-import { Level } from "../../../../../interfaces";
+import { Level } from "interfaces";
 
 export default function YearSelect() {
   const level = useSelector(selectLevel);

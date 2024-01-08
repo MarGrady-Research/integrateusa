@@ -9,9 +9,9 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
-import { MapData } from "../../../../../interfaces";
+import { MapData } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

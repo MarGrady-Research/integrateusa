@@ -14,7 +14,7 @@ const Control = dynamic(() => import("../Control"));
 
 // @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
-import { Bounds, MapLevel } from "../../../../../interfaces";
+import { Bounds, MapLevel } from "interfaces";
 
 interface Props {
   handleVisibility: (l: MapLevel) => void;

@@ -11,7 +11,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
 
-import { legendMargin } from "../../../../../charts";
+import { legendMargin } from "charts";
 
 import {
   asianColor,
@@ -20,9 +20,9 @@ import {
   whiteColor,
   otherColor,
   primaryColor,
-} from "../../../../../constants";
+} from "constants/";
 
-import { TrendData } from "../../../../../interfaces";
+import { TrendData } from "interfaces";
 
 // @ts-ignore
 import { container } from "../Bar/Bar.module.scss";

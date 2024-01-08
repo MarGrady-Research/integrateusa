@@ -6,7 +6,7 @@ import DistrictBar from "../DistrictBar";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-import { useBreakpoint } from "../../../../../hooks";
+import { useBreakpoint } from "hooks";
 
 // @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";

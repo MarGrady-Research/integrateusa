@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableFooter from "@mui/material/TableFooter";
 import TableRow from "@mui/material/TableRow";
 
-import { InfoData, SchoolType } from "../../../../../interfaces";
+import { InfoData, SchoolType } from "interfaces";
 
 // @ts-ignore
 import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";

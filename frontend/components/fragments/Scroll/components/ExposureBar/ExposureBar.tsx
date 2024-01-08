@@ -15,7 +15,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
 interface Props {
   step: ExposureBarStep;

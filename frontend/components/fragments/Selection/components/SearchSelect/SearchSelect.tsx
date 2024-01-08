@@ -3,7 +3,7 @@ import axios from "axios";
 import { debounce } from "@mui/material/utils";
 import { useSelector, useDispatch } from "react-redux";
 
-import Autocomplete from "../../../../atoms/Autocomplete";
+import Autocomplete from "components/atoms/Autocomplete";
 
 import {
   selectId,
@@ -15,11 +15,11 @@ import {
   setBounds,
   setLevelAndId,
   setSchoolCoordinates,
-} from "../../../../../store/selectSlice";
+} from "store/selectSlice";
 
 import { levelSelectData } from "../../data";
 
-import { Level, LocationSearchResult } from "../../../../../interfaces";
+import { Level, LocationSearchResult } from "interfaces";
 
 interface Props {
   level: Level;

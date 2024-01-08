@@ -3,11 +3,11 @@ import clsx from "clsx";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 
-import Loader from "../../../Loader";
+import Loader from "components/fragments/Loader";
 
 // @ts-ignore
 import { paper } from "./LoadingDialog.module.scss";
-import { MapStatus } from "../../../../../interfaces";
+import { MapStatus } from "interfaces";
 
 interface Props {
   open: boolean;

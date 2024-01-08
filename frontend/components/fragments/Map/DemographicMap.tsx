@@ -21,9 +21,9 @@ const ViewInfo = dynamic(() => import("./components/ViewInfo"));
 const SchoolPie = dynamic(() => import("./components/SchoolPie"));
 const AreaPie = dynamic(() => import("./components/AreaPie"));
 
-import { selectBounds } from "../../../store/selectSlice";
-import { selectMapData, setMapData } from "../../../store/apiCacheSlice";
-import { Level, MapLevel, MapStatus } from "../../../interfaces";
+import { selectBounds } from "store/selectSlice";
+import { selectMapData, setMapData } from "store/apiCacheSlice";
+import { Level, MapLevel, MapStatus } from "interfaces";
 import {
   asianColor,
   blackColor,
@@ -41,7 +41,7 @@ import {
   countySourceLayer,
   elementaryDistrictSourceLayer,
   secondaryDistrictSourceLayer,
-} from "../../../constants";
+} from "constants/";
 
 const prop_array = [
   "max",

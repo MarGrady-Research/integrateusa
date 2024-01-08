@@ -7,8 +7,8 @@ import { useRouter } from "next/router";
 // @ts-ignore
 import { root } from "./Header.module.scss";
 
-import MarGradyLogoText from "../../../public/MarGradyLogoText.png";
-import IntegrateUSALogo from "../../../public/IntegrateUSALogo.png";
+import MarGradyLogoText from "public/MarGradyLogoText.png";
+import IntegrateUSALogo from "public/IntegrateUSALogo.png";
 
 interface NavLinkProps {
   url: string;

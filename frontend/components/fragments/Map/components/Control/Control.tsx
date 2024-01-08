@@ -7,7 +7,7 @@ import FormLabel from "@mui/material/FormLabel";
 
 import Search from "../Search";
 
-import { Bounds, MapLevel } from "../../../../../interfaces";
+import { Bounds, MapLevel } from "interfaces";
 
 import {
   asianColor,
@@ -15,7 +15,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
 interface Props {
   handleVisibility: (l: MapLevel) => void;

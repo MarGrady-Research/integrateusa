@@ -1,6 +1,6 @@
 import React from "react";
 
-import { InfoData } from "../../../../../interfaces";
+import { InfoData } from "interfaces";
 
 interface Props {
   infoData: InfoData;

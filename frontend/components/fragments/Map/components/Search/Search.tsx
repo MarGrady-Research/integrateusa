@@ -2,14 +2,14 @@ import React, { useState, useMemo, useEffect, SyntheticEvent } from "react";
 import axios from "axios";
 import { debounce } from "@mui/material/utils";
 
-import Autocomplete from "../../../../atoms/Autocomplete";
+import Autocomplete from "components/atoms/Autocomplete";
 
 import {
   MapLevel,
   Bounds,
   LocationSearchResult,
   DistrictType,
-} from "../../../../../interfaces";
+} from "interfaces";
 
 interface Props {
   mapLevel: MapLevel;

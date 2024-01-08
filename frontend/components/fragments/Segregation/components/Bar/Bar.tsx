@@ -10,14 +10,14 @@ import {
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
 
-import { SegEntity } from "../../../../../interfaces";
+import { SegEntity } from "interfaces";
 import {
   asianColor,
   blackColor,
   hispanicColor,
   otherColor,
   whiteColor,
-} from "../../../../../constants";
+} from "constants/";
 
 // @ts-ignore
 import { container } from "./Bar.module.scss";

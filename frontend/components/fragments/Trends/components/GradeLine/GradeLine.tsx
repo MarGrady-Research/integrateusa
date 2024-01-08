@@ -11,11 +11,8 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-import {
-  selectedLineColor,
-  unselectedLineColor,
-} from "../../../../../constants";
-import { TrendData } from "../../../../../interfaces";
+import { selectedLineColor, unselectedLineColor } from "constants/";
+import { TrendData } from "interfaces";
 
 ChartJS.register(
   CategoryScale,

@@ -16,7 +16,7 @@ import Pagination from "../Pagination";
 
 import { sortRows, filterRows } from "../../helpers";
 
-import { SegData, Line } from "../../../../../interfaces";
+import { SegData, Line } from "interfaces";
 
 // @ts-ignore
 import { container } from "./ComparisonTable.module.scss";

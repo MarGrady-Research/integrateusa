@@ -15,7 +15,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
 import { schoolData } from "./data";
 

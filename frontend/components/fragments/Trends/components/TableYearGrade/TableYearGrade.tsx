@@ -11,7 +11,7 @@ import TableRow from "@mui/material/TableRow";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
-import { TrendData } from "../../../../../interfaces";
+import { TrendData } from "interfaces";
 
 // @ts-ignore
 import { headRow, contentRow, container } from "./TableYearGrade.module.scss";

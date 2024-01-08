@@ -19,11 +19,11 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "../../../../../constants";
+} from "constants/";
 
-import { legendMargin } from "../../../../../charts";
+import { legendMargin } from "charts";
 
-import { InfoData, RacialProportion } from "../../../../../interfaces";
+import { InfoData, RacialProportion } from "interfaces";
 
 import {
   // @ts-ignore

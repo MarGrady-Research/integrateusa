@@ -10,11 +10,11 @@ import SearchSelect from "./components/SearchSelect";
 import YearSelect from "./components/YearSelect";
 import GradeSelect from "./components/GradeSelect";
 
-import { selectLevel } from "../../../store/selectSlice";
+import { selectLevel } from "store/selectSlice";
 
-import { useBreakpoint } from "../../../hooks";
+import { useBreakpoint } from "hooks";
 
-import { Level } from "../../../interfaces";
+import { Level } from "interfaces";
 
 // @ts-ignore
 import { animate } from "./Selection.module.scss";

@@ -16,21 +16,21 @@ import ErrorIcon from "@mui/icons-material/Error";
 import clsx from "clsx";
 
 import { yearsData } from "../../../Selection/data";
-import { legendMargin } from "../../../../../charts";
+import { legendMargin } from "charts";
 import {
   primaryColor,
   selectedLineColor,
   unselectedLineColor,
-} from "../../../../../constants";
+} from "constants/";
 import {
   ApiStatus,
   Line,
   LineDataProcessed,
   LineData,
   MeasureAccessor,
-} from "../../../../../interfaces";
+} from "interfaces";
 
-import { selectLineData } from "../../../../../store/apiCacheSlice";
+import { selectLineData } from "store/apiCacheSlice";
 
 // @ts-ignore
 import { container } from "./Line.module.scss";
