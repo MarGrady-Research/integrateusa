@@ -22,7 +22,7 @@ import {
   setLineDataFailure,
 } from "../../../store/apiCacheSlice";
 
-import { SegData, LineDataBase, Level } from "../../../interfaces";
+import { SegData, Line, Level } from "../../../interfaces";
 
 interface Props {
   segData: SegData;
@@ -131,7 +131,7 @@ export default function Segregation({ segData, isLoading }: Props) {
 
   const [lines, setLines] = useState([
     { id, name: level === Level.State ? id : name },
-  ] as LineDataBase[]);
+  ] as Line[]);
 
   const abortControllersRef = useRef({});
 

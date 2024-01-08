@@ -8,8 +8,10 @@ export type {
   SchoolCoordinates,
   RacialProportion,
   SegEntity,
+  MeasureAccessor,
   LineData,
-  LineDataBase,
+  Line,
+  LineDataProcessed,
   LocationSearchResult,
 } from "./interfaces";
 

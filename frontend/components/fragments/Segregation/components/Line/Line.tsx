@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Line as LineChart } from "react-chartjs-2";
 import CircularProgress from "@mui/material/CircularProgress";
 import ErrorIcon from "@mui/icons-material/Error";
 import clsx from "clsx";
@@ -22,7 +22,13 @@ import {
   selectedLineColor,
   unselectedLineColor,
 } from "../../../../../constants";
-import { ApiStatus, LineDataBase } from "../../../../../interfaces";
+import {
+  ApiStatus,
+  Line,
+  LineDataProcessed,
+  LineData,
+  MeasureAccessor,
+} from "../../../../../interfaces";
 
 import { selectLineData } from "../../../../../store/apiCacheSlice";
 
@@ -40,13 +46,13 @@ ChartJS.register(
 );
 
 interface Props {
-  lines: LineDataBase[];
+  lines: Line[];
   id: string;
   year: number;
   grade: string;
   measure: {
-    accessor: string;
     name: string;
+    accessor: MeasureAccessor;
   };
 }
 
@@ -57,15 +63,13 @@ const labels = yearsData
   });
 
 const processLineData = (
-  data: {
-    [key: string]: any;
-  }[],
+  data: LineData,
   measure: {
     name: string;
-    accessor: string;
+    accessor: MeasureAccessor;
   }
 ) => {
-  let finalData = data.map((d) => ({
+  let finalData: LineDataProcessed[] = data.map((d) => ({
     seg: d[measure.accessor],
     year: d.year,
   }));
@@ -192,7 +196,7 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
   return (
     <div className={clsx(container, "mb-2")}>
       {legend}
-      <Line options={options} data={data} plugins={[legendMargin]} />
+      <LineChart options={options} data={data} plugins={[legendMargin]} />
     </div>
   );
 });

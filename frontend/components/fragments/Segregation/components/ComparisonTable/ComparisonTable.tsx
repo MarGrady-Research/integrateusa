@@ -16,7 +16,7 @@ import Pagination from "../Pagination";
 
 import { sortRows, filterRows } from "../../helpers";
 
-import { SegData, LineDataBase } from "../../../../../interfaces";
+import { SegData, Line } from "../../../../../interfaces";
 
 // @ts-ignore
 import { container } from "./ComparisonTable.module.scss";
@@ -29,7 +29,7 @@ interface Props {
     name: string;
   };
   isLoading: boolean;
-  lines: LineDataBase[];
+  lines: Line[];
   updateLine: (id: string, name: string) => void;
   clearSelection: () => void;
 }

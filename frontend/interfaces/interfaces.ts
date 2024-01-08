@@ -2,7 +2,7 @@ export type InfoData = School[];
 export type TrendData = Trend[];
 export type MapData = Feature[];
 export type SegData = SegEntity[];
-export type LineData = LineEntity[];
+export type LineData = LineDataAPI[];
 
 interface School {
   sch_name: string;
@@ -65,10 +65,26 @@ interface Feature {
   properties: any;
 }
 
-interface LineEntity {
+interface LineDataAPI {
+  norm_exp_as: number;
+  norm_exp_bl: number;
+  norm_exp_hi: number;
+  norm_exp_or: number;
+  norm_exp_wh: number;
+  year: number;
+}
+
+export interface LineDataProcessed {
   seg: number;
   year: number;
 }
+
+export type MeasureAccessor =
+  | "norm_exp_as"
+  | "norm_exp_bl"
+  | "norm_exp_hi"
+  | "norm_exp_or"
+  | "norm_exp_wh";
 
 export type SchoolType = "ES" | "ESMS" | "MS" | "MSHS" | "HS" | "K12" | "Other";
 
@@ -101,7 +117,7 @@ export enum MapLevel {
   State,
 }
 
-export interface LineDataBase {
+export interface Line {
   id: string;
   name: string;
 }
