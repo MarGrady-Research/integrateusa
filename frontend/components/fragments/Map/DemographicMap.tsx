@@ -292,7 +292,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     setIsHovering(false);
     setCursor("auto");
-  }, []);
+  }, [hoverSource, hoverSourceLayer]);
 
   const onMouseOut = useCallback(() => {
     if (mapRef.current && hoverSource && hoverSourceLayer) {
@@ -301,7 +301,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         sourceLayer: hoverSourceLayer,
       });
     }
-  }, []);
+  }, [hoverSource, hoverSourceLayer]);
 
   const handleDialog = () => {
     if (hoverInfo) {
@@ -330,7 +330,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           setMapStatus(MapStatus.Failed);
         }
       });
-  }, []);
+  }, [dispatch, mapData]);
 
   const querySchools = () => {
     if (mapRef.current) {
@@ -365,7 +365,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       updateBounds(initialBounds);
     }
     getData();
-  }, [onSmallerScreen, initialBounds]);
+  }, [onSmallerScreen, initialBounds, getData, updateBounds]);
 
   const coordinates = {
     x: hoverInfo?.x,

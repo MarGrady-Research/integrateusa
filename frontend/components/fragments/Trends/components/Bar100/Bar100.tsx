@@ -89,10 +89,6 @@ export default function BarChart100({
   year,
   isLoading,
 }: Props) {
-  if (isLoading) {
-    return <Skeleton variant="rectangular" className={container} />;
-  }
-
   const sortedData = useMemo(
     () => sortTrendData(trendData, grade),
     [trendData, grade]
@@ -100,6 +96,10 @@ export default function BarChart100({
 
   const { asianData, blackData, hispanicData, whiteData, otherData, labels } =
     useMemo(() => getBarData(sortedData), [sortedData]);
+
+  if (isLoading) {
+    return <Skeleton variant="rectangular" className={container} />;
+  }
 
   const data = {
     labels,

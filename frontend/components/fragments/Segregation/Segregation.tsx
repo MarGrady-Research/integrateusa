@@ -231,7 +231,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [grade]);
+  }, [grade, dispatch, idLevel, lines, table]);
 
   useEffect(() => {
     stopAllLineDataRequests();
@@ -261,7 +261,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [id]);
+  }, [id, dispatch, grade, idLevel, level, name, table]);
 
   const clearSelection = () => {
     const entityName = level === Level.State ? id : name;

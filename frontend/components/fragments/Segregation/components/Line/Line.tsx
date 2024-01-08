@@ -197,4 +197,6 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
   );
 });
 
+LineGraph.displayName = "LineGraph";
+
 export default LineGraph;

@@ -99,7 +99,7 @@ export default function SearchSelect({ level }: Props) {
       setInputValue("");
     }
     setOptions([]);
-  }, [id, value, selectedName, bounds, level, storeLevel]);
+  }, [id, value, selectedName, bounds, level, storeLevel, coordinates]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -184,7 +184,7 @@ export default function SearchSelect({ level }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch]);
+  }, [inputValue, value, fetch, level]);
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
