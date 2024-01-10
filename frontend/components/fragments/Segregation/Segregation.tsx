@@ -22,7 +22,7 @@ import {
   setLineDataFailure,
 } from "store/apiCacheSlice";
 
-import { SegData, Line, Level } from "interfaces";
+import { SegData, Line, Level, MeasureAccessor } from "interfaces";
 
 interface Props {
   segData: SegData;
@@ -108,7 +108,7 @@ export default function Segregation({ segData, isLoading }: Props) {
   const measure = useMemo(
     () => ({
       name: `${selected.label} Normalized Exposure`,
-      accessor: selected.value,
+      accessor: selected.value as MeasureAccessor,
     }),
     [selected]
   );
