@@ -5,7 +5,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import clsx from "clsx";
 
-// @ts-ignore
 import { inputLabel } from "./Select.module.scss";
 
 interface Props {

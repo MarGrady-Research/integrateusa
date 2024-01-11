@@ -7,7 +7,6 @@ import DemographicMap from "../components/fragments/Map";
 
 import { useBreakpoint } from "../hooks";
 
-// @ts-ignore
 import { mapHolder } from "./index.module.scss";
 
 export default function Map() {

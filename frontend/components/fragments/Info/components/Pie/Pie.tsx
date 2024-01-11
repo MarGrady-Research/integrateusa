@@ -15,7 +15,6 @@ import {
 
 import { InfoData } from "interfaces";
 
-// @ts-ignore
 import { pieLegendSkeleton } from "./Pie.module.scss";
 
 ChartJS.register(ArcElement, Tooltip, Legend);

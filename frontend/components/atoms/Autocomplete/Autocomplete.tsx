@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import clsx from "clsx";
 
-// @ts-ignore
 import { inputLabel } from "./Autocomplete.module.scss";
 
 interface SearchResult {

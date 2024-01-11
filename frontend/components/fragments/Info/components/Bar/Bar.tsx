@@ -26,21 +26,13 @@ import { legendMargin } from "charts";
 import { InfoData, RacialProportion } from "interfaces";
 
 import {
-  // @ts-ignore
   container,
-  // @ts-ignore
   buttons,
-  // @ts-ignore
   buttonAsian,
-  // @ts-ignore
   buttonBlack,
-  // @ts-ignore
   buttonHispanic,
-  // @ts-ignore
   buttonWhite,
-  // @ts-ignore
   buttonOther,
-  // @ts-ignore
   legend,
 } from "./Bar.module.scss";
 

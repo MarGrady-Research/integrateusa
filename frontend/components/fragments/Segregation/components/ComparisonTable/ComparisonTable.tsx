@@ -18,7 +18,6 @@ import { sortRows, filterRows } from "../../helpers";
 
 import { SegData, Line } from "interfaces";
 
-// @ts-ignore
 import { container } from "./ComparisonTable.module.scss";
 
 interface Props {

@@ -12,7 +12,6 @@ const Divider = dynamic(() => import("@mui/material/Divider"));
 
 const Control = dynamic(() => import("../Control"));
 
-// @ts-ignore
 import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 import { Bounds, MapLevel } from "interfaces";
 

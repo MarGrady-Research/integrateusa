@@ -1,7 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 
-// @ts-ignore
 import { root } from "./Popup.module.scss";
 
 interface Props {

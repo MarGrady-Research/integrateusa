@@ -1,6 +1,5 @@
 import React from "react";
 
-// @ts-ignore
 import { container } from "./Loader.module.scss";
 
 export default function Loader() {

@@ -8,7 +8,6 @@ import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
 import { useBreakpoint } from "hooks";
 
-// @ts-ignore
 import { step, graphic } from "./Scroller.module.scss";
 
 const charts = (currentStepIndex, onTablet) => {

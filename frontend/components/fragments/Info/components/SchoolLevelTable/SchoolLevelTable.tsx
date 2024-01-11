@@ -10,7 +10,6 @@ import TableRow from "@mui/material/TableRow";
 
 import { InfoData, SchoolType } from "interfaces";
 
-// @ts-ignore
 import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";
 
 interface Props {

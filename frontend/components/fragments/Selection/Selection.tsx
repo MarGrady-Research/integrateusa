@@ -16,7 +16,6 @@ import { useBreakpoint } from "hooks";
 
 import { Level } from "interfaces";
 
-// @ts-ignore
 import { animate } from "./Selection.module.scss";
 
 interface Props {

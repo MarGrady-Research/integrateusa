@@ -19,7 +19,6 @@ import {
   whiteColor,
 } from "constants/";
 
-// @ts-ignore
 import { container } from "./Bar.module.scss";
 
 ChartJS.register(LinearScale, BarElement, CategoryScale, Tooltip, Legend);

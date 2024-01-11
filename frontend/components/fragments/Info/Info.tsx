@@ -21,7 +21,6 @@ import {
 } from "store/selectSlice";
 import { Level, InfoData } from "interfaces";
 
-// @ts-ignore
 import { container, tableContainer } from "./Info.module.scss";
 
 interface Props {

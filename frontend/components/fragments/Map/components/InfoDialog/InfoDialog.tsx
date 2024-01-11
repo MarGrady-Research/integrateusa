@@ -8,7 +8,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 
-// @ts-ignore
 import { paper } from "./InfoDialog.module.scss";
 
 interface Props {

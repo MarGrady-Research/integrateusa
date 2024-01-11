@@ -32,7 +32,6 @@ import {
 
 import { selectLineData } from "store/apiCacheSlice";
 
-// @ts-ignore
 import { container } from "./Line.module.scss";
 
 ChartJS.register(

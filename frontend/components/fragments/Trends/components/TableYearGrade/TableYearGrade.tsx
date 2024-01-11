@@ -13,7 +13,6 @@ import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
 import { TrendData } from "interfaces";
 
-// @ts-ignore
 import { headRow, contentRow, container } from "./TableYearGrade.module.scss";
 
 interface Props {

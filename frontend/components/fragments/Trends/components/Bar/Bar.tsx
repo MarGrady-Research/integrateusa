@@ -24,7 +24,6 @@ import {
 
 import { TrendData } from "interfaces";
 
-// @ts-ignore
 import { container } from "./Bar.module.scss";
 
 ChartJS.register(
