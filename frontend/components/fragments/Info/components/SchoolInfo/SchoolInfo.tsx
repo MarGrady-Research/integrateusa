@@ -15,12 +15,15 @@ export default function SchoolInfo({ infoData }: Props) {
     );
   }
 
-  const { sch_name, state_abb, tot_enr, level } = infoData[0];
+  const { dist_name, sch_name, state_abb, tot_enr, level } = infoData[0];
 
   return (
     <div className="h-full shadow border border-gray-200 px-4 py-3">
       <p>
         <b>Name:</b> {sch_name}
+      </p>
+      <p>
+        <b>District:</b> {dist_name}
       </p>
       <p>
         <b>Level:</b> {level}

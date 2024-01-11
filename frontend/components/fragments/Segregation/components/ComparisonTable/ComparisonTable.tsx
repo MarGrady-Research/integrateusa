@@ -68,7 +68,7 @@ export default function ComparisonTable({
     table = "county";
   } else {
     idLevel = "state_abb";
-    nameLevel = "state_abb";
+    nameLevel = "state_name";
     table = "state";
   }
 

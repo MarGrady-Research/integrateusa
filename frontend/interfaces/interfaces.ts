@@ -18,6 +18,7 @@ interface School {
   white: number;
   other: number;
   state_abb: string;
+  dist_name: string;
   level: SchoolType;
 }
 
