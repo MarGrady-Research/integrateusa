@@ -78,7 +78,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [isHovering, setIsHovering] = useState(false);
 
   const [hoverSource, setHoverSource] = useState(null);
-  const [hoverSourceLayer, setHoverSourceLayer] = useState(null);
+  const [hoverId, setHoverId] = useState(null);
 
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const toggleInfoDialog = () => {
@@ -261,7 +261,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     if (hoveredFeature) {
       setHoverSource(hoveredFeature.source);
-      setHoverSourceLayer(hoveredFeature.sourceLayer);
+      setHoverId(hoveredFeature.id);
 
       if (mapRef.current) {
         (mapRef.current as any).removeFeatureState({
@@ -271,7 +271,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         (mapRef.current as any).setFeatureState(
           {
             source: hoveredFeature.source,
-            sourceLayer: hoveredFeature.sourceLayer,
             id: hoveredFeature.id,
           },
           { hover: true }
@@ -283,25 +282,34 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const onMouseEnter = useCallback(() => setCursor("pointer"), []);
 
   const onMouseLeave = useCallback(() => {
-    if (mapRef.current && hoverSource && hoverSourceLayer) {
-      (mapRef.current as any).removeFeatureState({
-        source: hoverSource,
-        sourceLayer: hoverSourceLayer,
-      });
+    if (mapRef.current && hoverSource && hoverId) {
+      (mapRef.current as any).setFeatureState(
+        {
+          source: hoverSource,
+          id: hoverId,
+        },
+        { hover: false }
+      );
     }
 
     setIsHovering(false);
     setCursor("auto");
-  }, [hoverSource, hoverSourceLayer]);
+  }, [hoverSource, hoverId]);
 
   const onMouseOut = useCallback(() => {
-    if (mapRef.current && hoverSource && hoverSourceLayer) {
-      (mapRef.current as any).removeFeatureState({
-        source: hoverSource,
-        sourceLayer: hoverSourceLayer,
-      });
+    if (mapRef.current && hoverSource && hoverId) {
+      (mapRef.current as any).setFeatureState(
+        {
+          source: hoverSource,
+          id: hoverId,
+        },
+        { hover: false }
+      );
     }
-  }, [hoverSource, hoverSourceLayer]);
+
+    setIsHovering(false);
+    setCursor("auto");
+  }, [hoverSource, hoverId]);
 
   const handleDialog = () => {
     if (hoverInfo) {
