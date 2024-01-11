@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <>
       <Head title="IntegrateUSA" desc="Research" />
-      <Header />
       <Page>
         <Research />
       </Page>

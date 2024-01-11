@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
-import Head from "../components/fragments/Head";
-import Header from "../components/fragments/Header";
-import Selection from "../components/fragments/Selection";
-import Page from "../components/layouts/Page";
-import Segregation from "../components/fragments/Segregation";
+import Head from "components/fragments/Head";
+import Selection from "components/fragments/Selection";
+import Page from "components/layouts/Page";
+import Segregation from "components/fragments/Segregation";
 
 import {
   selectYear,
@@ -107,7 +106,6 @@ export default function SegregationPage() {
   return (
     <>
       <Head title="Segregation" desc="Segregation Metrics" />
-      <Header />
       <Selection omitSchools />
       <Page>
         <div className="mx-auto mt-5">

@@ -57,7 +57,7 @@ export default function Header() {
             <NavLink url="/about" title="About" />
           </nav>
         </div>
-        <div className="absolute lg:relative w-28 sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
+        <div className="absolute lg:relative hidden sm:block sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
           <a href="http://www.margrady.com/" target="_blank">
             <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
           </a>

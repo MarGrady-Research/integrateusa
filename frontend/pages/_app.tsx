@@ -12,6 +12,8 @@ import { theme } from "../styles/materialTheme";
 import Loader from "../components/fragments/Loader";
 
 import "../styles/global.scss";
+import Header from "components/fragments/Header";
+import Footer from "components/fragments/Footer/Footer";
 
 ChartJS.defaults.font.family = "Libre Franklin";
 ChartJS.defaults.font.weight = "500";
@@ -36,7 +38,11 @@ function MyApp({ Component, ...rest }: AppProps) {
         }
       >
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <>
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </>
         </ThemeProvider>
       </PersistGate>
     </Provider>

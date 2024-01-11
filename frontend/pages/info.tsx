@@ -155,7 +155,6 @@ export default function InfoPage() {
   return (
     <>
       <Head title="Info" desc="Demographic Information" />
-      <Header />
       <Selection />
       <Page>
         <div className="mx-auto mt-5">
