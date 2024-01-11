@@ -1,3 +1,5 @@
+import { Bounds, Level, SchoolCoordinates } from "interfaces";
+
 export const sortOnOrder = (
   firstString: string,
   secondString: string,
@@ -34,6 +36,8 @@ export const getParamsInfo = (url: string) => {
   const paramsXMax = queryParams.xmax;
   const paramsYMin = queryParams.ymin;
   const paramsYMax = queryParams.ymax;
+  const paramsSchoolX = queryParams.lon_new;
+  const paramsSchoolY = queryParams.lat_new;
 
   const completeParams =
     !!paramsId &&
@@ -45,7 +49,7 @@ export const getParamsInfo = (url: string) => {
     !!paramsYMax;
 
   if (completeParams) {
-    return {
+    const obj = {
       id: paramsId,
       selectedName: paramsName.replace(/\+/g, " "),
       level: parseInt(paramsLevel),
@@ -55,7 +59,22 @@ export const getParamsInfo = (url: string) => {
         latmin: parseFloat(paramsYMin),
         latmax: parseFloat(paramsYMax),
       },
+    } as {
+      id: string;
+      selectedName: string;
+      level: Level;
+      bounds: Bounds;
+      schoolCoordinates?: SchoolCoordinates;
     };
+
+    if (!!paramsSchoolX && !!paramsSchoolY) {
+      obj.schoolCoordinates = {
+        lat_new: parseFloat(paramsSchoolY),
+        lon_new: parseFloat(paramsSchoolX),
+      };
+    }
+
+    return obj;
   }
 
   return null;

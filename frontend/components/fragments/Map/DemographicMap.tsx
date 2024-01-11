@@ -77,8 +77,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [hoverInfo, setHoverInfo] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const [hoverSource, setHoverSource] = useState(null);
-  const [hoverId, setHoverId] = useState(null);
+  const [hoveredFeatureData, setHoveredFeatureData] = useState(null);
+  const [hoveredSchoolData, setHoveredSchoolData] = useState(null);
 
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const toggleInfoDialog = () => {
@@ -235,81 +235,131 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     updateBounds(e);
   };
 
-  const handleHover = useCallback((event) => {
-    setHoverInfo(null);
-    setIsHovering(false);
+  const handleHover = useCallback(
+    (event) => {
+      setHoverInfo(null);
+      setIsHovering(false);
 
-    const {
-      point: { x, y },
-      originalEvent: {
-        target: { height, width },
-      },
-    } = event;
+      const {
+        point: { x, y },
+        originalEvent: {
+          target: { height, width },
+        },
+      } = event;
 
-    const hoveredFeature = event.features && event.features[0];
+      const hoveredFeature = event.features && event.features[0];
 
-    setHoverInfo(
-      hoveredFeature && {
-        feature: hoveredFeature,
-        x,
-        y,
-        height,
-        width,
-      }
-    );
-    setIsHovering(true);
+      if (hoveredFeature) {
+        setCursor("pointer");
+        setHoverInfo(
+          hoveredFeature && {
+            feature: hoveredFeature,
+            x,
+            y,
+            height,
+            width,
+          }
+        );
+        setIsHovering(true);
 
-    if (hoveredFeature) {
-      setHoverSource(hoveredFeature.source);
-      setHoverId(hoveredFeature.id);
+        const hoveringOnSchool = hoveredFeature.source === schoolsSourceId;
 
-      if (mapRef.current) {
-        (mapRef.current as any).removeFeatureState({
-          source: hoveredFeature.source,
-          sourceLayer: hoveredFeature.sourceLayer,
-        });
-        (mapRef.current as any).setFeatureState(
-          {
+        if (hoveringOnSchool) {
+          setHoveredSchoolData({
             source: hoveredFeature.source,
             id: hoveredFeature.id,
-          },
-          { hover: true }
-        );
-      }
-    }
-  }, []);
+          });
+        } else {
+          setHoveredFeatureData({
+            source: hoveredFeature.source,
+            sourceLayer: hoveredFeature.sourceLayer,
+            id: hoveredFeature.id,
+          });
+        }
 
-  const onMouseEnter = useCallback(() => setCursor("pointer"), []);
+        if (mapRef.current) {
+          if (hoveringOnSchool) {
+            if (hoveredFeatureData) {
+              (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+                hover: false,
+              });
+            }
+
+            (mapRef.current as any).removeFeatureState({
+              source: hoveredFeature.source,
+            });
+
+            (mapRef.current as any).setFeatureState(
+              {
+                source: hoveredFeature.source,
+                id: hoveredFeature.id,
+              },
+              { hover: true }
+            );
+          } else {
+            if (hoveredSchoolData) {
+              (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+                hover: false,
+              });
+            }
+
+            (mapRef.current as any).removeFeatureState({
+              source: hoveredFeature.source,
+              sourceLayer: hoveredFeature.sourceLayer,
+            });
+
+            (mapRef.current as any).setFeatureState(
+              {
+                source: hoveredFeature.source,
+                sourceLayer: hoveredFeature.sourceLayer,
+                id: hoveredFeature.id,
+              },
+              { hover: true }
+            );
+          }
+        }
+      }
+    },
+    [hoveredFeatureData, hoveredSchoolData]
+  );
 
   const onMouseLeave = useCallback(() => {
-    if (mapRef.current && hoverSource && hoverId) {
-      (mapRef.current as any).setFeatureState(
-        {
-          source: hoverSource,
-          id: hoverId,
-        },
-        { hover: false }
-      );
+    if (mapRef.current) {
+      if (hoveredFeatureData) {
+        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+          hover: false,
+        });
+      }
+
+      if (hoveredSchoolData) {
+        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+          hover: false,
+        });
+      }
     }
 
     setIsHovering(false);
     setCursor("auto");
-  }, [hoverSource, hoverId]);
+  }, [hoveredFeatureData, hoveredSchoolData]);
 
   const onMouseOut = useCallback(() => {
-    if (mapRef.current && hoverSource && hoverId) {
-      (mapRef.current as any).setFeatureState(
-        {
-          source: hoverSource,
-          id: hoverId,
-        },
-        { hover: false }
-      );
+    if (mapRef.current) {
+      if (hoveredFeatureData) {
+        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+          hover: false,
+        });
+      }
+
+      if (hoveredSchoolData) {
+        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+          hover: false,
+        });
+      }
     }
 
     setIsHovering(false);
     setCursor("auto");
-  }, [hoverSource, hoverId]);
+  }, [hoveredFeatureData, hoveredSchoolData]);
 
   const handleDialog = () => {
     if (hoverInfo) {
@@ -448,7 +498,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
-    const { nces_id, sch_name, xmin, xmax, ymin, ymax } =
+    const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =
       hoverInfo.feature.properties;
 
     const level = Level.School.toString();
@@ -481,6 +531,14 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     if (ymax) {
       params.append("ymax", ymax);
+    }
+
+    if (lat_new) {
+      params.append("lat_new", lat_new);
+    }
+
+    if (lon_new) {
+      params.append("lon_new", lon_new);
     }
 
     urlParams = `/?${params.toString()}`;
@@ -521,7 +579,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         onLoad={onLoad}
         onClick={handleDialog}
         onMouseMove={handleHover}
-        onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onMouseOut={onMouseOut}
         onResize={querySchools}

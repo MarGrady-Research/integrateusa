@@ -70,6 +70,10 @@ export const selectSlice = createSlice({
       state.id = action.payload.id;
       state.selectedName = action.payload.selectedName;
       state.bounds = action.payload.bounds;
+
+      if (action.payload.schoolCoordinates) {
+        state.schoolCoordinates = action.payload.schoolCoordinates;
+      }
     },
   },
   extraReducers: (builder) => {
