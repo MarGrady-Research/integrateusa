@@ -1,16 +1,12 @@
 export default () => {
   /** @type {import('next').NextConfig} */
 
-  const nextConfig = {
+  return {
     reactStrictMode: true,
     swcMinify: true,
     compiler: {
       removeConsole: process.env.NODE_ENV === "production",
     },
-  };
-
-  return {
-    ...nextConfig,
     webpack: (config) => {
       config.watchOptions = {
         poll: 1000,
