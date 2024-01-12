@@ -1,0 +1,14 @@
+@import "styles/constants.scss";
+
+.root {
+  z-index: $drawerZIndex + 1;
+  height: $navbarMobileHeight;
+
+  @screen sm {
+    height: $navbarTabletHeight;
+  }
+
+  @screen lg {
+    height: $navbarDesktopHeight;
+  }
+}

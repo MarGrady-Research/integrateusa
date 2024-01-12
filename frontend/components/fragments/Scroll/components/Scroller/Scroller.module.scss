@@ -1,0 +1,40 @@
+.step {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  @screen md {
+    justify-content: center;
+  }
+
+  > div {
+    background: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 2px;
+    z-index: 50;
+
+    @screen md {
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
+  }
+}
+
+.graphic {
+  height: 90vh;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: auto;
+  position: sticky;
+
+  @screen md {
+    height: 100vh;
+    flex-basis: 66.666667%;
+    padding-top: 0;
+  }
+}

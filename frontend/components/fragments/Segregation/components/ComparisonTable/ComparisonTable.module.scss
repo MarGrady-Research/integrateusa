@@ -1,0 +1,7 @@
+.container {
+  height: 721px !important;
+
+  @screen 2xl {
+    height: 696px !important;
+  }
+}

@@ -1,0 +1,13 @@
+@import "styles/constants.scss";
+
+.mapHolder {
+  height: calc(100vh - $navbarMobileHeight);
+
+  @screen sm {
+    height: calc(100vh - $navbarTabletHeight);
+  }
+
+  @screen lg {
+    height: calc(100vh - $navbarDesktopHeight);
+  }
+}

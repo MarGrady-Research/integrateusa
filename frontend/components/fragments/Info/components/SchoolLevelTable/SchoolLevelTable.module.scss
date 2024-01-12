@@ -1,0 +1,19 @@
+@import "styles/common.scss";
+
+.headRow {
+  th {
+    @extend .headCell;
+  }
+}
+
+.contentRow {
+  td {
+    @extend .contentCell;
+  }
+}
+
+.footerRow {
+  td {
+    @apply font-medium py-4;
+  }
+}

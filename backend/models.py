@@ -15,6 +15,7 @@ class Schools(models.Model):
     sch_name = models.TextField(null=True)
     level = models.TextField()
     dist_id = models.TextField()
+    dist_name = models.TextField()
     dist_id_alt = models.TextField()
     county_id = models.TextField()
     state_abb = models.CharField(max_length = 2)
@@ -56,6 +57,7 @@ class CountyNames(models.Model):
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
     dist_name = models.TextField()
+    dist_type = models.TextField()
     lngmin = models.FloatField()
     latmin = models.FloatField()
     lngmax = models.FloatField()
@@ -91,6 +93,8 @@ class SchoolNames(models.Model):
     latmin = models.FloatField()
     lngmax = models.FloatField()
     latmax = models.FloatField()
+    lat_new = models.FloatField()
+    lon_new = models.FloatField()
 
     class Meta:
         db_table = 'school_names'
@@ -320,6 +324,7 @@ class StateSeg(models.Model):
     year = models.IntegerField()
     grade = models.CharField(max_length = 2)
     state_abb = models.CharField(max_length=2)
+    state_name = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.FloatField(blank=True, null=True)
     enr_prop_bl = models.FloatField(blank=True, null=True)
