@@ -16,10 +16,16 @@ import {
   setLevelAndId,
   setSchoolCoordinates,
 } from "store/selectSlice";
+import {
+  setLocationSearchRequest,
+  setLocationSearchSuccess,
+  setLocationSearchFailure,
+  selectLocationSearch,
+} from "store/apiCacheSlice";
 
 import { levelSelectData } from "../../data";
 
-import { Level, LocationSearchResult } from "interfaces";
+import { ApiStatus, Level, LocationSearchResult } from "interfaces";
 
 interface Props {
   level: Level;
@@ -31,6 +37,7 @@ export default function SearchSelect({ level }: Props) {
   const bounds = useSelector(selectBounds);
   const coordinates = useSelector(selectSchoolCoordinates);
   const storeLevel = useSelector(selectLevel);
+  const locationSearchStore = useSelector(selectLocationSearch);
 
   const dispatch = useDispatch();
 
@@ -45,8 +52,6 @@ export default function SearchSelect({ level }: Props) {
     lon_new: coordinates.lon_new,
   });
   const [inputValue, setInputValue] = useState(selectedName);
-  const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   const fetch = useMemo(
@@ -56,25 +61,17 @@ export default function SearchSelect({ level }: Props) {
           input: string,
           abortController: AbortController,
           callback: (results?: readonly any[]) => void,
-          callbackFailure: () => void
+          callbackFailure: (error) => void
         ) => {
           const url = `${levelSelectData[level].route}${input}`;
 
-          const cachedOption = sessionStorage.getItem(url);
-
-          if (cachedOption) {
-            const cachedOptionJSON = JSON.parse(cachedOption);
-            callback(cachedOptionJSON);
-            return;
-          }
-
           axios
             .get(url, { signal: abortController.signal })
-            .then((res: any) => {
+            .then((res) => {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
-            .catch(() => callbackFailure());
+            .catch((error) => callbackFailure(error));
         },
         400
       ),
@@ -98,30 +95,25 @@ export default function SearchSelect({ level }: Props) {
       setValue(null);
       setInputValue("");
     }
-    setOptions([]);
   }, [id, value, selectedName, bounds, level, storeLevel, coordinates]);
 
   useEffect(() => {
     const abortController = new AbortController();
 
     if (inputValue === "") {
-      setOptions(value ? [value] : []);
       setLoading(false);
       return;
     }
 
-    if (value && inputValue === value.label) {
+    if (value && value.label === inputValue) {
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    const locationSearchKey = `${level}-${inputValue}`;
 
     const callback = (results?: readonly any[]) => {
       let newOptions: readonly LocationSearchResult[] = [];
-
-      if (value) {
-        newOptions = [value];
-      }
 
       if (results) {
         const resultsOptions = results.map((ro) => {
@@ -171,13 +163,21 @@ export default function SearchSelect({ level }: Props) {
         newOptions = [...newOptions, ...resultsOptions];
       }
 
-      setOptions(newOptions);
+      dispatch(
+        setLocationSearchSuccess({ key: locationSearchKey, data: newOptions })
+      );
       setLoading(false);
     };
 
-    const callbackFailure = () => {
-      setLoading(false);
+    const callbackFailure = (error) => {
+      if (error.name !== "CanceledError") {
+        dispatch(setLocationSearchFailure(locationSearchKey));
+        setLoading(false);
+      }
     };
+
+    dispatch(setLocationSearchRequest(locationSearchKey));
+    setLoading(true);
 
     fetch(inputValue, abortController, callback, callbackFailure);
 
@@ -190,7 +190,6 @@ export default function SearchSelect({ level }: Props) {
     event: SyntheticEvent<Element, Event>,
     newValue: LocationSearchResult
   ) => {
-    setOptions(newValue ? [newValue, ...options] : options);
     setValue(newValue);
 
     if (!newValue) {
@@ -222,16 +221,48 @@ export default function SearchSelect({ level }: Props) {
     setInputValue(newInputValue);
   };
 
+  const locationSearchKey = `${level}-${inputValue}`;
+  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
+  const isLocationSearchKeyCached =
+    typeof locationSearchKeyCache !== "undefined";
+  const locationSearchDataCache = isLocationSearchKeyCached
+    ? locationSearchKeyCache.data
+    : null;
+  const isLocationSearchDataCached =
+    typeof locationSearchDataCache !== "undefined";
+
+  const locationSearchData = isLocationSearchDataCached
+    ? locationSearchDataCache || []
+    : [];
+
+  const isLocationSearchDataLoading =
+    !isLocationSearchKeyCached ||
+    (!isLocationSearchDataCached &&
+      locationSearchKeyCache.status !== ApiStatus.Failure);
+
+  const isLoading = isLocationSearchDataLoading && loading;
+  let options = locationSearchData;
+
+  if (value != null) {
+    const isValueInOptions =
+      options.findIndex((o) => o.value === value.value) != -1;
+
+    if (!isValueInOptions) {
+      options = [value, ...options];
+    }
+  }
+
   return (
     <Autocomplete
       id="search-select"
       value={value}
       inputValue={inputValue}
       options={options}
-      loading={loading}
+      loading={isLoading}
       handleChange={handleChange}
       handleInputChange={handleInputChange}
       label="Name"
+      isOptionEqualToValue={(o, v) => o.value == v.value}
     />
   );
 }

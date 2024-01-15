@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import Head from "../components/fragments/Head";
-import Header from "../components/fragments/Header";
 import Selection from "../components/fragments/Selection";
 import Info from "../components/fragments/Info";
 import Trends from "../components/fragments/Trends";

@@ -9,7 +9,8 @@ import {
   SegData,
   LineData,
   ApiStatus,
-} from "../interfaces";
+  LocationSearchResult,
+} from "interfaces";
 
 interface SegDataCache {
   [key: string]: {
@@ -39,12 +40,20 @@ interface LineDataCache {
   };
 }
 
+interface LocationSearchCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: LocationSearchResult[];
+  };
+}
+
 export interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
   trendData: TrendDataCache;
   segData: SegDataCache;
   lineData: LineDataCache;
+  locationSearch: LocationSearchCache;
 }
 
 const initialState: ApiCacheState = {
@@ -53,6 +62,7 @@ const initialState: ApiCacheState = {
   trendData: {},
   segData: {},
   lineData: {},
+  locationSearch: {},
 };
 
 export const apiCacheSlice = createSlice({
@@ -194,6 +204,39 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
+    setLocationSearchRequest(state, action) {
+      const key = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          ...state.locationSearch[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setLocationSearchSuccess(state, action) {
+      const { key, data } = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setLocationSearchFailure(state, action) {
+      const key = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          ...state.locationSearch[key],
+          status: ApiStatus.Failure,
+        },
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(HYDRATE, (state, action) => {
@@ -219,6 +262,9 @@ export const {
   setLineDataRequest,
   setLineDataSuccess,
   setLineDataFailure,
+  setLocationSearchRequest,
+  setLocationSearchSuccess,
+  setLocationSearchFailure,
 } = apiCacheSlice.actions;
 
 export const selectMapData = (state: AppState) =>
@@ -235,5 +281,8 @@ export const selectSegData = (state: AppState) =>
 
 export const selectLineData = (state: AppState) =>
   state.apiCache.lineData as LineDataCache;
+
+export const selectLocationSearch = (state: AppState) =>
+  state.apiCache.locationSearch as LocationSearchCache;
 
 export default apiCacheSlice.reducer;

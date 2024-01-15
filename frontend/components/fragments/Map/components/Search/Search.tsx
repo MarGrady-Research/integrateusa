@@ -1,15 +1,24 @@
 import React, { useState, useMemo, useEffect, SyntheticEvent } from "react";
 import axios from "axios";
 import { debounce } from "@mui/material/utils";
+import { useSelector, useDispatch } from "react-redux";
 
 import Autocomplete from "components/atoms/Autocomplete";
 
 import {
+  ApiStatus,
   MapLevel,
   Bounds,
   LocationSearchResult,
   DistrictType,
+  Level,
 } from "interfaces";
+import {
+  setLocationSearchRequest,
+  setLocationSearchSuccess,
+  setLocationSearchFailure,
+  selectLocationSearch,
+} from "store/apiCacheSlice";
 
 interface Props {
   mapLevel: MapLevel;
@@ -30,11 +39,27 @@ const getURL = (mapLevel: MapLevel) => {
   return "";
 };
 
+const convertMapLevelToLevel = (mapLevel: MapLevel): Level => {
+  switch (mapLevel) {
+    case MapLevel.School:
+      return Level.School;
+    case MapLevel.UnifiedElementaryDistrict:
+    case MapLevel.UnifiedSecondaryDistrict:
+      return Level.District;
+    case MapLevel.County:
+      return Level.County;
+    case MapLevel.State:
+      return Level.School;
+  }
+};
+
 export default function Search({ mapLevel, handleBounds }: Props) {
+  const locationSearchStore = useSelector(selectLocationSearch);
+
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState<LocationSearchResult | null>(null);
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState<readonly LocationSearchResult[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   const fetch = useMemo(
@@ -44,17 +69,9 @@ export default function Search({ mapLevel, handleBounds }: Props) {
           input: string,
           abortController: AbortController,
           callback: (results?: readonly any[]) => void,
-          callbackFailure: () => void
+          callbackFailure: (error) => void
         ) => {
           const url = `${getURL(mapLevel)}${input}`;
-
-          const cachedOption = sessionStorage.getItem(url);
-
-          if (cachedOption) {
-            const cachedOptionJSON = JSON.parse(cachedOption);
-            callback(cachedOptionJSON);
-            return;
-          }
 
           axios
             .get(url, { signal: abortController.signal })
@@ -62,7 +79,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
-            .catch(() => callbackFailure());
+            .catch((error) => callbackFailure(error));
         },
         400
       ),
@@ -73,23 +90,21 @@ export default function Search({ mapLevel, handleBounds }: Props) {
     const abortController = new AbortController();
 
     if (inputValue === "") {
-      setOptions(value ? [value] : []);
       setLoading(false);
       return;
     }
 
-    if (value && inputValue === value.label) {
+    if (value && value.label === inputValue) {
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    const level = convertMapLevelToLevel(mapLevel);
+
+    const locationSearchKey = `${level}-${inputValue}`;
 
     const callback = (results?: readonly any[]) => {
       let newOptions: readonly LocationSearchResult[] = [];
-
-      if (value) {
-        newOptions = [value];
-      }
 
       if (results) {
         let filteredResults = [...results];
@@ -152,13 +167,21 @@ export default function Search({ mapLevel, handleBounds }: Props) {
         newOptions = [...newOptions, ...resultsOptions];
       }
 
-      setOptions(newOptions);
+      dispatch(
+        setLocationSearchSuccess({ key: locationSearchKey, data: newOptions })
+      );
       setLoading(false);
     };
 
-    const callbackFailure = () => {
-      setLoading(false);
+    const callbackFailure = (error) => {
+      if (error.name !== "CanceledError") {
+        dispatch(setLocationSearchFailure(locationSearchKey));
+        setLoading(false);
+      }
     };
+
+    dispatch(setLocationSearchRequest(locationSearchKey));
+    setLoading(true);
 
     fetch(inputValue, abortController, callback, callbackFailure);
 
@@ -170,14 +193,12 @@ export default function Search({ mapLevel, handleBounds }: Props) {
   useEffect(() => {
     setValue(null);
     setInputValue("");
-    setOptions([]);
   }, [mapLevel]);
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
     newValue: LocationSearchResult
   ) => {
-    setOptions(newValue ? [newValue, ...options] : options);
     setValue(newValue);
 
     if (newValue) {
@@ -212,17 +233,57 @@ export default function Search({ mapLevel, handleBounds }: Props) {
 
   const isDisabled = mapLevel === MapLevel.School;
 
+  const level = convertMapLevelToLevel(mapLevel);
+
+  const locationSearchKey = `${level}-${inputValue}`;
+  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
+  const isLocationSearchKeyCached =
+    typeof locationSearchKeyCache !== "undefined";
+  const locationSearchDataCache = isLocationSearchKeyCached
+    ? locationSearchKeyCache.data
+    : null;
+  const isLocationSearchDataCached =
+    typeof locationSearchDataCache !== "undefined";
+
+  const locationSearchData = isLocationSearchDataCached
+    ? locationSearchDataCache || []
+    : [];
+
+  const isLocationSearchDataLoading =
+    !isLocationSearchKeyCached ||
+    (!isLocationSearchDataCached &&
+      locationSearchKeyCache.status !== ApiStatus.Failure);
+
+  let isLoading = isLocationSearchDataLoading && loading;
+  let options = locationSearchData;
+
+  console.log("xxxxxxxxxxxxxxx");
+  if (value != null) {
+    const isValueInOptions =
+      options.findIndex((o) => o.value === value.value) != -1;
+
+    console.log(isValueInOptions);
+
+    if (!isValueInOptions) {
+      options = [value, ...options];
+    }
+  }
+
+  console.log(value);
+  console.log(options);
+
   return (
     <Autocomplete
       id="map-search-select"
       value={value}
       inputValue={inputValue}
       options={options}
-      loading={loading}
+      loading={isLoading}
       handleChange={handleChange}
       handleInputChange={handleInputChange}
       placeholder={placeholder}
       disabled={isDisabled}
+      isOptionEqualToValue={(o, v) => o.value == v.value}
     />
   );
 }
