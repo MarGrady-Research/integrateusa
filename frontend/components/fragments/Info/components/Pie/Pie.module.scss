@@ -1,0 +1,30 @@
+.pieLegendSkeleton {
+  height: 38px !important;
+  width: 272px;
+  margin: {
+    top: 8px;
+    bottom: 18px;
+  }
+
+  @media only screen and (min-width: 418px) {
+    width: 362px;
+  }
+
+  @media only screen and (min-width: 507px) {
+    width: 452px;
+    height: 16px !important;
+    margin-bottom: 20px;
+  }
+
+  @screen lg {
+    margin-bottom: 44px;
+    width: 190px;
+    height: 60px !important;
+  }
+
+  @screen xl {
+    width: 272px;
+    height: 38px !important;
+    margin-bottom: 18px;
+  }
+}

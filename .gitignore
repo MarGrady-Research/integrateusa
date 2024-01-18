@@ -1,6 +1,5 @@
-docker-compose.yml
-docker-compose-production.yml
-docker-compose-dev.yml
 .dockerignore
 ./integrateusa/secretkey.txt
 .DS_Store
+
+.env

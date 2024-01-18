@@ -1,0 +1,18 @@
+export const gradesTableData = [
+  { value: "PK", label: "Pre-K" },
+  { value: "KG", label: "Grade K" },
+  { value: "01", label: "Grade 1" },
+  { value: "02", label: "Grade 2" },
+  { value: "03", label: "Grade 3" },
+  { value: "04", label: "Grade 4" },
+  { value: "05", label: "Grade 5" },
+  { value: "06", label: "Grade 6" },
+  { value: "07", label: "Grade 7" },
+  { value: "08", label: "Grade 8" },
+  { value: "09", label: "Grade 9" },
+  { value: "10", label: "Grade 10" },
+  { value: "11", label: "Grade 11" },
+  { value: "12", label: "Grade 12" },
+  { value: "UG", label: "Ungraded" },
+  { value: "All", label: "Total" },
+];
