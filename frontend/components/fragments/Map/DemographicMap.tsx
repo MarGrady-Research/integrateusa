@@ -434,7 +434,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
   };
   const onLoad = useCallback(() => {
-    console.log("On Load----------------");
     setHasMapLoaded(true);
 
     if (onSmallerScreen || zoomOnMap) {
