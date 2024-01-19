@@ -188,7 +188,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch, mapLevel]);
+  }, [inputValue, value, fetch, mapLevel, dispatch]);
 
   useEffect(() => {
     setValue(null);
@@ -257,7 +257,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
   let isLoading = isLocationSearchDataLoading && loading;
   let options = locationSearchData;
 
-  console.log("xxxxxxxxxxxxxxx");
   if (value != null) {
     const isValueInOptions =
       options.findIndex((o) => o.value === value.value) != -1;
@@ -268,9 +267,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       options = [value, ...options];
     }
   }
-
-  console.log(value);
-  console.log(options);
 
   return (
     <Autocomplete

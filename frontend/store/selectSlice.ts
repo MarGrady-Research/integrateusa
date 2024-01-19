@@ -6,7 +6,7 @@ import { yearsData } from "../components/fragments/Selection/data";
 
 import { Bounds, Level, SchoolCoordinates } from "../interfaces";
 
-export interface SelectState {
+interface SelectState {
   level: Level;
   year: number;
   grade: string;

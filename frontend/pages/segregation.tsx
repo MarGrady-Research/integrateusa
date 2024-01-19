@@ -13,17 +13,18 @@ import {
   selectLevel,
   restoreInitialState,
   setStateFromParams,
-} from "../store/selectSlice";
+} from "store/selectSlice";
 import {
   selectSegData,
   setSegDataRequest,
   setSegDataSuccess,
   setSegDataFailure,
-} from "../store/apiCacheSlice";
+} from "store/apiCacheSlice";
+import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 
-import { ApiStatus, Level } from "../interfaces";
+import { ApiStatus, Level } from "interfaces";
 
-import { getParamsInfo } from "../utils";
+import { getParamsInfo } from "utils";
 
 export default function SegregationPage() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function SegregationPage() {
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const segDataStore = useSelector(selectSegData);
+  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let idlevel = "";
 
@@ -62,6 +64,12 @@ export default function SegregationPage() {
     !isSegKeyCached ||
     (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+
+  useEffect(() => {
+    if (!zoomOnMap) {
+      dispatch(activateZoomOnMap());
+    }
+  }, [dispatch, zoomOnMap]);
 
   useEffect(() => {
     if (paramsChecked) {

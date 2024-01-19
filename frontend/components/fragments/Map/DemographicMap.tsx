@@ -23,6 +23,7 @@ const AreaPie = dynamic(() => import("./components/AreaPie"));
 
 import { selectBounds } from "store/selectSlice";
 import { selectMapData, setMapData } from "store/apiCacheSlice";
+import { selectZoomOnMap } from "store/mapSlice";
 import { Level, MapLevel, MapStatus } from "interfaces";
 import {
   asianColor,
@@ -61,12 +62,15 @@ const schoolsSourceId = "schools-source";
 export default function DemographicMap({ onSmallerScreen }: Props) {
   const dispatch = useDispatch();
 
+  const zoomOnMap = useSelector(selectZoomOnMap);
+
   const mapData = useSelector(selectMapData);
   const mapDataExists = mapData !== null;
 
   const [mapStatus, setMapStatus] = useState(
     mapDataExists ? MapStatus.Rendering : MapStatus.Fetching
   );
+  const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
   const mapRef = useRef();
 
@@ -391,6 +395,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   }, [dispatch, mapData]);
 
   const querySchools = () => {
+    if (!mapRenderingComplete) {
+      return;
+    }
+
+    if (mapRef.current) {
+      const features = (mapRef.current as any).queryRenderedFeatures({
+        layers: ["schools"],
+      });
+
+      setRenderedFeatures(features);
+    }
+  };
+
+  const querySchoolsInitial = () => {
     if (mapRef.current) {
       const features = (mapRef.current as any).queryRenderedFeatures({
         layers: ["schools"],
@@ -411,19 +429,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       source.sourceCacheId === `other:${schoolsSourceId}` &&
       source.source.data.features.length > 0
     ) {
-      querySchools();
+      querySchoolsInitial();
       setMapStatus(MapStatus.Complete);
     }
   };
-
   const onLoad = useCallback(() => {
+    console.log("On Load----------------");
     setHasMapLoaded(true);
 
-    if (onSmallerScreen) {
+    if (onSmallerScreen || zoomOnMap) {
       updateBounds(initialBounds);
     }
+
     getData();
-  }, [onSmallerScreen, initialBounds, getData, updateBounds]);
+  }, [getData, onSmallerScreen, zoomOnMap, initialBounds, updateBounds]);
 
   const coordinates = {
     x: hoverInfo?.x,
@@ -443,8 +462,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     type: "FeatureCollection" as "FeatureCollection",
     features: mapData || [],
   };
-
-  const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
   let urlParams = "";
 

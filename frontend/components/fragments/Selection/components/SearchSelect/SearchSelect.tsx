@@ -184,7 +184,7 @@ export default function SearchSelect({ level }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch, level]);
+  }, [inputValue, value, fetch, level, dispatch]);
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,

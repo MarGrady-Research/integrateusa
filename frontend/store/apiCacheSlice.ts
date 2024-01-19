@@ -47,7 +47,7 @@ interface LocationSearchCache {
   };
 }
 
-export interface ApiCacheState {
+interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
   trendData: TrendDataCache;

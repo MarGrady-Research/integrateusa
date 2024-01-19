@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-import Head from "../components/fragments/Head";
-import Selection from "../components/fragments/Selection";
-import Info from "../components/fragments/Info";
-import Trends from "../components/fragments/Trends";
-import Page from "../components/layouts/Page";
+import Head from "components/fragments/Head";
+import Selection from "components/fragments/Selection";
+import Info from "components/fragments/Info";
+import Trends from "components/fragments/Trends";
+import Page from "components/layouts/Page";
 
 import {
   selectYear,
@@ -15,7 +15,7 @@ import {
   selectId,
   selectSelectedName,
   setStateFromParams,
-} from "../store/selectSlice";
+} from "store/selectSlice";
 import {
   selectInfoData,
   setInfoDataRequest,
@@ -25,11 +25,12 @@ import {
   setTrendDataRequest,
   setTrendDataSuccess,
   setTrendDataFailure,
-} from "../store/apiCacheSlice";
+} from "store/apiCacheSlice";
+import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 
-import { Level, ApiStatus } from "../interfaces";
+import { Level, ApiStatus } from "interfaces";
 
-import { getParamsInfo } from "../utils";
+import { getParamsInfo } from "utils";
 
 export default function InfoPage() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ export default function InfoPage() {
   const title = useSelector(selectSelectedName);
   const infoDataStore = useSelector(selectInfoData);
   const trendDataStore = useSelector(selectTrendData);
+  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let levelTable = "";
   let levelId = "";
@@ -91,6 +93,12 @@ export default function InfoPage() {
     !isTrendKeyCached ||
     (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+
+  useEffect(() => {
+    if (!zoomOnMap) {
+      dispatch(activateZoomOnMap());
+    }
+  }, [dispatch, zoomOnMap]);
 
   useEffect(() => {
     if (paramsChecked) {

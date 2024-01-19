@@ -1,11 +1,10 @@
 import React from "react";
 import clsx from "clsx";
 
-import Head from "../components/fragments/Head";
-import Header from "../components/fragments/Header";
-import DemographicMap from "../components/fragments/Map";
+import Head from "components/fragments/Head";
+import DemographicMap from "components/fragments/Map";
 
-import { useBreakpoint } from "../hooks";
+import { useBreakpoint } from "hooks";
 
 import { mapHolder } from "./index.module.scss";
 
