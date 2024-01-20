@@ -90,7 +90,9 @@ const options = {
       callbacks: {
         label: (context) => {
           const label = context.dataset.data[context.dataIndex];
-          return context.dataset.label + " " + label + "%";
+          return (
+            context.dataset.label + " " + parseFloat(label).toFixed(1) + "%"
+          );
         },
       },
     },

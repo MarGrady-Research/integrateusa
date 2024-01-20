@@ -143,7 +143,7 @@ export default function BarChart100({
           label: (context) =>
             context.dataset.label +
             ": " +
-            parseFloat(context.formattedValue).toFixed(2) +
+            parseFloat(context.formattedValue).toFixed(1) +
             "%",
         },
       },
