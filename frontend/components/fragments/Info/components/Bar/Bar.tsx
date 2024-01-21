@@ -6,6 +6,7 @@ import {
   CategoryScale,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
@@ -88,7 +89,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return (
             context.dataset.label + " " + parseFloat(label).toFixed(1) + "%"

@@ -1,5 +1,11 @@
 import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  TooltipItem,
+} from "chart.js";
 import { Pie } from "react-chartjs-2";
 import clsx from "clsx";
 
@@ -104,7 +110,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return (
             labels[context.dataIndex] + " " + Math.round(label * 100) + "%"

@@ -8,7 +8,7 @@ import Map, {
   GeolocateControl,
   FullscreenControl,
 } from "react-map-gl";
-import { Visibility } from "mapbox-gl";
+import mapboxgl, { Visibility } from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -209,6 +209,125 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     } as any,
   };
 
+  const coordinates = {
+    x: hoverInfo?.x,
+    y: hoverInfo?.y,
+    height: hoverInfo?.height,
+    width: hoverInfo?.width,
+  };
+
+  const schoolName = hoverInfo?.feature.properties?.sch_name;
+  const areaName = hoverInfo?.feature.properties?.NAME;
+
+  const entityName = schoolName || areaName;
+
+  const showPopup = entityName && isHovering;
+
+  const mapboxData = {
+    type: "FeatureCollection" as "FeatureCollection",
+    features: mapData || [],
+  };
+
+  let urlParams = "";
+
+  if (areaName) {
+    const { GEOID, STUSPS, NAME, latmin, latmax, lngmin, lngmax } =
+      hoverInfo.feature.properties;
+
+    let level = "";
+    let id = "";
+
+    if (GEOID.length === 5) {
+      id = GEOID;
+      level = Level.County.toString();
+    } else if (GEOID.length === 7) {
+      id = GEOID;
+      level = Level.District.toString();
+    } else if (STUSPS) {
+      id = STUSPS;
+      level = Level.State.toString();
+    }
+
+    const params = new URLSearchParams({});
+
+    if (id) {
+      params.append("id", id);
+    }
+
+    if (level) {
+      params.append("level", level);
+    }
+
+    if (NAME) {
+      params.append("name", NAME);
+    }
+
+    if (lngmin) {
+      params.append("xmin", lngmin);
+    }
+
+    if (lngmax) {
+      params.append("xmax", lngmax);
+    }
+
+    if (latmin) {
+      params.append("ymin", latmin);
+    }
+
+    if (latmax) {
+      params.append("ymax", latmax);
+    }
+
+    urlParams = `/?${params.toString()}`;
+  } else if (schoolName) {
+    const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =
+      hoverInfo.feature.properties;
+
+    const level = Level.School.toString();
+
+    const params = new URLSearchParams({});
+
+    if (nces_id) {
+      params.append("id", nces_id);
+    }
+
+    if (level) {
+      params.append("level", level);
+    }
+
+    if (sch_name) {
+      params.append("name", sch_name);
+    }
+
+    if (xmin) {
+      params.append("xmin", xmin);
+    }
+
+    if (xmax) {
+      params.append("xmax", xmax);
+    }
+
+    if (ymin) {
+      params.append("ymin", ymin);
+    }
+
+    if (ymax) {
+      params.append("ymax", ymax);
+    }
+
+    if (lat_new) {
+      params.append("lat_new", lat_new);
+    }
+
+    if (lon_new) {
+      params.append("lon_new", lon_new);
+    }
+
+    urlParams = `/?${params.toString()}`;
+  }
+
+  const hideSegLink = typeof schoolName != "undefined";
+
   const handleVisibility = (mapLevel: MapLevel) => {
     const elementaryDistrictVisibility =
       mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none";
@@ -240,16 +359,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   };
 
   const handleHover = useCallback(
-    (event) => {
+    (event: mapboxgl.MapLayerMouseEvent) => {
       setHoverInfo(null);
       setIsHovering(false);
 
       const {
         point: { x, y },
-        originalEvent: {
-          target: { height, width },
-        },
       } = event;
+
+      const height = (event.originalEvent.target as HTMLCanvasElement).height;
+      const width = (event.originalEvent.target as HTMLCanvasElement).width;
 
       const hoveredFeature = event.features && event.features[0];
 
@@ -442,125 +561,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     getData();
   }, [getData, onSmallerScreen, zoomOnMap, initialBounds, updateBounds]);
-
-  const coordinates = {
-    x: hoverInfo?.x,
-    y: hoverInfo?.y,
-    height: hoverInfo?.height,
-    width: hoverInfo?.width,
-  };
-
-  const schoolName = hoverInfo?.feature.properties?.sch_name;
-  const areaName = hoverInfo?.feature.properties?.NAME;
-
-  const entityName = schoolName || areaName;
-
-  const showPopup = entityName && isHovering;
-
-  const mapboxData = {
-    type: "FeatureCollection" as "FeatureCollection",
-    features: mapData || [],
-  };
-
-  let urlParams = "";
-
-  if (areaName) {
-    const { GEOID, STUSPS, NAME, latmin, latmax, lngmin, lngmax } =
-      hoverInfo.feature.properties;
-
-    let level = "";
-    let id = "";
-
-    if (GEOID.length === 5) {
-      id = GEOID;
-      level = Level.County.toString();
-    } else if (GEOID.length === 7) {
-      id = GEOID;
-      level = Level.District.toString();
-    } else if (STUSPS) {
-      id = STUSPS;
-      level = Level.State.toString();
-    }
-
-    const params = new URLSearchParams({});
-
-    if (id) {
-      params.append("id", id);
-    }
-
-    if (level) {
-      params.append("level", level);
-    }
-
-    if (NAME) {
-      params.append("name", NAME);
-    }
-
-    if (lngmin) {
-      params.append("xmin", lngmin);
-    }
-
-    if (lngmax) {
-      params.append("xmax", lngmax);
-    }
-
-    if (latmin) {
-      params.append("ymin", latmin);
-    }
-
-    if (latmax) {
-      params.append("ymax", latmax);
-    }
-
-    urlParams = `/?${params.toString()}`;
-  } else if (schoolName) {
-    const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =
-      hoverInfo.feature.properties;
-
-    const level = Level.School.toString();
-
-    const params = new URLSearchParams({});
-
-    if (nces_id) {
-      params.append("id", nces_id);
-    }
-
-    if (level) {
-      params.append("level", level);
-    }
-
-    if (sch_name) {
-      params.append("name", sch_name);
-    }
-
-    if (xmin) {
-      params.append("xmin", xmin);
-    }
-
-    if (xmax) {
-      params.append("xmax", xmax);
-    }
-
-    if (ymin) {
-      params.append("ymin", ymin);
-    }
-
-    if (ymax) {
-      params.append("ymax", ymax);
-    }
-
-    if (lat_new) {
-      params.append("lat_new", lat_new);
-    }
-
-    if (lon_new) {
-      params.append("lon_new", lon_new);
-    }
-
-    urlParams = `/?${params.toString()}`;
-  }
-
-  const hideSegLink = typeof schoolName != "undefined";
 
   const pie = (small?: boolean) =>
     schoolName ? (
