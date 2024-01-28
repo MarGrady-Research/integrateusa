@@ -4,6 +4,7 @@ import Image from "next/image";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 import SectionDistrictPie from "./components/SectionDistrictPie";
+import SectionDistrictBar from "./components/SectionDistrictBar";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
 
@@ -38,6 +39,7 @@ export default function Scroll() {
   return (
     <>
       <SectionDistrictPie />
+      <SectionDistrictBar />
       <EndScreen />
     </>
   );

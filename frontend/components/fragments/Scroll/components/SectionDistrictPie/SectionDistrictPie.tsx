@@ -2,10 +2,11 @@ import React from "react";
 
 import DistrictPie from "../DistrictPie";
 import Info from "../Info";
+import Section from "../Section";
 
 export default function SectionDistrictPie() {
   return (
-    <div className="px-5 md:px-10 py-10 flex flex-col items-center">
+    <Section firstSection>
       <Info>
         <p className="mb-1 md:mb-3">
           In 2019, New York City&#39;s School District 15 was a racially diverse
@@ -21,6 +22,6 @@ export default function SectionDistrictPie() {
       <div className="w-full h-96">
         <DistrictPie />
       </div>
-    </div>
+    </Section>
   );
 }
