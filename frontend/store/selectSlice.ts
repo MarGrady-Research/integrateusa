@@ -79,6 +79,10 @@ export const selectSlice = createSlice({
       if (action.payload.schoolCoordinates) {
         state.schoolCoordinates = action.payload.schoolCoordinates;
       }
+
+      if (action.payload.districtType) {
+        state.districtType = action.payload.districtType;
+      }
     },
   },
   extraReducers: (builder) => {

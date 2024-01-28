@@ -318,6 +318,14 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       params.append("ymax", latmax);
     }
 
+    if (mapLevel === MapLevel.UnifiedElementaryDistrict) {
+      params.append("dist_type", DistrictType.Elementary);
+    } else if (mapLevel === MapLevel.UnifiedSecondaryDistrict) {
+      params.append("dist_type", DistrictType.Secondary);
+    } else {
+      params.append("dist_type", DistrictType.Unified);
+    }
+
     urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
     const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =

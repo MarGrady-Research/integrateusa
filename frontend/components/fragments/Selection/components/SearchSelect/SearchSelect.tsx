@@ -136,7 +136,16 @@ export default function SearchSelect({ level }: Props) {
       setValue(null);
       setInputValue("");
     }
-  }, [id, value, selectedName, bounds, level, storeLevel, coordinates]);
+  }, [
+    id,
+    value,
+    selectedName,
+    bounds,
+    level,
+    storeLevel,
+    coordinates,
+    distType,
+  ]);
 
   useEffect(() => {
     const abortController = new AbortController();
