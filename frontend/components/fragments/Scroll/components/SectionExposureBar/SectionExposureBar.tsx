@@ -7,9 +7,13 @@ import Section from "../Section";
 import Info from "../Info";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
+const SCROLL_OFFSET = 0.85;
+
 const charts = (currentStepIndex: number, onTablet: boolean) => {
-  const step =
-    currentStepIndex === 0 ? ExposureBarStep.StepOne : ExposureBarStep.StepTwo;
+  const step: ExposureBarStep =
+    currentStepIndex === 0 || currentStepIndex === -1
+      ? ExposureBarStep.StepOne
+      : ExposureBarStep.StepTwo;
 
   return <ExposureBar step={step} onTablet={onTablet} />;
 };
@@ -38,7 +42,11 @@ export default function SectionExposureBar() {
           </div>
         </div>
         <div className="absolute top-0 w-full">
-          <Scrollama onStepEnter={onStepEnter} onStepExit={onStepExit}>
+          <Scrollama
+            onStepEnter={onStepEnter}
+            onStepExit={onStepExit}
+            offset={SCROLL_OFFSET}
+          >
             <Step data={0}>
               <div className="h-screen w-full flex items-start justify-center">
                 <Info>

@@ -6,6 +6,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import SectionDistrictPie from "./components/SectionDistrictPie";
 import SectionDistrictBar from "./components/SectionDistrictBar";
 import SectionExposureBar from "./components/SectionExposureBar";
+import SectionIntegrationLine from "./components/SectionIntegrationLine";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
 
@@ -42,6 +43,7 @@ export default function Scroll() {
       <SectionDistrictPie />
       <SectionDistrictBar />
       <SectionExposureBar />
+      <SectionIntegrationLine />
       <EndScreen />
     </>
   );
