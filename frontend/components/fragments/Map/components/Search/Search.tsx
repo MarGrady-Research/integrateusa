@@ -62,6 +62,59 @@ export default function Search({ mapLevel, handleBounds }: Props) {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
 
+  let placeholder = "";
+
+  switch (mapLevel) {
+    case MapLevel.School:
+      placeholder = "Select District, County or State";
+      break;
+    case MapLevel.UnifiedElementaryDistrict:
+      placeholder = "Type an elementary district name";
+      break;
+    case MapLevel.UnifiedSecondaryDistrict:
+      placeholder = "Type a secondary district name";
+      break;
+    default:
+      const levelName = MapLevel[mapLevel].toLowerCase();
+      placeholder = `Type a ${levelName} name`;
+      break;
+  }
+
+  const isDisabled = mapLevel === MapLevel.School;
+
+  const level = convertMapLevelToLevel(mapLevel);
+
+  const locationSearchKey = `${level}-${inputValue}`;
+  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
+  const isLocationSearchKeyCached =
+    typeof locationSearchKeyCache !== "undefined";
+  const locationSearchDataCache = isLocationSearchKeyCached
+    ? locationSearchKeyCache.data
+    : null;
+  const isLocationSearchDataCached =
+    typeof locationSearchDataCache !== "undefined";
+
+  const locationSearchData = isLocationSearchDataCached
+    ? locationSearchDataCache || []
+    : [];
+
+  const isLocationSearchDataLoading =
+    !isLocationSearchKeyCached ||
+    (!isLocationSearchDataCached &&
+      locationSearchKeyCache.status !== ApiStatus.Failure);
+
+  let isLoading = isLocationSearchDataLoading && loading;
+  let options = locationSearchData;
+
+  if (value != null) {
+    const isValueInOptions =
+      options.findIndex((o) => o.value === value.value) != -1;
+
+    if (!isValueInOptions) {
+      options = [value, ...options];
+    }
+  }
+
   const fetch = useMemo(
     () =>
       debounce(
@@ -98,10 +151,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       setLoading(false);
       return;
     }
-
-    const level = convertMapLevelToLevel(mapLevel);
-
-    const locationSearchKey = `${level}-${inputValue}`;
 
     const callback = (results?: readonly any[]) => {
       let newOptions: readonly LocationSearchResult[] = [];
@@ -188,7 +237,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch, mapLevel, dispatch]);
+  }, [inputValue, value, fetch, mapLevel, locationSearchKey, dispatch]);
 
   useEffect(() => {
     setValue(null);
@@ -212,61 +261,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
   ) => {
     setInputValue(newInputValue);
   };
-
-  let placeholder = "";
-
-  switch (mapLevel) {
-    case MapLevel.School:
-      placeholder = "Select District, County or State";
-      break;
-    case MapLevel.UnifiedElementaryDistrict:
-      placeholder = "Type an elementary district name";
-      break;
-    case MapLevel.UnifiedSecondaryDistrict:
-      placeholder = "Type a secondary district name";
-      break;
-    default:
-      const levelName = MapLevel[mapLevel].toLowerCase();
-      placeholder = `Type a ${levelName} name`;
-      break;
-  }
-
-  const isDisabled = mapLevel === MapLevel.School;
-
-  const level = convertMapLevelToLevel(mapLevel);
-
-  const locationSearchKey = `${level}-${inputValue}`;
-  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
-  const isLocationSearchKeyCached =
-    typeof locationSearchKeyCache !== "undefined";
-  const locationSearchDataCache = isLocationSearchKeyCached
-    ? locationSearchKeyCache.data
-    : null;
-  const isLocationSearchDataCached =
-    typeof locationSearchDataCache !== "undefined";
-
-  const locationSearchData = isLocationSearchDataCached
-    ? locationSearchDataCache || []
-    : [];
-
-  const isLocationSearchDataLoading =
-    !isLocationSearchKeyCached ||
-    (!isLocationSearchDataCached &&
-      locationSearchKeyCache.status !== ApiStatus.Failure);
-
-  let isLoading = isLocationSearchDataLoading && loading;
-  let options = locationSearchData;
-
-  if (value != null) {
-    const isValueInOptions =
-      options.findIndex((o) => o.value === value.value) != -1;
-
-    console.log(isValueInOptions);
-
-    if (!isValueInOptions) {
-      options = [value, ...options];
-    }
-  }
 
   return (
     <Autocomplete

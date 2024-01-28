@@ -54,6 +54,37 @@ export default function SearchSelect({ level }: Props) {
   const [inputValue, setInputValue] = useState(selectedName);
   const [loading, setLoading] = useState(false);
 
+  const locationSearchKey = `${level}-${inputValue}`;
+  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
+  const isLocationSearchKeyCached =
+    typeof locationSearchKeyCache !== "undefined";
+  const locationSearchDataCache = isLocationSearchKeyCached
+    ? locationSearchKeyCache.data
+    : null;
+  const isLocationSearchDataCached =
+    typeof locationSearchDataCache !== "undefined";
+
+  const locationSearchData = isLocationSearchDataCached
+    ? locationSearchDataCache || []
+    : [];
+
+  const isLocationSearchDataLoading =
+    !isLocationSearchKeyCached ||
+    (!isLocationSearchDataCached &&
+      locationSearchKeyCache.status !== ApiStatus.Failure);
+
+  const isLoading = isLocationSearchDataLoading && loading;
+  let options = locationSearchData;
+
+  if (value != null) {
+    const isValueInOptions =
+      options.findIndex((o) => o.value === value.value) != -1;
+
+    if (!isValueInOptions) {
+      options = [value, ...options];
+    }
+  }
+
   const fetch = useMemo(
     () =>
       debounce(
@@ -109,8 +140,6 @@ export default function SearchSelect({ level }: Props) {
       setLoading(false);
       return;
     }
-
-    const locationSearchKey = `${level}-${inputValue}`;
 
     const callback = (results?: readonly any[]) => {
       let newOptions: readonly LocationSearchResult[] = [];
@@ -184,7 +213,7 @@ export default function SearchSelect({ level }: Props) {
     return () => {
       abortController.abort();
     };
-  }, [inputValue, value, fetch, level, dispatch]);
+  }, [inputValue, value, fetch, level, locationSearchKey, dispatch]);
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
@@ -220,37 +249,6 @@ export default function SearchSelect({ level }: Props) {
   ) => {
     setInputValue(newInputValue);
   };
-
-  const locationSearchKey = `${level}-${inputValue}`;
-  const locationSearchKeyCache = locationSearchStore[locationSearchKey];
-  const isLocationSearchKeyCached =
-    typeof locationSearchKeyCache !== "undefined";
-  const locationSearchDataCache = isLocationSearchKeyCached
-    ? locationSearchKeyCache.data
-    : null;
-  const isLocationSearchDataCached =
-    typeof locationSearchDataCache !== "undefined";
-
-  const locationSearchData = isLocationSearchDataCached
-    ? locationSearchDataCache || []
-    : [];
-
-  const isLocationSearchDataLoading =
-    !isLocationSearchKeyCached ||
-    (!isLocationSearchDataCached &&
-      locationSearchKeyCache.status !== ApiStatus.Failure);
-
-  const isLoading = isLocationSearchDataLoading && loading;
-  let options = locationSearchData;
-
-  if (value != null) {
-    const isValueInOptions =
-      options.findIndex((o) => o.value === value.value) != -1;
-
-    if (!isValueInOptions) {
-      options = [value, ...options];
-    }
-  }
 
   return (
     <Autocomplete
