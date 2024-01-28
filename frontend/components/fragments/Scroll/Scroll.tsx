@@ -5,12 +5,13 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 
 import SectionDistrictPie from "./components/SectionDistrictPie";
 import SectionDistrictBar from "./components/SectionDistrictBar";
+import SectionExposureBar from "./components/SectionExposureBar";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
 
 function EndScreen() {
   return (
-    <div className="sticky h-screen flex flex-col px-5 py-10 items-center justify-between text-lg lg:text-xl">
+    <div className="h-screen flex flex-col py-10 items-center justify-between text-lg lg:text-xl">
       <div className="px-4 text-center">
         <p className="mb-4">
           IntegrateUSA was built to explore segregation in districts, counties
@@ -40,6 +41,7 @@ export default function Scroll() {
     <>
       <SectionDistrictPie />
       <SectionDistrictBar />
+      <SectionExposureBar />
       <EndScreen />
     </>
   );
