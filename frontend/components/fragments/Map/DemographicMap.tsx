@@ -21,10 +21,14 @@ const ViewInfo = dynamic(() => import("./components/ViewInfo"));
 const SchoolPie = dynamic(() => import("./components/SchoolPie"));
 const AreaPie = dynamic(() => import("./components/AreaPie"));
 
-import { selectBounds } from "store/selectSlice";
+import {
+  selectBounds,
+  selectLevel,
+  selectDistrictType,
+} from "store/selectSlice";
 import { selectMapData, setMapData } from "store/apiCacheSlice";
 import { selectZoomOnMap } from "store/mapSlice";
-import { Level, MapLevel, MapStatus } from "interfaces";
+import { Level, MapLevel, MapStatus, DistrictType } from "interfaces";
 import {
   asianColor,
   blackColor,
@@ -44,6 +48,10 @@ import {
   secondaryDistrictSourceLayer,
 } from "constants/";
 
+interface Props {
+  onSmallerScreen: boolean;
+}
+
 const prop_array = [
   "max",
   ["get", "as"],
@@ -53,16 +61,41 @@ const prop_array = [
   ["get", "or"],
 ];
 
-interface Props {
-  onSmallerScreen: boolean;
-}
-
 const schoolsSourceId = "schools-source";
+
+const setInitialMapLevel = (
+  zoomOnMap: boolean,
+  level: Level,
+  districtType: DistrictType
+): MapLevel => {
+  if (!zoomOnMap) {
+    return MapLevel.School;
+  }
+
+  switch (level) {
+    case Level.School:
+      return MapLevel.School;
+    case Level.District:
+      return districtType === DistrictType.Secondary
+        ? MapLevel.UnifiedSecondaryDistrict
+        : MapLevel.UnifiedElementaryDistrict;
+    case Level.County:
+      return MapLevel.County;
+    case Level.State:
+      return MapLevel.School;
+  }
+};
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
   const dispatch = useDispatch();
 
   const zoomOnMap = useSelector(selectZoomOnMap);
+  const level = useSelector(selectLevel);
+  const districtType = useSelector(selectDistrictType);
+
+  const [mapLevel, setMapLevel] = useState(() =>
+    setInitialMapLevel(zoomOnMap, level, districtType)
+  );
 
   const mapData = useSelector(selectMapData);
   const mapDataExists = mapData !== null;
@@ -92,16 +125,11 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const [cursor, setCursor] = useState("auto");
 
-  const [stateVisible, setStateVisible] = useState("none" as Visibility);
-  const [countyVisible, setCountyVisible] = useState("none" as Visibility);
-  const [elementaryDistrictVisible, setElementaryDistrictVisible] = useState(
-    "none" as Visibility
-  );
-  const [secondaryDistrictVisible, setSecondaryDistrictVisible] = useState(
-    "none" as Visibility
-  );
-
   const [renderedFeatures, setRenderedFeatures] = useState([]);
+
+  const stateVisibility = (
+    mapLevel === MapLevel.State ? "visible" : "none"
+  ) as Visibility;
 
   const stateLayer = {
     id: "state-boundary",
@@ -118,9 +146,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       ],
     } as any,
     layout: {
-      visibility: stateVisible,
+      visibility: stateVisibility,
     },
   };
+
+  const countyVisibility = (
+    mapLevel === MapLevel.County ? "visible" : "none"
+  ) as Visibility;
 
   const countyLayer = {
     id: "county-boundary",
@@ -137,9 +169,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       ],
     } as any,
     layout: {
-      visibility: countyVisible,
+      visibility: countyVisibility,
     },
   };
+
+  const elementaryDistrictVisibility = (
+    mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none"
+  ) as Visibility;
 
   const elementaryDistrictLayer = {
     id: "elementary-district-boundary",
@@ -156,9 +192,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       ],
     } as any,
     layout: {
-      visibility: elementaryDistrictVisible,
+      visibility: elementaryDistrictVisibility,
     },
   };
+
+  const secondaryDistrictVisibility = (
+    mapLevel === MapLevel.UnifiedSecondaryDistrict ? "visible" : "none"
+  ) as Visibility;
 
   const secondaryDistrictLayer = {
     id: "secondary-district-boundary",
@@ -175,7 +215,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       ],
     } as any,
     layout: {
-      visibility: secondaryDistrictVisible,
+      visibility: secondaryDistrictVisibility,
     },
   };
 
@@ -328,18 +368,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const hideSegLink = typeof schoolName != "undefined";
 
-  const handleVisibility = (mapLevel: MapLevel) => {
-    const elementaryDistrictVisibility =
-      mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none";
-    const secondaryDistrictVisibility =
-      mapLevel === MapLevel.UnifiedSecondaryDistrict ? "visible" : "none";
-    const countyVisibility = mapLevel === MapLevel.County ? "visible" : "none";
-    const stateVisibility = mapLevel === MapLevel.State ? "visible" : "none";
-
-    setElementaryDistrictVisible(elementaryDistrictVisibility);
-    setSecondaryDistrictVisible(secondaryDistrictVisibility);
-    setCountyVisible(countyVisibility);
-    setStateVisible(stateVisibility);
+  const handleMapLevel = (mapLevel: MapLevel) => {
+    setMapLevel(mapLevel);
   };
 
   const updateBounds = useCallback((e) => {
@@ -665,7 +695,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>
       <Slideover
-        handleVisibility={handleVisibility}
+        mapLevel={mapLevel}
+        handleMapLevel={handleMapLevel}
         handleBounds={handleBounds}
       />
     </>

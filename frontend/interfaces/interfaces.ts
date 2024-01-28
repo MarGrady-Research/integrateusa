@@ -142,6 +142,7 @@ export interface LocationSearchResult extends SchoolCoordinates {
   latmin: number;
   lngmax: number;
   latmax: number;
+  dist_type: DistrictType;
 }
 
 export enum ApiStatus {

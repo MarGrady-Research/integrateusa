@@ -4,7 +4,7 @@ import { HYDRATE } from "next-redux-wrapper";
 
 import { yearsData } from "../components/fragments/Selection/data";
 
-import { Bounds, Level, SchoolCoordinates } from "../interfaces";
+import { Bounds, Level, SchoolCoordinates, DistrictType } from "../interfaces";
 
 interface SelectState {
   level: Level;
@@ -14,6 +14,7 @@ interface SelectState {
   selectedName: string;
   bounds: Bounds;
   schoolCoordinates: SchoolCoordinates;
+  districtType: DistrictType;
 }
 
 const currentYear = Math.max(...yearsData.map((e) => e.value));
@@ -34,6 +35,7 @@ const initialState: SelectState = {
     lat_new: null,
     lon_new: null,
   },
+  districtType: DistrictType.Unified,
 };
 
 export const selectSlice = createSlice({
@@ -58,6 +60,9 @@ export const selectSlice = createSlice({
     },
     setSchoolCoordinates(state, action) {
       state.schoolCoordinates = action.payload;
+    },
+    setDistrictType(state, action) {
+      state.districtType = action.payload;
     },
     restoreInitialState(state) {
       state.level = initialState.level;
@@ -93,6 +98,7 @@ export const {
   setSelectedName,
   setBounds,
   setSchoolCoordinates,
+  setDistrictType,
   restoreInitialState,
   setStateFromParams,
 } = selectSlice.actions;
@@ -106,5 +112,7 @@ export const selectSchoolCoordinates = (state: AppState) =>
 export const selectSelectedName = (state: AppState) =>
   state.select.selectedName as string;
 export const selectBounds = (state: AppState) => state.select.bounds as Bounds;
+export const selectDistrictType = (state: AppState) =>
+  state.select.districtType as DistrictType;
 
 export default selectSlice.reducer;

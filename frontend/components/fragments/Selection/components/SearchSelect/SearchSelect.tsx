@@ -11,10 +11,12 @@ import {
   selectBounds,
   selectLevel,
   selectSchoolCoordinates,
+  selectDistrictType,
   setSelectedName,
   setBounds,
   setLevelAndId,
   setSchoolCoordinates,
+  setDistrictType,
 } from "store/selectSlice";
 import {
   setLocationSearchRequest,
@@ -25,7 +27,12 @@ import {
 
 import { levelSelectData } from "../../data";
 
-import { ApiStatus, Level, LocationSearchResult } from "interfaces";
+import {
+  ApiStatus,
+  Level,
+  LocationSearchResult,
+  DistrictType,
+} from "interfaces";
 
 interface Props {
   level: Level;
@@ -38,6 +45,7 @@ export default function SearchSelect({ level }: Props) {
   const coordinates = useSelector(selectSchoolCoordinates);
   const storeLevel = useSelector(selectLevel);
   const locationSearchStore = useSelector(selectLocationSearch);
+  const distType = useSelector(selectDistrictType);
 
   const dispatch = useDispatch();
 
@@ -50,6 +58,7 @@ export default function SearchSelect({ level }: Props) {
     latmax: bounds.latmax,
     lat_new: coordinates.lat_new,
     lon_new: coordinates.lon_new,
+    dist_type: distType,
   });
   const [inputValue, setInputValue] = useState(selectedName);
   const [loading, setLoading] = useState(false);
@@ -120,6 +129,7 @@ export default function SearchSelect({ level }: Props) {
         latmax: bounds.latmax,
         lat_new: coordinates.lat_new,
         lon_new: coordinates.lon_new,
+        dist_type: distType,
       });
       setInputValue(selectedName);
     } else if (level != storeLevel) {
@@ -180,6 +190,7 @@ export default function SearchSelect({ level }: Props) {
 
           return {
             ...labelData,
+            dist_type: ro.dist_type,
             lngmin: ro.lngmin,
             latmin: ro.latmin,
             lngmax: ro.lngmax,
@@ -241,6 +252,7 @@ export default function SearchSelect({ level }: Props) {
         lon_new: newValue.lon_new,
       })
     );
+    dispatch(setDistrictType(newValue.dist_type));
   };
 
   const handleInputChange = (
