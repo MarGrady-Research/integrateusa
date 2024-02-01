@@ -210,6 +210,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
             latmax: ro.latmax,
             lat_new: ro.lat_new || null,
             lon_new: ro.lon_new || null,
+            dist_type: ro.dist_type,
           };
         });
 
