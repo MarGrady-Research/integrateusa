@@ -15,7 +15,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { MapData } from "interfaces";
 

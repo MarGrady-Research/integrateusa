@@ -17,7 +17,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { InfoData } from "interfaces";
 

@@ -15,9 +15,9 @@ import {
   asianColor,
   blackColor,
   hispanicColor,
-  otherColor,
   whiteColor,
-} from "constants/";
+  otherColor,
+} from "@/colors";
 
 import { container } from "./Bar.module.scss";
 

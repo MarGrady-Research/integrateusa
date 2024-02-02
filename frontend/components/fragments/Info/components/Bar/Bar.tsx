@@ -20,7 +20,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { legendMargin } from "charts";
 

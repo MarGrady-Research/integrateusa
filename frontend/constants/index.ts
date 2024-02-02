@@ -1,10 +1,5 @@
 export {
   primaryColor,
-  asianColor,
-  blackColor,
-  hispanicColor,
-  whiteColor,
-  otherColor,
   selectedAreaColor,
   unselectedAreaColor,
   elementaryDistrictBoundaryURL,

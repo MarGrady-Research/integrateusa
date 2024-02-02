@@ -30,11 +30,6 @@ import { selectMapData, setMapData } from "store/apiCacheSlice";
 import { selectZoomOnMap } from "store/mapSlice";
 import { Level, MapLevel, MapStatus, DistrictType } from "interfaces";
 import {
-  asianColor,
-  blackColor,
-  hispanicColor,
-  whiteColor,
-  otherColor,
   defaultMapSchoolColor,
   selectedAreaColor,
   unselectedAreaColor,
@@ -47,6 +42,14 @@ import {
   elementaryDistrictSourceLayer,
   secondaryDistrictSourceLayer,
 } from "constants/";
+
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "@/colors";
 
 interface Props {
   onSmallerScreen: boolean;

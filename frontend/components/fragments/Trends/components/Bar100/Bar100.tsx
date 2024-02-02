@@ -13,14 +13,15 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { legendMargin } from "charts";
 
+import { primaryColor } from "constants/";
+
 import {
   asianColor,
   blackColor,
   hispanicColor,
   whiteColor,
   otherColor,
-  primaryColor,
-} from "constants/";
+} from "@/colors";
 
 import { TrendData } from "interfaces";
 

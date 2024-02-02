@@ -19,8 +19,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-  primaryColor,
-} from "constants/";
+} from "@/colors";
 
 import { TrendData } from "interfaces";
 
