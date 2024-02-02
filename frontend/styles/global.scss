@@ -31,22 +31,24 @@ a {
   box-sizing: border-box;
 }
 
-.text-blackstudents {
-  color: $blackColor;
-}
+.text {
+  &-blackstudents {
+    color: $blackColor;
+  }
 
-.text-asian {
-  color: $asianColor;
-}
+  &-asian {
+    color: $asianColor;
+  }
 
-.text-hispanic {
-  color: $hispanicColor;
-}
+  &-hispanic {
+    color: $hispanicColor;
+  }
 
-.text-whitestudents {
-  color: $whiteColor;
-}
+  &-whitestudents {
+    color: $whiteColor;
+  }
 
-.text-other {
-  color: $otherColor;
+  &-other {
+    color: $otherColor;
+  }
 }
