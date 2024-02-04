@@ -24,6 +24,7 @@ import {
 import { TrendData } from "interfaces";
 
 import { container } from "./Bar.module.scss";
+import { primaryColor } from "constants/";
 
 ChartJS.register(
   CategoryScale,

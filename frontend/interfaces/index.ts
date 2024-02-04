@@ -1,9 +1,6 @@
 export type {
-  InfoData,
-  TrendData,
   SegData,
   Bounds,
-  SchoolType,
   SchoolCoordinates,
   RacialProportion,
   SegEntity,
@@ -23,3 +20,5 @@ export {
 } from "./interfaces";
 
 export type { MapData, Feature } from "./mapInterfaces";
+
+export type { InfoData, TrendData, SchoolType } from "./infoInterfaces";

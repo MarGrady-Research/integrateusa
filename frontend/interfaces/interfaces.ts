@@ -1,25 +1,5 @@
-export type InfoData = School[];
-export type TrendData = Trend[];
 export type SegData = SegEntity[];
 export type LineData = LineDataAPI[];
-
-interface School {
-  sch_name: string;
-  tot_enr: number;
-  prop_as: number;
-  prop_bl: number;
-  prop_hi: number;
-  prop_wh: number;
-  prop_or: number;
-  asian: number;
-  black: number;
-  hispanic: number;
-  white: number;
-  other: number;
-  state_abb: string;
-  dist_name: string;
-  level: SchoolType;
-}
 
 export interface SegEntity {
   exp_as_as: number;
@@ -49,16 +29,6 @@ export interface SegEntity {
   exp_wh_or: number;
 }
 
-interface Trend {
-  year: number;
-  grade: string;
-  asian: number;
-  black: number;
-  hispanic: number;
-  white: number;
-  other: number;
-}
-
 interface LineDataAPI {
   norm_exp_as: number;
   norm_exp_bl: number;
@@ -79,8 +49,6 @@ export type MeasureAccessor =
   | "norm_exp_hi"
   | "norm_exp_or"
   | "norm_exp_wh";
-
-export type SchoolType = "ES" | "ESMS" | "MS" | "MSHS" | "HS" | "K12" | "Other";
 
 export interface Bounds {
   lngmin: number;
