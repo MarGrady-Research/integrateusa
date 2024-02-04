@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import Map, {
@@ -535,29 +535,40 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
   };
 
-  const getData = useCallback(() => {
-    const mapDataExistsOnStore = mapData !== null;
+  const mapDataApiCallDone = useRef(false);
 
-    if (!mapDataExistsOnStore) {
-      setMapStatus(MapStatus.Fetching);
+  useEffect(() => {
+    if (mapDataApiCallDone.current) {
+      return;
     }
 
+    const abortController = new AbortController();
+
     axios
-      .get<ApiMapData>("/api/mapschools/?q=2022")
+      .get<ApiMapData>("/api/mapschools/?q=2022", {
+        signal: abortController.signal,
+      })
       .then((res) => {
-        console.log(res.data);
+        mapDataApiCallDone.current = true;
+
         dispatch(setMapData(res.data.map((d) => d.map_data)));
 
-        if (!mapDataExistsOnStore) {
+        if (!mapDataExists) {
           setMapStatus(MapStatus.Rendering);
         }
       })
-      .catch(() => {
-        if (!mapDataExistsOnStore) {
+      .catch((error) => {
+        if (!mapDataExists && error.name !== "CanceledError") {
+          mapDataApiCallDone.current = true;
+
           setMapStatus(MapStatus.Failed);
         }
       });
-  }, [dispatch, mapData]);
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch, mapDataExists]);
 
   const querySchools = () => {
     if (!mapRenderingComplete) {
@@ -598,15 +609,14 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       setMapStatus(MapStatus.Complete);
     }
   };
+
   const onLoad = useCallback(() => {
     setHasMapLoaded(true);
 
     if (onSmallerScreen || zoomOnMap) {
       updateBounds(initialBounds);
     }
-
-    getData();
-  }, [getData, onSmallerScreen, zoomOnMap, initialBounds, updateBounds]);
+  }, [onSmallerScreen, zoomOnMap, initialBounds, updateBounds]);
 
   const pie = (small?: boolean) =>
     schoolName ? (
