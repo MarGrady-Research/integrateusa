@@ -1,7 +1,6 @@
 export type {
   InfoData,
   TrendData,
-  MapData,
   SegData,
   Bounds,
   SchoolType,
@@ -22,3 +21,5 @@ export {
   ApiStatus,
   DistrictType,
 } from "./interfaces";
+
+export type { MapData, Feature } from "./mapInterfaces";

@@ -1,6 +1,5 @@
 export type InfoData = School[];
 export type TrendData = Trend[];
-export type MapData = Feature[];
 export type SegData = SegEntity[];
 export type LineData = LineDataAPI[];
 
@@ -58,12 +57,6 @@ interface Trend {
   hispanic: number;
   white: number;
   other: number;
-}
-
-interface Feature {
-  type: any;
-  geometry: any;
-  properties: any;
 }
 
 interface LineDataAPI {

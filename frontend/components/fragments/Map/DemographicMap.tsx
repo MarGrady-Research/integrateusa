@@ -28,7 +28,7 @@ import {
 } from "store/selectSlice";
 import { selectMapData, setMapData } from "store/apiCacheSlice";
 import { selectZoomOnMap } from "store/mapSlice";
-import { Level, MapLevel, MapStatus, DistrictType } from "interfaces";
+import { Level, MapLevel, MapStatus, DistrictType, Feature } from "interfaces";
 import {
   defaultMapSchoolColor,
   selectedAreaColor,
@@ -54,6 +54,10 @@ import {
 interface Props {
   onSmallerScreen: boolean;
 }
+
+type ApiMapData = {
+  map_data: Feature;
+}[];
 
 const prop_array = [
   "max",
@@ -539,8 +543,9 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
 
     axios
-      .get("/api/mapschools/?q=2022")
+      .get<ApiMapData>("/api/mapschools/?q=2022")
       .then((res) => {
+        console.log(res.data);
         dispatch(setMapData(res.data.map((d) => d.map_data)));
 
         if (!mapDataExistsOnStore) {
