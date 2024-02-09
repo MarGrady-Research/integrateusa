@@ -24,12 +24,6 @@ class Schools(models.Model):
     hispanic = models.IntegerField(blank=True, null=True)
     other = models.IntegerField(blank=True, null=True)
     white = models.IntegerField(blank=True, null=True)
-    tot_enr = models.IntegerField(blank=True, null=True)
-    prop_as = models.FloatField(null=True)
-    prop_bl = models.FloatField(null=True)
-    prop_hi = models.FloatField(null=True)
-    prop_or = models.FloatField(null=True)
-    prop_wh = models.FloatField(null=True)
 
     class Meta:
         db_table = 'schools'
@@ -40,7 +34,6 @@ class Schools(models.Model):
             models.Index(fields=['county_id'], name='county_idx'),
             models.Index(fields=['state_abb'], name='state_idx'),
             models.Index(fields=['nces_id'], name='school_idx')
-
         ]
 
 # Name Models
@@ -134,7 +127,7 @@ class DistrictTrends(models.Model):
     class Meta:
         db_table = 'dist_trends'
         indexes = [
-            models.Index(fields=['year'], name='dist_trends_idx'),
+            models.Index(fields=['dist_id'], name='dist_trends_idx'),
         ]
 
 class DistrictTrendsAlt(models.Model):
@@ -167,7 +160,7 @@ class CountyTrends(models.Model):
     class Meta:
         db_table = 'county_trends'
         indexes = [
-            models.Index(fields=['year'], name='county_trends_idx'),
+            models.Index(fields=['county_id'], name='county_trends_idx'),
         ]
 
 
@@ -185,7 +178,7 @@ class StateTrends(models.Model):
     class Meta:
         db_table = 'state_trends'
         indexes = [
-            models.Index(fields=['year'], name='state_trends_idx'),
+            models.Index(fields=['state_abb'], name='state_trends_idx'),
         ]
 
 
