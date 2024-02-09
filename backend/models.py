@@ -38,7 +38,9 @@ class Schools(models.Model):
             models.Index(fields=['grade'], name='grade_idx'),
             models.Index(fields=['dist_id'], name='dist_idx'),
             models.Index(fields=['county_id'], name='county_idx'),
-            models.Index(fields=['state_abb'], name='state_idx')
+            models.Index(fields=['state_abb'], name='state_idx'),
+            models.Index(fields=['nces_id'], name='school_idx')
+
         ]
 
 # Name Models
