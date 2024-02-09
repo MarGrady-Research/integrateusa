@@ -3,12 +3,6 @@ export type TrendData = School[] | Trend[];
 
 interface School {
   sch_name: string;
-  tot_enr: number;
-  prop_as: number;
-  prop_bl: number;
-  prop_hi: number;
-  prop_wh: number;
-  prop_or: number;
   asian: number;
   black: number;
   hispanic: number;

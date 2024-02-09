@@ -67,9 +67,10 @@ class stateNameList(generics.ListAPIView):
 # Trends Views
 
 class districtTrendsList(generics.ListAPIView):
-    queryset = DistrictTrends.objects.all()
     serializer_class = DistrictTrendSerializer
-    filterset_fields = ['dist_id']
+
+    def get_queryset(self):
+        return DistrictTrends.objects.filter(dist_id=self.kwargs['dist_id'])
 
 class districtTrendsAltList(generics.ListAPIView):
     queryset = DistrictTrendsAlt.objects.all()
@@ -77,19 +78,16 @@ class districtTrendsAltList(generics.ListAPIView):
     filterset_fields = ['dist_id']
 
 class countyTrendsList(generics.ListAPIView):
-    queryset = CountyTrends.objects.all()
     serializer_class = CountyTrendSerializer
-    filterset_fields = ['county_id']
+    
+    def get_queryset(self):
+        return CountyTrends.objects.filter(county_id=self.kwargs['county_id'])
 
 class stateTrendsList(generics.ListAPIView):
-    queryset = StateTrends.objects.all()
     serializer_class = StateTrendSerializer
-    filterset_fields = [
-        'state_abb', 
-        'grade', 
-        'year'
-    ]
 
+    def get_queryset(self):
+        return StateTrends.objects.filter(state_abb=self.kwargs['state_abb'])
 
 # Segregation Views
 

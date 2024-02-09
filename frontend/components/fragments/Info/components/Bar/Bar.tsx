@@ -60,7 +60,15 @@ const getBarData = (data: InfoData) => {
   const labels = [];
 
   for (const school of data) {
-    const { prop_as, prop_bl, prop_hi, prop_wh, prop_or, sch_name } = school;
+    const { asian, black, hispanic, white, other, sch_name } = school;
+
+    const tot_enr = asian + black + hispanic + white + other;
+
+    const prop_as = (asian * 100) / tot_enr;
+    const prop_bl = (black * 100) / tot_enr;
+    const prop_hi = (hispanic * 100) / tot_enr;
+    const prop_wh = (white * 100) / tot_enr;
+    const prop_or = (other * 100) / tot_enr;
 
     asianData.push(prop_as);
     blackData.push(prop_bl);

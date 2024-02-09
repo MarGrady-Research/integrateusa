@@ -116,16 +116,13 @@ class StateNames(models.Model):
         self.state_abb
 
 
-
-
 # Trend Models
 
 class DistrictTrends(models.Model):
     dist_key = models.TextField(primary_key=True)
+    dist_id = models.TextField()
     year = models.IntegerField()
     grade = models.TextField()
-    dist_id = models.TextField()
-    dist_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
     hispanic = models.IntegerField()
@@ -134,6 +131,9 @@ class DistrictTrends(models.Model):
 
     class Meta:
         db_table = 'dist_trends'
+        indexes = [
+            models.Index(fields=['year'], name='dist_trends_idx'),
+        ]
 
 class DistrictTrendsAlt(models.Model):
     dist_key = models.TextField(primary_key=True)
@@ -152,9 +152,9 @@ class DistrictTrendsAlt(models.Model):
 
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
+    county_id = models.TextField()
     year = models.IntegerField()
     grade = models.TextField()
-    county_id = models.TextField()
     county_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
@@ -164,13 +164,16 @@ class CountyTrends(models.Model):
 
     class Meta:
         db_table = 'county_trends'
+        indexes = [
+            models.Index(fields=['year'], name='county_trends_idx'),
+        ]
 
 
 class StateTrends(models.Model):
     state_key = models.TextField(primary_key=True)
+    state_abb = models.CharField(max_length=2)
     year = models.IntegerField()
     grade = models.TextField()
-    state_abb = models.CharField(max_length=2)
     asian = models.IntegerField()
     black = models.IntegerField()
     hispanic = models.IntegerField()
@@ -179,6 +182,9 @@ class StateTrends(models.Model):
 
     class Meta:
         db_table = 'state_trends'
+        indexes = [
+            models.Index(fields=['year'], name='state_trends_idx'),
+        ]
 
 
 # Segregation Models

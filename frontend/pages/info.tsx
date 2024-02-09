@@ -145,7 +145,9 @@ export default function InfoPage() {
   useEffect(() => {
     const abortController = new AbortController();
 
-    const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
+    const trendUrl = isSchool
+      ? `/api/schools/?nces_id=${id}`
+      : `/api/${levelTable}/${id}`;
 
     dispatch(setTrendDataRequest(trendKey));
 
@@ -163,7 +165,7 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, dispatch, levelId, levelTable, trendKey]);
+  }, [id, level, dispatch, levelId, levelTable, trendKey, isSchool]);
 
   const infoDataDeduplicated = isSchool
     ? (trendData.filter(

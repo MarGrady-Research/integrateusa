@@ -4,7 +4,8 @@ from backend.models import Schools, CountySegSchools, DistSeg, StateSeg, DistNam
 class SchoolsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schools
-        fields = '__all__'
+        fields = ["year","grade","sch_name","level","dist_name","state_abb","asian","black","hispanic","white","other"]
+
 
 # Name Serializers
 class DistNameSerializer(serializers.ModelSerializer):
@@ -37,7 +38,7 @@ class StateNameSerializer(serializers.ModelSerializer):
 class DistrictTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = DistrictTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 class DistrictTrendAltSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,12 +48,12 @@ class DistrictTrendAltSerializer(serializers.ModelSerializer):
 class CountyTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountyTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 class StateTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = StateTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 
 # Segregation Serialzers

@@ -15,7 +15,19 @@ export default function SchoolInfo({ infoData }: Props) {
     );
   }
 
-  const { dist_name, sch_name, state_abb, tot_enr, level } = infoData[0];
+  const {
+    dist_name,
+    sch_name,
+    state_abb,
+    level,
+    asian,
+    black,
+    hispanic,
+    white,
+    other,
+  } = infoData[0];
+
+  const tot_enr = asian + black + hispanic + white + other;
 
   return (
     <div className="h-full shadow border border-gray-200 px-4 py-3">
