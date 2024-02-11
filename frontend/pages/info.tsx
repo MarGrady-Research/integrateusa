@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
@@ -131,7 +131,7 @@ export default function InfoPage() {
       .then((res) => {
         dispatch(setInfoDataSuccess({ key: infoKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setInfoDataFailure(infoKey));
         }
@@ -156,7 +156,7 @@ export default function InfoPage() {
       .then((res) => {
         dispatch(setTrendDataSuccess({ key: trendKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setTrendDataFailure(trendKey));
         }

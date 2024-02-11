@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Map, {
   Layer,
   Source,
@@ -557,7 +557,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
           setMapStatus(MapStatus.Rendering);
         }
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (!mapDataExists && error.name !== "CanceledError") {
           mapDataApiCallDone.current = true;
 

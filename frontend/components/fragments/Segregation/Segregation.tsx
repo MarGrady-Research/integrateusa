@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import SegBar from "./components/Bar";
 import Info from "./components/Info";
@@ -155,7 +155,7 @@ export default function Segregation({ segData, isLoading }: Props) {
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setLineDataFailure(lineKey));
         }
@@ -211,7 +211,7 @@ export default function Segregation({ segData, isLoading }: Props) {
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setLineDataFailure(lineKey));
         }

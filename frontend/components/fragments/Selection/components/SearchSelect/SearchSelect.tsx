@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState, useMemo, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { debounce } from "@mui/material/utils";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -117,7 +117,7 @@ export default function SearchSelect({ level }: Props) {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
-            .catch((error) => callbackFailure(error));
+            .catch((error: AxiosError) => callbackFailure(error));
         },
         400
       ),

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
@@ -102,7 +102,7 @@ export default function SegregationPage() {
       .then((res) => {
         dispatch(setSegDataSuccess({ key: segKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setSegDataFailure(segKey));
         }

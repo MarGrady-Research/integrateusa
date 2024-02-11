@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, SyntheticEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { debounce } from "@mui/material/utils";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -135,11 +135,11 @@ export default function Search({ mapLevel, handleBounds }: Props) {
             .get<LocationSearchResult[]>(url, {
               signal: abortController.signal,
             })
-            .then((res: any) => {
+            .then((res) => {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
-            .catch((error) => callbackFailure(error));
+            .catch((error: AxiosError) => callbackFailure(error));
         },
         400
       ),
@@ -227,7 +227,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       setLoading(false);
     };
 
-    const callbackFailure = (error) => {
+    const callbackFailure = (error: AxiosError) => {
       if (error.name !== "CanceledError") {
         dispatch(setLocationSearchFailure(locationSearchKey));
         setLoading(false);
