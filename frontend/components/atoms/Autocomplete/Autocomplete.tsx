@@ -33,7 +33,7 @@ interface Props {
     event: SyntheticEvent<Element, Event>,
     value: string
   ) => void;
-  isOptionEqualToValue: (option: any, value: any) => boolean;
+  isOptionEqualToValue: (option: SearchResult, value: SearchResult) => boolean;
 }
 
 export default function AutocompleteComponent({
