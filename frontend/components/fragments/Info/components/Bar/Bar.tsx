@@ -189,6 +189,10 @@ export default function BarChart({ infoData, isLoading }: Props) {
     sortedData.sort((a, b) => {
       return getPropData(a, sortBy) - getPropData(b, sortBy);
     });
+  } else {
+    sortedData.sort((a, b) => {
+      return a.sch_name < b.sch_name ? -1 : a.sch_name > b.sch_name ? 1 : 0;
+    });
   }
 
   const { asianData, blackData, hispanicData, whiteData, otherData, labels } =
