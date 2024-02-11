@@ -1,14 +1,4 @@
-export type {
-  SegData,
-  Bounds,
-  SchoolCoordinates,
-  RacialProportion,
-  SegEntity,
-  MeasureAccessor,
-  LineData,
-  Line,
-  LineDataProcessed,
-} from "./interfaces";
+export type { Bounds, SchoolCoordinates, RacialProportion } from "./interfaces";
 
 export {
   Level,
@@ -30,3 +20,12 @@ export type {
   LocationSearchResult,
   LocationSearchOption,
 } from "./locationSearchInterfaces";
+
+export type {
+  SegData,
+  SegEntity,
+  MeasureAccessor,
+  LineData,
+  Line,
+  LineDataProcessed,
+} from "./segregationInterfaces";

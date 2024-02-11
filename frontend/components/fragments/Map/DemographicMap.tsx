@@ -720,11 +720,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         )}
         <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>
-      <Slideover
-        mapLevel={mapLevel}
-        handleMapLevel={handleMapLevel}
-        handleBounds={handleBounds}
-      />
+      {mapRenderingComplete && (
+        <Slideover
+          mapLevel={mapLevel}
+          handleMapLevel={handleMapLevel}
+          handleBounds={handleBounds}
+        />
+      )}
     </>
   );
 }
