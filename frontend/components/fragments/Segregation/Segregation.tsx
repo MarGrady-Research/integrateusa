@@ -196,46 +196,6 @@ export default function Segregation({ segData, isLoading }: Props) {
   useEffect(() => {
     stopAllLineDataRequests();
 
-    const abortController = new AbortController();
-
-    const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
-        signal: abortController.signal,
-      })
-    );
-
-    lines.forEach((l) => {
-      const lineKey = `${grade}-${l.id}`;
-
-      dispatch(setLineDataRequest(lineKey));
-    });
-
-    Promise.all(promises)
-      .then((values) => {
-        for (const [index, res] of values.entries()) {
-          const lineKey = `${grade}-${lines[index].id}`;
-
-          dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
-        }
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          lines.forEach((l) => {
-            const lineKey = `${grade}-${l.id}`;
-
-            dispatch(setLineDataFailure(lineKey));
-          });
-        }
-      });
-
-    return () => {
-      abortController.abort();
-    };
-  }, [grade, dispatch, idLevel, lines, table]);
-
-  useEffect(() => {
-    stopAllLineDataRequests();
-
     setLines([{ id, name }]);
 
     const abortController = new AbortController();

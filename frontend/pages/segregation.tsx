@@ -96,7 +96,9 @@ export default function SegregationPage() {
     dispatch(setSegDataRequest(segKey));
 
     axios
-      .get(url)
+      .get(url, {
+        signal: abortController.signal,
+      })
       .then((res) => {
         dispatch(setSegDataSuccess({ key: segKey, data: res.data }));
       })
