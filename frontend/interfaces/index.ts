@@ -8,7 +8,6 @@ export type {
   LineData,
   Line,
   LineDataProcessed,
-  LocationSearchResult,
 } from "./interfaces";
 
 export {
@@ -22,3 +21,12 @@ export {
 export type { MapData, Feature } from "./mapInterfaces";
 
 export type { InfoData, TrendData, SchoolType } from "./infoInterfaces";
+
+export type {
+  SchoolSearchResult,
+  DistrictSearchResult,
+  CountySearchResult,
+  StateSearchResult,
+  LocationSearchResult,
+  LocationSearchOption,
+} from "./locationSearchInterfaces";

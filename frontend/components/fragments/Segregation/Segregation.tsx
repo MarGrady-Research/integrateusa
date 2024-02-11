@@ -22,7 +22,7 @@ import {
   setLineDataFailure,
 } from "store/apiCacheSlice";
 
-import { SegData, Line, Level, MeasureAccessor } from "interfaces";
+import { SegData, Line, Level, MeasureAccessor, LineData } from "interfaces";
 
 interface Props {
   segData: SegData;
@@ -151,7 +151,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get(url, { signal: currentAbortController.signal })
+      .get<LineData>(url, { signal: currentAbortController.signal })
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
@@ -205,7 +205,7 @@ export default function Segregation({ segData, isLoading }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
+      .get<LineData>(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
         signal: abortController.signal,
       })
       .then((res) => {

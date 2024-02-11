@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
@@ -9,7 +9,7 @@ import {
   SegData,
   LineData,
   ApiStatus,
-  LocationSearchResult,
+  LocationSearchOption,
 } from "interfaces";
 
 interface SegDataCache {
@@ -43,7 +43,7 @@ interface LineDataCache {
 interface LocationSearchCache {
   [key: string]: {
     status: ApiStatus;
-    data: LocationSearchResult[];
+    data: LocationSearchOption[];
   };
 }
 
@@ -69,10 +69,10 @@ export const apiCacheSlice = createSlice({
   name: "apiCache",
   initialState,
   reducers: {
-    setMapData(state, action) {
+    setMapData(state, action: PayloadAction<MapData>) {
       state.mapData = action.payload;
     },
-    setInfoDataRequest(state, action) {
+    setInfoDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.infoData = {
@@ -83,7 +83,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setInfoDataSuccess(state, action) {
+    setInfoDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: InfoData }>
+    ) {
       const { key, data } = action.payload;
 
       state.infoData = {
@@ -94,7 +97,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setInfoDataFailure(state, action) {
+    setInfoDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.infoData = {
@@ -105,7 +108,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataRequest(state, action) {
+    setTrendDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.trendData = {
@@ -116,7 +119,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataSuccess(state, action) {
+    setTrendDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: TrendData }>
+    ) {
       const { key, data } = action.payload;
 
       state.trendData = {
@@ -127,7 +133,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataFailure(state, action) {
+    setTrendDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.trendData = {
@@ -138,7 +144,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataRequest(state, action) {
+    setSegDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.segData = {
@@ -149,7 +155,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataSuccess(state, action) {
+    setSegDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: SegData }>
+    ) {
       const { key, data } = action.payload;
 
       state.segData = {
@@ -160,7 +169,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataFailure(state, action) {
+    setSegDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.segData = {
@@ -171,7 +180,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataRequest(state, action) {
+    setLineDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.lineData = {
@@ -182,7 +191,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataSuccess(state, action) {
+    setLineDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: LineData }>
+    ) {
       const { key, data } = action.payload;
 
       state.lineData = {
@@ -193,7 +205,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataFailure(state, action) {
+    setLineDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.lineData = {
@@ -204,7 +216,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLocationSearchRequest(state, action) {
+    setLocationSearchRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.locationSearch = {
@@ -215,7 +227,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLocationSearchSuccess(state, action) {
+    setLocationSearchSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: LocationSearchOption[] }>
+    ) {
       const { key, data } = action.payload;
 
       state.locationSearch = {
@@ -226,7 +241,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLocationSearchFailure(state, action) {
+    setLocationSearchFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.locationSearch = {

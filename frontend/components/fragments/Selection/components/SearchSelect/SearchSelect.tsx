@@ -29,9 +29,13 @@ import { levelSelectData } from "../../data";
 
 import {
   ApiStatus,
+  CountySearchResult,
+  DistrictSearchResult,
   Level,
+  LocationSearchOption,
   LocationSearchResult,
-  DistrictType,
+  SchoolSearchResult,
+  StateSearchResult,
 } from "interfaces";
 
 interface Props {
@@ -49,7 +53,7 @@ export default function SearchSelect({ level }: Props) {
 
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState<LocationSearchResult | null>({
+  const [value, setValue] = useState<LocationSearchOption | null>({
     label: selectedName,
     value: id,
     lngmin: bounds.lngmin,
@@ -100,13 +104,15 @@ export default function SearchSelect({ level }: Props) {
         (
           input: string,
           abortController: AbortController,
-          callback: (results?: readonly any[]) => void,
+          callback: (results?: readonly LocationSearchResult[]) => void,
           callbackFailure: (error) => void
         ) => {
           const url = `${levelSelectData[level].route}${input}`;
 
           axios
-            .get(url, { signal: abortController.signal })
+            .get<LocationSearchResult[]>(url, {
+              signal: abortController.signal,
+            })
             .then((res) => {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
@@ -160,52 +166,51 @@ export default function SearchSelect({ level }: Props) {
       return;
     }
 
-    const callback = (results?: readonly any[]) => {
-      let newOptions: readonly LocationSearchResult[] = [];
+    const callback = (results?: readonly LocationSearchResult[]) => {
+      let newOptions: LocationSearchOption[] = [];
 
       if (results) {
         const resultsOptions = results.map((ro) => {
-          let labelData = {
-            value: "",
-            label: "",
-          };
+          let labelData = {};
 
           switch (level) {
             case Level.School:
               labelData = {
-                value: ro.nces_id,
-                label: ro.sch_name,
+                value: (ro as SchoolSearchResult).nces_id,
+                label: (ro as SchoolSearchResult).sch_name,
+                lat_new: (ro as SchoolSearchResult).lat_new || null,
+                lon_new: (ro as SchoolSearchResult).lon_new || null,
               };
               break;
             case Level.District:
               labelData = {
-                value: ro.dist_id,
-                label: ro.dist_name,
+                value: (ro as DistrictSearchResult).dist_id,
+                label: (ro as DistrictSearchResult).dist_name,
+                dist_type: (ro as DistrictSearchResult).dist_type,
               };
               break;
             case Level.County:
               labelData = {
-                value: ro.county_id,
-                label: ro.county_name,
+                value: (ro as CountySearchResult).county_id,
+                label: (ro as CountySearchResult).county_name,
               };
               break;
             case Level.State:
               labelData = {
-                value: ro.state_abb,
-                label: ro.state_name,
+                value: (ro as StateSearchResult).state_abb,
+                label: (ro as StateSearchResult).state_name,
               };
               break;
           }
 
           return {
+            value: "",
+            label: "",
             ...labelData,
-            dist_type: ro.dist_type,
             lngmin: ro.lngmin,
             latmin: ro.latmin,
             lngmax: ro.lngmax,
             latmax: ro.latmax,
-            lat_new: ro.lat_new || null,
-            lon_new: ro.lon_new || null,
           };
         });
 
@@ -237,7 +242,7 @@ export default function SearchSelect({ level }: Props) {
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    newValue: LocationSearchResult
+    newValue: LocationSearchOption
   ) => {
     setValue(newValue);
 

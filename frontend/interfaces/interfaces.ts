@@ -43,6 +43,11 @@ export interface LineDataProcessed {
   year: number;
 }
 
+export interface Line {
+  id: string;
+  name: string;
+}
+
 export type MeasureAccessor =
   | "norm_exp_as"
   | "norm_exp_bl"
@@ -79,11 +84,6 @@ export enum MapLevel {
   State,
 }
 
-export interface Line {
-  id: string;
-  name: string;
-}
-
 export enum MapStatus {
   Fetching,
   Rendering,
@@ -91,25 +91,15 @@ export enum MapStatus {
   Failed,
 }
 
-export interface SchoolCoordinates {
-  lat_new: number | null;
-  lon_new: number | null;
-}
-
-export interface LocationSearchResult extends SchoolCoordinates {
-  value: string;
-  label: string;
-  lngmin: number;
-  latmin: number;
-  lngmax: number;
-  latmax: number;
-  dist_type: DistrictType;
-}
-
 export enum ApiStatus {
   Fetching = "fetching",
   Success = "success",
   Failure = "failure",
+}
+
+export interface SchoolCoordinates {
+  lat_new: number | null;
+  lon_new: number | null;
 }
 
 export enum DistrictType {

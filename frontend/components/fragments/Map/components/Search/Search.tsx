@@ -12,6 +12,11 @@ import {
   LocationSearchResult,
   DistrictType,
   Level,
+  LocationSearchOption,
+  DistrictSearchResult,
+  SchoolSearchResult,
+  CountySearchResult,
+  StateSearchResult,
 } from "interfaces";
 import {
   setLocationSearchRequest,
@@ -58,7 +63,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
 
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState<LocationSearchResult | null>(null);
+  const [value, setValue] = useState<LocationSearchOption | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -121,13 +126,15 @@ export default function Search({ mapLevel, handleBounds }: Props) {
         (
           input: string,
           abortController: AbortController,
-          callback: (results?: readonly any[]) => void,
+          callback: (results?: readonly LocationSearchResult[]) => void,
           callbackFailure: (error) => void
         ) => {
           const url = `${getURL(mapLevel)}${input}`;
 
           axios
-            .get(url, { signal: abortController.signal })
+            .get<LocationSearchResult[]>(url, {
+              signal: abortController.signal,
+            })
             .then((res: any) => {
               sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
@@ -152,19 +159,19 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       return;
     }
 
-    const callback = (results?: readonly any[]) => {
-      let newOptions: readonly LocationSearchResult[] = [];
+    const callback = (results?: readonly LocationSearchResult[]) => {
+      let newOptions: LocationSearchOption[] = [];
 
       if (results) {
         let filteredResults = [...results];
 
         if (mapLevel === MapLevel.UnifiedElementaryDistrict) {
           filteredResults = results.filter(
-            (r) => r.dist_type !== DistrictType.Secondary
+            (r: DistrictSearchResult) => r.dist_type !== DistrictType.Secondary
           );
         } else if (mapLevel === MapLevel.UnifiedSecondaryDistrict) {
           filteredResults = results.filter(
-            (r) => r.dist_type !== DistrictType.Elementary
+            (r: DistrictSearchResult) => r.dist_type !== DistrictType.Elementary
           );
         }
 
@@ -177,27 +184,27 @@ export default function Search({ mapLevel, handleBounds }: Props) {
           switch (mapLevel) {
             case MapLevel.School:
               labelData = {
-                value: ro.nces_id,
-                label: ro.sch_name,
+                value: (ro as SchoolSearchResult).nces_id,
+                label: (ro as SchoolSearchResult).sch_name,
               };
               break;
             case MapLevel.UnifiedElementaryDistrict:
             case MapLevel.UnifiedSecondaryDistrict:
               labelData = {
-                value: ro.dist_id,
-                label: ro.dist_name,
+                value: (ro as DistrictSearchResult).dist_id,
+                label: (ro as DistrictSearchResult).dist_name,
               };
               break;
             case MapLevel.County:
               labelData = {
-                value: ro.county_id,
-                label: ro.county_name,
+                value: (ro as CountySearchResult).county_id,
+                label: (ro as CountySearchResult).county_name,
               };
               break;
             case MapLevel.State:
               labelData = {
-                value: ro.state_abb,
-                label: ro.state_name,
+                value: (ro as StateSearchResult).state_abb,
+                label: (ro as StateSearchResult).state_name,
               };
               break;
           }
@@ -208,9 +215,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
             latmin: ro.latmin,
             lngmax: ro.lngmax,
             latmax: ro.latmax,
-            lat_new: ro.lat_new || null,
-            lon_new: ro.lon_new || null,
-            dist_type: ro.dist_type,
           };
         });
 
@@ -247,7 +251,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
 
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    newValue: LocationSearchResult
+    newValue: LocationSearchOption
   ) => {
     setValue(newValue);
 
