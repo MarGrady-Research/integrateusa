@@ -28,7 +28,14 @@ import {
 } from "store/selectSlice";
 import { selectMapData, setMapData } from "store/apiCacheSlice";
 import { selectZoomOnMap } from "store/mapSlice";
-import { Level, MapLevel, MapStatus, DistrictType, Feature } from "interfaces";
+import {
+  Level,
+  MapLevel,
+  MapStatus,
+  DistrictType,
+  Feature,
+  HoverInfoInterface,
+} from "interfaces";
 import {
   defaultMapSchoolColor,
   selectedAreaColor,
@@ -118,7 +125,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const initialBounds = useSelector(selectBounds);
 
-  const [hoverInfo, setHoverInfo] = useState(null);
+  const [hoverInfo, setHoverInfo] = useState(null as HoverInfoInterface | null);
   const [isHovering, setIsHovering] = useState(false);
 
   const [hoveredFeatureData, setHoveredFeatureData] = useState(null);

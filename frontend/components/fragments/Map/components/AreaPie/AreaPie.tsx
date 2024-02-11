@@ -17,12 +17,12 @@ import {
   otherColor,
 } from "@/colors";
 
-import { MapData } from "interfaces";
+import { HoverInfoInterface, MapData } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  hoverInfo: any;
+  hoverInfo: HoverInfoInterface;
   mapData: MapData;
   small?: boolean;
 }

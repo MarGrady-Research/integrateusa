@@ -10,11 +10,12 @@ import {
   whiteColor,
   otherColor,
 } from "@/colors";
+import { HoverInfoInterface } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  hoverInfo: any;
+  hoverInfo: HoverInfoInterface;
   small?: boolean;
 }
 

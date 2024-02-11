@@ -1,3 +1,5 @@
+import { MapboxGeoJSONFeature } from "mapbox-gl";
+
 export interface Bounds {
   lngmin: number;
   latmin: number;
@@ -49,4 +51,12 @@ export enum DistrictType {
   Unified = "U",
   Elementary = "E",
   Secondary = "S",
+}
+
+export interface HoverInfoInterface {
+  feature: MapboxGeoJSONFeature;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 }

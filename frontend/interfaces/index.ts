@@ -1,4 +1,9 @@
-export type { Bounds, SchoolCoordinates, RacialProportion } from "./interfaces";
+export type {
+  Bounds,
+  SchoolCoordinates,
+  RacialProportion,
+  HoverInfoInterface,
+} from "./interfaces";
 
 export {
   Level,
