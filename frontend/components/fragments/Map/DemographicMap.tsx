@@ -7,6 +7,7 @@ import Map, {
   NavigationControl,
   GeolocateControl,
   FullscreenControl,
+  MapRef,
 } from "react-map-gl";
 import mapboxgl, { Visibility } from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +36,7 @@ import {
   DistrictType,
   Feature,
   HoverInfoInterface,
+  Bounds,
 } from "interfaces";
 import {
   defaultMapSchoolColor,
@@ -119,7 +121,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   );
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
-  const mapRef = useRef();
+  const mapRef = useRef<MapRef>();
 
   const [hasMapLoaded, setHasMapLoaded] = useState(false);
 
@@ -394,20 +396,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     setMapLevel(mapLevel);
   };
 
-  const updateBounds = useCallback((e) => {
+  const updateBounds = useCallback((b: Bounds) => {
     if (mapRef.current) {
-      (mapRef.current as any).fitBounds(
+      mapRef.current.fitBounds(
         [
-          [e.lngmin, e.latmin],
-          [e.lngmax, e.latmax],
+          [b.lngmin, b.latmin],
+          [b.lngmax, b.latmax],
         ],
         { padding: 25, duration: 2000 }
       );
     }
   }, []);
 
-  const handleBounds = (e) => {
-    updateBounds(e);
+  const handleBounds = (b: Bounds) => {
+    updateBounds(b);
   };
 
   const handleHover = useCallback(
@@ -455,16 +457,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         if (mapRef.current) {
           if (hoveringOnSchool) {
             if (hoveredFeatureData) {
-              (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+              mapRef.current.setFeatureState(hoveredFeatureData, {
                 hover: false,
               });
             }
 
-            (mapRef.current as any).removeFeatureState({
+            mapRef.current.removeFeatureState({
               source: hoveredFeature.source,
             });
 
-            (mapRef.current as any).setFeatureState(
+            mapRef.current.setFeatureState(
               {
                 source: hoveredFeature.source,
                 id: hoveredFeature.id,
@@ -473,17 +475,17 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
             );
           } else {
             if (hoveredSchoolData) {
-              (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+              mapRef.current.setFeatureState(hoveredSchoolData, {
                 hover: false,
               });
             }
 
-            (mapRef.current as any).removeFeatureState({
+            mapRef.current.removeFeatureState({
               source: hoveredFeature.source,
               sourceLayer: hoveredFeature.sourceLayer,
             });
 
-            (mapRef.current as any).setFeatureState(
+            mapRef.current.setFeatureState(
               {
                 source: hoveredFeature.source,
                 sourceLayer: hoveredFeature.sourceLayer,
@@ -501,13 +503,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const onMouseLeave = useCallback(() => {
     if (mapRef.current) {
       if (hoveredFeatureData) {
-        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+        mapRef.current.setFeatureState(hoveredFeatureData, {
           hover: false,
         });
       }
 
       if (hoveredSchoolData) {
-        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+        mapRef.current.setFeatureState(hoveredSchoolData, {
           hover: false,
         });
       }
@@ -520,13 +522,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const onMouseOut = useCallback(() => {
     if (mapRef.current) {
       if (hoveredFeatureData) {
-        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
+        mapRef.current.setFeatureState(hoveredFeatureData, {
           hover: false,
         });
       }
 
       if (hoveredSchoolData) {
-        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
+        mapRef.current.setFeatureState(hoveredSchoolData, {
           hover: false,
         });
       }
@@ -583,7 +585,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
 
     if (mapRef.current) {
-      const features = (mapRef.current as any).queryRenderedFeatures({
+      const features = mapRef.current.queryRenderedFeatures(null, {
         layers: ["schools"],
       });
 
@@ -593,7 +595,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const querySchoolsInitial = () => {
     if (mapRef.current) {
-      const features = (mapRef.current as any).queryRenderedFeatures({
+      const features = mapRef.current.queryRenderedFeatures(null, {
         layers: ["schools"],
       });
 
