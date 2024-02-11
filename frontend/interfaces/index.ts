@@ -10,7 +10,7 @@ export {
 
 export type { MapData, Feature } from "./mapInterfaces";
 
-export type { InfoData, TrendData, SchoolType } from "./infoInterfaces";
+export type { InfoData, TrendData, School, SchoolType } from "./infoInterfaces";
 
 export type {
   SchoolSearchResult,

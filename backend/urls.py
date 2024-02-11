@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/county/', views.countyList.as_view()),
     path('api/statenames/', views.stateNameList.as_view()),
     path('api/state/', views.stateList.as_view()),
-    path('api/districttrends/<dist_id>/', views.districtTrendsList.as_view()),
+    path('api/districttrends/<dist_id>', views.districtTrendsList.as_view()),
     path('api/districttrendsalt/', views.districtTrendsList.as_view()),
     path('api/countytrends/<county_id>', views.countyTrendsList.as_view()),
     path('api/statetrends/<state_abb>', views.stateTrendsList.as_view()),

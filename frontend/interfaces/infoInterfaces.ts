@@ -1,7 +1,7 @@
 export type InfoData = School[];
 export type TrendData = School[] | Trend[];
 
-interface School {
+export interface School {
   sch_name: string;
   asian: number;
   black: number;

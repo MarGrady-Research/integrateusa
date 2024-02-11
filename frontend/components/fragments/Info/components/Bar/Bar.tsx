@@ -24,7 +24,7 @@ import {
 
 import { legendMargin } from "charts";
 
-import { InfoData, RacialProportion } from "interfaces";
+import { InfoData, RacialProportion, School } from "interfaces";
 
 import {
   container,
@@ -86,6 +86,34 @@ const getBarData = (data: InfoData) => {
     otherData,
     labels,
   };
+};
+
+const getPropData = (school: School, sortBy: RacialProportion): number => {
+  const { asian, black, hispanic, white, other } = school;
+
+  const tot_enr = asian + black + hispanic + white + other;
+
+  let prop = 0;
+
+  switch (sortBy) {
+    case "prop_as":
+      prop = asian;
+      break;
+    case "prop_bl":
+      prop = black;
+      break;
+    case "prop_hi":
+      prop = hispanic;
+      break;
+    case "prop_wh":
+      prop = white;
+      break;
+    case "prop_or":
+      prop = other;
+      break;
+  }
+
+  return (prop * 100) / tot_enr;
 };
 
 const options = {
@@ -159,7 +187,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   if (!!sortBy) {
     sortedData.sort((a, b) => {
-      return a[sortBy] - b[sortBy];
+      return getPropData(a, sortBy) - getPropData(b, sortBy);
     });
   }
 
