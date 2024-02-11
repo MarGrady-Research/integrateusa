@@ -127,7 +127,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
           input: string,
           abortController: AbortController,
           callback: (results?: readonly LocationSearchResult[]) => void,
-          callbackFailure: (error) => void
+          callbackFailure: (error: AxiosError) => void
         ) => {
           const url = `${getURL(mapLevel)}${input}`;
 
@@ -136,7 +136,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
               signal: abortController.signal,
             })
             .then((res) => {
-              sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
             .catch((error: AxiosError) => callbackFailure(error));
@@ -278,7 +277,10 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       handleInputChange={handleInputChange}
       placeholder={placeholder}
       disabled={isDisabled}
-      isOptionEqualToValue={(o, v) => o.value == v.value}
+      isOptionEqualToValue={(
+        o: LocationSearchOption,
+        v: LocationSearchOption
+      ) => o.value == v.value}
     />
   );
 }

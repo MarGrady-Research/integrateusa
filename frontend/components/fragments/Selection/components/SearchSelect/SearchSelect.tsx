@@ -105,7 +105,7 @@ export default function SearchSelect({ level }: Props) {
           input: string,
           abortController: AbortController,
           callback: (results?: readonly LocationSearchResult[]) => void,
-          callbackFailure: (error) => void
+          callbackFailure: (error: AxiosError) => void
         ) => {
           const url = `${levelSelectData[level].route}${input}`;
 
@@ -114,7 +114,6 @@ export default function SearchSelect({ level }: Props) {
               signal: abortController.signal,
             })
             .then((res) => {
-              sessionStorage.setItem(url, JSON.stringify(res.data));
               callback(res.data);
             })
             .catch((error: AxiosError) => callbackFailure(error));
@@ -286,7 +285,10 @@ export default function SearchSelect({ level }: Props) {
       handleChange={handleChange}
       handleInputChange={handleInputChange}
       label="Name"
-      isOptionEqualToValue={(o, v) => o.value == v.value}
+      isOptionEqualToValue={(
+        o: LocationSearchOption,
+        v: LocationSearchOption
+      ) => o.value == v.value}
     />
   );
 }
