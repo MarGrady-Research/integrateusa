@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
+from backend.models import Schools, SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import SchoolsSerializer, SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
@@ -20,6 +20,19 @@ class schoolList(generics.ListAPIView):
         'nces_id',
     ]
  
+class schoolInfoList(generics.ListAPIView):
+    queryset = SchoolInfo.objects.all()
+    serializer_class = SchoolInfoSerializer
+    filterset_fields = ['nces_id']
+
+class schoolTrendsList(generics.ListAPIView):
+    queryset = SchoolTrends.objects.all()
+    serializer_class = SchoolTrendsSerializer
+    filterset_fields = [
+        'nces_id', 
+        'year',
+        'grade',
+    ]
 
 # Names Views
 
@@ -125,7 +138,3 @@ class stateList(generics.ListAPIView):
 class mapSchoolsList(generics.ListAPIView):
     queryset = MapSchools.objects.all()
     serializer_class = MapSchoolsSerializer
-
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        return MapSchools.objects.filter(map_data__properties__year = int(query)) 
