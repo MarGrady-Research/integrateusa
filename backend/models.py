@@ -7,45 +7,19 @@ from django.contrib.postgres.indexes import GinIndex
 
 # School Models
 
-class Schools(models.Model):
-    school_key = models.TextField(primary_key=True)
-    year = models.IntegerField()
-    grade = models.TextField()
-    nces_id = models.TextField()
-    sch_name = models.TextField(null=True)
-    level = models.TextField()
-    dist_id = models.TextField()
-    dist_name = models.TextField()
-    dist_id_alt = models.TextField()
-    county_id = models.TextField()
-    state_abb = models.CharField(max_length = 2)
-    asian = models.IntegerField(blank=True, null=True)
-    black = models.IntegerField(blank=True, null=True)
-    hispanic = models.IntegerField(blank=True, null=True)
-    other = models.IntegerField(blank=True, null=True)
-    white = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'schools'
-        indexes = [
-            models.Index(fields=['year'], name ='year_idx'),
-            models.Index(fields=['grade'], name='grade_idx'),
-            models.Index(fields=['dist_id'], name='dist_idx'),
-            models.Index(fields=['county_id'], name='county_idx'),
-            models.Index(fields=['state_abb'], name='state_idx'),
-            models.Index(fields=['nces_id'], name='school_idx')
-        ]
-
 class SchoolInfo(models.Model):
     nces_id = models.TextField(primary_key=True)
     sch_name = models.TextField()
     dist_name = models.TextField()
     state_abb = models.TextField()
     year_open = models.IntegerField()
-    year_close = models.TextField()
+    year_close = models.IntegerField()
 
     class Meta:
         db_table = 'school_info'
+        indexes = [
+            models.Index(fields=['nces_id'], name='school_info_idx')
+        ]
 
 class SchoolTrends(models.Model):
     school_key = models.TextField(primary_key=True)
@@ -67,6 +41,14 @@ class SchoolTrends(models.Model):
 
     class Meta: 
         db_table = 'school_trends'
+        indexes = [
+            models.Index(fields=['year'], name ='year_sch_trends_idx'),
+            models.Index(fields=['grade'], name='grade_sch_trends_idx'),
+            models.Index(fields=['dist_id'], name='dist_sch_trends_idx'),
+            models.Index(fields=['county_id'], name='county_sch_trends_idx'),
+            models.Index(fields=['state_abb'], name='state_sch_trends_idx'),
+            models.Index(fields=['nces_id'], name='school_sch_trends_idx')
+        ]
 
 # Name Models
 

@@ -15,7 +15,13 @@ export {
 
 export type { MapData, ApiMapData } from "./mapInterfaces";
 
-export type { InfoData, TrendData, School, SchoolType } from "./infoInterfaces";
+export type {
+  InfoData,
+  TrendData,
+  School,
+  SchoolType,
+  SchoolInfo,
+} from "./infoInterfaces";
 
 export type {
   SchoolSearchResult,

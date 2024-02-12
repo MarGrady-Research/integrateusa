@@ -10,6 +10,7 @@ import {
   LineData,
   ApiStatus,
   LocationSearchOption,
+  SchoolInfo,
 } from "interfaces";
 
 interface SegDataCache {
@@ -23,6 +24,13 @@ interface InfoDataCache {
   [key: string]: {
     status: ApiStatus;
     data: InfoData;
+  };
+}
+
+interface SchoolInfoCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: SchoolInfo[];
   };
 }
 
@@ -50,6 +58,7 @@ interface LocationSearchCache {
 interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
+  schoolInfo: SchoolInfoCache;
   trendData: TrendDataCache;
   segData: SegDataCache;
   lineData: LineDataCache;
@@ -59,6 +68,7 @@ interface ApiCacheState {
 const initialState: ApiCacheState = {
   mapData: null,
   infoData: {},
+  schoolInfo: {},
   trendData: {},
   segData: {},
   lineData: {},
@@ -104,6 +114,42 @@ export const apiCacheSlice = createSlice({
         ...state.infoData,
         [key]: {
           ...state.infoData[key],
+          status: ApiStatus.Failure,
+        },
+      };
+    },
+    setSchoolInfoRequest(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          ...state.schoolInfo[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setSchoolInfoSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: SchoolInfo[] }>
+    ) {
+      const { key, data } = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setSchoolInfoFailure(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          ...state.schoolInfo[key],
           status: ApiStatus.Failure,
         },
       };
@@ -268,6 +314,9 @@ export const {
   setInfoDataRequest,
   setInfoDataSuccess,
   setInfoDataFailure,
+  setSchoolInfoRequest,
+  setSchoolInfoSuccess,
+  setSchoolInfoFailure,
   setTrendDataRequest,
   setTrendDataSuccess,
   setTrendDataFailure,
@@ -287,6 +336,9 @@ export const selectMapData = (state: AppState) =>
 
 export const selectInfoData = (state: AppState) =>
   state.apiCache.infoData as InfoDataCache;
+
+export const selectSchoolInfo = (state: AppState) =>
+  state.apiCache.schoolInfo as SchoolInfoCache;
 
 export const selectTrendData = (state: AppState) =>
   state.apiCache.trendData as TrendDataCache;

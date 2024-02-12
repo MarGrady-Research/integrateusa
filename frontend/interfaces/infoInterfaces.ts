@@ -8,8 +8,6 @@ export interface School {
   hispanic: number;
   white: number;
   other: number;
-  state_abb: string;
-  dist_name: string;
   level: SchoolType;
   year: number;
   grade: string;
@@ -25,4 +23,12 @@ interface Trend {
   hispanic: number;
   white: number;
   other: number;
+}
+
+export interface SchoolInfo {
+  sch_name: string;
+  dist_name: string;
+  state_abb: string;
+  year_open: number;
+  year_close: number;
 }

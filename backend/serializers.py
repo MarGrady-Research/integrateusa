@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from backend.models import Schools, SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
-
-class SchoolsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Schools
-        fields = ["year","grade","sch_name","level","dist_name","state_abb","asian","black","hispanic","white","other"]
-
+from backend.models import SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
 
 class SchoolInfoSerializer(serializers.ModelSerializer):
     class Meta:

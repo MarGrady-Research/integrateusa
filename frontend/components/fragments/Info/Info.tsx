@@ -7,7 +7,7 @@ import Skeleton from "@mui/material/Skeleton";
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
-import SchoolInfo from "./components/SchoolInfo";
+import SchoolInfoComponent from "./components/SchoolInfo";
 
 const BarChart = dynamic(() => import("./components/Bar"), {
   ssr: false,
@@ -19,17 +19,25 @@ import {
   selectLevel,
   selectSchoolCoordinates,
 } from "store/selectSlice";
-import { Level, InfoData } from "interfaces";
+import { Level, InfoData, SchoolInfo } from "interfaces";
 
 import { container, tableContainer } from "./Info.module.scss";
 
 interface Props {
   title: string;
   infoData: InfoData;
-  isLoading: boolean;
+  isInfoDataLoading: boolean;
+  schoolInfo: SchoolInfo[];
+  isSchoolInfoLoading: boolean;
 }
 
-export default function Info({ infoData, title, isLoading }: Props) {
+export default function Info({
+  infoData,
+  title,
+  isInfoDataLoading,
+  schoolInfo,
+  isSchoolInfoLoading,
+}: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
   const coordinates = useSelector(selectSchoolCoordinates);
@@ -51,22 +59,27 @@ export default function Info({ infoData, title, isLoading }: Props) {
           />
         </div>
         <div className={clsx(tableContainer, "col-span-2")}>
-          {isLoading ? (
+          {isSchool ? (
+            <SchoolInfoComponent
+              infoData={infoData}
+              isInfoDataLoading={isInfoDataLoading}
+              schoolInfo={schoolInfo}
+              isSchoolInfoLoading={isSchoolInfoLoading}
+            />
+          ) : isInfoDataLoading ? (
             <Skeleton variant="rectangular" className="!h-full w-full" />
-          ) : isSchool ? (
-            <SchoolInfo infoData={infoData} />
           ) : (
             <SchoolLevelTable infoData={infoData} />
           )}
         </div>
         <div className={container}>
-          {<PieChart infoData={infoData} isLoading={isLoading} />}
+          {<PieChart infoData={infoData} isLoading={isInfoDataLoading} />}
         </div>
       </div>
       {!isSchool && (
         <div className="mb-10">
           <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-          <BarChart infoData={infoData} isLoading={isLoading} />
+          <BarChart infoData={infoData} isLoading={isInfoDataLoading} />
         </div>
       )}
     </>

@@ -1,25 +1,13 @@
 from django.shortcuts import render
-from backend.models import Schools, SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
+from backend.models import  SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import  SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
-class schoolList(generics.ListAPIView):
-    queryset = Schools.objects.all()
-    serializer_class = SchoolsSerializer
-    filterset_fields = [
-        'year',
-        'grade',
-        'dist_id',
-        'county_id',
-        'state_abb',
-        'nces_id',
-    ]
- 
 class schoolInfoList(generics.ListAPIView):
     queryset = SchoolInfo.objects.all()
     serializer_class = SchoolInfoSerializer
@@ -32,6 +20,9 @@ class schoolTrendsList(generics.ListAPIView):
         'nces_id', 
         'year',
         'grade',
+        'dist_id',
+        'county_id',
+        'state_abb',
     ]
 
 # Names Views
