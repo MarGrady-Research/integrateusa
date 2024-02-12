@@ -148,7 +148,7 @@ export default function IntegrationLine({ step, onTablet }: Props) {
           display: false,
         },
         ticks: {
-          callback: (value) => {
+          callback: (value: number) => {
             const prepend = value >= 0 ? "  " : "";
 
             return prepend + value.toFixed(2);

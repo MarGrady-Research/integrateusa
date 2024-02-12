@@ -5,6 +5,7 @@ import {
   BarElement,
   CategoryScale,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
@@ -116,7 +117,7 @@ export default function ExposureBar({ step, onTablet }: Props) {
         enabled: isOnFirstStep,
         display: isOnFirstStep,
         callbacks: {
-          label: (context) => {
+          label: (context: TooltipItem<any>) => {
             const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
@@ -135,7 +136,7 @@ export default function ExposureBar({ step, onTablet }: Props) {
         barPercentage: 1,
         ticks: {
           crossAlign: "far",
-          callback: (value) => {
+          callback: (value: string) => {
             return chartLabels[value];
           },
         },

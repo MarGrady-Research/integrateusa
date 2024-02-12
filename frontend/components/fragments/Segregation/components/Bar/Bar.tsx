@@ -6,6 +6,7 @@ import {
   CategoryScale,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
@@ -41,7 +42,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = (context.dataset.data[context.dataIndex] * 100).toFixed(
             1
           );
@@ -67,7 +68,7 @@ const options = {
       max: 1,
       position: "right",
       ticks: {
-        callback: (value) => {
+        callback: (value: number) => {
           return value * 100 + "%";
         },
       },

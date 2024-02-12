@@ -5,6 +5,7 @@ import {
   BarElement,
   CategoryScale,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
@@ -106,7 +107,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return context.dataset.label + " " + label + "%";
         },
