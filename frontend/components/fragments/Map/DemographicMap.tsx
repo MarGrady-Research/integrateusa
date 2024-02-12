@@ -9,7 +9,7 @@ import Map, {
   FullscreenControl,
   MapRef,
 } from "react-map-gl";
-import mapboxgl, { Visibility } from "mapbox-gl";
+import mapboxgl, { MapboxGeoJSONFeature, Visibility } from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -141,7 +141,9 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const [cursor, setCursor] = useState("auto");
 
-  const [renderedFeatures, setRenderedFeatures] = useState([]);
+  const [renderedFeatures, setRenderedFeatures] = useState(
+    [] as MapboxGeoJSONFeature[]
+  );
 
   const stateVisibility = (
     mapLevel === MapLevel.State ? "visible" : "none"
@@ -149,7 +151,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const stateLayer = {
     id: "state-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "state-boundary-source",
     "source-layer": stateSourceLayer,
     paint: {
@@ -172,7 +174,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const countyLayer = {
     id: "county-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "county-boundary-source",
     "source-layer": countySourceLayer,
     paint: {
@@ -195,7 +197,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const elementaryDistrictLayer = {
     id: "elementary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "elementary-district-boundary-source",
     "source-layer": elementaryDistrictSourceLayer,
     paint: {
@@ -218,7 +220,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const secondaryDistrictLayer = {
     id: "secondary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "secondary-district-boundary-source",
     "source-layer": secondaryDistrictSourceLayer,
     paint: {
@@ -237,7 +239,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const LayerProps = {
     id: "schools",
-    type: "circle" as any,
+    type: "circle" as "circle",
     source: schoolsSourceId,
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],

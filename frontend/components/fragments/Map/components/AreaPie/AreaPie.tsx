@@ -29,7 +29,7 @@ interface Props {
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
-const getAreaInfo = (hoverInfo, mapData: MapData) => {
+const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: MapData) => {
   const { GEOID, STUSPS } = hoverInfo.feature.properties;
 
   let layerProp;

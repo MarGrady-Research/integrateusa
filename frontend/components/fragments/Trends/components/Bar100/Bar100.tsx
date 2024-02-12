@@ -137,7 +137,7 @@ export default function BarChart100({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as any,
+        position: "top" as "top",
       },
       tooltip: {
         callbacks: {

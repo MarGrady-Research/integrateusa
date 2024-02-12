@@ -123,7 +123,7 @@ export default function BarChart({ trendData, grade, year, isLoading }: Props) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as any,
+        position: "top" as "top",
       },
     },
     scales: {
