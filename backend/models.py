@@ -36,6 +36,38 @@ class Schools(models.Model):
             models.Index(fields=['nces_id'], name='school_idx')
         ]
 
+class SchoolInfo(models.Model):
+    nces_id = models.TextField(primary_key=True)
+    sch_name = models.TextField()
+    dist_name = models.TextField()
+    state_abb = models.TextField()
+    year_open = models.IntegerField()
+    year_close = models.TextField()
+
+    class Meta:
+        db_table = 'school_info'
+
+class SchoolTrends(models.Model):
+    school_key = models.TextField(primary_key=True)
+    nces_id = models.TextField()
+    dist_id = models.TextField()
+    county_id = models.TextField()
+    cod_id = models.TextField()
+    state_abb = models.TextField()
+    year = models.IntegerField()
+    grade = models.TextField()
+    sch_name = models.TextField()
+    level = models.TextField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+    tot_enr = models.IntegerField()
+
+    class Meta: 
+        db_table = 'school_trends'
+
 # Name Models
 
 class CountyNames(models.Model):
@@ -400,7 +432,25 @@ class StateSeg(models.Model):
 # Geographic Data
 
 class MapSchools(models.Model):
-    map_data = models.JSONField(primary_key=True)
+    nces_id = models.TextField(primary_key = True)
+    dist_id = models.TextField()
+    county_id = models.TextField()
+    state_abb = models.TextField()
+    sch_name = models.TextField()
+    dist_name = models.TextField()
+    county_name = models.TextField()
+    lon_new = models.FloatField()
+    lat_new = models.FloatField()
+    xminimum = models.FloatField()
+    yminimum = models.FloatField()
+    xmaximum = models.FloatField()
+    ymaximum = models.FloatField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+    charter = models.IntegerField()
 
     class Meta:
-        db_table = 'map_schools' 
+        db_table = 'map' 

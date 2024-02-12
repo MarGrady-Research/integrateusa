@@ -1,11 +1,21 @@
 from rest_framework import serializers
-from backend.models import Schools, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
+from backend.models import Schools, SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
 
 class SchoolsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schools
         fields = ["year","grade","sch_name","level","dist_name","state_abb","asian","black","hispanic","white","other"]
 
+
+class SchoolInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolInfo
+        fields = '__all__'
+
+class SchoolTrendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolTrends
+        fields = ['sch_name', 'year', 'grade', 'level', 'asian', 'black', 'hispanic', 'other', 'white']
 
 # Name Serializers
 class DistNameSerializer(serializers.ModelSerializer):
@@ -80,5 +90,22 @@ class MapSchoolsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MapSchools
-        fields = ['map_data'] 
+        fields = ['nces_id',
+                  'dist_id',
+                  'county_id',
+                  'state_abb',
+                  'sch_name',
+                  'dist_name',
+                  'county_name',
+                  'lon_new',
+                  'lat_new',
+                  'xminimum',
+                  'yminimum',
+                  'xmaximum',
+                  'ymaximum',
+                  'asian',
+                  'black',
+                  'hispanic',
+                  'other', 
+                  'white'] 
 
