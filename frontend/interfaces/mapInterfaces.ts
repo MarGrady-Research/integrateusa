@@ -1,30 +1,32 @@
 export type MapData = Feature[];
+export type ApiMapData = MapProperties[];
 
-export interface Feature {
+interface Feature {
   type: "Feature";
   geometry: {
     type: "Point";
     coordinates: [number, number];
   };
-  properties: {
-    as: number;
-    bl: number;
-    county_id: string;
-    county_name: string;
-    dist_id: string;
-    dist_name: string;
-    hi: number;
-    lat_new: string;
-    lon_new: string;
-    nces_id: number;
-    or: number;
-    sch_name: string;
-    state_abb: string;
-    tot_enr: number;
-    wh: number;
-    xmax: string;
-    xmin: string;
-    ymax: string;
-    ymin: string;
-  };
+  properties: MapProperties;
+}
+
+interface MapProperties {
+  nces_id: string;
+  dist_id: string;
+  county_id: string;
+  state_abb: string;
+  sch_name: string;
+  dist_name: string;
+  county_name: string;
+  lon_new: string;
+  lat_new: string;
+  xmaximum: string;
+  xminimum: string;
+  ymaximum: string;
+  yminimum: string;
+  asian: number;
+  black: number;
+  hispanic: number;
+  white: number;
+  other: number;
 }

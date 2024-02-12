@@ -34,9 +34,10 @@ import {
   MapLevel,
   MapStatus,
   DistrictType,
-  Feature,
+  ApiMapData,
   HoverInfoInterface,
   Bounds,
+  MapData,
 } from "interfaces";
 import {
   defaultMapSchoolColor,
@@ -64,17 +65,13 @@ interface Props {
   onSmallerScreen: boolean;
 }
 
-type ApiMapData = {
-  map_data: Feature;
-}[];
-
 const prop_array = [
   "max",
-  ["get", "as"],
-  ["get", "bl"],
-  ["get", "hi"],
-  ["get", "wh"],
-  ["get", "or"],
+  ["get", "asian"],
+  ["get", "black"],
+  ["get", "hispanic"],
+  ["get", "white"],
+  ["get", "other"],
 ];
 
 const schoolsSourceId = "schools-source";
@@ -100,6 +97,17 @@ const setInitialMapLevel = (
     case Level.State:
       return MapLevel.School;
   }
+};
+
+const processMapData = (mapData: ApiMapData): MapData => {
+  return mapData.map((md) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [parseFloat(md.lon_new), parseFloat(md.lat_new)],
+    },
+    properties: md,
+  }));
 };
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
@@ -245,15 +253,15 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
       "circle-color": [
         "case",
-        ["==", ["get", "as"], prop_array],
+        ["==", ["get", "asian"], prop_array],
         asianColor,
-        ["==", ["get", "bl"], prop_array],
+        ["==", ["get", "black"], prop_array],
         blackColor,
-        ["==", ["get", "hi"], prop_array],
+        ["==", ["get", "hispanic"], prop_array],
         hispanicColor,
-        ["==", ["get", "wh"], prop_array],
+        ["==", ["get", "white"], prop_array],
         whiteColor,
-        ["==", ["get", "or"], prop_array],
+        ["==", ["get", "other"], prop_array],
         otherColor,
         defaultMapSchoolColor,
       ],
@@ -346,8 +354,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
     urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
-    const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =
-      hoverInfo.feature.properties;
+    const {
+      nces_id,
+      sch_name,
+      xminimum,
+      xmaximum,
+      yminimum,
+      ymaximum,
+      lat_new,
+      lon_new,
+    } = hoverInfo.feature.properties;
 
     const level = Level.School.toString();
 
@@ -365,20 +381,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       params.append("name", sch_name);
     }
 
-    if (xmin) {
-      params.append("xmin", xmin);
+    if (xminimum) {
+      params.append("xmin", xminimum);
     }
 
-    if (xmax) {
-      params.append("xmax", xmax);
+    if (xmaximum) {
+      params.append("xmax", xmaximum);
     }
 
-    if (ymin) {
-      params.append("ymin", ymin);
+    if (yminimum) {
+      params.append("ymin", yminimum);
     }
 
-    if (ymax) {
-      params.append("ymax", ymax);
+    if (ymaximum) {
+      params.append("ymax", ymaximum);
     }
 
     if (lat_new) {
@@ -562,7 +578,9 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       .then((res) => {
         mapDataApiCallDone.current = true;
 
-        dispatch(setMapData(res.data.map((d) => d.map_data)));
+        const processedMapData = processMapData(res.data);
+
+        dispatch(setMapData(processedMapData));
 
         if (!mapDataExists) {
           setMapStatus(MapStatus.Rendering);

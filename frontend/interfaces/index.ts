@@ -13,7 +13,7 @@ export {
   DistrictType,
 } from "./interfaces";
 
-export type { MapData, Feature } from "./mapInterfaces";
+export type { MapData, ApiMapData } from "./mapInterfaces";
 
 export type { InfoData, TrendData, School, SchoolType } from "./infoInterfaces";
 

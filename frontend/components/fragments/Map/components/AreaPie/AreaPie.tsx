@@ -56,16 +56,18 @@ const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: MapData) => {
   let otherTotal = 0;
 
   for (const feature of mapData) {
-    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+    const { asian, black, hispanic, white, other } = feature.properties;
+
+    const tot_enr = asian + black + hispanic + white + other;
 
     if (feature.properties[areaId] === layerProp) {
       schoolsTotal += 1;
       studentsTotal += tot_enr;
-      asianTotal += as;
-      blackTotal += bl;
-      hispanicTotal += hi;
-      whiteTotal += wh;
-      otherTotal += or;
+      asianTotal += asian;
+      blackTotal += black;
+      hispanicTotal += hispanic;
+      whiteTotal += white;
+      otherTotal += other;
     }
   }
 
