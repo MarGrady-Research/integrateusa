@@ -7,7 +7,10 @@ import {
   Tooltip,
   Legend,
   TooltipItem,
+  CartesianScaleTypeRegistry,
+  ScaleOptionsByType,
 } from "chart.js";
+import { _DeepPartialObject } from "chart.js/types/utils";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -73,7 +76,9 @@ const options = {
         },
       },
     },
-  } as any,
+  } as _DeepPartialObject<{
+    [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
+  }>,
 };
 
 export default function SegBar({ focus, isLoading }: Props) {

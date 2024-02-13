@@ -6,7 +6,10 @@ import {
   CategoryScale,
   Tooltip,
   TooltipItem,
+  CartesianScaleTypeRegistry,
+  ScaleOptionsByType,
 } from "chart.js";
+import { _DeepPartialObject } from "chart.js/types/utils";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 
@@ -131,7 +134,6 @@ export default function ExposureBar({ step, onTablet }: Props) {
         grid: {
           display: false,
         },
-        display: true,
         stacked: true,
         barPercentage: 1,
         ticks: {
@@ -149,7 +151,9 @@ export default function ExposureBar({ step, onTablet }: Props) {
         },
         position: "right",
       },
-    } as any,
+    } as _DeepPartialObject<{
+      [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
+    }>,
     annotations: {
       label1: {
         type: "label",

@@ -7,7 +7,10 @@ import {
   LineElement,
   Title,
   Tooltip,
+  ScaleOptionsByType,
+  CartesianScaleTypeRegistry,
 } from "chart.js";
+import { _DeepPartialObject } from "chart.js/types/utils";
 import { Line } from "react-chartjs-2";
 
 import { selectedLineColor, unselectedLineColor } from "constants/";
@@ -155,7 +158,9 @@ export default function IntegrationLine({ step, onTablet }: Props) {
           },
         },
       },
-    } as any,
+    } as _DeepPartialObject<{
+      [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
+    }>,
     annotations: {
       line1: {
         type: "line",
