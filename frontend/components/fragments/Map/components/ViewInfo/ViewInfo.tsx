@@ -20,14 +20,16 @@ const getViewInfo = (renderedFeatures: MapboxGeoJSONFeature[]) => {
   let otherTotal = 0;
 
   for (const feature of renderedFeatures) {
-    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+    const { asian, black, hispanic, white, other } = feature.properties;
+
+    const tot_enr = asian + black + hispanic + white + other;
 
     studentsTotal += tot_enr;
-    asianTotal += as;
-    blackTotal += bl;
-    hispanicTotal += hi;
-    whiteTotal += wh;
-    otherTotal += or;
+    asianTotal += asian;
+    blackTotal += black;
+    hispanicTotal += hispanic;
+    whiteTotal += white;
+    otherTotal += other;
   }
 
   const asianPercentageRaw = (asianTotal / studentsTotal) * 100;
