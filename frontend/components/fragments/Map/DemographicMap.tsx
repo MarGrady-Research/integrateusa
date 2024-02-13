@@ -9,7 +9,11 @@ import Map, {
   FullscreenControl,
   MapRef,
 } from "react-map-gl";
-import mapboxgl, { MapboxGeoJSONFeature, Visibility } from "mapbox-gl";
+import mapboxgl, {
+  Expression,
+  MapboxGeoJSONFeature,
+  Visibility,
+} from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -169,8 +173,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
       visibility: stateVisibility,
     },
@@ -192,8 +196,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
       visibility: countyVisibility,
     },
@@ -215,8 +219,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
       visibility: elementaryDistrictVisibility,
     },
@@ -238,8 +242,8 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
       visibility: secondaryDistrictVisibility,
     },
@@ -250,7 +254,15 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     type: "circle" as "circle",
     source: schoolsSourceId,
     paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        3.5,
+        1,
+        14,
+        9,
+      ] as Expression,
       "circle-color": [
         "case",
         ["==", ["get", "asian"], prop_array],
@@ -264,15 +276,15 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["==", ["get", "other"], prop_array],
         otherColor,
         defaultMapSchoolColor,
-      ],
+      ] as Expression,
       "circle-stroke-width": 2,
       "circle-stroke-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
         "#000",
         "transparent",
-      ],
-    } as any,
+      ] as Expression,
+    },
   };
 
   const coordinates = {
