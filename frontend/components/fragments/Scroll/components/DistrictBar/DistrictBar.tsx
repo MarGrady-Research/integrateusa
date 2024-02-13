@@ -6,10 +6,7 @@ import {
   CategoryScale,
   Tooltip,
   TooltipItem,
-  ScaleOptionsByType,
-  CartesianScaleTypeRegistry,
 } from "chart.js";
-import { _DeepPartialObject } from "chart.js/types/utils";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 
@@ -136,11 +133,9 @@ const options = {
       grid: {
         display: false,
       },
-      position: "right",
+      position: "right" as "right",
     },
-  } as _DeepPartialObject<{
-    [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
-  }>,
+  },
 };
 
 export default function DistrictBar() {

@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
+import { Mode } from "chartjs-plugin-zoom/types/options";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -136,7 +137,7 @@ const options = {
     zoom: {
       pan: {
         enabled: true,
-        mode: "x",
+        mode: "x" as Mode,
       },
       zoom: {
         wheel: {
@@ -145,7 +146,7 @@ const options = {
         pinch: {
           enabled: true,
         },
-        mode: "x",
+        mode: "x" as Mode,
       },
       limits: {
         y: { min: 0, max: 150 },
@@ -156,7 +157,6 @@ const options = {
   maintainAspectRatio: false,
   scales: {
     x: {
-      ticks: false,
       display: false,
       stacked: true,
       barPercentage: 1,
@@ -298,7 +298,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
         </div>
       </div>
       <div className={container}>
-        <Bar data={data} options={options as any} plugins={[legendMargin]} />
+        <Bar data={data} options={options} plugins={[legendMargin]} />
       </div>
     </div>
   );

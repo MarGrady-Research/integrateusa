@@ -7,10 +7,7 @@ import {
   LineElement,
   Title,
   Tooltip,
-  ScaleOptionsByType,
-  CartesianScaleTypeRegistry,
 } from "chart.js";
-import { _DeepPartialObject } from "chart.js/types/utils";
 import { Line } from "react-chartjs-2";
 
 import { selectedLineColor, unselectedLineColor } from "constants/";
@@ -144,7 +141,7 @@ export default function IntegrationLine({ step, onTablet }: Props) {
         },
       },
       y: {
-        position: "right",
+        position: "right" as "right",
         min: isOnFourthStep ? -0.2 : 0,
         max: isOnFourthStep ? 0.2 : 0.5,
         grid: {
@@ -158,9 +155,7 @@ export default function IntegrationLine({ step, onTablet }: Props) {
           },
         },
       },
-    } as _DeepPartialObject<{
-      [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry>;
-    }>,
+    },
     annotations: {
       line1: {
         type: "line",
