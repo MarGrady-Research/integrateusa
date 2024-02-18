@@ -20,10 +20,12 @@ import { getPersistConfig } from "redux-deep-persist";
 
 import { selectSlice } from "./selectSlice";
 import { apiCacheSlice } from "./apiCacheSlice";
+import { mapSlice } from "./mapSlice";
 
 const rootReducer = combineReducers({
   [selectSlice.name]: selectSlice.reducer,
   [apiCacheSlice.name]: apiCacheSlice.reducer,
+  [mapSlice.name]: mapSlice.reducer,
 });
 
 const makeConfiguredStore = () =>
@@ -42,12 +44,7 @@ export const makeStore = () => {
       key: "root",
       storage,
       version: 1,
-      blacklist: [
-        "select.grade",
-        "select.year",
-        "select.infoDataRequestingApi",
-        "apiCache",
-      ],
+      blacklist: ["select.grade", "select.year", "apiCache", "map"],
       rootReducer,
     });
 

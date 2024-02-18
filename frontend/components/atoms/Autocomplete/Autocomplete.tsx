@@ -33,6 +33,7 @@ interface Props {
     event: SyntheticEvent<Element, Event>,
     value: string
   ) => void;
+  isOptionEqualToValue: (option: SearchResult, value: SearchResult) => boolean;
 }
 
 export default function AutocompleteComponent({
@@ -46,6 +47,7 @@ export default function AutocompleteComponent({
   label,
   placeholder,
   disabled,
+  isOptionEqualToValue,
 }: Props) {
   return (
     <Autocomplete
@@ -55,13 +57,13 @@ export default function AutocompleteComponent({
       options={options}
       autoComplete
       includeInputInList
-      filterSelectedOptions
       value={value}
       inputValue={inputValue}
       noOptionsText={loading ? "Searching..." : "No results"}
       classes={{ inputRoot: "!pl-3.5 !py-2", input: "!p-0" }}
       onChange={handleChange}
       onInputChange={handleInputChange}
+      isOptionEqualToValue={isOptionEqualToValue}
       renderInput={(params) => (
         <TextField
           {...params}

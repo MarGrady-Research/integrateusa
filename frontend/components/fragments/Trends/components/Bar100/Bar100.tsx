@@ -13,14 +13,15 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { legendMargin } from "charts";
 
+import { primaryColor } from "constants/";
+
 import {
   asianColor,
   blackColor,
   hispanicColor,
   whiteColor,
   otherColor,
-  primaryColor,
-} from "constants/";
+} from "@/colors";
 
 import { TrendData } from "interfaces";
 
@@ -136,14 +137,14 @@ export default function BarChart100({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as any,
+        position: "top" as "top",
       },
       tooltip: {
         callbacks: {
           label: (context) =>
             context.dataset.label +
             ": " +
-            parseFloat(context.formattedValue).toFixed(2) +
+            parseFloat(context.formattedValue).toFixed(1) +
             "%",
         },
       },

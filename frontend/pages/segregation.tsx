@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
@@ -13,17 +13,18 @@ import {
   selectLevel,
   restoreInitialState,
   setStateFromParams,
-} from "../store/selectSlice";
+} from "store/selectSlice";
 import {
   selectSegData,
   setSegDataRequest,
   setSegDataSuccess,
   setSegDataFailure,
-} from "../store/apiCacheSlice";
+} from "store/apiCacheSlice";
+import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 
-import { ApiStatus, Level } from "../interfaces";
+import { ApiStatus, Level, SegData } from "interfaces";
 
-import { getParamsInfo } from "../utils";
+import { getParamsInfo } from "utils";
 
 export default function SegregationPage() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function SegregationPage() {
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const segDataStore = useSelector(selectSegData);
+  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let idlevel = "";
 
@@ -64,6 +66,12 @@ export default function SegregationPage() {
     !paramsChecked;
 
   useEffect(() => {
+    if (!zoomOnMap) {
+      dispatch(activateZoomOnMap());
+    }
+  }, [dispatch, zoomOnMap]);
+
+  useEffect(() => {
     if (paramsChecked) {
       return;
     }
@@ -88,11 +96,13 @@ export default function SegregationPage() {
     dispatch(setSegDataRequest(segKey));
 
     axios
-      .get(url)
+      .get<SegData>(url, {
+        signal: abortController.signal,
+      })
       .then((res) => {
         dispatch(setSegDataSuccess({ key: segKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setSegDataFailure(segKey));
         }

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-import Head from "../components/fragments/Head";
-import Header from "../components/fragments/Header";
-import Selection from "../components/fragments/Selection";
-import Info from "../components/fragments/Info";
-import Trends from "../components/fragments/Trends";
-import Page from "../components/layouts/Page";
+import Head from "components/fragments/Head";
+import Selection from "components/fragments/Selection";
+import Info from "components/fragments/Info";
+import Trends from "components/fragments/Trends";
+import Page from "components/layouts/Page";
 
 import {
   selectYear,
@@ -16,7 +15,7 @@ import {
   selectId,
   selectSelectedName,
   setStateFromParams,
-} from "../store/selectSlice";
+} from "store/selectSlice";
 import {
   selectInfoData,
   setInfoDataRequest,
@@ -26,11 +25,16 @@ import {
   setTrendDataRequest,
   setTrendDataSuccess,
   setTrendDataFailure,
-} from "../store/apiCacheSlice";
+  selectSchoolInfo,
+  setSchoolInfoRequest,
+  setSchoolInfoSuccess,
+  setSchoolInfoFailure,
+} from "store/apiCacheSlice";
+import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 
-import { Level, ApiStatus } from "../interfaces";
+import { Level, ApiStatus, InfoData, TrendData, SchoolInfo } from "interfaces";
 
-import { getParamsInfo } from "../utils";
+import { getParamsInfo } from "utils";
 
 export default function InfoPage() {
   const dispatch = useDispatch();
@@ -43,7 +47,9 @@ export default function InfoPage() {
   const id = useSelector(selectId);
   const title = useSelector(selectSelectedName);
   const infoDataStore = useSelector(selectInfoData);
+  const schoolInfoStore = useSelector(selectSchoolInfo);
   const trendDataStore = useSelector(selectTrendData);
+  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let levelTable = "";
   let levelId = "";
@@ -80,6 +86,21 @@ export default function InfoPage() {
     (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
 
+  const schoolInfoKey = id;
+  const schoolInfoKeyCache = schoolInfoStore[schoolInfoKey];
+  const isSchoolInfoKeyCached = typeof schoolInfoKeyCache !== "undefined";
+  const schoolInfoCache = isSchoolInfoKeyCached
+    ? schoolInfoKeyCache.data
+    : null;
+  const isSchoolInfoCached = typeof schoolInfoCache !== "undefined";
+
+  const schoolInfo = isSchoolInfoCached ? schoolInfoCache || [] : [];
+
+  const isSchoolInfoLoading =
+    !isSchoolInfoKeyCached ||
+    (!isSchoolInfoCached && schoolInfoKeyCache.status !== ApiStatus.Failure) ||
+    !paramsChecked;
+
   const trendKey = `${levelTable}-${id}`;
   const trendKeyCache = trendDataStore[trendKey];
   const isTrendKeyCached = typeof trendKeyCache !== "undefined";
@@ -92,6 +113,14 @@ export default function InfoPage() {
     !isTrendKeyCached ||
     (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+
+  const isSchool = level == Level.School;
+
+  useEffect(() => {
+    if (!zoomOnMap) {
+      dispatch(activateZoomOnMap());
+    }
+  }, [dispatch, zoomOnMap]);
 
   useEffect(() => {
     if (paramsChecked) {
@@ -107,18 +136,22 @@ export default function InfoPage() {
   }, [dispatch, paramsChecked]);
 
   useEffect(() => {
+    if (level == Level.School) {
+      return;
+    }
+
     const abortController = new AbortController();
 
-    const infoUrl = `/api/schools/?year=${year}&grade=${grade}&${levelId}=${id}`;
+    const infoUrl = `/api/schooltrends/?year=${year}&grade=${grade}&${levelId}=${id}`;
 
     dispatch(setInfoDataRequest(infoKey));
 
     axios
-      .get(infoUrl, { signal: abortController.signal })
+      .get<InfoData>(infoUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setInfoDataSuccess({ key: infoKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setInfoDataFailure(infoKey));
         }
@@ -130,18 +163,47 @@ export default function InfoPage() {
   }, [id, level, grade, year, dispatch, infoKey, levelId]);
 
   useEffect(() => {
+    if (level != Level.School) {
+      return;
+    }
+
     const abortController = new AbortController();
 
-    const trendUrl = `/api/${levelTable}/?${levelId}=${id}`;
+    const schoolInfoUrl = `/api/schoolinfo/?nces_id=${id}`;
+
+    dispatch(setSchoolInfoRequest(schoolInfoKey));
+
+    axios
+      .get<SchoolInfo[]>(schoolInfoUrl, { signal: abortController.signal })
+      .then((res) => {
+        dispatch(setSchoolInfoSuccess({ key: schoolInfoKey, data: res.data }));
+      })
+      .catch((error: AxiosError) => {
+        if (error.name !== "CanceledError") {
+          dispatch(setSchoolInfoFailure(schoolInfoKey));
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch, id, schoolInfoKey, level]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const trendUrl = isSchool
+      ? `/api/schooltrends/?nces_id=${id}`
+      : `/api/${levelTable}/${id}`;
 
     dispatch(setTrendDataRequest(trendKey));
 
     axios
-      .get(trendUrl, { signal: abortController.signal })
+      .get<TrendData>(trendUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setTrendDataSuccess({ key: trendKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setTrendDataFailure(trendKey));
         }
@@ -150,7 +212,16 @@ export default function InfoPage() {
     return () => {
       abortController.abort();
     };
-  }, [id, level, dispatch, levelId, levelTable, trendKey]);
+  }, [id, level, dispatch, levelId, levelTable, trendKey, isSchool]);
+
+  const infoDataDeduplicated = isSchool
+    ? (trendData.filter(
+        (td) => td.grade === grade && td.year === year
+      ) as InfoData)
+    : infoData;
+  const isInfoDataLoadingDedepulicated = isSchool
+    ? isTrendDataLoading
+    : isInfoDataLoading;
 
   return (
     <>
@@ -159,9 +230,11 @@ export default function InfoPage() {
       <Page>
         <div className="mx-auto mt-5">
           <Info
-            infoData={infoData}
+            infoData={infoDataDeduplicated}
             title={title}
-            isLoading={isInfoDataLoading}
+            isInfoDataLoading={isInfoDataLoadingDedepulicated}
+            schoolInfo={schoolInfo}
+            isSchoolInfoLoading={isSchoolInfoLoading}
           />
           <Trends trendData={trendData || []} isLoading={isTrendDataLoading} />
         </div>

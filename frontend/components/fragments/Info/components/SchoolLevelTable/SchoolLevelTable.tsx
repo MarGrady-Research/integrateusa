@@ -53,11 +53,15 @@ const getSchoolLevel = (infoData: InfoData) => {
   };
 
   for (const school of infoData) {
+    const { asian, black, hispanic, white, other } = school;
+
+    const tot_enr = asian + black + hispanic + white + other;
+
     schoolLevel.Total.schools += 1;
-    schoolLevel.Total.students += school.tot_enr;
+    schoolLevel.Total.students += tot_enr;
 
     schoolLevel[school.level].schools += 1;
-    schoolLevel[school.level].students += school.tot_enr;
+    schoolLevel[school.level].students += tot_enr;
   }
 
   return schoolLevel;

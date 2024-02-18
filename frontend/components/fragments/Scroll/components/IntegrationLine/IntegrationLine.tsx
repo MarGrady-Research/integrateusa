@@ -141,21 +141,21 @@ export default function IntegrationLine({ step, onTablet }: Props) {
         },
       },
       y: {
-        position: "right",
+        position: "right" as "right",
         min: isOnFourthStep ? -0.2 : 0,
         max: isOnFourthStep ? 0.2 : 0.5,
         grid: {
           display: false,
         },
         ticks: {
-          callback: (value) => {
+          callback: (value: number) => {
             const prepend = value >= 0 ? "  " : "";
 
             return prepend + value.toFixed(2);
           },
         },
       },
-    } as any,
+    },
     annotations: {
       line1: {
         type: "line",

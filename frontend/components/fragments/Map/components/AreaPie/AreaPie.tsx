@@ -1,5 +1,11 @@
 import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  TooltipItem,
+} from "chart.js";
 import { Pie } from "react-chartjs-2";
 import clsx from "clsx";
 
@@ -9,24 +15,24 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
-import { MapData } from "interfaces";
+import { HoverInfoInterface, MapData } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  hoverInfo: any;
+  hoverInfo: HoverInfoInterface;
   mapData: MapData;
   small?: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
-const getAreaInfo = (hoverInfo, mapData) => {
+const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: MapData) => {
   const { GEOID, STUSPS } = hoverInfo.feature.properties;
 
-  let layerProp;
+  let layerProp: string;
 
   let areaId = "";
 
@@ -50,16 +56,18 @@ const getAreaInfo = (hoverInfo, mapData) => {
   let otherTotal = 0;
 
   for (const feature of mapData) {
-    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+    const { asian, black, hispanic, white, other } = feature.properties;
+
+    const tot_enr = asian + black + hispanic + white + other;
 
     if (feature.properties[areaId] === layerProp) {
       schoolsTotal += 1;
       studentsTotal += tot_enr;
-      asianTotal += as;
-      blackTotal += bl;
-      hispanicTotal += hi;
-      whiteTotal += wh;
-      otherTotal += or;
+      asianTotal += asian;
+      blackTotal += black;
+      hispanicTotal += hispanic;
+      whiteTotal += white;
+      otherTotal += other;
     }
   }
 
@@ -104,7 +112,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return (
             labels[context.dataIndex] + " " + Math.round(label * 100) + "%"

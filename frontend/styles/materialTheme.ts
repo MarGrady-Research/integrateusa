@@ -1,7 +1,8 @@
 import { createTheme } from "@mui/material/styles";
 
 import { primaryColor } from "../constants";
-import { libre } from "./typography";
+
+import { libre } from "@/typography";
 
 export const theme = createTheme({
   palette: {

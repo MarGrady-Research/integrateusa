@@ -1,7 +1,6 @@
 import React from "react";
 
-import Head from "../components/fragments/Head";
-import Header from "../components/fragments/Header";
+import Head from "components/fragments/Head";
 
 export default function About() {
   return (

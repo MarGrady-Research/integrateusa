@@ -1,13 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-import {
-  primaryColor,
-  asianColor,
-  blackColor,
-  hispanicColor,
-  whiteColor,
-  otherColor,
-} from "./constants";
+import { primaryColor } from "./constants";
 
 const tailwindConfig = {
   content: [
@@ -23,11 +16,6 @@ const tailwindConfig = {
         primary: primaryColor,
         secondary: "rgb(252,136,55)",
         "line-red": "rgb(255, 99, 132)",
-        asian: asianColor,
-        blackstudents: blackColor,
-        hispanic: hispanicColor,
-        whitestudents: whiteColor,
-        other: otherColor,
       },
       transitionProperty: {
         width: "width",
