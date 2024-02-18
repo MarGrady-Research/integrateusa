@@ -9,31 +9,33 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
+import { HoverInfoInterface } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  hoverInfo: any;
+  hoverInfo: HoverInfoInterface;
   small?: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
-const getSchoolInfo = (hoverInfo) => {
-  const { dist_name, county_name, year, tot_enr, as, bl, hi, wh, or } =
+const getSchoolInfo = (hoverInfo: HoverInfoInterface) => {
+  const { dist_name, county_name, asian, black, hispanic, white, other } =
     hoverInfo.feature.properties;
 
   const districtName = dist_name;
   const countyName = county_name;
-  const enrollmentYear = year;
+
+  const tot_enr = asian + black + hispanic + white + other;
 
   const studentsTotal = tot_enr;
-  const asianTotal = as;
-  const blackTotal = bl;
-  const hispanicTotal = hi;
-  const whiteTotal = wh;
-  const otherTotal = or;
+  const asianTotal = asian;
+  const blackTotal = black;
+  const hispanicTotal = hispanic;
+  const whiteTotal = white;
+  const otherTotal = other;
 
   const asianRatio = asianTotal / studentsTotal;
   const blackRatio = blackTotal / studentsTotal;
@@ -59,7 +61,6 @@ const getSchoolInfo = (hoverInfo) => {
   return {
     districtName,
     countyName,
-    enrollmentYear,
     studentsEnrolled,
     asianPercentage,
     blackPercentage,
@@ -95,7 +96,6 @@ export default function SchoolPie({ hoverInfo, small = false }: Props) {
   const {
     districtName,
     countyName,
-    enrollmentYear,
     studentsEnrolled,
     asianPercentage,
     blackPercentage,
@@ -147,7 +147,7 @@ export default function SchoolPie({ hoverInfo, small = false }: Props) {
           {countyName}
         </p>
         <p>
-          <b>{enrollmentYear} Enrollment: </b> {studentsEnrolled}
+          <b>2022 Enrollment: </b> {studentsEnrolled}
         </p>
       </div>
       <div className="pb-4 text-center">

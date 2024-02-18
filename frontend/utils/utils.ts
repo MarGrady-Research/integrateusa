@@ -1,4 +1,4 @@
-import { Bounds, Level, SchoolCoordinates } from "interfaces";
+import { Bounds, DistrictType, Level, SchoolCoordinates } from "interfaces";
 
 export const sortOnOrder = (
   firstString: string,
@@ -38,6 +38,7 @@ export const getParamsInfo = (url: string) => {
   const paramsYMax = queryParams.ymax;
   const paramsSchoolX = queryParams.lon_new;
   const paramsSchoolY = queryParams.lat_new;
+  const paramsDistType = queryParams.dist_type;
 
   const completeParams =
     !!paramsId &&
@@ -59,12 +60,14 @@ export const getParamsInfo = (url: string) => {
         latmin: parseFloat(paramsYMin),
         latmax: parseFloat(paramsYMax),
       },
+      districtType: paramsDistType,
     } as {
       id: string;
       selectedName: string;
       level: Level;
       bounds: Bounds;
       schoolCoordinates?: SchoolCoordinates;
+      districtType?: DistrictType;
     };
 
     if (!!paramsSchoolX && !!paramsSchoolY) {

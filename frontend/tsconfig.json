@@ -16,7 +16,8 @@
       "isolatedModules": true,
       "jsx": "preserve",
       "paths": {
-        "@/typography": ["./styles/typography"]
+        "@/typography": ["./styles/typography"],
+        "@/colors": ["./styles/colors"]
       }
     },
     "include": ["index.d.ts","next-env.d.ts", "**/*.ts", "**/*.tsx"],

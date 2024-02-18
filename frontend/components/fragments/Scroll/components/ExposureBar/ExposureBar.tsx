@@ -5,6 +5,7 @@ import {
   BarElement,
   CategoryScale,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
@@ -15,7 +16,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 interface Props {
   step: ExposureBarStep;
@@ -116,7 +117,7 @@ export default function ExposureBar({ step, onTablet }: Props) {
         enabled: isOnFirstStep,
         display: isOnFirstStep,
         callbacks: {
-          label: (context) => {
+          label: (context: TooltipItem<any>) => {
             const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
           },
@@ -130,12 +131,11 @@ export default function ExposureBar({ step, onTablet }: Props) {
         grid: {
           display: false,
         },
-        display: true,
         stacked: true,
         barPercentage: 1,
         ticks: {
-          crossAlign: "far",
-          callback: (value) => {
+          crossAlign: "far" as "far",
+          callback: (value: string) => {
             return chartLabels[value];
           },
         },
@@ -146,9 +146,9 @@ export default function ExposureBar({ step, onTablet }: Props) {
         grid: {
           display: false,
         },
-        position: "right",
+        position: "right" as "right",
       },
-    } as any,
+    },
     annotations: {
       label1: {
         type: "label",

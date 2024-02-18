@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -15,10 +15,11 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 interface Props {
-  handleVisibility: (l: MapLevel) => void;
+  mapLevel: MapLevel;
+  handleMapLevel: (l: MapLevel) => void;
   handleBounds: (e: Bounds) => void;
 }
 
@@ -30,13 +31,14 @@ const race = [
   { race: "Other Races", color: otherColor },
 ];
 
-export default function Control({ handleVisibility, handleBounds }: Props) {
-  const [mapLevel, setMapLevel] = useState(MapLevel.School);
-
+export default function Control({
+  mapLevel,
+  handleMapLevel,
+  handleBounds,
+}: Props) {
   const handleChange = (e) => {
     const val = parseInt(e.target.value);
-    setMapLevel(val);
-    handleVisibility(val);
+    handleMapLevel(val);
   };
 
   const legend = () =>

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
@@ -9,7 +9,9 @@ import {
   SegData,
   LineData,
   ApiStatus,
-} from "../interfaces";
+  LocationSearchOption,
+  SchoolInfo,
+} from "interfaces";
 
 interface SegDataCache {
   [key: string]: {
@@ -22,6 +24,13 @@ interface InfoDataCache {
   [key: string]: {
     status: ApiStatus;
     data: InfoData;
+  };
+}
+
+interface SchoolInfoCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: SchoolInfo[];
   };
 }
 
@@ -39,30 +48,41 @@ interface LineDataCache {
   };
 }
 
-export interface ApiCacheState {
+interface LocationSearchCache {
+  [key: string]: {
+    status: ApiStatus;
+    data: LocationSearchOption[];
+  };
+}
+
+interface ApiCacheState {
   mapData: MapData | null;
   infoData: InfoDataCache;
+  schoolInfo: SchoolInfoCache;
   trendData: TrendDataCache;
   segData: SegDataCache;
   lineData: LineDataCache;
+  locationSearch: LocationSearchCache;
 }
 
 const initialState: ApiCacheState = {
   mapData: null,
   infoData: {},
+  schoolInfo: {},
   trendData: {},
   segData: {},
   lineData: {},
+  locationSearch: {},
 };
 
 export const apiCacheSlice = createSlice({
   name: "apiCache",
   initialState,
   reducers: {
-    setMapData(state, action) {
+    setMapData(state, action: PayloadAction<MapData>) {
       state.mapData = action.payload;
     },
-    setInfoDataRequest(state, action) {
+    setInfoDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.infoData = {
@@ -73,7 +93,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setInfoDataSuccess(state, action) {
+    setInfoDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: InfoData }>
+    ) {
       const { key, data } = action.payload;
 
       state.infoData = {
@@ -84,7 +107,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setInfoDataFailure(state, action) {
+    setInfoDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.infoData = {
@@ -95,7 +118,43 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataRequest(state, action) {
+    setSchoolInfoRequest(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          ...state.schoolInfo[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setSchoolInfoSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: SchoolInfo[] }>
+    ) {
+      const { key, data } = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setSchoolInfoFailure(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.schoolInfo = {
+        ...state.schoolInfo,
+        [key]: {
+          ...state.schoolInfo[key],
+          status: ApiStatus.Failure,
+        },
+      };
+    },
+    setTrendDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.trendData = {
@@ -106,7 +165,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataSuccess(state, action) {
+    setTrendDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: TrendData }>
+    ) {
       const { key, data } = action.payload;
 
       state.trendData = {
@@ -117,7 +179,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setTrendDataFailure(state, action) {
+    setTrendDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.trendData = {
@@ -128,7 +190,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataRequest(state, action) {
+    setSegDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.segData = {
@@ -139,7 +201,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataSuccess(state, action) {
+    setSegDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: SegData }>
+    ) {
       const { key, data } = action.payload;
 
       state.segData = {
@@ -150,7 +215,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setSegDataFailure(state, action) {
+    setSegDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.segData = {
@@ -161,7 +226,7 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataRequest(state, action) {
+    setLineDataRequest(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.lineData = {
@@ -172,7 +237,10 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataSuccess(state, action) {
+    setLineDataSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: LineData }>
+    ) {
       const { key, data } = action.payload;
 
       state.lineData = {
@@ -183,13 +251,49 @@ export const apiCacheSlice = createSlice({
         },
       };
     },
-    setLineDataFailure(state, action) {
+    setLineDataFailure(state, action: PayloadAction<string>) {
       const key = action.payload;
 
       state.lineData = {
         ...state.lineData,
         [key]: {
           ...state.lineData[key],
+          status: ApiStatus.Failure,
+        },
+      };
+    },
+    setLocationSearchRequest(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          ...state.locationSearch[key],
+          status: ApiStatus.Fetching,
+        },
+      };
+    },
+    setLocationSearchSuccess(
+      state,
+      action: PayloadAction<{ key: string; data: LocationSearchOption[] }>
+    ) {
+      const { key, data } = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          status: ApiStatus.Success,
+          data,
+        },
+      };
+    },
+    setLocationSearchFailure(state, action: PayloadAction<string>) {
+      const key = action.payload;
+
+      state.locationSearch = {
+        ...state.locationSearch,
+        [key]: {
+          ...state.locationSearch[key],
           status: ApiStatus.Failure,
         },
       };
@@ -210,6 +314,9 @@ export const {
   setInfoDataRequest,
   setInfoDataSuccess,
   setInfoDataFailure,
+  setSchoolInfoRequest,
+  setSchoolInfoSuccess,
+  setSchoolInfoFailure,
   setTrendDataRequest,
   setTrendDataSuccess,
   setTrendDataFailure,
@@ -219,6 +326,9 @@ export const {
   setLineDataRequest,
   setLineDataSuccess,
   setLineDataFailure,
+  setLocationSearchRequest,
+  setLocationSearchSuccess,
+  setLocationSearchFailure,
 } = apiCacheSlice.actions;
 
 export const selectMapData = (state: AppState) =>
@@ -226,6 +336,9 @@ export const selectMapData = (state: AppState) =>
 
 export const selectInfoData = (state: AppState) =>
   state.apiCache.infoData as InfoDataCache;
+
+export const selectSchoolInfo = (state: AppState) =>
+  state.apiCache.schoolInfo as SchoolInfoCache;
 
 export const selectTrendData = (state: AppState) =>
   state.apiCache.trendData as TrendDataCache;
@@ -235,5 +348,8 @@ export const selectSegData = (state: AppState) =>
 
 export const selectLineData = (state: AppState) =>
   state.apiCache.lineData as LineDataCache;
+
+export const selectLocationSearch = (state: AppState) =>
+  state.apiCache.locationSearch as LocationSearchCache;
 
 export default apiCacheSlice.reducer;

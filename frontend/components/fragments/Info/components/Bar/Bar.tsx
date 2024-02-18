@@ -6,9 +6,11 @@ import {
   CategoryScale,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
+import { Mode } from "chartjs-plugin-zoom/types/options";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -19,11 +21,11 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { legendMargin } from "charts";
 
-import { InfoData, RacialProportion } from "interfaces";
+import { InfoData, RacialProportion, School } from "interfaces";
 
 import {
   container,
@@ -59,7 +61,15 @@ const getBarData = (data: InfoData) => {
   const labels = [];
 
   for (const school of data) {
-    const { prop_as, prop_bl, prop_hi, prop_wh, prop_or, sch_name } = school;
+    const { asian, black, hispanic, white, other, sch_name } = school;
+
+    const tot_enr = asian + black + hispanic + white + other;
+
+    const prop_as = (asian * 100) / tot_enr;
+    const prop_bl = (black * 100) / tot_enr;
+    const prop_hi = (hispanic * 100) / tot_enr;
+    const prop_wh = (white * 100) / tot_enr;
+    const prop_or = (other * 100) / tot_enr;
 
     asianData.push(prop_as);
     blackData.push(prop_bl);
@@ -79,6 +89,34 @@ const getBarData = (data: InfoData) => {
   };
 };
 
+const getPropData = (school: School, sortBy: RacialProportion): number => {
+  const { asian, black, hispanic, white, other } = school;
+
+  const tot_enr = asian + black + hispanic + white + other;
+
+  let prop = 0;
+
+  switch (sortBy) {
+    case "prop_as":
+      prop = asian;
+      break;
+    case "prop_bl":
+      prop = black;
+      break;
+    case "prop_hi":
+      prop = hispanic;
+      break;
+    case "prop_wh":
+      prop = white;
+      break;
+    case "prop_or":
+      prop = other;
+      break;
+  }
+
+  return (prop * 100) / tot_enr;
+};
+
 const options = {
   plugins: {
     legend: {
@@ -88,16 +126,18 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
-          return context.dataset.label + " " + label + "%";
+          return (
+            context.dataset.label + " " + parseFloat(label).toFixed(1) + "%"
+          );
         },
       },
     },
     zoom: {
       pan: {
         enabled: true,
-        mode: "x",
+        mode: "x" as Mode,
       },
       zoom: {
         wheel: {
@@ -106,7 +146,7 @@ const options = {
         pinch: {
           enabled: true,
         },
-        mode: "x",
+        mode: "x" as Mode,
       },
       limits: {
         y: { min: 0, max: 150 },
@@ -117,7 +157,6 @@ const options = {
   maintainAspectRatio: false,
   scales: {
     x: {
-      ticks: false,
       display: false,
       stacked: true,
       barPercentage: 1,
@@ -148,7 +187,11 @@ export default function BarChart({ infoData, isLoading }: Props) {
 
   if (!!sortBy) {
     sortedData.sort((a, b) => {
-      return a[sortBy] - b[sortBy];
+      return getPropData(a, sortBy) - getPropData(b, sortBy);
+    });
+  } else {
+    sortedData.sort((a, b) => {
+      return a.sch_name < b.sch_name ? -1 : a.sch_name > b.sch_name ? 1 : 0;
     });
   }
 
@@ -255,7 +298,7 @@ export default function BarChart({ infoData, isLoading }: Props) {
         </div>
       </div>
       <div className={container}>
-        <Bar data={data} options={options as any} plugins={[legendMargin]} />
+        <Bar data={data} options={options} plugins={[legendMargin]} />
       </div>
     </div>
   );

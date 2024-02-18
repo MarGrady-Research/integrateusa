@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect } from "react";
-import Map, { Source, Layer } from "react-map-gl";
+import Map, { Source, Layer, MapRef, LngLatBoundsLike } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function InsetMap({ id, bounds, level, coordinates }: Props) {
-  const mapRef = useRef();
+  const mapRef = useRef<MapRef>();
 
   const { latmin, latmax, lngmin, lngmax } = bounds;
 
@@ -41,28 +41,29 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
     type: "FeatureCollection" as "FeatureCollection",
     features: [
       {
-        type: "Feature",
+        type: "Feature" as "Feature",
         geometry: {
-          type: "Point",
+          type: "Point" as "Point",
           coordinates: pointCoordinates,
         },
+        properties: {},
       },
-    ] as any,
+    ],
   };
 
   const isSchool = level === Level.School;
 
   const zoomToLocation = useCallback(() => {
-    if (!mapRef.current as any) {
+    if (!mapRef.current) {
       return;
     }
 
-    const mapBounds = [
+    const mapBounds: LngLatBoundsLike = [
       [bounds.lngmin, bounds.latmin],
       [bounds.lngmax, bounds.latmax],
     ];
 
-    (mapRef.current as any).fitBounds(mapBounds, {
+    mapRef.current.fitBounds(mapBounds, {
       padding: 25,
       duration: 2000,
     });
@@ -74,7 +75,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   const elementaryDistrictLayer = {
     id: "elementary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     "source-layer": elementaryDistrictSourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
@@ -85,7 +86,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   const secondaryDistrictLayer = {
     id: "secondary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     "source-layer": secondaryDistrictSourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
@@ -96,7 +97,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   const countyLayer = {
     id: "county-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     "source-layer": countySourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
@@ -107,7 +108,7 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   const stateLayer = {
     id: "state-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     "source-layer": stateSourceLayer,
     paint: {
       "fill-outline-color": selectedAreaColor,
@@ -118,14 +119,14 @@ export default function InsetMap({ id, bounds, level, coordinates }: Props) {
 
   const LayerProps = {
     id: "schools",
-    type: "circle" as any,
+    type: "circle" as "circle",
     source: "schools-source",
     paint: {
       "circle-radius": 3.5,
       "circle-color": defaultMapSchoolColor,
       "circle-stroke-width": 2,
       "circle-stroke-color": "#000",
-    } as any,
+    },
   };
 
   return (

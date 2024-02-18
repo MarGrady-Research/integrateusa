@@ -1,25 +1,29 @@
 from django.shortcuts import render
-from backend.models import Schools, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
+from backend.models import  SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import SchoolsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import  SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
-class schoolList(generics.ListAPIView):
-    queryset = Schools.objects.all()
-    serializer_class = SchoolsSerializer
+class schoolInfoList(generics.ListAPIView):
+    queryset = SchoolInfo.objects.all()
+    serializer_class = SchoolInfoSerializer
+    filterset_fields = ['nces_id']
+
+class schoolTrendsList(generics.ListAPIView):
+    queryset = SchoolTrends.objects.all()
+    serializer_class = SchoolTrendsSerializer
     filterset_fields = [
+        'nces_id', 
         'year',
         'grade',
         'dist_id',
         'county_id',
         'state_abb',
-        'nces_id',
     ]
- 
 
 # Names Views
 
@@ -67,9 +71,10 @@ class stateNameList(generics.ListAPIView):
 # Trends Views
 
 class districtTrendsList(generics.ListAPIView):
-    queryset = DistrictTrends.objects.all()
     serializer_class = DistrictTrendSerializer
-    filterset_fields = ['dist_id']
+
+    def get_queryset(self):
+        return DistrictTrends.objects.filter(dist_id=self.kwargs['dist_id'])
 
 class districtTrendsAltList(generics.ListAPIView):
     queryset = DistrictTrendsAlt.objects.all()
@@ -77,19 +82,16 @@ class districtTrendsAltList(generics.ListAPIView):
     filterset_fields = ['dist_id']
 
 class countyTrendsList(generics.ListAPIView):
-    queryset = CountyTrends.objects.all()
     serializer_class = CountyTrendSerializer
-    filterset_fields = ['county_id']
+    
+    def get_queryset(self):
+        return CountyTrends.objects.filter(county_id=self.kwargs['county_id'])
 
 class stateTrendsList(generics.ListAPIView):
-    queryset = StateTrends.objects.all()
     serializer_class = StateTrendSerializer
-    filterset_fields = [
-        'state_abb', 
-        'grade', 
-        'year'
-    ]
 
+    def get_queryset(self):
+        return StateTrends.objects.filter(state_abb=self.kwargs['state_abb'])
 
 # Segregation Views
 
@@ -125,7 +127,3 @@ class stateList(generics.ListAPIView):
 class mapSchoolsList(generics.ListAPIView):
     queryset = MapSchools.objects.all()
     serializer_class = MapSchoolsSerializer
-
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        return MapSchools.objects.filter(map_data__properties__year = int(query)) 

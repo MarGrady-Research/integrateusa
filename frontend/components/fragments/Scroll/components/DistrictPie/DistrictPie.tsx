@@ -8,7 +8,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
