@@ -20,7 +20,7 @@ for (const bp in breakpoints) {
   breakpointsNumbers[bp] = parseInt(breakpoints[bp].slice(0, -2));
 }
 
-type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
+type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | null;
 
 export function useBreakpoint() {
   const [breakpoint, setBreakpoint] = useState(null as Breakpoint);
@@ -59,7 +59,7 @@ export function useBreakpoint() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [sm, md, lg, xl]);
 
   return breakpoint;
 }
