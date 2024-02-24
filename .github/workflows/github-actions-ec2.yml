@@ -10,6 +10,15 @@ jobs:
     steps:
       - name: Checkout the files
         uses: actions/checkout@v2
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo POSTGRES_NAME=$${{secrets.POSTGRES_NAME}} >> .env
+          echo POSTGRES_USER=${{ secrets.POSTGRES_USER}} >> .env
+          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD}} >> .env
+          echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST}} >> .env
+          echo MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN}} >> .env
+          cat .env
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
         with:
@@ -29,9 +38,3 @@ jobs:
             sudo docker system prune -a -f
             sudo docker-compose -f docker-compose-production.yml build
             sudo docker-compose -f docker-compose-production.yml up --detach
-        env:
-          POSTGRES_NAME: ${{ secrets.POSTGRES_NAME }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
