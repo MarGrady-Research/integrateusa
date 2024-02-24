@@ -19,6 +19,7 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
       - name: "Create env file"
         run: |
+          ls
           cd ~/app
           touch .env
           echo POSTGRES_NAME=${{secrets.POSTGRES_NAME}} > .env
