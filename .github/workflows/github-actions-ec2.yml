@@ -13,26 +13,35 @@ jobs:
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-      - name: Executing remote ssh commands using ssh key
-        uses: appleboy/ssh-action@master
+          SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
+          REMOTE_HOST: ${{secrets.HOST_DNS}}
+          REMOTE_USER: ${{secrets.USERNAME}}
+          TARGET: ${{secrets.TARGET_DIR}}
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
         with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/app
-            touch .env
-            echo POSTGRES_NAME=${{secrets.POSTGRES_NAME}} > .env
-            echo POSTGRES_USER=${{secrets.POSTGRES_USER}} > .env
-            echo POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} > .env
-            echo POSTGRES_HOST=${{secrets.POSTGRES_HOST}} > .env
-            echo MAPBOX_TOKEN=${{secrets.MAPBOX_TOKEN}} > .env
-            cat .env
-          # sudo docker-compose -f docker-compose-production.yml down
-          # sudo docker system prune -a -f
-          # sudo docker-compose -f docker-compose-production.yml build
-          # sudo docker-compose -f docker-compose-production.yml up --detach
+          envkey_POSTGRES_NAME: ${{secrets.POSTGRES_NAME}}
+          envkey_POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          envkey_POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          envkey_POSTGRES_HOST: ${{secrets.POSTGRES_HOST}}
+          envkey_MAPBOX_TOKEN: ${{secrets.MAPBOX_TOKEN}}
+          directory: ${{ secrets.TARGET_DIR }}
+      #- name: Executing remote ssh commands using ssh key
+      # uses: appleboy/ssh-action@master
+      #with:
+      # host: ${{ secrets.HOST_DNS }}
+      #username: ${{ secrets.USERNAME }}
+      #key: ${{ secrets.EC2_SSH_KEY }}
+      #script: |
+      #cd ~/app
+      # touch .env
+      #echo POSTGRES_NAME=${{secrets.POSTGRES_NAME}} > .env
+      #echo POSTGRES_USER=${{secrets.POSTGRES_USER}} > .env
+      #echo POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} > .env
+      #echo POSTGRES_HOST=${{secrets.POSTGRES_HOST}} > .env
+      #echo MAPBOX_TOKEN=${{secrets.MAPBOX_TOKEN}} > .env
+      #cat .env
+      # sudo docker-compose -f docker-compose-production.yml down
+      # sudo docker system prune -a -f
+      # sudo docker-compose -f docker-compose-production.yml build
+      # sudo docker-compose -f docker-compose-production.yml up --detach
