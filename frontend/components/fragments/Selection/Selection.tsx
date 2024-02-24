@@ -12,7 +12,7 @@ import GradeSelect from "./components/GradeSelect";
 
 import { selectLevel } from "store/selectSlice";
 
-import { useBreakpoint } from "hooks";
+import { useBreakpointRegion } from "hooks";
 
 import { Level } from "interfaces";
 
@@ -31,11 +31,11 @@ const selectsHeight = 224;
 export default function Selection({ omitSchools }: Props) {
   const [{ y }] = useWindowScroll();
 
-  const breakpoint = useBreakpoint();
+  const breakpointRegion = useBreakpointRegion();
 
   let navbarHeight = 0;
 
-  switch (breakpoint) {
+  switch (breakpointRegion) {
     case "xs":
       navbarHeight = navbarMobileHeight;
       break;

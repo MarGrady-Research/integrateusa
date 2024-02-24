@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 
-import { useBreakpoint } from "hooks";
+import { useBreakpointRegion } from "hooks";
 
 import Section from "../Section";
 import Info from "../Info";
@@ -42,9 +42,11 @@ export default function SectionIntegrationLine() {
     data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
   };
 
-  const breakpoint = useBreakpoint();
+  const breakpointRegion = useBreakpointRegion();
   const onTablet =
-    breakpoint === "xs" || breakpoint === "sm" || breakpoint === "md";
+    breakpointRegion === "xs" ||
+    breakpointRegion === "sm" ||
+    breakpointRegion === "md";
 
   return (
     <Section>

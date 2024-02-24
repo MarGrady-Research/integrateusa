@@ -17,18 +17,23 @@ const breakpoints = fullConfig?.theme?.screens || {
 const breakpointsNumbers = { sm: 0, md: 0, lg: 0, xl: 0, "2xl": 0 };
 
 for (const bp in breakpoints) {
-  breakpointsNumbers[bp] = parseInt(breakpoints[bp].slice(0, -2));
+  breakpointsNumbers[bp as Breakpoint] = parseInt(
+    breakpoints[bp as Breakpoint].slice(0, -2)
+  );
 }
 
-type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
+type Breakpoint = "sm" | "md" | "lg" | "xl" | "2xl";
+type BreakpointRegion = "xs" | "sm" | "md" | "lg" | "xl" | null;
 
-export function useBreakpoint() {
-  const [breakpoint, setBreakpoint] = useState(null as Breakpoint);
+export function useBreakpointRegion() {
+  const [breakpointRegion, setBreakpointRegion] = useState(
+    null as BreakpointRegion
+  );
 
   const { sm, md, lg, xl } = breakpointsNumbers;
 
   useEffect(() => {
-    const returnBreakpoint = (): Breakpoint => {
+    const returnBreakpointRegion = (): BreakpointRegion => {
       if (window.innerWidth < sm) {
         return "xs";
       }
@@ -49,8 +54,8 @@ export function useBreakpoint() {
     };
 
     const handleResize = () => {
-      const currentBreakpoint = returnBreakpoint();
-      setBreakpoint(currentBreakpoint);
+      const currentBreakpointRegion = returnBreakpointRegion();
+      setBreakpointRegion(currentBreakpointRegion);
     };
 
     handleResize();
@@ -59,7 +64,7 @@ export function useBreakpoint() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [sm, md, lg, xl]);
 
-  return breakpoint;
+  return breakpointRegion;
 }
