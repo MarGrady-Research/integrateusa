@@ -17,6 +17,15 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo POSTGRES_NAME=${{secrets.POSTGRES_NAME}} > .env
+          echo POSTGRES_USER=${{secrets.POSTGRES_USER}} > .env
+          echo POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} > .env
+          echo POSTGRES_HOST=${{secrets.POSTGRES_HOST}} > .env
+          echo MAPBOX_TOKEN=${{secrets.MAPBOX_TOKEN}} > .env
+          cat .env
       - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
@@ -29,9 +38,3 @@ jobs:
             sudo docker system prune -a -f
             sudo docker-compose -f docker-compose-production.yml build
             sudo docker-compose -f docker-compose-production.yml up --detach
-        env:
-          POSTGRES_NAME: ${{ secrets.POSTGRES_NAME }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
