@@ -8,6 +8,7 @@ import {
   LineElement,
   Title,
   Tooltip,
+  Tick,
   Legend,
 } from "chart.js";
 import { Line as LineChart } from "react-chartjs-2";
@@ -109,14 +110,14 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
         stacked: true,
         ticks: {
           font: {
-            weight: (c) => {
-              if (c.tick.label === year) {
+            weight: (c: { tick: Tick }) => {
+              if (c.tick.label === year.toString()) {
                 return "bold";
               }
             },
           },
-          color: (c) => {
-            if (c.tick.label === year) {
+          color: (c: { tick: Tick }) => {
+            if (c.tick.label === year.toString()) {
               return primaryColor;
             }
           },
