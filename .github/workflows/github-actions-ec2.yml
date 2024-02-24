@@ -25,7 +25,6 @@ jobs:
           envkey_POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
           envkey_POSTGRES_HOST: ${{secrets.POSTGRES_HOST}}
           envkey_MAPBOX_TOKEN: ${{secrets.MAPBOX_TOKEN}}
-          directory: ${{ secrets.TARGET_DIR }}
       #- name: Executing remote ssh commands using ssh key
       # uses: appleboy/ssh-action@master
       #with:
