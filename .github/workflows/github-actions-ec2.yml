@@ -13,19 +13,19 @@ jobs:
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         with:
-            SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-            REMOTE_HOST: ${{ secrets.HOST_DNS }}
-            REMOTE_USER: ${{ secrets.USERNAME }}
-            TARGET: ${{ secrets.TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
       - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ secrets.HOST_DNS }}
-            username: ${{ secrets.USERNAME }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              cd ~/YOUR/TARGET/DIR
-              sudo docker-compose -f docker-compose-production.yml down
-              sudo docker system prune -a -f
-              sudo docker-compose -f docker-compose-production.yml build
-              sudo docker-compose -f docker-compose-production.yml up --detach
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/app
+            sudo docker-compose -f docker-compose-production.yml down
+            sudo docker system prune -a -f
+            sudo docker-compose -f docker-compose-production.yml build
+            sudo docker-compose -f docker-compose-production.yml up --detach
