@@ -29,3 +29,9 @@ jobs:
             sudo docker system prune -a -f
             sudo docker-compose -f docker-compose-production.yml build
             sudo docker-compose -f docker-compose-production.yml up --detach
+        env:
+          POSTGRES_NAME: ${{ secrets.POSTGRES_NAME }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
