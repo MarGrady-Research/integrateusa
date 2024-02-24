@@ -37,7 +37,7 @@
     "redux-deep-persist": "^1.0.7",
     "redux-persist": "^6.0.0",
     "sass": "^1.69.5",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.1.0",
