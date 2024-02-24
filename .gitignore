@@ -2,4 +2,4 @@
 ./integrateusa/secretkey.txt
 .DS_Store
 
-.env
+//.env
