@@ -5,6 +5,7 @@ import {
   BarElement,
   CategoryScale,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
@@ -15,7 +16,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { schoolData } from "./data";
 
@@ -106,7 +107,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return context.dataset.label + " " + label + "%";
         },
@@ -117,8 +118,12 @@ const options = {
   maintainAspectRatio: false,
   scales: {
     x: {
-      ticks: false,
-      display: false,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
       stacked: true,
       barPercentage: 1,
     },
@@ -128,9 +133,9 @@ const options = {
       grid: {
         display: false,
       },
-      position: "right",
+      position: "right" as "right",
     },
-  } as any,
+  },
 };
 
 export default function DistrictBar() {

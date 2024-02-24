@@ -1,5 +1,5 @@
 import React from "react";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { SelectChangeEvent, SelectClasses } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -18,8 +18,7 @@ interface Props {
     label: string;
     disabled?: boolean;
   }[];
-  classes?: any;
-  menuItemClasses?: any;
+  classes?: Partial<SelectClasses>;
   full?: boolean;
 }
 

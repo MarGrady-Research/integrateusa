@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from backend.models import Schools, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
+from backend.models import SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
 
-class SchoolsSerializer(serializers.ModelSerializer):
+class SchoolInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Schools
+        model = SchoolInfo
         fields = '__all__'
+
+class SchoolTrendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolTrends
+        fields = ['sch_name', 'year', 'grade', 'level', 'asian', 'black', 'hispanic', 'other', 'white']
 
 # Name Serializers
 class DistNameSerializer(serializers.ModelSerializer):
@@ -37,7 +42,7 @@ class StateNameSerializer(serializers.ModelSerializer):
 class DistrictTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = DistrictTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 class DistrictTrendAltSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,12 +52,12 @@ class DistrictTrendAltSerializer(serializers.ModelSerializer):
 class CountyTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountyTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 class StateTrendSerializer(serializers.ModelSerializer):
     class Meta:
         model = StateTrends
-        fields = '__all__'
+        fields = ["year","grade","asian","black","hispanic","white","other"]
 
 
 # Segregation Serialzers
@@ -79,5 +84,22 @@ class MapSchoolsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MapSchools
-        fields = ['map_data'] 
+        fields = ['nces_id',
+                  'dist_id',
+                  'county_id',
+                  'state_abb',
+                  'sch_name',
+                  'dist_name',
+                  'county_name',
+                  'lon_new',
+                  'lat_new',
+                  'xminimum',
+                  'yminimum',
+                  'xmaximum',
+                  'ymaximum',
+                  'asian',
+                  'black',
+                  'hispanic',
+                  'other', 
+                  'white'] 
 

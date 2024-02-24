@@ -16,11 +16,16 @@ import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
 import { Bounds, MapLevel } from "interfaces";
 
 interface Props {
-  handleVisibility: (l: MapLevel) => void;
+  mapLevel: MapLevel;
+  handleMapLevel: (l: MapLevel) => void;
   handleBounds: (e: Bounds) => void;
 }
 
-export default function Slideover({ handleVisibility, handleBounds }: Props) {
+export default function Slideover({
+  mapLevel,
+  handleMapLevel,
+  handleBounds,
+}: Props) {
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen((o) => !o);
 
@@ -60,7 +65,8 @@ export default function Slideover({ handleVisibility, handleBounds }: Props) {
         <div className="p-4">
           <h1 className="text-xl mb-4">Map Options</h1>
           <Control
-            handleVisibility={handleVisibility}
+            mapLevel={mapLevel}
+            handleMapLevel={handleMapLevel}
             handleBounds={handleBounds}
           />
         </div>

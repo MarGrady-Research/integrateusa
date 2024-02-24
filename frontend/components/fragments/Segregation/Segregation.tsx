@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import SegBar from "./components/Bar";
 import Info from "./components/Info";
@@ -22,7 +22,7 @@ import {
   setLineDataFailure,
 } from "store/apiCacheSlice";
 
-import { SegData, Line, Level, MeasureAccessor } from "interfaces";
+import { SegData, Line, Level, MeasureAccessor, LineData } from "interfaces";
 
 interface Props {
   segData: SegData;
@@ -151,11 +151,11 @@ export default function Segregation({ segData, isLoading }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get(url, { signal: currentAbortController.signal })
+      .get<LineData>(url, { signal: currentAbortController.signal })
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setLineDataFailure(lineKey));
         }
@@ -196,46 +196,6 @@ export default function Segregation({ segData, isLoading }: Props) {
   useEffect(() => {
     stopAllLineDataRequests();
 
-    const abortController = new AbortController();
-
-    const promises = lines.map((l) =>
-      axios.get(`/api/${table}/?grade=${grade}&${idLevel}=${l.id}`, {
-        signal: abortController.signal,
-      })
-    );
-
-    lines.forEach((l) => {
-      const lineKey = `${grade}-${l.id}`;
-
-      dispatch(setLineDataRequest(lineKey));
-    });
-
-    Promise.all(promises)
-      .then((values) => {
-        for (const [index, res] of values.entries()) {
-          const lineKey = `${grade}-${lines[index].id}`;
-
-          dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
-        }
-      })
-      .catch((error) => {
-        if (error.name !== "CanceledError") {
-          lines.forEach((l) => {
-            const lineKey = `${grade}-${l.id}`;
-
-            dispatch(setLineDataFailure(lineKey));
-          });
-        }
-      });
-
-    return () => {
-      abortController.abort();
-    };
-  }, [grade, dispatch, idLevel, lines, table]);
-
-  useEffect(() => {
-    stopAllLineDataRequests();
-
     setLines([{ id, name }]);
 
     const abortController = new AbortController();
@@ -245,13 +205,13 @@ export default function Segregation({ segData, isLoading }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
+      .get<LineData>(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
         signal: abortController.signal,
       })
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         if (error.name !== "CanceledError") {
           dispatch(setLineDataFailure(lineKey));
         }

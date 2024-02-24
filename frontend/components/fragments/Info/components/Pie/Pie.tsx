@@ -1,5 +1,11 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  TooltipItem,
+} from "chart.js";
 import Skeleton from "@mui/material/Skeleton";
 import { Pie } from "react-chartjs-2";
 
@@ -11,7 +17,7 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-} from "constants/";
+} from "@/colors";
 
 import { InfoData } from "interfaces";
 
@@ -33,7 +39,9 @@ const getPieData = (infoData: InfoData) => {
   let otherTotal = 0;
 
   for (const school of infoData) {
-    const { tot_enr, asian, black, hispanic, white, other } = school;
+    const { asian, black, hispanic, white, other } = school;
+
+    const tot_enr = asian + black + hispanic + white + other;
 
     studentsTotal += tot_enr;
     asianTotal += asian;
@@ -69,7 +77,7 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<any>) => {
           const label = context.dataset.data[context.dataIndex];
           return labels[context.dataIndex] + " " + label + "%";
         },

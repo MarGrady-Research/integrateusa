@@ -5,12 +5,13 @@ import clsx from "clsx";
 import SummaryPie from "../SummaryPie";
 
 import { root } from "./ViewInfo.module.scss";
+import { MapboxGeoJSONFeature } from "mapbox-gl";
 
 interface Props {
-  renderedFeatures: any[];
+  renderedFeatures: MapboxGeoJSONFeature[];
 }
 
-const getViewInfo = (renderedFeatures) => {
+const getViewInfo = (renderedFeatures: MapboxGeoJSONFeature[]) => {
   let studentsTotal = 0;
   let asianTotal = 0;
   let blackTotal = 0;
@@ -19,14 +20,16 @@ const getViewInfo = (renderedFeatures) => {
   let otherTotal = 0;
 
   for (const feature of renderedFeatures) {
-    const { tot_enr, as, bl, hi, wh, or } = feature.properties;
+    const { asian, black, hispanic, white, other } = feature.properties;
+
+    const tot_enr = asian + black + hispanic + white + other;
 
     studentsTotal += tot_enr;
-    asianTotal += as;
-    blackTotal += bl;
-    hispanicTotal += hi;
-    whiteTotal += wh;
-    otherTotal += or;
+    asianTotal += asian;
+    blackTotal += black;
+    hispanicTotal += hispanic;
+    whiteTotal += white;
+    otherTotal += other;
   }
 
   const asianPercentageRaw = (asianTotal / studentsTotal) * 100;

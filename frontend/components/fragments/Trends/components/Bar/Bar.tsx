@@ -19,12 +19,12 @@ import {
   hispanicColor,
   whiteColor,
   otherColor,
-  primaryColor,
-} from "constants/";
+} from "@/colors";
 
 import { TrendData } from "interfaces";
 
 import { container } from "./Bar.module.scss";
+import { primaryColor } from "constants/";
 
 ChartJS.register(
   CategoryScale,
@@ -123,7 +123,7 @@ export default function BarChart({ trendData, grade, year, isLoading }: Props) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as any,
+        position: "top" as "top",
       },
     },
     scales: {

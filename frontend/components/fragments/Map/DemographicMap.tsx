@@ -1,14 +1,19 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Map, {
   Layer,
   Source,
   NavigationControl,
   GeolocateControl,
   FullscreenControl,
+  MapRef,
 } from "react-map-gl";
-import { Visibility } from "mapbox-gl";
+import mapboxgl, {
+  Expression,
+  MapboxGeoJSONFeature,
+  Visibility,
+} from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -21,15 +26,24 @@ const ViewInfo = dynamic(() => import("./components/ViewInfo"));
 const SchoolPie = dynamic(() => import("./components/SchoolPie"));
 const AreaPie = dynamic(() => import("./components/AreaPie"));
 
-import { selectBounds } from "store/selectSlice";
-import { selectMapData, setMapData } from "store/apiCacheSlice";
-import { Level, MapLevel, MapStatus } from "interfaces";
 import {
-  asianColor,
-  blackColor,
-  hispanicColor,
-  whiteColor,
-  otherColor,
+  selectBounds,
+  selectLevel,
+  selectDistrictType,
+} from "store/selectSlice";
+import { selectMapData, setMapData } from "store/apiCacheSlice";
+import { selectZoomOnMap } from "store/mapSlice";
+import {
+  Level,
+  MapLevel,
+  MapStatus,
+  DistrictType,
+  ApiMapData,
+  HoverInfoInterface,
+  Bounds,
+  MapData,
+} from "interfaces";
+import {
   defaultMapSchoolColor,
   selectedAreaColor,
   unselectedAreaColor,
@@ -43,23 +57,73 @@ import {
   secondaryDistrictSourceLayer,
 } from "constants/";
 
-const prop_array = [
-  "max",
-  ["get", "as"],
-  ["get", "bl"],
-  ["get", "hi"],
-  ["get", "wh"],
-  ["get", "or"],
-];
+import {
+  asianColor,
+  blackColor,
+  hispanicColor,
+  whiteColor,
+  otherColor,
+} from "@/colors";
 
 interface Props {
   onSmallerScreen: boolean;
 }
 
+const prop_array = [
+  "max",
+  ["get", "asian"],
+  ["get", "black"],
+  ["get", "hispanic"],
+  ["get", "white"],
+  ["get", "other"],
+];
+
 const schoolsSourceId = "schools-source";
+
+const setInitialMapLevel = (
+  zoomOnMap: boolean,
+  level: Level,
+  districtType: DistrictType
+): MapLevel => {
+  if (!zoomOnMap) {
+    return MapLevel.School;
+  }
+
+  switch (level) {
+    case Level.School:
+      return MapLevel.School;
+    case Level.District:
+      return districtType === DistrictType.Secondary
+        ? MapLevel.UnifiedSecondaryDistrict
+        : MapLevel.UnifiedElementaryDistrict;
+    case Level.County:
+      return MapLevel.County;
+    case Level.State:
+      return MapLevel.School;
+  }
+};
+
+const processMapData = (mapData: ApiMapData): MapData => {
+  return mapData.map((md) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [parseFloat(md.lon_new), parseFloat(md.lat_new)],
+    },
+    properties: md,
+  }));
+};
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
   const dispatch = useDispatch();
+
+  const zoomOnMap = useSelector(selectZoomOnMap);
+  const level = useSelector(selectLevel);
+  const districtType = useSelector(selectDistrictType);
+
+  const [mapLevel, setMapLevel] = useState(() =>
+    setInitialMapLevel(zoomOnMap, level, districtType)
+  );
 
   const mapData = useSelector(selectMapData);
   const mapDataExists = mapData !== null;
@@ -67,14 +131,15 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [mapStatus, setMapStatus] = useState(
     mapDataExists ? MapStatus.Rendering : MapStatus.Fetching
   );
+  const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
-  const mapRef = useRef();
+  const mapRef = useRef<MapRef>();
 
   const [hasMapLoaded, setHasMapLoaded] = useState(false);
 
   const initialBounds = useSelector(selectBounds);
 
-  const [hoverInfo, setHoverInfo] = useState(null);
+  const [hoverInfo, setHoverInfo] = useState(null as HoverInfoInterface | null);
   const [isHovering, setIsHovering] = useState(false);
 
   const [hoveredFeatureData, setHoveredFeatureData] = useState(null);
@@ -88,20 +153,17 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
   const [cursor, setCursor] = useState("auto");
 
-  const [stateVisible, setStateVisible] = useState("none" as Visibility);
-  const [countyVisible, setCountyVisible] = useState("none" as Visibility);
-  const [elementaryDistrictVisible, setElementaryDistrictVisible] = useState(
-    "none" as Visibility
-  );
-  const [secondaryDistrictVisible, setSecondaryDistrictVisible] = useState(
-    "none" as Visibility
+  const [renderedFeatures, setRenderedFeatures] = useState(
+    [] as MapboxGeoJSONFeature[]
   );
 
-  const [renderedFeatures, setRenderedFeatures] = useState([]);
+  const stateVisibility = (
+    mapLevel === MapLevel.State ? "visible" : "none"
+  ) as Visibility;
 
   const stateLayer = {
     id: "state-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "state-boundary-source",
     "source-layer": stateSourceLayer,
     paint: {
@@ -111,16 +173,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
-      visibility: stateVisible,
+      visibility: stateVisibility,
     },
   };
 
+  const countyVisibility = (
+    mapLevel === MapLevel.County ? "visible" : "none"
+  ) as Visibility;
+
   const countyLayer = {
     id: "county-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "county-boundary-source",
     "source-layer": countySourceLayer,
     paint: {
@@ -130,16 +196,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
-      visibility: countyVisible,
+      visibility: countyVisibility,
     },
   };
 
+  const elementaryDistrictVisibility = (
+    mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none"
+  ) as Visibility;
+
   const elementaryDistrictLayer = {
     id: "elementary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "elementary-district-boundary-source",
     "source-layer": elementaryDistrictSourceLayer,
     paint: {
@@ -149,16 +219,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
-      visibility: elementaryDistrictVisible,
+      visibility: elementaryDistrictVisibility,
     },
   };
 
+  const secondaryDistrictVisibility = (
+    mapLevel === MapLevel.UnifiedSecondaryDistrict ? "visible" : "none"
+  ) as Visibility;
+
   const secondaryDistrictLayer = {
     id: "secondary-district-boundary",
-    type: "fill" as any,
+    type: "fill" as "fill",
     source: "secondary-district-boundary-source",
     "source-layer": secondaryDistrictSourceLayer,
     paint: {
@@ -168,262 +242,50 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         ["boolean", ["feature-state", "hover"], false],
         selectedAreaColor,
         unselectedAreaColor,
-      ],
-    } as any,
+      ] as Expression,
+    },
     layout: {
-      visibility: secondaryDistrictVisible,
+      visibility: secondaryDistrictVisibility,
     },
   };
 
   const LayerProps = {
     id: "schools",
-    type: "circle" as any,
+    type: "circle" as "circle",
     source: schoolsSourceId,
     paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 3.5, 1, 14, 9],
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        3.5,
+        1,
+        14,
+        9,
+      ] as Expression,
       "circle-color": [
         "case",
-        ["==", ["get", "as"], prop_array],
+        ["==", ["get", "asian"], prop_array],
         asianColor,
-        ["==", ["get", "bl"], prop_array],
+        ["==", ["get", "black"], prop_array],
         blackColor,
-        ["==", ["get", "hi"], prop_array],
+        ["==", ["get", "hispanic"], prop_array],
         hispanicColor,
-        ["==", ["get", "wh"], prop_array],
+        ["==", ["get", "white"], prop_array],
         whiteColor,
-        ["==", ["get", "or"], prop_array],
+        ["==", ["get", "other"], prop_array],
         otherColor,
         defaultMapSchoolColor,
-      ],
+      ] as Expression,
       "circle-stroke-width": 2,
       "circle-stroke-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
         "#000",
         "transparent",
-      ],
-    } as any,
-  };
-
-  const handleVisibility = (mapLevel: MapLevel) => {
-    const elementaryDistrictVisibility =
-      mapLevel === MapLevel.UnifiedElementaryDistrict ? "visible" : "none";
-    const secondaryDistrictVisibility =
-      mapLevel === MapLevel.UnifiedSecondaryDistrict ? "visible" : "none";
-    const countyVisibility = mapLevel === MapLevel.County ? "visible" : "none";
-    const stateVisibility = mapLevel === MapLevel.State ? "visible" : "none";
-
-    setElementaryDistrictVisible(elementaryDistrictVisibility);
-    setSecondaryDistrictVisible(secondaryDistrictVisibility);
-    setCountyVisible(countyVisibility);
-    setStateVisible(stateVisibility);
-  };
-
-  const updateBounds = useCallback((e) => {
-    if (mapRef.current) {
-      (mapRef.current as any).fitBounds(
-        [
-          [e.lngmin, e.latmin],
-          [e.lngmax, e.latmax],
-        ],
-        { padding: 25, duration: 2000 }
-      );
-    }
-  }, []);
-
-  const handleBounds = (e) => {
-    updateBounds(e);
-  };
-
-  const handleHover = useCallback(
-    (event) => {
-      setHoverInfo(null);
-      setIsHovering(false);
-
-      const {
-        point: { x, y },
-        originalEvent: {
-          target: { height, width },
-        },
-      } = event;
-
-      const hoveredFeature = event.features && event.features[0];
-
-      if (hoveredFeature) {
-        setCursor("pointer");
-        setHoverInfo(
-          hoveredFeature && {
-            feature: hoveredFeature,
-            x,
-            y,
-            height,
-            width,
-          }
-        );
-        setIsHovering(true);
-
-        const hoveringOnSchool = hoveredFeature.source === schoolsSourceId;
-
-        if (hoveringOnSchool) {
-          setHoveredSchoolData({
-            source: hoveredFeature.source,
-            id: hoveredFeature.id,
-          });
-        } else {
-          setHoveredFeatureData({
-            source: hoveredFeature.source,
-            sourceLayer: hoveredFeature.sourceLayer,
-            id: hoveredFeature.id,
-          });
-        }
-
-        if (mapRef.current) {
-          if (hoveringOnSchool) {
-            if (hoveredFeatureData) {
-              (mapRef.current as any).setFeatureState(hoveredFeatureData, {
-                hover: false,
-              });
-            }
-
-            (mapRef.current as any).removeFeatureState({
-              source: hoveredFeature.source,
-            });
-
-            (mapRef.current as any).setFeatureState(
-              {
-                source: hoveredFeature.source,
-                id: hoveredFeature.id,
-              },
-              { hover: true }
-            );
-          } else {
-            if (hoveredSchoolData) {
-              (mapRef.current as any).setFeatureState(hoveredSchoolData, {
-                hover: false,
-              });
-            }
-
-            (mapRef.current as any).removeFeatureState({
-              source: hoveredFeature.source,
-              sourceLayer: hoveredFeature.sourceLayer,
-            });
-
-            (mapRef.current as any).setFeatureState(
-              {
-                source: hoveredFeature.source,
-                sourceLayer: hoveredFeature.sourceLayer,
-                id: hoveredFeature.id,
-              },
-              { hover: true }
-            );
-          }
-        }
-      }
+      ] as Expression,
     },
-    [hoveredFeatureData, hoveredSchoolData]
-  );
-
-  const onMouseLeave = useCallback(() => {
-    if (mapRef.current) {
-      if (hoveredFeatureData) {
-        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
-          hover: false,
-        });
-      }
-
-      if (hoveredSchoolData) {
-        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
-          hover: false,
-        });
-      }
-    }
-
-    setIsHovering(false);
-    setCursor("auto");
-  }, [hoveredFeatureData, hoveredSchoolData]);
-
-  const onMouseOut = useCallback(() => {
-    if (mapRef.current) {
-      if (hoveredFeatureData) {
-        (mapRef.current as any).setFeatureState(hoveredFeatureData, {
-          hover: false,
-        });
-      }
-
-      if (hoveredSchoolData) {
-        (mapRef.current as any).setFeatureState(hoveredSchoolData, {
-          hover: false,
-        });
-      }
-    }
-
-    setIsHovering(false);
-    setCursor("auto");
-  }, [hoveredFeatureData, hoveredSchoolData]);
-
-  const handleDialog = () => {
-    if (hoverInfo) {
-      toggleInfoDialog();
-    }
   };
-
-  const getData = useCallback(() => {
-    const mapDataExistsOnStore = mapData !== null;
-
-    if (!mapDataExistsOnStore) {
-      setMapStatus(MapStatus.Fetching);
-    }
-
-    axios
-      .get("/api/mapschools/?q=2022")
-      .then((res) => {
-        dispatch(setMapData(res.data.map((d) => d.map_data)));
-
-        if (!mapDataExistsOnStore) {
-          setMapStatus(MapStatus.Rendering);
-        }
-      })
-      .catch(() => {
-        if (!mapDataExistsOnStore) {
-          setMapStatus(MapStatus.Failed);
-        }
-      });
-  }, [dispatch, mapData]);
-
-  const querySchools = () => {
-    if (mapRef.current) {
-      const features = (mapRef.current as any).queryRenderedFeatures({
-        layers: ["schools"],
-      });
-
-      setRenderedFeatures(features);
-    }
-  };
-
-  const onInitialRender = (source) => {
-    if (renderedFeatures.length > 0) {
-      return;
-    }
-
-    if (
-      source.isSourceLoaded &&
-      source.sourceId === schoolsSourceId &&
-      source.sourceCacheId === `other:${schoolsSourceId}` &&
-      source.source.data.features.length > 0
-    ) {
-      querySchools();
-      setMapStatus(MapStatus.Complete);
-    }
-  };
-
-  const onLoad = useCallback(() => {
-    setHasMapLoaded(true);
-
-    if (onSmallerScreen) {
-      updateBounds(initialBounds);
-    }
-    getData();
-  }, [onSmallerScreen, initialBounds, getData, updateBounds]);
 
   const coordinates = {
     x: hoverInfo?.x,
@@ -443,8 +305,6 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     type: "FeatureCollection" as "FeatureCollection",
     features: mapData || [],
   };
-
-  const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
   let urlParams = "";
 
@@ -496,10 +356,26 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       params.append("ymax", latmax);
     }
 
+    if (mapLevel === MapLevel.UnifiedElementaryDistrict) {
+      params.append("dist_type", DistrictType.Elementary);
+    } else if (mapLevel === MapLevel.UnifiedSecondaryDistrict) {
+      params.append("dist_type", DistrictType.Secondary);
+    } else {
+      params.append("dist_type", DistrictType.Unified);
+    }
+
     urlParams = `/?${params.toString()}`;
   } else if (schoolName) {
-    const { nces_id, sch_name, xmin, xmax, ymin, ymax, lat_new, lon_new } =
-      hoverInfo.feature.properties;
+    const {
+      nces_id,
+      sch_name,
+      xminimum,
+      xmaximum,
+      yminimum,
+      ymaximum,
+      lat_new,
+      lon_new,
+    } = hoverInfo.feature.properties;
 
     const level = Level.School.toString();
 
@@ -517,20 +393,20 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
       params.append("name", sch_name);
     }
 
-    if (xmin) {
-      params.append("xmin", xmin);
+    if (xminimum) {
+      params.append("xmin", xminimum);
     }
 
-    if (xmax) {
-      params.append("xmax", xmax);
+    if (xmaximum) {
+      params.append("xmax", xmaximum);
     }
 
-    if (ymin) {
-      params.append("ymin", ymin);
+    if (yminimum) {
+      params.append("ymin", yminimum);
     }
 
-    if (ymax) {
-      params.append("ymax", ymax);
+    if (ymaximum) {
+      params.append("ymax", ymaximum);
     }
 
     if (lat_new) {
@@ -545,6 +421,243 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   }
 
   const hideSegLink = typeof schoolName != "undefined";
+
+  const handleMapLevel = (mapLevel: MapLevel) => {
+    setMapLevel(mapLevel);
+  };
+
+  const updateBounds = useCallback((b: Bounds) => {
+    if (mapRef.current) {
+      mapRef.current.fitBounds(
+        [
+          [b.lngmin, b.latmin],
+          [b.lngmax, b.latmax],
+        ],
+        { padding: 25, duration: 2000 }
+      );
+    }
+  }, []);
+
+  const handleBounds = (b: Bounds) => {
+    updateBounds(b);
+  };
+
+  const handleHover = useCallback(
+    (event: mapboxgl.MapLayerMouseEvent) => {
+      setHoverInfo(null);
+      setIsHovering(false);
+
+      const {
+        point: { x, y },
+      } = event;
+
+      const height = (event.originalEvent.target as HTMLCanvasElement).height;
+      const width = (event.originalEvent.target as HTMLCanvasElement).width;
+
+      const hoveredFeature = event.features && event.features[0];
+
+      if (hoveredFeature) {
+        setCursor("pointer");
+        setHoverInfo(
+          hoveredFeature && {
+            feature: hoveredFeature,
+            x,
+            y,
+            height,
+            width,
+          }
+        );
+        setIsHovering(true);
+
+        const hoveringOnSchool = hoveredFeature.source === schoolsSourceId;
+
+        if (hoveringOnSchool) {
+          setHoveredSchoolData({
+            source: hoveredFeature.source,
+            id: hoveredFeature.id,
+          });
+        } else {
+          setHoveredFeatureData({
+            source: hoveredFeature.source,
+            sourceLayer: hoveredFeature.sourceLayer,
+            id: hoveredFeature.id,
+          });
+        }
+
+        if (mapRef.current) {
+          if (hoveringOnSchool) {
+            if (hoveredFeatureData) {
+              mapRef.current.setFeatureState(hoveredFeatureData, {
+                hover: false,
+              });
+            }
+
+            mapRef.current.removeFeatureState({
+              source: hoveredFeature.source,
+            });
+
+            mapRef.current.setFeatureState(
+              {
+                source: hoveredFeature.source,
+                id: hoveredFeature.id,
+              },
+              { hover: true }
+            );
+          } else {
+            if (hoveredSchoolData) {
+              mapRef.current.setFeatureState(hoveredSchoolData, {
+                hover: false,
+              });
+            }
+
+            mapRef.current.removeFeatureState({
+              source: hoveredFeature.source,
+              sourceLayer: hoveredFeature.sourceLayer,
+            });
+
+            mapRef.current.setFeatureState(
+              {
+                source: hoveredFeature.source,
+                sourceLayer: hoveredFeature.sourceLayer,
+                id: hoveredFeature.id,
+              },
+              { hover: true }
+            );
+          }
+        }
+      }
+    },
+    [hoveredFeatureData, hoveredSchoolData]
+  );
+
+  const onMouseLeave = useCallback(() => {
+    if (mapRef.current) {
+      if (hoveredFeatureData) {
+        mapRef.current.setFeatureState(hoveredFeatureData, {
+          hover: false,
+        });
+      }
+
+      if (hoveredSchoolData) {
+        mapRef.current.setFeatureState(hoveredSchoolData, {
+          hover: false,
+        });
+      }
+    }
+
+    setIsHovering(false);
+    setCursor("auto");
+  }, [hoveredFeatureData, hoveredSchoolData]);
+
+  const onMouseOut = useCallback(() => {
+    if (mapRef.current) {
+      if (hoveredFeatureData) {
+        mapRef.current.setFeatureState(hoveredFeatureData, {
+          hover: false,
+        });
+      }
+
+      if (hoveredSchoolData) {
+        mapRef.current.setFeatureState(hoveredSchoolData, {
+          hover: false,
+        });
+      }
+    }
+
+    setIsHovering(false);
+    setCursor("auto");
+  }, [hoveredFeatureData, hoveredSchoolData]);
+
+  const handleDialog = () => {
+    if (hoverInfo) {
+      toggleInfoDialog();
+    }
+  };
+
+  const mapDataApiCallDone = useRef(false);
+
+  useEffect(() => {
+    if (mapDataApiCallDone.current) {
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    axios
+      .get<ApiMapData>("/api/mapschools/?q=2022", {
+        signal: abortController.signal,
+      })
+      .then((res) => {
+        mapDataApiCallDone.current = true;
+
+        const processedMapData = processMapData(res.data);
+
+        dispatch(setMapData(processedMapData));
+
+        if (!mapDataExists) {
+          setMapStatus(MapStatus.Rendering);
+        }
+      })
+      .catch((error: AxiosError) => {
+        if (!mapDataExists && error.name !== "CanceledError") {
+          mapDataApiCallDone.current = true;
+
+          setMapStatus(MapStatus.Failed);
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch, mapDataExists]);
+
+  const querySchools = () => {
+    if (!mapRenderingComplete) {
+      return;
+    }
+
+    if (mapRef.current) {
+      const features = mapRef.current.queryRenderedFeatures(null, {
+        layers: ["schools"],
+      });
+
+      setRenderedFeatures(features);
+    }
+  };
+
+  const querySchoolsInitial = () => {
+    if (mapRef.current) {
+      const features = mapRef.current.queryRenderedFeatures(null, {
+        layers: ["schools"],
+      });
+
+      setRenderedFeatures(features);
+    }
+  };
+
+  const onInitialRender = (source) => {
+    if (renderedFeatures.length > 0) {
+      return;
+    }
+
+    if (
+      source.isSourceLoaded &&
+      source.sourceId === schoolsSourceId &&
+      source.sourceCacheId === `other:${schoolsSourceId}` &&
+      source.source.data.features.length > 0
+    ) {
+      querySchoolsInitial();
+      setMapStatus(MapStatus.Complete);
+    }
+  };
+
+  const onLoad = useCallback(() => {
+    setHasMapLoaded(true);
+
+    if (onSmallerScreen || zoomOnMap) {
+      updateBounds(initialBounds);
+    }
+  }, [onSmallerScreen, zoomOnMap, initialBounds, updateBounds]);
 
   const pie = (small?: boolean) =>
     schoolName ? (
@@ -648,10 +761,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         )}
         <LoadingDialog open={!mapRenderingComplete} mapStatus={mapStatus} />
       </Map>
-      <Slideover
-        handleVisibility={handleVisibility}
-        handleBounds={handleBounds}
-      />
+      {mapRenderingComplete && (
+        <Slideover
+          mapLevel={mapLevel}
+          handleMapLevel={handleMapLevel}
+          handleBounds={handleBounds}
+        />
+      )}
     </>
   );
 }

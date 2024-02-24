@@ -73,12 +73,12 @@ const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top" as any,
+      position: "top" as "top",
     },
   },
   scales: {
     y: {
-      position: "right" as any,
+      position: "right" as "right",
     },
   },
 };
