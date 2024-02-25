@@ -66,10 +66,11 @@ export default function Info({
               schoolInfo={schoolInfo}
               isSchoolInfoLoading={isSchoolInfoLoading}
             />
-          ) : isInfoDataLoading ? (
-            <Skeleton variant="rectangular" className="!h-full w-full" />
           ) : (
-            <SchoolLevelTable infoData={infoData} />
+            <SchoolLevelTable
+              infoData={infoData}
+              isLoading={isInfoDataLoading}
+            />
           )}
         </div>
         <div className={container}>

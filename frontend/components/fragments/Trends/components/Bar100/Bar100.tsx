@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Tick,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
@@ -159,14 +160,14 @@ export default function BarChart100({
         stacked: true,
         ticks: {
           font: {
-            weight: (c) => {
-              if (c.tick.label === year) {
+            weight: (c: { tick: Tick }) => {
+              if (c.tick.label === year.toString()) {
                 return "bold";
               }
             },
           },
-          color: (c) => {
-            if (c.tick.label === year) {
+          color: (c: { tick: Tick }) => {
+            if (c.tick.label === year.toString()) {
               return primaryColor;
             }
           },

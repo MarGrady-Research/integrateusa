@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableFooter from "@mui/material/TableFooter";
 import TableRow from "@mui/material/TableRow";
+import { Skeleton } from "@mui/material";
 
 import { InfoData, SchoolType } from "interfaces";
 
@@ -14,6 +15,7 @@ import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";
 
 interface Props {
   infoData: InfoData;
+  isLoading: boolean;
 }
 
 const getSchoolLevel = (infoData: InfoData) => {
@@ -75,7 +77,11 @@ function TableHolder({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function SchoolLevelTable({ infoData }: Props) {
+export default function SchoolLevelTable({ infoData, isLoading }: Props) {
+  if (isLoading) {
+    return <Skeleton variant="rectangular" className="!h-full w-full" />;
+  }
+
   const schoolLevel = getSchoolLevel(infoData);
 
   const totalSchools = schoolLevel.Total.schools;
