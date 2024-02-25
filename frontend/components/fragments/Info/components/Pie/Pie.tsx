@@ -28,6 +28,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 interface Props {
   infoData: InfoData;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const getPieData = (infoData: InfoData) => {
@@ -86,7 +87,7 @@ const options = {
   },
 };
 
-export default function PieChart({ infoData, isLoading }: Props) {
+export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
   const ref = useRef(null);
 
   const [width, setWidth] = useState(0);

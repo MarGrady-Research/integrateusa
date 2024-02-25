@@ -6,15 +6,19 @@ import { InfoData, SchoolInfo } from "interfaces";
 interface Props {
   infoData: InfoData;
   isInfoDataLoading: boolean;
+  hasInfoDataFailed: boolean;
   schoolInfo: SchoolInfo[];
   isSchoolInfoLoading: boolean;
+  hasSchoolInfoFailed: boolean;
 }
 
 export default function SchoolInfo({
   infoData,
   isInfoDataLoading,
+  hasInfoDataFailed,
   schoolInfo,
   isSchoolInfoLoading,
+  hasSchoolInfoFailed,
 }: Props) {
   let tot_enr_str = "Not available",
     level_str = "Not available",

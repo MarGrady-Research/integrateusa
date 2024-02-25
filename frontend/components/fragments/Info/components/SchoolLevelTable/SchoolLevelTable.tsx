@@ -16,6 +16,7 @@ import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";
 interface Props {
   infoData: InfoData;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const getSchoolLevel = (infoData: InfoData) => {
@@ -77,7 +78,11 @@ function TableHolder({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function SchoolLevelTable({ infoData, isLoading }: Props) {
+export default function SchoolLevelTable({
+  infoData,
+  isLoading,
+  hasFailed,
+}: Props) {
   if (isLoading) {
     return <Skeleton variant="rectangular" className="!h-full w-full" />;
   }

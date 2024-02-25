@@ -2,7 +2,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
-import Skeleton from "@mui/material/Skeleton";
 
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
@@ -27,16 +26,20 @@ interface Props {
   title: string;
   infoData: InfoData;
   isInfoDataLoading: boolean;
+  hasInfoDataFailed: boolean;
   schoolInfo: SchoolInfo[];
   isSchoolInfoLoading: boolean;
+  hasSchoolInfoFailed: boolean;
 }
 
 export default function Info({
-  infoData,
   title,
+  infoData,
   isInfoDataLoading,
+  hasInfoDataFailed,
   schoolInfo,
   isSchoolInfoLoading,
+  hasSchoolInfoFailed,
 }: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
@@ -63,24 +66,37 @@ export default function Info({
             <SchoolInfoComponent
               infoData={infoData}
               isInfoDataLoading={isInfoDataLoading}
+              hasInfoDataFailed={hasInfoDataFailed}
               schoolInfo={schoolInfo}
               isSchoolInfoLoading={isSchoolInfoLoading}
+              hasSchoolInfoFailed={hasSchoolInfoFailed}
             />
           ) : (
             <SchoolLevelTable
               infoData={infoData}
               isLoading={isInfoDataLoading}
+              hasFailed={hasInfoDataFailed}
             />
           )}
         </div>
         <div className={container}>
-          {<PieChart infoData={infoData} isLoading={isInfoDataLoading} />}
+          {
+            <PieChart
+              infoData={infoData}
+              isLoading={isInfoDataLoading}
+              hasFailed={hasInfoDataFailed}
+            />
+          }
         </div>
       </div>
       {!isSchool && (
         <div className="mb-10">
           <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
-          <BarChart infoData={infoData} isLoading={isInfoDataLoading} />
+          <BarChart
+            infoData={infoData}
+            isLoading={isInfoDataLoading}
+            hasFailed={hasInfoDataFailed}
+          />
         </div>
       )}
     </>

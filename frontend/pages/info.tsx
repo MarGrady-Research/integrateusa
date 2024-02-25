@@ -239,11 +239,13 @@ export default function InfoPage() {
       <Page>
         <div className="mx-auto mt-5">
           <Info
-            infoData={infoDataFinal}
             title={title}
+            infoData={infoDataFinal}
             isInfoDataLoading={isInfoDataLoadingFinal}
+            hasInfoDataFailed={hasInfoDataFailedFinal}
             schoolInfo={schoolInfo}
             isSchoolInfoLoading={isSchoolInfoLoading}
+            hasSchoolInfoFailed={hasSchoolInfoFailed}
           />
           <Trends trendData={trendData || []} isLoading={isTrendDataLoading} />
         </div>

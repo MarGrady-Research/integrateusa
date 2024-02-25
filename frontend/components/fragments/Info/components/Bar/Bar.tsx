@@ -50,6 +50,7 @@ ChartJS.register(
 interface Props {
   infoData: InfoData;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const getBarData = (data: InfoData) => {
@@ -169,7 +170,7 @@ const options = {
   },
 };
 
-export default function BarChart({ infoData, isLoading }: Props) {
+export default function BarChart({ infoData, isLoading, hasFailed }: Props) {
   const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
   if (isLoading) {
