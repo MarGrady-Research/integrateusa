@@ -7,9 +7,12 @@ import {
   Title,
   Tooltip,
   Legend,
+  Tick,
 } from "chart.js";
+import clsx from "clsx";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { legendMargin } from "charts";
 
@@ -41,6 +44,7 @@ interface Props {
   grade: string;
   year: number;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const sortTrendData = (trendData: TrendData, grade: string) =>
@@ -88,6 +92,7 @@ export default function BarChart100({
   grade,
   year,
   isLoading,
+  hasFailed,
 }: Props) {
   const sortedData = useMemo(
     () => sortTrendData(trendData, grade),
@@ -99,6 +104,20 @@ export default function BarChart100({
 
   if (isLoading) {
     return <Skeleton variant="rectangular" className={container} />;
+  }
+
+  if (hasFailed) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center shadow border border-gray-200",
+          container
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
   }
 
   const data = {
@@ -159,14 +178,14 @@ export default function BarChart100({
         stacked: true,
         ticks: {
           font: {
-            weight: (c) => {
-              if (c.tick.label === year) {
+            weight: (c: { tick: Tick }) => {
+              if (c.tick.label === year.toString()) {
                 return "bold";
               }
             },
           },
-          color: (c) => {
-            if (c.tick.label === year) {
+          color: (c: { tick: Tick }) => {
+            if (c.tick.label === year.toString()) {
               return primaryColor;
             }
           },

@@ -12,9 +12,10 @@ import { TrendData } from "interfaces";
 interface Props {
   trendData: TrendData;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
-export default function Trends({ trendData, isLoading }: Props) {
+export default function Trends({ trendData, isLoading, hasFailed }: Props) {
   const grade = useSelector(selectGrade);
   const year = useSelector(selectYear);
 
@@ -29,6 +30,7 @@ export default function Trends({ trendData, isLoading }: Props) {
               grade={grade}
               year={year}
               isLoading={isLoading}
+              hasFailed={hasFailed}
             />
           </div>
         </div>
@@ -39,6 +41,7 @@ export default function Trends({ trendData, isLoading }: Props) {
               grade={grade}
               year={year}
               isLoading={isLoading}
+              hasFailed={hasFailed}
             />
           </div>
         </div>
@@ -49,6 +52,7 @@ export default function Trends({ trendData, isLoading }: Props) {
         selectedGrade={grade}
         selectedYear={year}
         isLoading={isLoading}
+        hasFailed={hasFailed}
       />
     </>
   );

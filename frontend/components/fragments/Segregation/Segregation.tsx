@@ -27,6 +27,7 @@ import { SegData, Line, Level, MeasureAccessor, LineData } from "interfaces";
 interface Props {
   segData: SegData;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const options = [
@@ -84,7 +85,7 @@ const findFocus = (segData: SegData, id: string) => {
   return null;
 };
 
-export default function Segregation({ segData, isLoading }: Props) {
+export default function Segregation({ segData, isLoading, hasFailed }: Props) {
   const dispatch = useDispatch();
 
   const grade = useSelector(selectGrade);
@@ -236,16 +237,18 @@ export default function Segregation({ segData, isLoading }: Props) {
           options={options}
           title={name}
           isLoading={isLoading}
+          hasFailed={hasFailed}
           year={year}
           grade={grade}
         />
-        <SegBar focus={focus} isLoading={isLoading} />
+        <SegBar focus={focus} isLoading={isLoading} hasFailed={hasFailed} />
       </div>
       <ComparisonTable
         id={id}
         segData={segData}
         measure={measure}
         isLoading={isLoading}
+        hasFailed={hasFailed}
         lines={lines}
         updateLine={updateLine}
         clearSelection={clearSelection}

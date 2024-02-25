@@ -8,8 +8,10 @@ import {
   Legend,
   TooltipItem,
 } from "chart.js";
+import clsx from "clsx";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { SegEntity } from "interfaces";
 import {
@@ -27,6 +29,7 @@ ChartJS.register(LinearScale, BarElement, CategoryScale, Tooltip, Legend);
 interface Props {
   focus: SegEntity;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
@@ -76,9 +79,19 @@ const options = {
   },
 };
 
-export default function SegBar({ focus, isLoading }: Props) {
-  if (!isLoading && !focus) {
-    return null;
+export default function SegBar({ focus, isLoading, hasFailed }: Props) {
+  if (hasFailed && !focus) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center shadow border border-gray-200",
+          container
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
   }
 
   if (isLoading) {

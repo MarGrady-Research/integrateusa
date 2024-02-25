@@ -1,12 +1,16 @@
 import React from "react";
 import { SelectChangeEvent } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
+import clsx from "clsx";
 
 import { SegEntity } from "interfaces";
 
 import { yearsData, gradesData } from "../../../Selection/data";
 
 import Select from "components/atoms/Select";
+
+import { errorContainer } from "./Info.module.scss";
 
 interface Props {
   selected: {
@@ -23,6 +27,7 @@ interface Props {
   title: string;
   focus: SegEntity;
   isLoading: boolean;
+  hasFailed: boolean;
   year: number;
   grade: string;
 }
@@ -34,11 +39,22 @@ export default function Info({
   title,
   focus,
   isLoading,
+  hasFailed,
   year,
   grade,
 }: Props) {
-  if (!isLoading && !focus) {
-    return null;
+  if (hasFailed && !focus) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center",
+          errorContainer
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
   }
 
   const selectedValue = selected.value;

@@ -33,7 +33,7 @@ services:
         context: .
         dockerfile: Dockerfile.prod
       environment:
-        - SECRET_KEY='gPjBmwb-G1F58J-zxNvZd5OZF32qqZTTWboBvHSPHE0'
+        - SECRET_KEY='${SECRET_KEY}'
         - POSTGRES_NAME=${POSTGRES_NAME}
         - POSTGRES_USER=${POSTGRES_USER}
         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

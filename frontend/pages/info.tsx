@@ -85,6 +85,8 @@ export default function InfoPage() {
     !isInfoKeyCached ||
     (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+  const hasInfoDataFailed =
+    !isInfoDataCached && infoKeyCache.status === ApiStatus.Failure;
 
   const schoolInfoKey = id;
   const schoolInfoKeyCache = schoolInfoStore[schoolInfoKey];
@@ -100,6 +102,8 @@ export default function InfoPage() {
     !isSchoolInfoKeyCached ||
     (!isSchoolInfoCached && schoolInfoKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+  const hasSchoolInfoFailed =
+    !isSchoolInfoCached && schoolInfoKeyCache.status === ApiStatus.Failure;
 
   const trendKey = `${levelTable}-${id}`;
   const trendKeyCache = trendDataStore[trendKey];
@@ -113,6 +117,8 @@ export default function InfoPage() {
     !isTrendKeyCached ||
     (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+  const hasTrendDataFailed =
+    !isTrendDataCached && trendKeyCache.status === ApiStatus.Failure;
 
   const isSchool = level == Level.School;
 
@@ -214,14 +220,17 @@ export default function InfoPage() {
     };
   }, [id, level, dispatch, levelId, levelTable, trendKey, isSchool]);
 
-  const infoDataDeduplicated = isSchool
+  const infoDataFinal = isSchool
     ? (trendData.filter(
         (td) => td.grade === grade && td.year === year
       ) as InfoData)
     : infoData;
-  const isInfoDataLoadingDedepulicated = isSchool
+  const isInfoDataLoadingFinal = isSchool
     ? isTrendDataLoading
     : isInfoDataLoading;
+  const hasInfoDataFailedFinal = isSchool
+    ? hasTrendDataFailed
+    : hasInfoDataFailed;
 
   return (
     <>
@@ -230,13 +239,19 @@ export default function InfoPage() {
       <Page>
         <div className="mx-auto mt-5">
           <Info
-            infoData={infoDataDeduplicated}
             title={title}
-            isInfoDataLoading={isInfoDataLoadingDedepulicated}
+            infoData={infoDataFinal}
+            isInfoDataLoading={isInfoDataLoadingFinal}
+            hasInfoDataFailed={hasInfoDataFailedFinal}
             schoolInfo={schoolInfo}
             isSchoolInfoLoading={isSchoolInfoLoading}
+            hasSchoolInfoFailed={hasSchoolInfoFailed}
           />
-          <Trends trendData={trendData || []} isLoading={isTrendDataLoading} />
+          <Trends
+            trendData={trendData || []}
+            isLoading={isTrendDataLoading}
+            hasFailed={hasTrendDataFailed}
+          />
         </div>
       </Page>
     </>
