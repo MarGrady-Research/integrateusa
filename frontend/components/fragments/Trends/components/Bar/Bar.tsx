@@ -8,8 +8,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import clsx from "clsx";
 import { Bar } from "react-chartjs-2";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { legendMargin } from "charts";
 
@@ -40,6 +42,7 @@ interface Props {
   grade: string;
   year: number;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 const sortTrendData = (trendData: TrendData, grade: string) =>
@@ -74,7 +77,13 @@ const getBarData = (data: TrendData) => {
   };
 };
 
-export default function BarChart({ trendData, grade, year, isLoading }: Props) {
+export default function BarChart({
+  trendData,
+  grade,
+  year,
+  isLoading,
+  hasFailed,
+}: Props) {
   const sortedData = useMemo(
     () => sortTrendData(trendData, grade),
     [trendData, grade]
@@ -85,6 +94,20 @@ export default function BarChart({ trendData, grade, year, isLoading }: Props) {
 
   if (isLoading) {
     return <Skeleton variant="rectangular" className={container} />;
+  }
+
+  if (hasFailed) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center shadow border border-gray-200",
+          container
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
   }
 
   const data = {

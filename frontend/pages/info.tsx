@@ -247,7 +247,11 @@ export default function InfoPage() {
             isSchoolInfoLoading={isSchoolInfoLoading}
             hasSchoolInfoFailed={hasSchoolInfoFailed}
           />
-          <Trends trendData={trendData || []} isLoading={isTrendDataLoading} />
+          <Trends
+            trendData={trendData || []}
+            isLoading={isTrendDataLoading}
+            hasFailed={hasTrendDataFailed}
+          />
         </div>
       </Page>
     </>

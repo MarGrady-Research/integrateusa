@@ -8,6 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
@@ -20,6 +21,7 @@ interface Props {
   selectedGrade: string;
   selectedYear: number;
   isLoading: boolean;
+  hasFailed: boolean;
 }
 
 function TableHolder({ children }: { children: React.ReactNode }) {
@@ -35,12 +37,27 @@ export default function TableYearGrade({
   selectedGrade,
   selectedYear,
   isLoading,
+  hasFailed,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   if (isLoading) {
     return (
       <Skeleton variant="rectangular" className={clsx(container, "mb-4")} />
+    );
+  }
+
+  if (hasFailed) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center shadow border border-gray-200",
+          container
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
     );
   }
 
