@@ -11,6 +11,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Skeleton from "@mui/material/Skeleton";
 import clsx from "clsx";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import Pagination from "../Pagination";
 
@@ -28,6 +29,7 @@ interface Props {
     name: string;
   };
   isLoading: boolean;
+  hasFailed: boolean;
   lines: Line[];
   updateLine: (id: string, name: string) => void;
   clearSelection: () => void;
@@ -49,6 +51,7 @@ export default function ComparisonTable({
   segData,
   measure,
   isLoading,
+  hasFailed,
   lines,
   updateLine,
   clearSelection,
@@ -176,6 +179,30 @@ export default function ComparisonTable({
   useEffect(() => {
     setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
   }, [minSchools]);
+
+  if (isLoading) {
+    return (
+      <div className="mb-10">
+        <Skeleton className={clsx("w-full", container)} variant="rectangular" />
+      </div>
+    );
+  }
+
+  if (hasFailed) {
+    return (
+      <div className="mb-10">
+        <div
+          className={clsx(
+            "flex flex-col items-center justify-center shadow border border-gray-200",
+            container
+          )}
+        >
+          <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+          Error loading data
+        </div>
+      </div>
+    );
+  }
 
   const tableHeader = () => (
     <TableHead className="bg-gray-200">
@@ -435,37 +462,31 @@ export default function ComparisonTable({
 
   return (
     <div className="mb-10">
-      {isLoading ? (
-        <Skeleton className={clsx("w-full", container)} variant="rectangular" />
-      ) : (
-        <>
-          <TableContainer component={TableHolder}>
-            <Table size="small">
-              {tableHeader()}
-              <TableBody>
-                {tableSearchRow()}
-                {tableContentRows()}
-                {tableEmptyRows()}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div className="flex items-center justify-between">
-            <Button
-              variant="outlined"
-              className="!normal-case"
-              onClick={clearSelection}
-            >
-              Clear Selection
-            </Button>
-            <Pagination
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={ROWS_PER_PAGE}
-              count={filteredRows.length}
-            />
-          </div>
-        </>
-      )}
+      <TableContainer component={TableHolder}>
+        <Table size="small">
+          {tableHeader()}
+          <TableBody>
+            {tableSearchRow()}
+            {tableContentRows()}
+            {tableEmptyRows()}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <div className="flex items-center justify-between">
+        <Button
+          variant="outlined"
+          className="!normal-case"
+          onClick={clearSelection}
+        >
+          Clear Selection
+        </Button>
+        <Pagination
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={ROWS_PER_PAGE}
+          count={filteredRows.length}
+        />
+      </div>
     </div>
   );
 }

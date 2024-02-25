@@ -64,6 +64,8 @@ export default function SegregationPage() {
     !isSegKeyCached ||
     (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure) ||
     !paramsChecked;
+  const hasFailed =
+    !isSegDataCached && segKeyCache.status === ApiStatus.Failure;
 
   useEffect(() => {
     if (!zoomOnMap) {
@@ -119,7 +121,11 @@ export default function SegregationPage() {
       <Selection omitSchools />
       <Page>
         <div className="mx-auto mt-5">
-          <Segregation segData={segData} isLoading={isLoading} />
+          <Segregation
+            segData={segData}
+            isLoading={isLoading}
+            hasFailed={hasFailed}
+          />
         </div>
       </Page>
     </>
