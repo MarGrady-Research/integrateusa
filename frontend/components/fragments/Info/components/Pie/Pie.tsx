@@ -7,6 +7,7 @@ import {
   TooltipItem,
 } from "chart.js";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
 import { Pie } from "react-chartjs-2";
 
 import { legendMargin } from "charts";
@@ -131,6 +132,15 @@ export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
             height={circleDiameter}
           />
         </div>
+      </div>
+    );
+  }
+
+  if (hasFailed) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
       </div>
     );
   }

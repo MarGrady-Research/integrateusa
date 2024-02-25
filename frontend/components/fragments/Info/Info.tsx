@@ -66,7 +66,6 @@ export default function Info({
             <SchoolInfoComponent
               infoData={infoData}
               isInfoDataLoading={isInfoDataLoading}
-              hasInfoDataFailed={hasInfoDataFailed}
               schoolInfo={schoolInfo}
               isSchoolInfoLoading={isSchoolInfoLoading}
               hasSchoolInfoFailed={hasSchoolInfoFailed}

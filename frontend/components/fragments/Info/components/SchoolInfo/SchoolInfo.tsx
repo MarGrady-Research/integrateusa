@@ -1,12 +1,12 @@
 import React from "react";
 import Skeleton from "@mui/material/Skeleton";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { InfoData, SchoolInfo } from "interfaces";
 
 interface Props {
   infoData: InfoData;
   isInfoDataLoading: boolean;
-  hasInfoDataFailed: boolean;
   schoolInfo: SchoolInfo[];
   isSchoolInfoLoading: boolean;
   hasSchoolInfoFailed: boolean;
@@ -15,14 +15,22 @@ interface Props {
 export default function SchoolInfo({
   infoData,
   isInfoDataLoading,
-  hasInfoDataFailed,
   schoolInfo,
   isSchoolInfoLoading,
   hasSchoolInfoFailed,
 }: Props) {
+  if (hasSchoolInfoFailed) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full shadow border border-gray-200 px-4 py-3">
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
+  }
+
   let tot_enr_str = "Not available",
     level_str = "Not available",
-    school_name = "Not_Available",
+    school_name = "Not available",
     district_name = "Not available",
     state = "Not available",
     years = "Not available";

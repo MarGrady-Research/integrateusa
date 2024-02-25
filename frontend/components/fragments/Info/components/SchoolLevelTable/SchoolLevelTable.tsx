@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableFooter from "@mui/material/TableFooter";
 import TableRow from "@mui/material/TableRow";
 import { Skeleton } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import { InfoData, SchoolType } from "interfaces";
 
@@ -87,6 +88,23 @@ export default function SchoolLevelTable({
     return <Skeleton variant="rectangular" className="!h-full w-full" />;
   }
 
+  if (hasFailed) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full shadow border border-gray-200">
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
+      </div>
+    );
+  }
+
+  if (infoData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full shadow border border-gray-200">
+        No data available
+      </div>
+    );
+  }
+
   const schoolLevel = getSchoolLevel(infoData);
 
   const totalSchools = schoolLevel.Total.schools;
@@ -117,14 +135,6 @@ export default function SchoolLevelTable({
       </TableRow>
     );
   };
-
-  if (infoData.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-full shadow border border-gray-200">
-        No data available
-      </div>
-    );
-  }
 
   return (
     <TableContainer component={TableHolder}>

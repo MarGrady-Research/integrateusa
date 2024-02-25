@@ -14,6 +14,7 @@ import { Mode } from "chartjs-plugin-zoom/types/options";
 import clsx from "clsx";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import {
   asianColor,
@@ -178,6 +179,23 @@ export default function BarChart({ infoData, isLoading, hasFailed }: Props) {
       <>
         <Skeleton variant="rectangular" className={clsx(legend, "mb-1")} />
         <Skeleton variant="rectangular" className={container} />
+      </>
+    );
+  }
+
+  if (hasFailed) {
+    return (
+      <>
+        <div className={clsx(legend, "mb-1")} />
+        <div
+          className={clsx(
+            "flex flex-col items-center justify-center shadow border border-gray-200",
+            container
+          )}
+        >
+          <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+          Error loading data
+        </div>
       </>
     );
   }
