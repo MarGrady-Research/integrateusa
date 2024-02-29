@@ -20,6 +20,7 @@ export default function Research() {
           alt=""
           height={220}
           className="border border-black"
+          placeholder="blur"
         />
         <div className="mt-4 md:mt-0 md:ml-4">
           <h3 className="font-semibold mb-2">
