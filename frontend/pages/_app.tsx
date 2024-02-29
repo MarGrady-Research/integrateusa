@@ -38,11 +38,11 @@ function MyApp({ Component, ...rest }: AppProps) {
         }
       >
         <ThemeProvider theme={theme}>
-          <>
+          <main className="flex flex-col min-h-screen">
             <Header />
             <Component {...pageProps} />
             <Footer />
-          </>
+          </main>
         </ThemeProvider>
       </PersistGate>
     </Provider>
