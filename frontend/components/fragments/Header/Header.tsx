@@ -47,6 +47,7 @@ export default function Header() {
             className="flex items-center text-black w-40 sm:w-auto"
           >
             <Image src={IntegrateUSALogo} alt="IntegrateUSA logo" width={200} />
+            {process.env.NEXT_PUBLIC_MAPBOX_TOKEN.slice(0, 10)}
           </Link>
           <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
             <NavLink url="/" title="Home" />
