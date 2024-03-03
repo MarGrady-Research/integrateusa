@@ -10,6 +10,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - SECRET_KEY=${SECRET_KEY}
       - POSTGRES_NAME=${POSTGRES_NAME}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'gPjBmwb-G1F58J-zxNvZd5OZF32qqZTTWboBvHSPHE0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -46,8 +46,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.gzip.GZipMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -143,9 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Add origins allowed to make requests
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://3.143.245.158/",
-    "https://ec2-3-143-245-158.us-east-2.compute.amazonaws.com/"
+    "http://localhost:3000"
 ]
 
 # Add headers allowed in the request
