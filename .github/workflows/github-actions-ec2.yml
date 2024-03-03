@@ -20,6 +20,10 @@ jobs:
           echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST}} >> .env
           echo MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN}} >> .env
           cat .env
+          cd frontend
+          touch .env
+          echo NEXT_PUBLIC_MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN}} >> .env
+          cat .env
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
         with:
