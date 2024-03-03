@@ -143,7 +143,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Add origins allowed to make requests
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://3.143.245.158/",
+    "https://ec2-3-143-245-158.us-east-2.compute.amazonaws.com/"
 ]
 
 # Add headers allowed in the request
