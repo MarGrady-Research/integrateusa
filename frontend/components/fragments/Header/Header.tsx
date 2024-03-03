@@ -33,7 +33,6 @@ function NavLink({ url, title }: NavLinkProps) {
 }
 
 export default function Header() {
-  console.log(process.env);
   return (
     <header
       className={clsx(
