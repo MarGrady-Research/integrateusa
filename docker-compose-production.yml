@@ -1,4 +1,8 @@
 services:
+    nextjs:
+      build: 
+        context: ./frontend
+        dockerfile: Dockerfile.prod
     nginx: 
         restart: unless-stopped
         build:
@@ -35,18 +39,7 @@ services:
       # volumes: 
       #   - static_volume:app/integrateusa/django_static
       expose:
-      - 8000:8000    
-    nextjs:
-      build: 
-        context: ./frontend
-        dockerfile: Dockerfile.prod
-      volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
-      environment:
-        - NEXT_PUBLIC_MAPBOX_TOKEN=${MAPBOX_TOKEN}
-        - NEXT_PUBLIC_BACKEND_URL=https://integrateusa.org  
+      - 8000:8000      
 
 volumes:
     static_volume: {}
