@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout the files
         uses: actions/checkout@v4
-      - name: "Create env file"
+      - name: "Create env files"
         run: |
           touch .env
           echo SECRET_KEY=${{secrets.SECRET_KEY}} >> .env
