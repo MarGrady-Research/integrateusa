@@ -37,6 +37,7 @@ export default function Slideover({
           "absolute top-2.5 right-2.5 z-20 flex justify-center items-center",
           button
         )}
+        aria-label="Open map options"
       >
         <MenuIcon fontSize="large" />
       </button>
@@ -57,7 +58,7 @@ export default function Slideover({
         variant="persistent"
       >
         <div className="flex flex-start p-2">
-          <IconButton onClick={toggleOpen}>
+          <IconButton onClick={toggleOpen} aria-label="Close map options">
             <ChevronRightIcon />
           </IconButton>
         </div>

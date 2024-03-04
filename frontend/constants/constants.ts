@@ -1,4 +1,4 @@
-export const primaryColor = "#4278C4";
+export const primaryColor = "#4472C3";
 
 export const defaultMapSchoolColor = "#808080";
 
