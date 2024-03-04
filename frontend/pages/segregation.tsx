@@ -6,6 +6,7 @@ import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
 import Page from "components/layouts/Page";
 import Segregation from "components/fragments/Segregation";
+import Footer from "components/fragments/Footer";
 
 import {
   selectYear,
@@ -129,6 +130,7 @@ export default function SegregationPage() {
           />
         </div>
       </Page>
+      <Footer />
     </>
   );
 }

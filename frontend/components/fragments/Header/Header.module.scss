@@ -5,10 +5,6 @@
   height: $navbarMobileHeight;
 
   @screen sm {
-    height: $navbarTabletHeight;
-  }
-
-  @screen lg {
     height: $navbarDesktopHeight;
   }
 }

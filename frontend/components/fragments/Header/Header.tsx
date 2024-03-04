@@ -22,7 +22,7 @@ function NavLink({ url, title }: NavLinkProps) {
   return (
     <Link
       href={url}
-      className={clsx("mr-3 sm:mr-5 last:mr-0 hover:text-secondary", {
+      className={clsx("mr-6 last:mr-0 duration-300 hover:text-secondary", {
         "text-primary hover:text-primary": isActiveURL,
       })}
     >
@@ -33,13 +33,8 @@ function NavLink({ url, title }: NavLinkProps) {
 
 export default function Header() {
   return (
-    <header
-      className={clsx(
-        "text-black bg-white shadow text-sm sm:text-base lg:text-lg relative",
-        root
-      )}
-    >
-      <div className="container p-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
+    <header className={clsx("text-black bg-white shadow relative", root)}>
+      <div className="container px-3 h-full mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
         <div className="flex items-center flex-col lg:flex-row">
           <Link
             href="/"
@@ -47,7 +42,7 @@ export default function Header() {
           >
             <Image src={IntegrateUSALogo} alt="IntegrateUSA logo" width={200} />
           </Link>
-          <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
+          <nav className="hidden lg:block lg:pl-4 lg:border-l lg:border-gray-400 flex items-center justify-center text-xl font-medium">
             <NavLink url="/" title="Home" />
             <NavLink url="/info" title="Demographic Info" />
             <NavLink url="/segregation" title="Segregation" />
@@ -55,8 +50,8 @@ export default function Header() {
             <NavLink url="/about" title="About" />
           </nav>
         </div>
-        <div className="absolute lg:relative hidden sm:block sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
-          <a href="http://www.margrady.com/" target="_blank">
+        <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
+          <a href="https://www.margrady.com/" target="_blank">
             <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
           </a>
         </div>

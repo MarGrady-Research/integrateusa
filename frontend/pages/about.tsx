@@ -1,6 +1,7 @@
 import React from "react";
 
 import Head from "components/fragments/Head";
+import Footer from "components/fragments/Footer";
 
 export default function About() {
   return (
@@ -73,6 +74,7 @@ export default function About() {
           </p>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

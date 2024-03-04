@@ -23,10 +23,6 @@ $drawerWidth: 360px;
 
   @screen sm {
     width: $drawerWidth;
-    padding-top: $navbarTabletHeight;
-  }
-
-  @screen lg {
     padding-top: $navbarDesktopHeight;
   }
 }

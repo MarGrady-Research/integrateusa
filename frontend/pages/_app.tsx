@@ -13,7 +13,6 @@ import Loader from "../components/fragments/Loader";
 
 import "../styles/global.scss";
 import Header from "components/fragments/Header";
-import Footer from "components/fragments/Footer/Footer";
 
 ChartJS.defaults.font.family = "Libre Franklin";
 ChartJS.defaults.font.weight = "500";
@@ -41,7 +40,6 @@ function MyApp({ Component, ...rest }: AppProps) {
           <main className="flex flex-col min-h-screen">
             <Header />
             <Component {...pageProps} />
-            <Footer />
           </main>
         </ThemeProvider>
       </PersistGate>

@@ -4,10 +4,6 @@
   min-height: calc(100vh - $navbarMobileHeight);
 
   @screen sm {
-    min-height: calc(100vh - $navbarTabletHeight);
-  }
-
-  @screen lg {
     min-height: calc(100vh - $navbarDesktopHeight);
   }
 }
