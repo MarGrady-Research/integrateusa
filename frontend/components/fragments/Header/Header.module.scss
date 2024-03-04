@@ -1,7 +1,7 @@
-@import "styles/constants.scss";
+@import "styles/constants.module.scss";
 
 .root {
-  z-index: $drawerZIndex + 1;
+  z-index: $drawerZIndex + 2;
   height: $navbarMobileHeight;
 
   @screen sm {

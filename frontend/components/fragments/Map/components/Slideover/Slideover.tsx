@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,7 +12,7 @@ const Divider = dynamic(() => import("@mui/material/Divider"));
 
 const Control = dynamic(() => import("../Control"));
 
-import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
+import { button, drawerPaper } from "./Slideover.module.scss";
 import { Bounds, MapLevel } from "interfaces";
 
 interface Props {
@@ -52,7 +52,6 @@ export default function Slideover({
           },
         }}
         classes={{
-          root: drawerRoot,
           paper: drawerPaper,
         }}
         variant="persistent"
