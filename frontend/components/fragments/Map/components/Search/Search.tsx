@@ -18,12 +18,14 @@ import {
   CountySearchResult,
   StateSearchResult,
 } from "interfaces";
+
 import {
   setLocationSearchRequest,
   setLocationSearchSuccess,
   setLocationSearchFailure,
   selectLocationSearch,
 } from "store/apiCacheSlice";
+import { AppDispatch } from "store/store";
 
 interface Props {
   mapLevel: MapLevel;
@@ -61,7 +63,7 @@ const convertMapLevelToLevel = (mapLevel: MapLevel): Level => {
 export default function Search({ mapLevel, handleBounds }: Props) {
   const locationSearchStore = useSelector(selectLocationSearch);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [value, setValue] = useState<LocationSearchOption | null>(null);
   const [inputValue, setInputValue] = useState("");

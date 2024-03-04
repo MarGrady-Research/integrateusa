@@ -7,13 +7,14 @@ import Select from "components/atoms/Select";
 import { yearsData } from "../../data";
 
 import { selectLevel, selectYear, setYear } from "store/selectSlice";
+import { AppDispatch } from "store/store";
 
 import { Level } from "interfaces";
 
 export default function YearSelect() {
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: SelectChangeEvent) => {
     const value = parseInt(e.target.value as string);

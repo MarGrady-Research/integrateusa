@@ -33,6 +33,8 @@ import {
 } from "store/selectSlice";
 import { selectMapData, setMapData } from "store/apiCacheSlice";
 import { selectZoomOnMap } from "store/mapSlice";
+import { AppDispatch } from "store/store";
+
 import {
   Level,
   MapLevel,
@@ -115,7 +117,7 @@ const processMapData = (mapData: ApiMapData): MapData => {
 };
 
 export default function DemographicMap({ onSmallerScreen }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const zoomOnMap = useSelector(selectZoomOnMap);
   const level = useSelector(selectLevel);

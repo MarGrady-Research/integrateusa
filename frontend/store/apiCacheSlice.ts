@@ -303,7 +303,7 @@ export const apiCacheSlice = createSlice({
     builder.addCase(HYDRATE, (state, action) => {
       return {
         ...state,
-        ...(action as any).payload,
+        ...(action as PayloadAction<any>).payload,
       };
     });
   },
@@ -331,25 +331,17 @@ export const {
   setLocationSearchFailure,
 } = apiCacheSlice.actions;
 
-export const selectMapData = (state: AppState) =>
-  state.apiCache.mapData as MapData;
+export const selectMapData = (state: AppState) => state.apiCache.mapData;
 
-export const selectInfoData = (state: AppState) =>
-  state.apiCache.infoData as InfoDataCache;
+export const selectInfoData = (state: AppState) => state.apiCache.infoData;
 
-export const selectSchoolInfo = (state: AppState) =>
-  state.apiCache.schoolInfo as SchoolInfoCache;
+export const selectSchoolInfo = (state: AppState) => state.apiCache.schoolInfo;
 
-export const selectTrendData = (state: AppState) =>
-  state.apiCache.trendData as TrendDataCache;
+export const selectTrendData = (state: AppState) => state.apiCache.trendData;
 
-export const selectSegData = (state: AppState) =>
-  state.apiCache.segData as SegDataCache;
+export const selectSegData = (state: AppState) => state.apiCache.segData;
 
-export const selectLineData = (state: AppState) =>
-  state.apiCache.lineData as LineDataCache;
+export const selectLineData = (state: AppState) => state.apiCache.lineData;
 
 export const selectLocationSearch = (state: AppState) =>
-  state.apiCache.locationSearch as LocationSearchCache;
-
-export default apiCacheSlice.reducer;
+  state.apiCache.locationSearch;

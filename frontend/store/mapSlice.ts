@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
@@ -22,7 +22,7 @@ export const mapSlice = createSlice({
     builder.addCase(HYDRATE, (state, action) => {
       return {
         ...state,
-        ...(action as any).payload,
+        ...(action as PayloadAction<any>).payload,
       };
     });
   },
@@ -30,7 +30,4 @@ export const mapSlice = createSlice({
 
 export const { activateZoomOnMap } = mapSlice.actions;
 
-export const selectZoomOnMap = (state: AppState) =>
-  state.map.zoomOnMap as boolean;
-
-export default mapSlice.reducer;
+export const selectZoomOnMap = (state: AppState) => state.map.zoomOnMap;
