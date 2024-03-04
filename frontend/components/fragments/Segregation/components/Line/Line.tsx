@@ -194,7 +194,7 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
   );
 
   return (
-    <div className={clsx(container, "mb-2")}>
+    <div className={clsx(container, "mb-16")}>
       {legend}
       <LineChart options={options} data={data} plugins={[legendMargin]} />
     </div>
