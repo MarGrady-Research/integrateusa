@@ -1,19 +1,10 @@
 @import "styles/common.scss";
-@import "styles/constants.scss";
-
-$drawerWidth: 360px;
+@import "styles/constants.module.scss";
 
 .button {
   @extend .mapControlButton;
   width: 40px;
   height: 40px;
-}
-
-.drawerRoot {
-  width: 100%;
-  @screen sm {
-    width: $drawerWidth;
-  }
 }
 
 .drawerPaper {
@@ -23,10 +14,6 @@ $drawerWidth: 360px;
 
   @screen sm {
     width: $drawerWidth;
-    padding-top: $navbarTabletHeight;
-  }
-
-  @screen lg {
     padding-top: $navbarDesktopHeight;
   }
 }

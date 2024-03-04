@@ -18,13 +18,16 @@ import { Level } from "interfaces";
 
 import { animate } from "./Selection.module.scss";
 
+import constants from "styles/_constants.module.scss";
+
 interface Props {
   omitSchools?: boolean;
 }
 
-const navbarDesktopHeight = 84;
-const navbarTabletHeight = 108;
-const navbarMobileHeight = 92;
+const navbarDesktopHeight = parseInt(
+  constants.navbarDesktopHeight.slice(0, -2)
+);
+const navbarMobileHeight = parseInt(constants.navbarMobileHeight.slice(0, -2));
 
 const selectsHeight = 224;
 
@@ -41,8 +44,6 @@ export default function Selection({ omitSchools }: Props) {
       break;
     case "sm":
     case "md":
-      navbarHeight = navbarTabletHeight;
-      break;
     case "lg":
     case "xl":
       navbarHeight = navbarDesktopHeight;

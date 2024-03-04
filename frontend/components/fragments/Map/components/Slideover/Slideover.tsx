@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,7 +12,7 @@ const Divider = dynamic(() => import("@mui/material/Divider"));
 
 const Control = dynamic(() => import("../Control"));
 
-import { button, drawerPaper, drawerRoot } from "./Slideover.module.scss";
+import { button, drawerPaper } from "./Slideover.module.scss";
 import { Bounds, MapLevel } from "interfaces";
 
 interface Props {
@@ -37,6 +37,7 @@ export default function Slideover({
           "absolute top-2.5 right-2.5 z-20 flex justify-center items-center",
           button
         )}
+        aria-label="Open map options"
       >
         <MenuIcon fontSize="large" />
       </button>
@@ -51,13 +52,12 @@ export default function Slideover({
           },
         }}
         classes={{
-          root: drawerRoot,
           paper: drawerPaper,
         }}
         variant="persistent"
       >
         <div className="flex flex-start p-2">
-          <IconButton onClick={toggleOpen}>
+          <IconButton onClick={toggleOpen} aria-label="Close map options">
             <ChevronRightIcon />
           </IconButton>
         </div>

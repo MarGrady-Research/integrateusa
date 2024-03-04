@@ -3,6 +3,7 @@ import clsx from "clsx";
 
 import Head from "components/fragments/Head";
 import DemographicMap from "components/fragments/Map";
+import Footer from "components/fragments/Footer";
 
 import { useBreakpointRegion } from "hooks";
 

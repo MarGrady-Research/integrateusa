@@ -1,8 +1,9 @@
 import React from "react";
 
-import Head from "../../components/fragments/Head";
-import Research from "../../components/fragments/Research";
-import Page from "../../components/layouts/Page";
+import Head from "components/fragments/Head";
+import Research from "components/fragments/Research";
+import Page from "components/layouts/Page";
+import Footer from "components/fragments/Footer";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Page>
         <Research />
       </Page>
+      <Footer />
     </>
   );
 }

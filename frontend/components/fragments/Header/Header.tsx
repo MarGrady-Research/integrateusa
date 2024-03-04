@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+
+const Drawer = dynamic(() => import("./components/Drawer"));
+
+import Hamburger from "./components/Hamburger";
+
+import { useBreakpointRegion } from "hooks";
 
 import { root } from "./Header.module.scss";
 
@@ -22,10 +29,12 @@ function NavLink({ url, title }: NavLinkProps) {
   return (
     <Link
       href={url}
-      className={clsx({
-        "mr-3 sm:mr-5 last:mr-0 hover:text-secondary ": true,
-        "text-primary hover:text-primary": isActiveURL,
-      })}
+      className={clsx(
+        "mr-0 lg:mr-6 last:mr-0 mb-2 lg:mb-0 duration-300 hover:text-secondary text-2xl lg:text-xl font-medium",
+        {
+          "text-primary hover:text-primary": isActiveURL,
+        }
+      )}
     >
       {title}
     </Link>
@@ -33,35 +42,60 @@ function NavLink({ url, title }: NavLinkProps) {
 }
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const breakpointRegion = useBreakpointRegion();
+  const onTablet =
+    breakpointRegion === "xs" ||
+    breakpointRegion === "sm" ||
+    breakpointRegion === "md";
+
+  useEffect(() => {
+    if (!onTablet && isOpen) {
+      setIsOpen(false);
+    }
+  }, [onTablet, isOpen]);
+
+  const navLinks = (
+    <>
+      <NavLink url="/" title="Home" />
+      <NavLink url="/info" title="Demographic Info" />
+      <NavLink url="/segregation" title="Segregation" />
+      <NavLink url="/research" title="Research" />
+      <NavLink url="/about" title="About" />
+    </>
+  );
+
   return (
-    <header
-      className={clsx(
-        "text-black bg-white shadow text-sm sm:text-base lg:text-lg relative",
-        root
-      )}
-    >
-      <div className="container p-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center justify-center lg:justify-between">
-        <div className="flex items-center flex-col lg:flex-row">
-          <Link
-            href="/"
-            className="flex items-center text-black w-40 sm:w-auto"
-          >
-            <Image src={IntegrateUSALogo} alt="IntegrateUSA logo" width={200} />
-          </Link>
-          <nav className="lg:pl-4 lg:border-l lg:border-gray-400	flex flex-wrap items-center justify-center">
-            <NavLink url="/" title="Home" />
-            <NavLink url="/info" title="Demographic Info" />
-            <NavLink url="/segregation" title="Segregation" />
-            <NavLink url="/research" title="Research" />
-            <NavLink url="/about" title="About" />
-          </nav>
+    <>
+      <header className={clsx("text-black bg-white shadow relative", root)}>
+        <div className="max-w-full lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl pl-4 pr-2.5 lg:px-6 h-full mx-auto flex items-center justify-between">
+          <div className="flex items-center flex-col lg:flex-row">
+            <Link
+              href="/"
+              className="flex items-center text-black w-44 sm:w-auto"
+            >
+              <Image
+                src={IntegrateUSALogo}
+                alt="IntegrateUSA logo"
+                width={200}
+              />
+            </Link>
+            <nav className="hidden lg:block lg:pl-4 lg:border-l lg:border-gray-400 flex items-center justify-center">
+              {navLinks}
+            </nav>
+          </div>
+          <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
+            <a href="https://www.margrady.com/" target="_blank">
+              <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
+            </a>
+          </div>
+          <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
-        <div className="absolute lg:relative hidden sm:block sm:w-40 lg:w-auto top-0 right-0 inline-flex items-center hover:cursor-pointer justify-center">
-          <a href="http://www.margrady.com/" target="_blank">
-            <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
-          </a>
-        </div>
-      </div>
-    </header>
+      </header>
+      <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
+        {navLinks}
+      </Drawer>
+    </>
   );
 }

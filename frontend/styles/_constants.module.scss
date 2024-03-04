@@ -1,0 +1,10 @@
+$navbarDesktopHeight: 70px;
+$navbarMobileHeight: 56px;
+
+$drawerZIndex: 1200;
+$drawerWidth: 360px;
+
+:export {
+  navbarDesktopHeight: $navbarDesktopHeight;
+  navbarMobileHeight: $navbarMobileHeight;
+}

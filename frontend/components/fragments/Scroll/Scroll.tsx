@@ -30,7 +30,7 @@ function EndScreen() {
         Explore the dashboard
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
       </Link>
-      <Link href="http://www.margrady.com/">
+      <Link href="https://www.margrady.com/">
         <Image src={MarGradyLogo} alt="MarGrady Logo" width={350} />
       </Link>
     </div>

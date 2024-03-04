@@ -243,6 +243,13 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         />
         <SegBar focus={focus} isLoading={isLoading} hasFailed={hasFailed} />
       </div>
+      <LineGraph
+        lines={lines}
+        measure={measure}
+        id={id}
+        year={year}
+        grade={grade}
+      />
       <ComparisonTable
         id={id}
         segData={segData}
@@ -252,13 +259,6 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         lines={lines}
         updateLine={updateLine}
         clearSelection={clearSelection}
-      />
-      <LineGraph
-        lines={lines}
-        measure={measure}
-        id={id}
-        year={year}
-        grade={grade}
       />
     </>
   );

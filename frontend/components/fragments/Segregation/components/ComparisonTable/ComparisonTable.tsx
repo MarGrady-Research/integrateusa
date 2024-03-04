@@ -461,7 +461,7 @@ export default function ComparisonTable({
     );
 
   return (
-    <div className="mb-10">
+    <>
       <TableContainer component={TableHolder}>
         <Table size="small">
           {tableHeader()}
@@ -487,6 +487,6 @@ export default function ComparisonTable({
           count={filteredRows.length}
         />
       </div>
-    </div>
+    </>
   );
 }

@@ -7,6 +7,7 @@ import Selection from "components/fragments/Selection";
 import Info from "components/fragments/Info";
 import Trends from "components/fragments/Trends";
 import Page from "components/layouts/Page";
+import Footer from "components/fragments/Footer";
 
 import {
   selectYear,
@@ -255,6 +256,7 @@ export default function InfoPage() {
           />
         </div>
       </Page>
+      <Footer />
     </>
   );
 }
