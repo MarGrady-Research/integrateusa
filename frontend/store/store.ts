@@ -1,9 +1,4 @@
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  combineReducers,
-} from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import {
   persistReducer,
@@ -15,7 +10,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { getPersistConfig } from "redux-deep-persist";
 
 import { selectSlice } from "./selectSlice";
@@ -38,11 +33,14 @@ export const makeStore = () => {
   const isServer = typeof window === "undefined";
 
   if (isServer) {
-    return makeConfiguredStore();
+    return {
+      ...makeConfiguredStore(),
+      __persistor: null,
+    };
   } else {
     const persistConfig = getPersistConfig({
       key: "root",
-      storage,
+      storage: createWebStorage("local"),
       version: 1,
       blacklist: ["select.grade", "select.year", "apiCache", "map"],
       rootReducer,
@@ -50,7 +48,7 @@ export const makeStore = () => {
 
     const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-    let store: any = configureStore({
+    const store = configureStore({
       reducer: persistedReducer,
       devTools: process.env.NODE_ENV !== "production",
       middleware: (getDefaultMiddleware) =>
@@ -61,19 +59,17 @@ export const makeStore = () => {
         }),
     });
 
-    store.__persistor = persistStore(store);
+    const newStore = {
+      ...store,
+      __persistor: persistStore(store),
+    };
 
-    return store;
+    return newStore;
   }
 };
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore["getState"]>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  AppState,
-  unknown,
-  Action
->;
+export type AppDispatch = AppStore["dispatch"];
 
 export const wrapper = createWrapper<AppStore>(makeStore);

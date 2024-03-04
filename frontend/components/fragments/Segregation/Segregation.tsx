@@ -15,12 +15,12 @@ import {
   selectSelectedName,
   selectLevel,
 } from "store/selectSlice";
-
 import {
   setLineDataRequest,
   setLineDataSuccess,
   setLineDataFailure,
 } from "store/apiCacheSlice";
+import { AppDispatch } from "store/store";
 
 import { SegData, Line, Level, MeasureAccessor, LineData } from "interfaces";
 
@@ -86,7 +86,7 @@ const findFocus = (segData: SegData, id: string) => {
 };
 
 export default function Segregation({ segData, isLoading, hasFailed }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const grade = useSelector(selectGrade);
   const year = useSelector(selectYear);

@@ -21,13 +21,14 @@ import {
   setSegDataFailure,
 } from "store/apiCacheSlice";
 import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
+import { AppDispatch } from "store/store";
 
 import { ApiStatus, Level, SegData } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
 export default function SegregationPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [paramsChecked, setParamsChecked] = useState(false);
 

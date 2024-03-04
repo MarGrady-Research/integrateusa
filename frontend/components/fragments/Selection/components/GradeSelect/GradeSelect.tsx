@@ -7,10 +7,11 @@ import Select from "components/atoms/Select";
 import { gradesData } from "../../data";
 
 import { selectGrade, setGrade } from "store/selectSlice";
+import { AppDispatch } from "store/store";
 
 export default function GradeSelect() {
   const grade = useSelector(selectGrade);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: SelectChangeEvent) => {
     dispatch(setGrade(e.target.value as string));

@@ -31,13 +31,14 @@ import {
   setSchoolInfoFailure,
 } from "store/apiCacheSlice";
 import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
+import { AppDispatch } from "store/store";
 
 import { Level, ApiStatus, InfoData, TrendData, SchoolInfo } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
 export default function InfoPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [paramsChecked, setParamsChecked] = useState(false);
 

@@ -24,6 +24,7 @@ import {
   setLocationSearchFailure,
   selectLocationSearch,
 } from "store/apiCacheSlice";
+import { AppDispatch } from "store/store";
 
 import { levelSelectData } from "../../data";
 
@@ -51,7 +52,7 @@ export default function SearchSelect({ level }: Props) {
   const locationSearchStore = useSelector(selectLocationSearch);
   const distType = useSelector(selectDistrictType);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [value, setValue] = useState<LocationSearchOption | null>({
     label: selectedName,
