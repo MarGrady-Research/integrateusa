@@ -10,7 +10,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { getPersistConfig } from "redux-deep-persist";
 
 import { selectSlice } from "./selectSlice";
@@ -40,7 +40,7 @@ export const makeStore = () => {
   } else {
     const persistConfig = getPersistConfig({
       key: "root",
-      storage,
+      storage: createWebStorage("local"),
       version: 1,
       blacklist: ["select.grade", "select.year", "apiCache", "map"],
       rootReducer,
