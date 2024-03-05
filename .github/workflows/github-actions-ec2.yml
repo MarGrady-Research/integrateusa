@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout the files
         uses: actions/checkout@v4
-      - name: "Create env files"
+      - name: Create env files
         run: |
           touch .env
           echo SECRET_KEY=${{secrets.SECRET_KEY}} >> .env
@@ -22,7 +22,6 @@ jobs:
           cd frontend
           touch .env
           echo NEXT_PUBLIC_MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN}} >> .env
-          echo NEXT_PUBLIC_BACKEND_URL=https://integrateusa.org >> .env
           cat .env
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
