@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'integrateusa.org']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'integrateusa.org', '3.131.141.139', 'ec2-3-131-141-139.us-east-2.compute.amazonaws.com' ]
 
 
 # Application definition
