@@ -701,9 +701,14 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
         onZoomEnd={querySchools}
         onSourceData={onInitialRender}
       >
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
+        {mapRenderingComplete && (
+          <>
+            <GeolocateControl position="top-left" />
+            <FullscreenControl position="top-left" />
+            <NavigationControl position="top-left" />
+          </>
+        )}
+
         {hasMapLoaded && (
           <>
             <Source
