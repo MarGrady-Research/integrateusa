@@ -33,7 +33,6 @@ export default function YearSelect() {
 
   return (
     <Select
-      id="year-select"
       value={selectedValue}
       label="Year"
       onChange={handleChange}

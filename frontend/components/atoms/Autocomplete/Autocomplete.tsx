@@ -17,7 +17,6 @@ interface SearchResult {
 }
 
 interface Props {
-  id: string;
   value: SearchResult | null;
   inputValue: string;
   options: readonly SearchResult[];
@@ -37,7 +36,6 @@ interface Props {
 }
 
 export default function AutocompleteComponent({
-  id,
   value,
   inputValue,
   options,
@@ -51,7 +49,6 @@ export default function AutocompleteComponent({
 }: Props) {
   return (
     <Autocomplete
-      id={id}
       disabled={disabled}
       filterOptions={(x) => x}
       options={options}

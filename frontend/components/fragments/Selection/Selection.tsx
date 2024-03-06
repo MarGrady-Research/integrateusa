@@ -99,7 +99,12 @@ export default function Selection({ omitSchools }: Props) {
       >
         <div className="p-3 pt-5">{selects}</div>
         <div className="flex justify-center p-1">
-          <IconButton onClick={toggleExpanded}>
+          <IconButton
+            onClick={toggleExpanded}
+            aria-label={
+              expanded ? "Clsoe selection panel" : "Open selection panel"
+            }
+          >
             <ExpandMoreIcon
               className={clsx({ "rotate-180": expanded, [animate]: true })}
             />

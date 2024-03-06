@@ -283,36 +283,41 @@ export default function BarChart({ infoData, isLoading, hasFailed }: Props) {
             <button
               className={buttonAsian}
               onClick={() => handleSort("prop_as")}
+              aria-labelledby="asian-sort"
             />
-            Asian
+            <span id="asian-sort">Asian</span>
           </div>
           <div className={clsx({ "text-primary": sortedByBlack })}>
             <button
               className={buttonBlack}
               onClick={() => handleSort("prop_bl")}
+              aria-labelledby="black-sort"
             />
-            Black
+            <span id="black-sort"> Black</span>
           </div>
           <div className={clsx({ "text-primary": sortedByHispanic })}>
             <button
               className={buttonHispanic}
               onClick={() => handleSort("prop_hi")}
+              aria-labelledby="hispanic-sort"
             />
-            Hispanic
+            <span id="hispanic-sort">Hispanic</span>
           </div>
           <div className={clsx({ "text-primary": sortedByWhite })}>
             <button
               className={buttonWhite}
               onClick={() => handleSort("prop_wh")}
+              aria-labelledby="white-sort"
             />
-            White
+            <span id="white-sort">White</span>
           </div>
           <div className={clsx({ "text-primary": sortedByOther })}>
             <button
               className={buttonOther}
               onClick={() => handleSort("prop_or")}
+              aria-labelledby="other-sort"
             />
-            Other
+            <span id="other-sort">Other</span>
           </div>
         </div>
       </div>

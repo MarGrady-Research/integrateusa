@@ -37,7 +37,6 @@ export default function LevelSelect({
 
   return (
     <Select
-      id="level-select"
       value={selectedValue}
       label="Level"
       onChange={handleChange}

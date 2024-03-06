@@ -8,7 +8,6 @@ import clsx from "clsx";
 import { inputLabel } from "./Select.module.scss";
 
 interface Props {
-  id: string;
   label?: string;
   value: string;
   onChange: (e: SelectChangeEvent) => void;
@@ -23,7 +22,6 @@ interface Props {
 }
 
 export default function SelectComponent({
-  id,
   label,
   value,
   onChange,
@@ -32,8 +30,6 @@ export default function SelectComponent({
   classes,
   full,
 }: Props) {
-  const inputLabelId = `${id}-label`;
-
   const selectOptions = options.map((o) => (
     <MenuItem key={o.value} value={o.value.toString()} disabled={o.disabled}>
       {o.label}
@@ -42,19 +38,19 @@ export default function SelectComponent({
 
   const emptyInput = value === "";
 
+  const selectLabel = `select-label-${label}`;
+
   return (
     <FormControl variant={variant} className={clsx({ "w-full": full })}>
       {label && (
         <InputLabel
-          id={inputLabel}
           className={clsx({ [inputLabel]: emptyInput })}
+          id={selectLabel}
         >
           {label}
         </InputLabel>
       )}
       <Select
-        labelId={inputLabelId}
-        id={id}
         value={value}
         label={label}
         onChange={onChange}
@@ -62,6 +58,7 @@ export default function SelectComponent({
           select: `!py-2 ${classes?.select}`,
           ...classes,
         }}
+        SelectDisplayProps={{ "aria-labelledby": selectLabel }}
       >
         {selectOptions}
       </Select>

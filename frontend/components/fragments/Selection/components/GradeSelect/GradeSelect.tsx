@@ -27,7 +27,6 @@ export default function GradeSelect() {
 
   return (
     <Select
-      id="grade-select"
       value={selectedValue}
       label="Grade"
       onChange={handleChange}
