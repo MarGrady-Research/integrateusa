@@ -34,6 +34,7 @@ const InfoDialog = memo(
         fullWidth
         fullScreen={fullScreen}
         classes={{ paper }}
+        PaperProps={{ title: "Info Dialog" }}
       >
         <DialogTitle className="text-center !font-semibold">{name}</DialogTitle>
         <DialogContent>

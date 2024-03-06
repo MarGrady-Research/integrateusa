@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
-import MenuIcon from "@mui/icons-material/Menu";
 
 const Drawer = dynamic(() => import("@mui/material/Drawer"));
 const IconButton = dynamic(() => import("@mui/material/IconButton"));
@@ -12,8 +11,9 @@ const Divider = dynamic(() => import("@mui/material/Divider"));
 
 const Control = dynamic(() => import("../Control"));
 
-import { button, drawerPaper } from "./Slideover.module.scss";
 import { Bounds, MapLevel } from "interfaces";
+
+import { button, drawerPaper } from "./Slideover.module.scss";
 
 interface Props {
   mapLevel: MapLevel;
@@ -34,12 +34,14 @@ export default function Slideover({
       <button
         onClick={toggleOpen}
         className={clsx(
-          "absolute top-2.5 right-2.5 z-20 flex justify-center items-center",
+          "absolute top-2.5 right-2.5 z-20 flex flex-col justify-center items-center",
           button
         )}
         aria-label="Open map options"
       >
-        <MenuIcon fontSize="large" />
+        <span className="block bg-map-control h-1 w-8 rounded translate-y-3" />
+        <span className="block bg-map-control h-1 w-8 rounded" />
+        <span className="block bg-map-control h-1 w-8 rounded -translate-y-3" />
       </button>
       <Drawer
         anchor="right"

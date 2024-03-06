@@ -16,6 +16,7 @@ const tailwindConfig = {
         primary: primaryColor,
         secondary: "rgb(252,136,55)",
         "line-red": "rgb(255, 99, 132)",
+        "map-control": "#333333",
       },
       transitionProperty: {
         width: "width",
