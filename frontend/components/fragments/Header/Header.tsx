@@ -71,15 +71,15 @@ export default function Header() {
       <header className={clsx("text-black bg-white shadow relative", root)}>
         <div className="max-w-full lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl pl-4 pr-2.5 lg:px-6 h-full mx-auto flex items-center justify-between">
           <div className="flex items-center flex-col lg:flex-row">
-            <Link
-              href="/"
-              className="flex items-center text-black w-44 sm:w-auto"
-            >
+            <Link href="/" className="relative mr-0 lg:mr-4">
               <Image
                 src={IntegrateUSALogo}
                 alt="IntegrateUSA logo"
                 width={200}
               />
+              <span className="text-sm sm:text-base absolute bottom-1 sm:bottom-0 right-0.5 sm:right-0 text-red-600">
+                beta
+              </span>
             </Link>
             <nav className="hidden lg:block lg:pl-4 lg:border-l lg:border-gray-400 flex items-center justify-center">
               {navLinks}
