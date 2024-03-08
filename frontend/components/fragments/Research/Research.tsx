@@ -19,6 +19,7 @@ export default function Research() {
           objectFit="contain"
           alt=""
           height={220}
+          style={{ height: "auto", width: "auto" }}
           className="border border-black"
           placeholder="blur"
         />

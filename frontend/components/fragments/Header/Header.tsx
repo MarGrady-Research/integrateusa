@@ -87,7 +87,12 @@ export default function Header() {
           </div>
           <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
             <a href="https://www.margrady.com/" target="_blank">
-              <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
+              <Image
+                src={MarGradyLogoText}
+                alt="MarGrady Logo"
+                width={250}
+                style={{ height: "auto", width: "auto" }}
+              />
             </a>
           </div>
           <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />

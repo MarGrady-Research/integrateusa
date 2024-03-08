@@ -9,6 +9,7 @@ import { inputLabel } from "./Select.module.scss";
 
 interface Props {
   label?: string;
+  ariaLabel?: string;
   labelPrefix?: string;
   value: string;
   onChange: (e: SelectChangeEvent) => void;
@@ -24,6 +25,7 @@ interface Props {
 
 export default function SelectComponent({
   label,
+  ariaLabel,
   labelPrefix = "",
   value,
   onChange,
@@ -40,7 +42,7 @@ export default function SelectComponent({
 
   const emptyInput = value === "";
 
-  const selectLabel = `select-label-${labelPrefix}${label}`;
+  const selectLabel = label && `select-label-${labelPrefix}${label}`;
 
   return (
     <FormControl variant={variant} className={clsx({ "w-full": full })}>
@@ -60,7 +62,11 @@ export default function SelectComponent({
           select: `!py-2 ${classes?.select}`,
           ...classes,
         }}
-        SelectDisplayProps={{ "aria-labelledby": selectLabel }}
+        SelectDisplayProps={
+          selectLabel
+            ? { "aria-labelledby": selectLabel }
+            : ariaLabel && { "aria-label": ariaLabel }
+        }
       >
         {selectOptions}
       </Select>

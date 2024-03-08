@@ -8,7 +8,12 @@ export default function Footer() {
   return (
     <footer className="flex justify-center mt-5 xl:hidden">
       <Link href="https://www.margrady.com/">
-        <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
+        <Image
+          src={MarGradyLogoText}
+          alt="MarGrady Logo"
+          width={250}
+          style={{ height: "auto", width: "auto" }}
+        />
       </Link>
     </footer>
   );
