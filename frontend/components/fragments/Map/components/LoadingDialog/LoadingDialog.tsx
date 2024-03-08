@@ -51,8 +51,8 @@ const LoadingDialog = memo(({ open, mapStatus }: Props) => {
       >
         {!fetchingFailed && <Loader />}
         <p
-          className={clsx("mt-5 italic", {
-            "text-red-500": fetchingFailed,
+          className={clsx("mt-5 italic text-xl", {
+            "text-red-600": fetchingFailed,
           })}
         >
           {message}
