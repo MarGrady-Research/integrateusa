@@ -9,6 +9,7 @@ import { inputLabel } from "./Select.module.scss";
 
 interface Props {
   label?: string;
+  labelPrefix?: string;
   value: string;
   onChange: (e: SelectChangeEvent) => void;
   variant?: "filled" | "outlined" | "standard";
@@ -23,6 +24,7 @@ interface Props {
 
 export default function SelectComponent({
   label,
+  labelPrefix = "",
   value,
   onChange,
   options,
@@ -38,7 +40,7 @@ export default function SelectComponent({
 
   const emptyInput = value === "";
 
-  const selectLabel = `select-label-${label}`;
+  const selectLabel = `select-label-${labelPrefix}${label}`;
 
   return (
     <FormControl variant={variant} className={clsx({ "w-full": full })}>

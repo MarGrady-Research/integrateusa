@@ -65,23 +65,24 @@ export default function Selection({ omitSchools }: Props) {
   const topOffset = Math.max(0, navbarHeight - y);
   const translateY = expanded ? 0 : -selectsHeight;
 
-  const selects = (
+  const selects = (prefix = "") => (
     <>
       <div className="w-full mb-3 lg:mb-0">
         <LevelSelect
           omitSchools={omitSchools}
           level={level}
           handleLevelChange={handleLevelChange}
+          labelPrefix={prefix}
         />
       </div>
       <div className="w-full mb-3 lg:mb-0">
         <SearchSelect level={level} />
       </div>
       <div className="w-full mb-3 lg:mb-0">
-        <YearSelect />
+        <YearSelect labelPrefix={prefix} />
       </div>
       <div className="w-full mb-0">
-        <GradeSelect />
+        <GradeSelect labelPrefix={prefix} />
       </div>
     </>
   );
@@ -90,19 +91,19 @@ export default function Selection({ omitSchools }: Props) {
     <>
       <div className="hidden lg:block shadow sticky top-0 z-10 bg-white">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 container mx-auto p-5 pb-10 lg:pb-5 hidden lg:grid">
-          {selects}
+          {selects()}
         </div>
       </div>
       <div
         className={clsx("lg:hidden shadow bg-white fixed w-full z-10", animate)}
         style={{ top: topOffset, transform: `translateY(${translateY}px)` }}
       >
-        <div className="p-3 pt-5">{selects}</div>
+        <div className="p-3 pt-5">{selects("mobile-")}</div>
         <div className="flex justify-center p-1">
           <IconButton
             onClick={toggleExpanded}
             aria-label={
-              expanded ? "Clsoe selection panel" : "Open selection panel"
+              expanded ? "Close selection panel" : "Open selection panel"
             }
           >
             <ExpandMoreIcon
