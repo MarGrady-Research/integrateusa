@@ -50,8 +50,8 @@ export default function Info({
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-5">{title}</h1>
-      <h2 className="text-2xl mb-4">Overview</h2>
+      <h1 className="text-4xl font-semibold mb-5">{title}</h1>
+      <h2 className="text-2xl font-medium mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>
           <InsetMap
@@ -90,7 +90,9 @@ export default function Info({
       </div>
       {!isSchool && (
         <div className="mb-10">
-          <h2 className="text-2xl mb-4">Race Breakdown by School</h2>
+          <h2 className="text-2xl font-medium mb-4">
+            Race Breakdown by School
+          </h2>
           <BarChart
             infoData={infoData}
             isLoading={isInfoDataLoading}

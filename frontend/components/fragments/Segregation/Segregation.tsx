@@ -226,9 +226,23 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
     setLines([{ id, name }]);
   };
 
+  let comparisonText = "";
+
+  switch (level) {
+    case Level.County:
+      comparisonText = "Comparison counties";
+      break;
+    case Level.State:
+      comparisonText = "Comparison states";
+      break;
+    case Level.District:
+      comparisonText = "Comparison districts";
+      break;
+  }
+
   return (
     <>
-      <h1 className="text-4xl font-bold mb-5">{name}</h1>
+      <h1 className="text-4xl font-semibold mb-5">{name}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-y-0 lg:gap-x-5 mb-10">
         <Info
           focus={focus}
@@ -243,6 +257,7 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         />
         <SegBar focus={focus} isLoading={isLoading} hasFailed={hasFailed} />
       </div>
+      <h2 className="text-2xl font-medium mb-4">Segregation Trends</h2>
       <LineGraph
         lines={lines}
         measure={measure}
@@ -250,6 +265,7 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         year={year}
         grade={grade}
       />
+      <h2 className="text-2xl font-medium mb-4">{comparisonText}</h2>
       <ComparisonTable
         id={id}
         segData={segData}
