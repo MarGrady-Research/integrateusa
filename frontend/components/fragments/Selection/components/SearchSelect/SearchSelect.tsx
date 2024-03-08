@@ -278,7 +278,6 @@ export default function SearchSelect({ level }: Props) {
 
   return (
     <Autocomplete
-      id="search-select"
       value={value}
       inputValue={inputValue}
       options={options}

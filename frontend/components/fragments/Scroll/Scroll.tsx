@@ -31,7 +31,12 @@ function EndScreen() {
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
       </Link>
       <Link href="https://www.margrady.com/">
-        <Image src={MarGradyLogo} alt="MarGrady Logo" width={350} />
+        <Image
+          src={MarGradyLogo}
+          alt="MarGrady Logo"
+          width={350}
+          style={{ height: "auto", width: "auto" }}
+        />
       </Link>
     </div>
   );

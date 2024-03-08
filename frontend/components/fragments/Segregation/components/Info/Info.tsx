@@ -63,10 +63,10 @@ export default function Info({
     <Skeleton variant="text" className="!inline-block w-24" />
   ) : (
     <Select
-      id="seg-select"
       value={selectedValue}
       onChange={handleChange}
       options={options}
+      ariaLabel="Change Race"
       variant="standard"
       classes={{
         root: "!text-md lg:!text-xl mt-px lg:mt-0",

@@ -30,9 +30,9 @@ function NavLink({ url, title }: NavLinkProps) {
     <Link
       href={url}
       className={clsx(
-        "mr-0 lg:mr-6 last:mr-0 mb-2 lg:mb-0 duration-300 hover:text-secondary text-2xl lg:text-xl font-medium",
+        "mr-0 lg:mr-6 last:mr-0 mb-2 lg:mb-0 duration-300 hover:text-primary text-2xl lg:text-xl font-medium",
         {
-          "text-primary hover:text-primary": isActiveURL,
+          "text-primary underline underline-offset-8 ": isActiveURL,
         }
       )}
     >
@@ -87,7 +87,12 @@ export default function Header() {
           </div>
           <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
             <a href="https://www.margrady.com/" target="_blank">
-              <Image src={MarGradyLogoText} alt="MarGrady Logo" width={250} />
+              <Image
+                src={MarGradyLogoText}
+                alt="MarGrady Logo"
+                width={250}
+                style={{ height: "auto", width: "auto" }}
+              />
             </a>
           </div>
           <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />

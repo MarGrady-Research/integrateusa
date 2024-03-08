@@ -54,6 +54,13 @@ interface Props {
   hasFailed: boolean;
 }
 
+interface SortButtonProps {
+  isSortedBy: boolean;
+  onClick: () => void;
+  label: string;
+  className: string;
+}
+
 const getBarData = (data: InfoData) => {
   const asianData = [];
   const blackData = [];
@@ -171,6 +178,30 @@ const options = {
   },
 };
 
+const SortButton = ({
+  isSortedBy,
+  onClick,
+  className,
+  label,
+}: SortButtonProps) => {
+  const ariaLabel = `${label}-sort`;
+
+  return (
+    <div
+      className={clsx("mr-2 mb-1 sm:mb-0 last:mr-0 flex items-center", {
+        "text-primary": isSortedBy,
+      })}
+    >
+      <button
+        className={clsx(className, "flex items-center justify-center")}
+        onClick={onClick}
+        aria-labelledby={ariaLabel}
+      />
+      <span id={ariaLabel}>{label}</span>
+    </div>
+  );
+};
+
 export default function BarChart({ infoData, isLoading, hasFailed }: Props) {
   const [sortBy, setSortBy] = useState("" as RacialProportion | "");
 
@@ -266,56 +297,55 @@ export default function BarChart({ infoData, isLoading, hasFailed }: Props) {
     datasets: barData,
   };
 
+  const barLegend = (
+    <div
+      className={clsx(
+        "flex justify-center items-center flex-col sm:flex-row mb-1",
+        legend
+      )}
+    >
+      <p className="text-sm mr-1 sm:-mt-0.5 sm:mr-0 mb-2 sm:mb-0">
+        Click to sort
+      </p>
+      <ArrowForwardIcon className="mr-1 !hidden sm:!inline-block" />
+      <div className={clsx("flex flex-wrap justify-center", buttons)}>
+        <SortButton
+          isSortedBy={sortedByAsian}
+          onClick={() => handleSort("prop_as")}
+          label="Asian"
+          className={buttonAsian}
+        />
+        <SortButton
+          isSortedBy={sortedByBlack}
+          onClick={() => handleSort("prop_bl")}
+          label="Black"
+          className={buttonBlack}
+        />
+        <SortButton
+          isSortedBy={sortedByHispanic}
+          onClick={() => handleSort("prop_hi")}
+          label="Hispanic"
+          className={buttonHispanic}
+        />
+        <SortButton
+          isSortedBy={sortedByWhite}
+          onClick={() => handleSort("prop_wh")}
+          label="White"
+          className={buttonWhite}
+        />
+        <SortButton
+          isSortedBy={sortedByOther}
+          onClick={() => handleSort("prop_or")}
+          label="Other"
+          className={buttonOther}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col">
-      <div
-        className={clsx(
-          "flex justify-center items-center flex-col sm:flex-row mb-1",
-          legend
-        )}
-      >
-        <p className="text-sm mr-1 sm:-mt-0.5 sm:mr-0 mb-1 sm:mb-0">
-          Click to sort
-        </p>
-        <ArrowForwardIcon className="mr-1 !hidden sm:!inline-block" />
-        <div className={clsx("flex flex-wrap justify-center", buttons)}>
-          <div className={clsx({ "text-primary": sortedByAsian })}>
-            <button
-              className={buttonAsian}
-              onClick={() => handleSort("prop_as")}
-            />
-            Asian
-          </div>
-          <div className={clsx({ "text-primary": sortedByBlack })}>
-            <button
-              className={buttonBlack}
-              onClick={() => handleSort("prop_bl")}
-            />
-            Black
-          </div>
-          <div className={clsx({ "text-primary": sortedByHispanic })}>
-            <button
-              className={buttonHispanic}
-              onClick={() => handleSort("prop_hi")}
-            />
-            Hispanic
-          </div>
-          <div className={clsx({ "text-primary": sortedByWhite })}>
-            <button
-              className={buttonWhite}
-              onClick={() => handleSort("prop_wh")}
-            />
-            White
-          </div>
-          <div className={clsx({ "text-primary": sortedByOther })}>
-            <button
-              className={buttonOther}
-              onClick={() => handleSort("prop_or")}
-            />
-            Other
-          </div>
-        </div>
-      </div>
+      {barLegend}
       <div className={container}>
         <Bar data={data} options={options} plugins={[legendMargin]} />
       </div>

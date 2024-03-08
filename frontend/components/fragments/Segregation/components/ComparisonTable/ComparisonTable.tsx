@@ -274,6 +274,9 @@ export default function ComparisonTable({
           }
         });
       }}
+      inputProps={{
+        "aria-label": allVisibleSelected ? "Hide all lines" : "Show all lines",
+      }}
     />
   );
 
@@ -393,19 +396,27 @@ export default function ComparisonTable({
     </TableRow>
   );
 
-  const tableContentRowCheckbox = (row, isSelectedRow) => (
-    <Checkbox
-      onClick={() => {
-        updateLine(row[idLevel], row[nameLevel]);
-      }}
-      disabled={isSelectedRow}
-      checked={
-        isSelectedRow
-          ? true
-          : lines.findIndex((l) => l.id === row[idLevel]) != -1
-      }
-    />
-  );
+  const tableContentRowCheckbox = (row, isSelectedRow: boolean) => {
+    const name = row[nameLevel];
+    const id = row[idLevel];
+
+    const isChecked =
+      isSelectedRow || lines.findIndex((l) => l.id === row[idLevel]) != -1;
+    return (
+      <Checkbox
+        onClick={() => {
+          updateLine(id, name);
+        }}
+        disabled={isSelectedRow}
+        checked={isChecked}
+        inputProps={{
+          "aria-label": isChecked
+            ? `Hide line for ${name}`
+            : `Show line for ${name}`,
+        }}
+      />
+    );
+  };
 
   const tableContentRows = () =>
     visibleRows.map((row) => (

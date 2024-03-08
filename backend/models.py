@@ -13,7 +13,7 @@ class SchoolInfo(models.Model):
     dist_name = models.TextField()
     state_abb = models.TextField()
     year_open = models.IntegerField()
-    year_close = models.IntegerField()
+    year_close = models.TextField()
 
     class Meta:
         db_table = 'school_info'

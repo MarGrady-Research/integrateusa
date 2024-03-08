@@ -11,12 +11,14 @@ interface Props {
   omitSchools?: boolean;
   level: Level;
   handleLevelChange: (l: Level) => void;
+  labelPrefix?: string;
 }
 
 export default function LevelSelect({
   omitSchools,
   level,
   handleLevelChange,
+  labelPrefix,
 }: Props) {
   const handleChange = (e: SelectChangeEvent) => {
     const value = parseInt(e.target.value as string);
@@ -37,8 +39,8 @@ export default function LevelSelect({
 
   return (
     <Select
-      id="level-select"
       value={selectedValue}
+      labelPrefix={labelPrefix}
       label="Level"
       onChange={handleChange}
       options={options}

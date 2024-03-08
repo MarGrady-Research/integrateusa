@@ -270,7 +270,6 @@ export default function Search({ mapLevel, handleBounds }: Props) {
 
   return (
     <Autocomplete
-      id="map-search-select"
       value={value}
       inputValue={inputValue}
       options={options}
@@ -279,6 +278,7 @@ export default function Search({ mapLevel, handleBounds }: Props) {
       handleInputChange={handleInputChange}
       placeholder={placeholder}
       disabled={isDisabled}
+      label="Name"
       isOptionEqualToValue={(
         o: LocationSearchOption,
         v: LocationSearchOption

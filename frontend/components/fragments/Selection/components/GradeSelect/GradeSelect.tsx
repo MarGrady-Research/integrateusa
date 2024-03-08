@@ -9,7 +9,11 @@ import { gradesData } from "../../data";
 import { selectGrade, setGrade } from "store/selectSlice";
 import { AppDispatch } from "store/store";
 
-export default function GradeSelect() {
+interface Props {
+  labelPrefix?: string;
+}
+
+export default function GradeSelect({ labelPrefix }: Props) {
   const grade = useSelector(selectGrade);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -27,8 +31,8 @@ export default function GradeSelect() {
 
   return (
     <Select
-      id="grade-select"
       value={selectedValue}
+      labelPrefix={labelPrefix}
       label="Grade"
       onChange={handleChange}
       options={options}

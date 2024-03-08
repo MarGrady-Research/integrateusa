@@ -11,7 +11,11 @@ import { AppDispatch } from "store/store";
 
 import { Level } from "interfaces";
 
-export default function YearSelect() {
+interface Props {
+  labelPrefix?: string;
+}
+
+export default function YearSelect({ labelPrefix }: Props) {
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
   const dispatch = useDispatch<AppDispatch>();
@@ -33,8 +37,8 @@ export default function YearSelect() {
 
   return (
     <Select
-      id="year-select"
       value={selectedValue}
+      labelPrefix={labelPrefix}
       label="Year"
       onChange={handleChange}
       options={options}
