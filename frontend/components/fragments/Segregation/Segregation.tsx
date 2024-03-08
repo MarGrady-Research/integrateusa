@@ -230,13 +230,13 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
 
   switch (level) {
     case Level.County:
-      comparisonText = "Comparison counties";
+      comparisonText = "Comparison Counties";
       break;
     case Level.State:
-      comparisonText = "Comparison states";
+      comparisonText = "Comparison States";
       break;
     case Level.District:
-      comparisonText = "Comparison districts";
+      comparisonText = "Comparison Districts";
       break;
   }
 
