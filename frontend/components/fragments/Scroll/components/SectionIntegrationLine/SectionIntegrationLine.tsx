@@ -77,7 +77,7 @@ export default function SectionIntegrationLine() {
                 <Info>
                   <p className="mb-3">
                     In 2019,{" "}
-                    <span className="text-line-red">
+                    <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
                     implemented an integration plan
@@ -94,7 +94,7 @@ export default function SectionIntegrationLine() {
                 <Info>
                   <p className="mb-3">
                     We can compare{" "}
-                    <span className="text-line-red">
+                    <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
                     to demographically similar districts without integration
@@ -102,7 +102,7 @@ export default function SectionIntegrationLine() {
                   </p>
                   <p>
                     The Normalized Exposure for White students in{" "}
-                    <span className="text-line-red">
+                    <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
                     shows a steep drop compared to other districts
@@ -118,7 +118,7 @@ export default function SectionIntegrationLine() {
                     each district
                   </p>
                   <p>
-                    <span className="text-line-red">
+                    <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
                     has the largest drop in White Normalized Exposure rates of
