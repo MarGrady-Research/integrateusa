@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-import { primaryColor } from "./constants";
+import { primaryColor, selectedLineColor } from "./constants";
 
 const tailwindConfig = {
   content: [
@@ -15,7 +15,7 @@ const tailwindConfig = {
       colors: {
         primary: primaryColor,
         secondary: "rgb(252,136,55)",
-        "line-red": "rgb(255, 99, 132)",
+        "line-selected": selectedLineColor,
         "map-control": "#333333",
       },
       transitionProperty: {

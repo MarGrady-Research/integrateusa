@@ -437,7 +437,7 @@ export default function ComparisonTable({
                   key={column.accessor}
                   className={clsx({
                     "text-sm text-left text-gray-900 font-light": true,
-                    "!text-line-red !font-semibold": isSelectedRow,
+                    "!text-line-selected !font-semibold": isSelectedRow,
                   })}
                 >
                   {row[column.accessor]}
@@ -449,7 +449,7 @@ export default function ComparisonTable({
                   key={column.accessor}
                   className={clsx({
                     "text-sm !text-center text-gray-900 font-light": true,
-                    "!text-line-red !font-semibold": isSelectedRow,
+                    "!text-line-selected !font-semibold": isSelectedRow,
                   })}
                 >
                   {row[column.accessor].toLocaleString("en-US")}
