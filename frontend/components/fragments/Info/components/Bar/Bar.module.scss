@@ -1,7 +1,7 @@
 @import "styles/colors.module.scss";
 
 .legend {
-  height: 60px !important;
+  height: 132px !important;
 
   @screen sm {
     height: 24px !important;
@@ -22,18 +22,16 @@
     align-items: center;
     font-size: 0.75rem;
     line-height: 1rem;
-    margin: {
-      right: 8px;
-      bottom: 2px;
-    }
-    &:last-of-type {
-      margin-right: 0;
-    }
 
     > button {
-      width: 40px;
-      height: 12px;
+      width: 48px;
+      height: 48px;
       margin-right: 4px;
+
+      @screen sm {
+        width: 40px;
+        height: 12px;
+      }
     }
   }
 }
@@ -48,6 +46,7 @@
 
 .buttonBlack {
   background-color: $blackColor;
+
   &:hover {
     background-color: darken($blackColor, 10%);
   }
@@ -55,6 +54,7 @@
 
 .buttonHispanic {
   background-color: $hispanicColor;
+
   &:hover {
     background-color: darken($hispanicColor, 10%);
   }
@@ -62,6 +62,7 @@
 
 .buttonWhite {
   background-color: $whiteColor;
+
   &:hover {
     background-color: darken($whiteColor, 10%);
   }
@@ -69,6 +70,7 @@
 
 .buttonOther {
   background-color: $otherColor;
+
   &:hover {
     background-color: darken($otherColor, 10%);
   }
