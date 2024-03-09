@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const Drawer = dynamic(() => import("@mui/material/Drawer"));
-const IconButton = dynamic(() => import("@mui/material/IconButton"));
-const ChevronRightIcon = dynamic(
-  () => import("@mui/icons-material/ChevronRight")
+const ChevronRightRoundedIcon = dynamic(
+  () => import("@mui/icons-material/ChevronRightRounded")
 );
 const Divider = dynamic(() => import("@mui/material/Divider"));
 
@@ -39,9 +39,7 @@ export default function Slideover({
         )}
         aria-label="Open map options"
       >
-        <span className="block bg-map-control h-1 w-8 rounded translate-y-3" />
-        <span className="block bg-map-control h-1 w-8 rounded" />
-        <span className="block bg-map-control h-1 w-8 rounded -translate-y-3" />
+        <MenuRoundedIcon fontSize="large" />
       </button>
       <Drawer
         anchor="right"
@@ -58,14 +56,18 @@ export default function Slideover({
         }}
         variant="persistent"
       >
-        <div className="flex flex-start p-2">
-          <IconButton onClick={toggleOpen} aria-label="Close map options">
-            <ChevronRightIcon />
-          </IconButton>
+        <div className="flex flex-start p-4">
+          <button
+            onClick={toggleOpen}
+            aria-label="Close map options"
+            className={button}
+          >
+            <ChevronRightRoundedIcon fontSize="large" />
+          </button>
         </div>
         <Divider />
-        <div className="p-4">
-          <h1 className="text-xl mb-4">Map Options</h1>
+        <div className="p-4 pt-2.5">
+          <h1 className="text-xl mb-3">Map Options</h1>
           <Control
             mapLevel={mapLevel}
             handleMapLevel={handleMapLevel}
