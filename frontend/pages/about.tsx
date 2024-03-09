@@ -14,7 +14,7 @@ export default function About() {
             IntegrateUSA is a project by{" "}
             <a
               href="http://margrady.com"
-              className="text-primary"
+              className="text-primary hover:underline underline-offset-4"
               target="_blank"
               rel="noreferrer"
             >
@@ -31,13 +31,13 @@ export default function About() {
             Education Statistics&#39;{" "}
             <a
               href="https://nces.ed.gov/ccd/"
-              className="text-primary"
+              className="text-primary hover:underline underline-offset-4"
               target="_blank"
               rel="noreferrer"
             >
-              Common Core of Data.
-            </a>{" "}
-            The data have been cleaned to standardize school codes and names
+              Common Core of Data
+            </a>
+            . The data have been cleaned to standardize school codes and names
             over time and exclude correctional facilities, district offices,
             hospital/homebound students, and schools that have fewer than 25
             students in all years. Charter schools have been assigned to local
@@ -54,12 +54,13 @@ export default function About() {
             and Stanford as part of the{" "}
             <a
               href="https://socialinnovation.usc.edu/segregation/"
-              className="text-primary"
+              className="text-primary hover:underline underline-offset-4"
               target="_blank"
               rel="noreferrer"
             >
-              Segregation Index project.
+              Segregation Index project
             </a>
+            .
           </p>
           <p className="mb-3">
             We would like to thank the Carnegie Corporation of New York for its
@@ -67,7 +68,10 @@ export default function About() {
           </p>
           <p className="mb-3">
             If you have any questions, please contact MarGrady Research at{" "}
-            <a href="mailto:integrateusa@margrady.com" className="text-primary">
+            <a
+              href="mailto:integrateusa@margrady.com"
+              className="text-primary hover:underline underline-offset-4"
+            >
               integrateusa@margrady.com
             </a>
             .

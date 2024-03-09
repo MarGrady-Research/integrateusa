@@ -13,7 +13,7 @@ export default function Research() {
       <h2 className="text-lg mb-10">
         Publications, projects, and other resources appear below.
       </h2>
-      <div className="border-4 border-black p-5 flex flex-col items-center md:flex-row md:items-start">
+      <div className="border-2 border-black p-5 flex flex-col items-center md:flex-row md:items-start">
         <Image
           src={district15Img}
           objectFit="contain"
