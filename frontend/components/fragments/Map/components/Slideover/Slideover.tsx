@@ -4,7 +4,6 @@ import clsx from "clsx";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const Drawer = dynamic(() => import("@mui/material/Drawer"));
-const IconButton = dynamic(() => import("@mui/material/IconButton"));
 const ChevronRightRoundedIcon = dynamic(
   () => import("@mui/icons-material/ChevronRightRounded")
 );
