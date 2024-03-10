@@ -87,7 +87,7 @@ export default function Header() {
               {navLinks}
             </nav>
           </div>
-          <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
+          <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer">
             <a href="https://www.margrady.com/" target="_blank">
               <Image
                 src={MarGradyLogoText}
