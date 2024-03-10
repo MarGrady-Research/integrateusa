@@ -15,7 +15,7 @@ export default function Research() {
       </h2>
       <Link
         href="/research/district15"
-        className="border-2 border-black hover:border-primary hover:bg-slate-50 duration-300 p-5 flex flex-col items-center md:flex-row md:items-start"
+        className="group border-2 border-black hover:border-primary hover:bg-slate-50 duration-300 p-5 flex flex-col items-center md:flex-row md:items-start"
       >
         <Image
           src={district15Img}
@@ -23,11 +23,11 @@ export default function Research() {
           alt=""
           height={220}
           style={{ height: "auto", width: "auto" }}
-          className="border border-black"
+          className="border border-black group-hover:border-primary"
           placeholder="blur"
         />
         <div className="mt-4 md:mt-0 md:ml-4">
-          <h3 className="text-xl font-semibold">
+          <h3 className="text-xl font-semibold group-hover:text-primary">
             Case Study: Middle School Integration in New York City’s District 15
           </h3>
           <h4 className="text-lg font-medium">Jesse Margolis</h4>
