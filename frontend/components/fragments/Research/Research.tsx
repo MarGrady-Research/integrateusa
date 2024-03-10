@@ -28,7 +28,8 @@ export default function Research() {
         />
         <div className="mt-4 md:mt-0 md:ml-4">
           <h3 className="text-lg lg:text-xl font-semibold group-hover:text-primary">
-            Case Study: Middle School Integration in New York City’s District 15
+            Case Study: Middle School Integration in New York City&apos;s
+            District 15
           </h3>
           <h4 className="text-base lg:text-lg font-medium">Jesse Margolis</h4>
           <h4 className="text-base lg:text-lg font-medium mb-2">March 2024</h4>
