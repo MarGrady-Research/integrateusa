@@ -2,14 +2,17 @@ import React from "react";
 
 import Head from "components/fragments/Head";
 import Footer from "components/fragments/Footer";
+import Page from "components/layouts/Page";
 
 export default function About() {
   return (
     <>
       <Head title="About" desc="About IntegrateUSA" />
-      <div className="container mx-auto p-10">
-        <h1 className="text-3xl text-center mb-6 text-semibold">About</h1>
-        <div className="md:w-4/5 mx-auto text-lg">
+      <Page>
+        <h1 className="text-3xl lg:text-4xl text-center mb-6 font-semibold">
+          About
+        </h1>
+        <div className="md:w-4/5 mx-auto text-base lg:text-lg">
           <p className="mb-3">
             IntegrateUSA is a project by{" "}
             <a
@@ -77,7 +80,7 @@ export default function About() {
             .
           </p>
         </div>
-      </div>
+      </Page>
       <Footer />
     </>
   );

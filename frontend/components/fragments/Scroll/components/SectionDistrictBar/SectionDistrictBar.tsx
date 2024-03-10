@@ -11,7 +11,7 @@ export default function SectionDistrictBar() {
       </p>
       <p>
         In 2019,{" "}
-        <span className="text-whitestudents font-semibold">
+        <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
           2/3 of White students
         </span>{" "}
         in the district attend just <b>5</b> of the district&#39;s <b>16</b>{" "}
