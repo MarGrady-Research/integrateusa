@@ -483,10 +483,10 @@ export default function ComparisonTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
         <Button
           variant="outlined"
-          className="!normal-case"
+          className="!normal-case order-2 md:order-1"
           onClick={clearSelection}
         >
           Clear Selection

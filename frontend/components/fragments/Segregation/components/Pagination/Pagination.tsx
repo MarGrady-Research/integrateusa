@@ -6,7 +6,6 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import Box from "@mui/material/Box";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -47,7 +46,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <div className="shrink-0 ml-5">
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -84,7 +83,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
-    </Box>
+    </div>
   );
 }
 
@@ -110,6 +109,11 @@ export default function Pagination({
       onPageChange={onPageChange}
       rowsPerPageOptions={[rowsPerPage]}
       ActionsComponent={TablePaginationActions}
+      classes={{
+        root: "order-1 md:order-2 w-full md:w-auto",
+        toolbar: "justify-between !pl-0.5 !py-0",
+        spacer: "hidden md:block",
+      }}
     />
   );
 }
