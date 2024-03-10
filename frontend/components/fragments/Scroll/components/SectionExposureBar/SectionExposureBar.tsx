@@ -36,10 +36,25 @@ export default function SectionExposureBar() {
     breakpointRegion === "md";
 
   return (
-    <Section>
-      <div className="relative w-full" style={{ height: "200vh" }}>
-        <div className="h-screen w-full top-0 flex justify-center items-center sticky">
-          <div className="w-full md:w-2/3 lg:w-1/2 h-96">
+    <>
+      <p className="mb-3">
+        One way to measure segregation is using <b>Normalized Exposure</b>{" "}
+        rates.
+      </p>
+      <p>
+        For example, we can compare the share of{" "}
+        <span className="text-whitestudents">White</span> students in the
+        average <span className="text-whitestudents">White</span> student&#39;s
+        school to the share of <span className="text-whitestudents">White</span>{" "}
+        students in the average non-
+        <span className="text-whitestudents">White</span> student&#39;s school
+      </p>
+      <div className="relative w-full" style={{ height: "180vh" }}>
+        <div
+          className="w-full top-0 flex justify-center items-center sticky"
+          style={{ height: "90vh" }}
+        >
+          <div className="w-full h-96">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -50,28 +65,13 @@ export default function SectionExposureBar() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="h-screen w-full flex items-start justify-center">
-                <Info>
-                  <p className="mb-3">
-                    One way to measure segregation is using{" "}
-                    <b>Normalized Exposure</b> rates
-                  </p>
-                  <p>
-                    For example, we can compare the share of{" "}
-                    <span className="text-whitestudents">White</span> students
-                    in the average{" "}
-                    <span className="text-whitestudents">White</span>{" "}
-                    student&#39;s school to the share of{" "}
-                    <span className="text-whitestudents">White</span> students
-                    in the average non-
-                    <span className="text-whitestudents">White</span>{" "}
-                    student&#39;s school
-                  </p>
-                </Info>
-              </div>
+              <div className="w-full" style={{ height: "90vh" }} />
             </Step>
             <Step data={1}>
-              <div className="h-screen w-full flex items-start justify-center">
+              <div
+                className="w-full flex items-start justify-center"
+                style={{ height: "90vh" }}
+              >
                 <Info>
                   <p className="mb-3">
                     In District 15 in 2019, the average White student&#39;s
@@ -91,6 +91,6 @@ export default function SectionExposureBar() {
           </Scrollama>
         </div>
       </div>
-    </Section>
+    </>
   );
 }
