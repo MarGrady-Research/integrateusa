@@ -6,7 +6,7 @@ import { useBreakpointRegion } from "hooks";
 import Info from "../Info";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-const SCROLL_OFFSET = 0.6;
+const SCROLL_OFFSET = 0.65;
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   let step: IntegrationLineStep;
@@ -53,12 +53,12 @@ export default function SectionIntegrationLine() {
         Normalized Exposure rates can help us to understand segregation in the
         district over time.
       </p>
-      <div
-        className="relative w-full mt-6 lg:mt-12"
-        style={{ height: "400vh" }}
-      >
-        <div className="h-screen w-full top-0 flex justify-center items-start sticky">
-          <div className="w-full h-96">
+      <div className="relative w-full " style={{ height: "280vh" }}>
+        <div
+          className="w-full top-0 flex justify-center items-start sticky"
+          style={{ height: "70vh" }}
+        >
+          <div className="w-full h-full max-h-96 mt-6 lg:mt-12">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -69,10 +69,13 @@ export default function SectionIntegrationLine() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="h-screen w-full" />
+              <div className="w-full" style={{ height: "70vh" }} />
             </Step>
             <Step data={1}>
-              <div className="h-screen w-full flex items-start justify-center">
+              <div
+                className="w-full flex items-start justify-center"
+                style={{ height: "70vh" }}
+              >
                 <Info>
                   <p className="mb-3">
                     In 2019,{" "}
@@ -89,7 +92,10 @@ export default function SectionIntegrationLine() {
               </div>
             </Step>
             <Step data={2}>
-              <div className="h-screen w-full flex items-start justify-center">
+              <div
+                className="w-full flex items-start justify-center"
+                style={{ height: "70vh" }}
+              >
                 <Info>
                   <p className="mb-3">
                     We can compare{" "}
@@ -110,7 +116,10 @@ export default function SectionIntegrationLine() {
               </div>
             </Step>
             <Step data={3}>
-              <div className="h-screen w-full flex items-start justify-center">
+              <div
+                className="w-full flex items-start justify-center"
+                style={{ height: "70vh" }}
+              >
                 <Info>
                   <p className="mb-3">
                     We can also normalize these rates using the 2019 values for

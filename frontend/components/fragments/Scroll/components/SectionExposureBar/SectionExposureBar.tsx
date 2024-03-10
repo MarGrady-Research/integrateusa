@@ -6,7 +6,7 @@ import { useBreakpointRegion } from "hooks";
 import Info from "../Info";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
-const SCROLL_OFFSET = 0.6;
+const SCROLL_OFFSET = 0.65;
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   const step: ExposureBarStep =
@@ -48,15 +48,12 @@ export default function SectionExposureBar() {
         students in the average non-
         <span className="text-whitestudents">White</span> student&#39;s school.
       </p>
-      <div
-        className="relative w-full mt-6 lg:mt-12"
-        style={{ height: "200vh" }}
-      >
+      <div className="relative w-full " style={{ height: "140vh" }}>
         <div
           className="w-full top-0 flex justify-center items-start sticky"
-          style={{ height: "100vh" }}
+          style={{ height: "70vh" }}
         >
-          <div className="w-full h-96">
+          <div className="w-full h-full max-h-96 mt-6 lg:mt-12">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -67,12 +64,12 @@ export default function SectionExposureBar() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="w-full" style={{ height: "100vh" }} />
+              <div className="w-full" style={{ height: "70vh" }} />
             </Step>
             <Step data={1}>
               <div
                 className="w-full flex items-start justify-center"
-                style={{ height: "100vh" }}
+                style={{ height: "70vh" }}
               >
                 <Info>
                   <p className="mb-3">

@@ -28,7 +28,7 @@ function EndScreen() {
       </div>
       <Link
         href="/info"
-        className="hover:text-primary  inline-flex items-center"
+        className="hover:text-primary inline-flex items-center"
       >
         Explore the dashboard
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
