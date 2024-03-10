@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import Link from "next/link";
 import Image from "next/image";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -9,6 +10,8 @@ import SectionExposureBar from "./components/SectionExposureBar";
 import SectionIntegrationLine from "./components/SectionIntegrationLine";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
+
+import { header, section } from "./Scroll.module.scss";
 
 function EndScreen() {
   return (
@@ -45,11 +48,22 @@ function EndScreen() {
 export default function Scroll() {
   return (
     <>
-      <SectionDistrictPie />
-      <SectionDistrictBar />
+      <h1
+        className={clsx(
+          "text-3xl lg:text-4xl font-semibold lg:mb-1 text-center mx-auto",
+          header
+        )}
+      >
+        Middle School Integration in New York City’s District 15
+      </h1>
+      <p className="mb-8 lg:mb-14 text-center">By Jesse Margolis</p>
+      <div className={clsx(section, "mx-auto")}>
+        <SectionDistrictPie />
+      </div>
+      {/*<SectionDistrictBar />
       <SectionExposureBar />
       <SectionIntegrationLine />
-      <EndScreen />
+  <EndScreen />*/}
     </>
   );
 }

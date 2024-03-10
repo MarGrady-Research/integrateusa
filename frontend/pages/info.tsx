@@ -238,23 +238,21 @@ export default function InfoPage() {
     <>
       <Head title="Info" desc="Demographic Information" />
       <Selection />
-      <Page>
-        <div className="mx-auto mt-5">
-          <Info
-            title={title}
-            infoData={infoDataFinal}
-            isInfoDataLoading={isInfoDataLoadingFinal}
-            hasInfoDataFailed={hasInfoDataFailedFinal}
-            schoolInfo={schoolInfo}
-            isSchoolInfoLoading={isSchoolInfoLoading}
-            hasSchoolInfoFailed={hasSchoolInfoFailed}
-          />
-          <Trends
-            trendData={trendData || []}
-            isLoading={isTrendDataLoading}
-            hasFailed={hasTrendDataFailed}
-          />
-        </div>
+      <Page className="mt-12 lg:mt-0">
+        <Info
+          title={title}
+          infoData={infoDataFinal}
+          isInfoDataLoading={isInfoDataLoadingFinal}
+          hasInfoDataFailed={hasInfoDataFailedFinal}
+          schoolInfo={schoolInfo}
+          isSchoolInfoLoading={isSchoolInfoLoading}
+          hasSchoolInfoFailed={hasSchoolInfoFailed}
+        />
+        <Trends
+          trendData={trendData || []}
+          isLoading={isTrendDataLoading}
+          hasFailed={hasTrendDataFailed}
+        />
       </Page>
       <Footer />
     </>

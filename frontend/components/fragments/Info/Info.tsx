@@ -50,7 +50,7 @@ export default function Info({
 
   return (
     <>
-      <h1 className="text-4xl font-semibold mb-5">{title}</h1>
+      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">{title}</h1>
       <h2 className="text-2xl font-medium mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>

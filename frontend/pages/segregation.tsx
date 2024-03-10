@@ -121,14 +121,12 @@ export default function SegregationPage() {
     <>
       <Head title="Segregation" desc="Segregation Metrics" />
       <Selection omitSchools />
-      <Page>
-        <div className="mx-auto mt-5">
-          <Segregation
-            segData={segData}
-            isLoading={isLoading}
-            hasFailed={hasFailed}
-          />
-        </div>
+      <Page className="mt-12 lg:mt-0">
+        <Segregation
+          segData={segData}
+          isLoading={isLoading}
+          hasFailed={hasFailed}
+        />
       </Page>
       <Footer />
     </>
