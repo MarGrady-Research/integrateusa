@@ -57,6 +57,8 @@ export default function SegregationPage() {
       break;
   }
 
+  const isSchoolLevel = level === Level.School;
+
   const segKey = `${idlevel}-${year}-${grade}`;
   const segKeyCache = segDataStore[segKey];
   const isSegKeyCached = typeof segKeyCache !== "undefined";
@@ -68,7 +70,8 @@ export default function SegregationPage() {
   const isLoading =
     !isSegKeyCached ||
     (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure) ||
-    (paramsInfo !== null && !paramsChecked);
+    (paramsInfo !== null && !paramsChecked) ||
+    isSchoolLevel;
   const hasFailed =
     !isSegDataCached && segKeyCache.status === ApiStatus.Failure;
 
@@ -90,7 +93,7 @@ export default function SegregationPage() {
   }, [dispatch, paramsChecked, paramsInfo]);
 
   useEffect(() => {
-    if (level === Level.School) {
+    if (isSchoolLevel) {
       dispatch(restoreInitialState());
     }
 
@@ -116,7 +119,7 @@ export default function SegregationPage() {
     return () => {
       abortController.abort();
     };
-  }, [level, year, grade, dispatch, idlevel, segKey]);
+  }, [isSchoolLevel, year, grade, dispatch, idlevel, segKey]);
 
   return (
     <>

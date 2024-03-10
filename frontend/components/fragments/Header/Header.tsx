@@ -24,7 +24,8 @@ interface NavLinkProps {
 function NavLink({ url, title }: NavLinkProps) {
   const router = useRouter();
 
-  const isActiveURL = router.pathname === url;
+  const isActiveURL =
+    url === "/" ? router.pathname === url : router.pathname.startsWith(url);
 
   return (
     <Link
@@ -86,7 +87,7 @@ export default function Header() {
               {navLinks}
             </nav>
           </div>
-          <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer ">
+          <div className="hidden xl:block inline-flex items-center justify-center hover:cursor-pointer">
             <a href="https://www.margrady.com/" target="_blank">
               <Image
                 src={MarGradyLogoText}
