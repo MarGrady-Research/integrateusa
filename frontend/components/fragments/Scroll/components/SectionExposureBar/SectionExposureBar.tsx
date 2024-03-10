@@ -45,11 +45,22 @@ export default function SectionExposureBar() {
       </p>
       <p>
         For example, we can compare the share of{" "}
-        <span className="text-whitestudents">White</span> students in the
-        average <span className="text-whitestudents">White</span> student&#39;s
-        school to the share of <span className="text-whitestudents">White</span>{" "}
+        <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
+          White
+        </span>{" "}
+        students in the average{" "}
+        <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
+          White
+        </span>{" "}
+        student&#39;s school to the share of{" "}
+        <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
+          White
+        </span>{" "}
         students in the average non-
-        <span className="text-whitestudents">White</span> student&#39;s school.
+        <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
+          White
+        </span>{" "}
+        student&#39;s school.
       </p>
       <div className={clsx("relative w-full", holder)}>
         <div
