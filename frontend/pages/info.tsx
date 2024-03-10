@@ -41,6 +41,9 @@ import { getParamsInfo } from "utils";
 export default function InfoPage() {
   const dispatch = useDispatch<AppDispatch>();
 
+  const paramsInfo =
+    typeof window === undefined ? null : getParamsInfo(window.location.href);
+
   const [paramsChecked, setParamsChecked] = useState(false);
 
   const level = useSelector(selectLevel);
@@ -86,7 +89,7 @@ export default function InfoPage() {
   const isInfoDataLoading =
     !isInfoKeyCached ||
     (!isInfoDataCached && infoKeyCache.status !== ApiStatus.Failure) ||
-    !paramsChecked;
+    (paramsInfo !== null && !paramsChecked);
   const hasInfoDataFailed =
     !isInfoDataCached && infoKeyCache.status === ApiStatus.Failure;
 
@@ -103,7 +106,7 @@ export default function InfoPage() {
   const isSchoolInfoLoading =
     !isSchoolInfoKeyCached ||
     (!isSchoolInfoCached && schoolInfoKeyCache.status !== ApiStatus.Failure) ||
-    !paramsChecked;
+    (paramsInfo !== null && !paramsChecked);
   const hasSchoolInfoFailed =
     !isSchoolInfoCached && schoolInfoKeyCache.status === ApiStatus.Failure;
 
@@ -118,7 +121,7 @@ export default function InfoPage() {
   const isTrendDataLoading =
     !isTrendKeyCached ||
     (!isTrendDataCached && trendKeyCache.status !== ApiStatus.Failure) ||
-    !paramsChecked;
+    (paramsInfo !== null && !paramsChecked);
   const hasTrendDataFailed =
     !isTrendDataCached && trendKeyCache.status === ApiStatus.Failure;
 
@@ -135,13 +138,12 @@ export default function InfoPage() {
       return;
     }
 
-    const paramsInfo = getParamsInfo(window.location.href);
-
     if (paramsInfo) {
       dispatch(setStateFromParams(paramsInfo));
     }
+
     setParamsChecked(true);
-  }, [dispatch, paramsChecked]);
+  }, [dispatch, paramsChecked, paramsInfo]);
 
   useEffect(() => {
     if (level == Level.School) {
