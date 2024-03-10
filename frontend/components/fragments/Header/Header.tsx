@@ -32,7 +32,8 @@ function NavLink({ url, title }: NavLinkProps) {
       className={clsx(
         "mr-0 lg:mr-6 last:mr-0 mb-2 lg:mb-0 duration-300 hover:text-primary text-2xl lg:text-xl font-medium",
         {
-          "text-primary underline underline-offset-8 ": isActiveURL,
+          "text-primary underline underline-offset-8 decoration-2 ":
+            isActiveURL,
         }
       )}
     >
