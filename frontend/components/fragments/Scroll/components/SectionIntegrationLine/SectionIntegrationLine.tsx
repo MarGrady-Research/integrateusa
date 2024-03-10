@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { Scrollama, Step } from "react-scrollama";
 
 import { useBreakpointRegion } from "hooks";
@@ -6,7 +7,7 @@ import { useBreakpointRegion } from "hooks";
 import Info from "../Info";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-const SCROLL_OFFSET = 0.65;
+import { holder, section } from "./SectionIntegrationLine.module.scss";
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   let step: IntegrationLineStep;
@@ -42,10 +43,12 @@ export default function SectionIntegrationLine() {
   };
 
   const breakpointRegion = useBreakpointRegion();
-  const onTablet =
-    breakpointRegion === "xs" ||
-    breakpointRegion === "sm" ||
-    breakpointRegion === "md";
+
+  const onMobile = breakpointRegion === "xs" || breakpointRegion === "sm";
+
+  const onTablet = onMobile || breakpointRegion === "md";
+
+  const SCROLL_OFFSET = onMobile ? 0.8 : 0.7;
 
   return (
     <>
@@ -53,12 +56,14 @@ export default function SectionIntegrationLine() {
         Normalized Exposure rates can help us to understand segregation in the
         district over time.
       </p>
-      <div className="relative w-full " style={{ height: "280vh" }}>
+      <div className={clsx("relative w-full", holder)}>
         <div
-          className="w-full top-0 flex justify-center items-start sticky"
-          style={{ height: "70vh" }}
+          className={clsx(
+            "w-full top-0 flex justify-center items-start sticky",
+            section
+          )}
         >
-          <div className="w-full h-full max-h-96 mt-6 lg:mt-12">
+          <div className="w-full h-full max-h-96 mt-12">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -69,12 +74,14 @@ export default function SectionIntegrationLine() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="w-full" style={{ height: "70vh" }} />
+              <div className={clsx("w-full", section)} />
             </Step>
             <Step data={1}>
               <div
-                className="w-full flex items-start justify-center"
-                style={{ height: "70vh" }}
+                className={clsx(
+                  "w-full flex items-start justify-center",
+                  section
+                )}
               >
                 <Info>
                   <p className="mb-3">
@@ -93,8 +100,10 @@ export default function SectionIntegrationLine() {
             </Step>
             <Step data={2}>
               <div
-                className="w-full flex items-start justify-center"
-                style={{ height: "70vh" }}
+                className={clsx(
+                  "w-full flex items-start justify-center",
+                  section
+                )}
               >
                 <Info>
                   <p className="mb-3">
@@ -117,8 +126,10 @@ export default function SectionIntegrationLine() {
             </Step>
             <Step data={3}>
               <div
-                className="w-full flex items-start justify-center"
-                style={{ height: "70vh" }}
+                className={clsx(
+                  "w-full flex items-start justify-center",
+                  section
+                )}
               >
                 <Info>
                   <p className="mb-3">
