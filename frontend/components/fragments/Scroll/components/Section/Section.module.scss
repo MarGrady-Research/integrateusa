@@ -1,9 +1,0 @@
-@import "styles/constants.module.scss";
-
-.firstSection {
-  min-height: calc(100vh - $navbarMobileHeight);
-
-  @screen sm {
-    min-height: calc(100vh - $navbarDesktopHeight);
-  }
-}

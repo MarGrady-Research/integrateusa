@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import Link from "next/link";
 import Image from "next/image";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -9,6 +10,8 @@ import SectionExposureBar from "./components/SectionExposureBar";
 import SectionIntegrationLine from "./components/SectionIntegrationLine";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
+
+import { header, section } from "./Scroll.module.scss";
 
 function EndScreen() {
   return (
@@ -25,7 +28,7 @@ function EndScreen() {
       </div>
       <Link
         href="/info"
-        className="hover:text-gray-500  inline-flex items-center"
+        className="hover:text-primary inline-flex items-center"
       >
         Explore the dashboard
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
@@ -45,10 +48,27 @@ function EndScreen() {
 export default function Scroll() {
   return (
     <>
-      <SectionDistrictPie />
-      <SectionDistrictBar />
-      <SectionExposureBar />
-      <SectionIntegrationLine />
+      <h1
+        className={clsx(
+          "text-3xl lg:text-4xl font-semibold lg:mb-1 text-center mx-auto",
+          header
+        )}
+      >
+        Middle School Integration in New York City’s District 15
+      </h1>
+      <p className="mb-8 lg:mb-14 text-center">By Jesse Margolis</p>
+      <div className={clsx(section, "mx-auto mb-10 lg:mb-20")}>
+        <SectionDistrictPie />
+      </div>
+      <div className={clsx(section, "mx-auto mb-10 lg:mb-20")}>
+        <SectionDistrictBar />
+      </div>
+      <div className={clsx(section, "mx-auto")}>
+        <SectionExposureBar />
+      </div>
+      <div className={clsx(section, "mx-auto")}>
+        <SectionIntegrationLine />
+      </div>
       <EndScreen />
     </>
   );

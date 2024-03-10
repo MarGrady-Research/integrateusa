@@ -1,0 +1,11 @@
+.header {
+  @screen md {
+    max-width: 740px;
+  }
+}
+
+.section {
+  @screen md {
+    max-width: 600px;
+  }
+}

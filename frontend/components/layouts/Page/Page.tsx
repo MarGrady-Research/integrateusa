@@ -1,12 +1,14 @@
 import React from "react";
+import clsx from "clsx";
 
 interface Props {
   children: React.ReactNode;
+  className?: string;
 }
 
-export default function Page({ children }: Props) {
+export default function Page({ children, className }: Props) {
   return (
-    <div className="container mx-auto p-3 sm:p-5 pt-12 lg:pt-5 flex-1">
+    <div className={clsx("container mx-auto p-5 lg:pt-10 flex-1", className)}>
       {children}
     </div>
   );

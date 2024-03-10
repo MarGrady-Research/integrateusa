@@ -242,7 +242,7 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
 
   return (
     <>
-      <h1 className="text-4xl font-semibold mb-5">{name}</h1>
+      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">{name}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-y-0 lg:gap-x-5 mb-10">
         <Info
           focus={focus}
