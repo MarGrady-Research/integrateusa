@@ -3,11 +3,10 @@ import { Scrollama, Step } from "react-scrollama";
 
 import { useBreakpointRegion } from "hooks";
 
-import Section from "../Section";
 import Info from "../Info";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-const SCROLL_OFFSET = 0.85;
+const SCROLL_OFFSET = 0.6;
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   let step: IntegrationLineStep;
@@ -49,10 +48,17 @@ export default function SectionIntegrationLine() {
     breakpointRegion === "md";
 
   return (
-    <Section>
-      <div className="relative w-full" style={{ height: "400vh" }}>
-        <div className="h-screen w-full top-0 flex justify-center items-center sticky">
-          <div className="w-full md:w-2/3 lg:w-1/2 h-96">
+    <>
+      <p>
+        Normalized Exposure rates can help us to understand segregation in the
+        district over time.
+      </p>
+      <div
+        className="relative w-full mt-6 lg:mt-12"
+        style={{ height: "400vh" }}
+      >
+        <div className="h-screen w-full top-0 flex justify-center items-start sticky">
+          <div className="w-full h-96">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -63,14 +69,7 @@ export default function SectionIntegrationLine() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="h-screen w-full flex items-start justify-center">
-                <Info>
-                  <p>
-                    Normalized Exposure rates can help us to understand
-                    segregation in the district over time
-                  </p>
-                </Info>
-              </div>
+              <div className="h-screen w-full" />
             </Step>
             <Step data={1}>
               <div className="h-screen w-full flex items-start justify-center">
@@ -130,6 +129,6 @@ export default function SectionIntegrationLine() {
           </Scrollama>
         </div>
       </div>
-    </Section>
+    </>
   );
 }

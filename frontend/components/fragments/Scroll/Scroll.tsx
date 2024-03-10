@@ -28,7 +28,7 @@ function EndScreen() {
       </div>
       <Link
         href="/info"
-        className="hover:text-gray-500  inline-flex items-center"
+        className="hover:text-primary  inline-flex items-center"
       >
         Explore the dashboard
         <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
@@ -63,12 +63,13 @@ export default function Scroll() {
       <div className={clsx(section, "mx-auto mb-10 lg:mb-20")}>
         <SectionDistrictBar />
       </div>
-      <div className={clsx(section, "mx-auto mb-10 lg:mb-20")}>
+      <div className={clsx(section, "mx-auto")}>
         <SectionExposureBar />
       </div>
-      {/*
-      <SectionIntegrationLine />
-  <EndScreen />*/}
+      <div className={clsx(section, "mx-auto")}>
+        <SectionIntegrationLine />
+      </div>
+      <EndScreen />
     </>
   );
 }

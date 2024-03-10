@@ -3,11 +3,10 @@ import { Scrollama, Step } from "react-scrollama";
 
 import { useBreakpointRegion } from "hooks";
 
-import Section from "../Section";
 import Info from "../Info";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
-const SCROLL_OFFSET = 0.85;
+const SCROLL_OFFSET = 0.6;
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   const step: ExposureBarStep =
@@ -47,12 +46,15 @@ export default function SectionExposureBar() {
         average <span className="text-whitestudents">White</span> student&#39;s
         school to the share of <span className="text-whitestudents">White</span>{" "}
         students in the average non-
-        <span className="text-whitestudents">White</span> student&#39;s school
+        <span className="text-whitestudents">White</span> student&#39;s school.
       </p>
-      <div className="relative w-full" style={{ height: "180vh" }}>
+      <div
+        className="relative w-full mt-6 lg:mt-12"
+        style={{ height: "200vh" }}
+      >
         <div
-          className="w-full top-0 flex justify-center items-center sticky"
-          style={{ height: "90vh" }}
+          className="w-full top-0 flex justify-center items-start sticky"
+          style={{ height: "100vh" }}
         >
           <div className="w-full h-96">
             {charts(currentStepIndex, onTablet)}
@@ -65,12 +67,12 @@ export default function SectionExposureBar() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className="w-full" style={{ height: "90vh" }} />
+              <div className="w-full" style={{ height: "100vh" }} />
             </Step>
             <Step data={1}>
               <div
                 className="w-full flex items-start justify-center"
-                style={{ height: "90vh" }}
+                style={{ height: "100vh" }}
               >
                 <Info>
                   <p className="mb-3">
