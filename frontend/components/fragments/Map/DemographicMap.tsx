@@ -749,10 +749,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
             </Source>
           </>
         )}
-        {showPopup && (
+        {mapRenderingComplete && showPopup && (
           <Popup name={entityName} coordinates={coordinates}>
             {pie(true)}
           </Popup>
+        )}
+        {mapRenderingComplete && (
+          <ViewInfo renderedFeatures={renderedFeatures} />
         )}
         <InfoDialog
           name={entityName}

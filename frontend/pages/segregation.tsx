@@ -31,6 +31,9 @@ import { getParamsInfo } from "utils";
 export default function SegregationPage() {
   const dispatch = useDispatch<AppDispatch>();
 
+  const paramsInfo =
+    typeof window === undefined ? null : getParamsInfo(window.location.href);
+
   const [paramsChecked, setParamsChecked] = useState(false);
 
   const level = useSelector(selectLevel);
@@ -65,7 +68,7 @@ export default function SegregationPage() {
   const isLoading =
     !isSegKeyCached ||
     (!isSegDataCached && segKeyCache.status !== ApiStatus.Failure) ||
-    !paramsChecked;
+    (paramsInfo !== null && !paramsChecked);
   const hasFailed =
     !isSegDataCached && segKeyCache.status === ApiStatus.Failure;
 
@@ -80,13 +83,11 @@ export default function SegregationPage() {
       return;
     }
 
-    const paramsInfo = getParamsInfo(window.location.href);
-
     if (paramsInfo) {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [paramsChecked, dispatch]);
+  }, [dispatch, paramsChecked, paramsInfo]);
 
   useEffect(() => {
     if (level === Level.School) {
