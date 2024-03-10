@@ -24,7 +24,8 @@ interface NavLinkProps {
 function NavLink({ url, title }: NavLinkProps) {
   const router = useRouter();
 
-  const isActiveURL = router.pathname === url;
+  const isActiveURL =
+    url === "/" ? router.pathname === url : router.pathname.startsWith(url);
 
   return (
     <Link
