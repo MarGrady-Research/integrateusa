@@ -57,11 +57,13 @@ export default function Scroll() {
         Middle School Integration in New York City’s District 15
       </h1>
       <p className="mb-8 lg:mb-14 text-center">By Jesse Margolis</p>
-      <div className={clsx(section, "mx-auto")}>
+      <div className={clsx(section, "mx-auto mb-10 lg:mb-20")}>
         <SectionDistrictPie />
       </div>
-      {/*<SectionDistrictBar />
-      <SectionExposureBar />
+      <div className={clsx(section, "mx-auto")}>
+        <SectionDistrictBar />
+      </div>
+      {/*<SectionExposureBar />
       <SectionIntegrationLine />
   <EndScreen />*/}
     </>

@@ -15,7 +15,7 @@ export default function SectionDistrictPie() {
       <p className="text-asian font-semibold text-center">13% Asian</p>
       <p className="text-blackstudents font-semibold text-center">13% Black</p>
       <p className="text-other font-semibold text-center">4% Other Races</p>
-      <div className="w-full h-96 mt-12">
+      <div className="w-full h-96 mt-6 lg:mt-12">
         <DistrictPie />
       </div>
     </>
