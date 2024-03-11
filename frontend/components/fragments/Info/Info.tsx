@@ -138,13 +138,11 @@ export default function Info({
           )}
         </div>
         <div className={container}>
-          {
-            <PieChart
-              infoData={infoData}
-              isLoading={isInfoDataLoading}
-              hasFailed={hasInfoDataFailed}
-            />
-          }
+          <PieChart
+            infoData={infoData}
+            isLoading={isInfoDataLoading}
+            hasFailed={hasInfoDataFailed}
+          />
         </div>
       </div>
       {!isSchool && (
