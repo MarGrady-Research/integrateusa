@@ -5,7 +5,7 @@ export const defaultMapSchoolColor = "#808080";
 export const selectedAreaColor = "rgba(0,0,0,0.1)";
 export const unselectedAreaColor = "rgba(255,255,255,0.1)";
 
-export const selectedLineColor = "#524cb3";
+export const selectedLineColor = primaryColor;
 export const unselectedLineColor = "#A9A9A9";
 
 export const elementaryDistrictBoundaryURL = "mapbox://margrady.0rwet47j";
