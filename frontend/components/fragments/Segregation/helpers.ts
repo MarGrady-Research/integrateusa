@@ -1,3 +1,5 @@
+import { SegData } from "interfaces";
+
 export function isEmpty(obj = {}) {
   return Object.keys(obj).length === 0;
 }
@@ -29,7 +31,7 @@ export function convertType(value) {
   return value;
 }
 
-export const sortRows = (rows, sort) => {
+export const sortRows = (rows: SegData, sort) => {
   return [...rows].sort((a, b) => {
     const { orderDesc, orderBy } = sort;
 
@@ -51,7 +53,7 @@ export const sortRows = (rows, sort) => {
   });
 };
 
-export const filterRows = (rows, filters) => {
+export const filterRows = (rows: SegData, filters) => {
   if (isEmpty(filters)) return [...rows];
 
   return rows.filter((row) => {

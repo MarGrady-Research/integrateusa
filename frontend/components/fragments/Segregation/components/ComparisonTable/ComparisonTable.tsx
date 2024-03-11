@@ -89,7 +89,7 @@ export default function ComparisonTable({
   const [filters, setFilters] = useState({});
 
   const [page, setPage] = useState(0);
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = ({}, newPage: number) => {
     setPage(newPage);
   };
 
@@ -418,6 +418,50 @@ export default function ComparisonTable({
     );
   };
 
+  const tableSelectedRow = () => {
+    const selectedRow = segData.find((row) => row[idLevel] === `${id}`);
+
+    console.log("----------");
+    console.log(selectedRow);
+
+    return (
+      <TableRow>
+        {columns.map((column) => {
+          switch (column.accessor) {
+            case "checkbox":
+              return (
+                <TableCell scope="row" key={column.accessor}>
+                  <Checkbox
+                    disabled={true}
+                    aria-hidden={true}
+                    className="opacity-0"
+                  />
+                </TableCell>
+              );
+            case nameLevel:
+              return (
+                <TableCell
+                  key={column.accessor}
+                  className="text-sm text-left !text-line-selected !font-semibold"
+                >
+                  {selectedRow[column.accessor]}
+                </TableCell>
+              );
+            default:
+              return (
+                <TableCell
+                  key={column.accessor}
+                  className="text-sm !text-center !text-line-selected !font-semibold"
+                >
+                  {selectedRow[column.accessor].toLocaleString("en-US")}
+                </TableCell>
+              );
+          }
+        })}
+      </TableRow>
+    );
+  };
+
   const tableContentRows = () =>
     visibleRows.map((row) => (
       <TableRow key={row[idLevel]}>
@@ -435,9 +479,8 @@ export default function ComparisonTable({
               return (
                 <TableCell
                   key={column.accessor}
-                  className={clsx({
-                    "text-sm text-left text-gray-900 font-light": true,
-                    "!text-line-selected !font-semibold": isSelectedRow,
+                  className={clsx("text-sm text-left", {
+                    "!text-line-selected": isSelectedRow,
                   })}
                 >
                   {row[column.accessor]}
@@ -447,9 +490,8 @@ export default function ComparisonTable({
               return (
                 <TableCell
                   key={column.accessor}
-                  className={clsx({
-                    "text-sm !text-center text-gray-900 font-light": true,
-                    "!text-line-selected !font-semibold": isSelectedRow,
+                  className={clsx("text-sm !text-center", {
+                    "!text-line-selected": isSelectedRow,
                   })}
                 >
                   {row[column.accessor].toLocaleString("en-US")}
@@ -477,6 +519,7 @@ export default function ComparisonTable({
         <Table size="small">
           {tableHeader()}
           <TableBody>
+            {tableSelectedRow()}
             {tableSearchRow()}
             {tableContentRows()}
             {tableEmptyRows()}
