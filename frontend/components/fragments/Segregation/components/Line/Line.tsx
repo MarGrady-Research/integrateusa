@@ -27,7 +27,7 @@ import {
   ApiStatus,
   Line,
   LineDataProcessed,
-  LineData,
+  LineDataAPI,
   MeasureAccessor,
 } from "interfaces";
 
@@ -63,7 +63,7 @@ const labels = yearsData
   });
 
 const processLineData = (
-  data: LineData,
+  data: LineDataAPI[],
   measure: {
     name: string;
     accessor: MeasureAccessor;

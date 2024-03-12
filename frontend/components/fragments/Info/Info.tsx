@@ -26,7 +26,7 @@ import {
   selectGrade,
   selectSelectedName,
 } from "store/selectSlice";
-import { Level, InfoData, SchoolInfo } from "interfaces";
+import { Level, School, SchoolInfo } from "interfaces";
 
 import { exportRaceBreakdown } from "excel";
 
@@ -34,7 +34,7 @@ import { container, tableContainer } from "./Info.module.scss";
 
 interface Props {
   title: string;
-  infoData: InfoData;
+  infoData: School[];
   isInfoDataLoading: boolean;
   hasInfoDataFailed: boolean;
   schoolInfo: SchoolInfo[];

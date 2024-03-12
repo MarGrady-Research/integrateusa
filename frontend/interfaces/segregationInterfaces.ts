@@ -1,6 +1,3 @@
-export type SegData = SegEntity[];
-export type LineData = LineDataAPI[];
-
 export interface SegEntity {
   exp_as_as: number;
   exp_bl_as: number;
@@ -29,7 +26,7 @@ export interface SegEntity {
   exp_wh_or: number;
 }
 
-interface LineDataAPI {
+export interface LineDataAPI {
   norm_exp_as: number;
   norm_exp_bl: number;
   norm_exp_hi: number;

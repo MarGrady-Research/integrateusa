@@ -3,11 +3,11 @@ import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
 import {
-  MapData,
-  InfoData,
+  School,
+  Feature,
   TrendData,
-  SegData,
-  LineData,
+  SegEntity,
+  LineDataAPI,
   ApiStatus,
   LocationSearchOption,
   SchoolInfo,
@@ -16,14 +16,14 @@ import {
 interface SegDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: SegData;
+    data: SegEntity[];
   };
 }
 
 interface InfoDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: InfoData;
+    data: School[];
   };
 }
 
@@ -44,7 +44,7 @@ interface TrendDataCache {
 interface LineDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: LineData;
+    data: LineDataAPI[];
   };
 }
 
@@ -56,7 +56,7 @@ interface LocationSearchCache {
 }
 
 interface ApiCacheState {
-  mapData: MapData | null;
+  mapData: Feature[] | null;
   infoData: InfoDataCache;
   schoolInfo: SchoolInfoCache;
   trendData: TrendDataCache;
@@ -79,7 +79,7 @@ export const apiCacheSlice = createSlice({
   name: "apiCache",
   initialState,
   reducers: {
-    setMapData(state, action: PayloadAction<MapData>) {
+    setMapData(state, action: PayloadAction<Feature[]>) {
       state.mapData = action.payload;
     },
     setInfoDataRequest(state, action: PayloadAction<string>) {
@@ -95,7 +95,7 @@ export const apiCacheSlice = createSlice({
     },
     setInfoDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: InfoData }>
+      action: PayloadAction<{ key: string; data: School[] }>
     ) {
       const { key, data } = action.payload;
 
@@ -203,7 +203,7 @@ export const apiCacheSlice = createSlice({
     },
     setSegDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: SegData }>
+      action: PayloadAction<{ key: string; data: SegEntity[] }>
     ) {
       const { key, data } = action.payload;
 
@@ -239,7 +239,7 @@ export const apiCacheSlice = createSlice({
     },
     setLineDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: LineData }>
+      action: PayloadAction<{ key: string; data: LineDataAPI[] }>
     ) {
       const { key, data } = action.payload;
 

@@ -2,10 +2,10 @@ import React from "react";
 import Skeleton from "@mui/material/Skeleton";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { InfoData, SchoolInfo } from "interfaces";
+import { School, SchoolInfo } from "interfaces";
 
 interface Props {
-  infoData: InfoData;
+  infoData: School[];
   isInfoDataLoading: boolean;
   schoolInfo: SchoolInfo[];
   isSchoolInfoLoading: boolean;

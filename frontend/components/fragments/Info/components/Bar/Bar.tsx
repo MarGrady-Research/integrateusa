@@ -26,7 +26,7 @@ import {
 
 import { legendMargin } from "charts";
 
-import { InfoData, RacialProportion, School } from "interfaces";
+import { RacialProportion, School } from "interfaces";
 
 import {
   container,
@@ -49,7 +49,7 @@ ChartJS.register(
 );
 
 interface Props {
-  infoData: InfoData;
+  infoData: School[];
   isLoading: boolean;
   hasFailed: boolean;
 }
@@ -61,7 +61,7 @@ interface SortButtonProps {
   className: string;
 }
 
-const getBarData = (data: InfoData) => {
+const getBarData = (data: School[]) => {
   const asianData = [];
   const blackData = [];
   const hispanicData = [];
