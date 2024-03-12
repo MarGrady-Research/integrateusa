@@ -39,6 +39,6 @@ jobs:
           script: |
             cd ~/app
             sudo docker-compose -f docker-compose-production.yml down
-            sudo docker system prune -a -f
+            sudo docker system prune -af
             sudo docker-compose -f docker-compose-production.yml build
             sudo docker-compose -f docker-compose-production.yml up --detach
