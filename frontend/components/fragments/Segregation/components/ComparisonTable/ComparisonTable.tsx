@@ -20,6 +20,7 @@ import { sortRows, filterRows } from "../../helpers";
 import { SegEntity, Line } from "interfaces";
 
 import { container } from "./ComparisonTable.module.scss";
+import { selectedLineColor } from "@/constants";
 
 interface Props {
   id: string;
@@ -277,6 +278,11 @@ export default function ComparisonTable({
       inputProps={{
         "aria-label": allVisibleSelected ? "Hide all lines" : "Show all lines",
       }}
+      sx={{
+        "&.Mui-checked": {
+          color: selectedLineColor,
+        },
+      }}
     />
   );
 
@@ -414,15 +420,17 @@ export default function ComparisonTable({
             ? `Hide line for ${name}`
             : `Show line for ${name}`,
         }}
+        sx={{
+          "&.Mui-checked": {
+            color: !isSelectedRow && selectedLineColor,
+          },
+        }}
       />
     );
   };
 
   const tableSelectedRow = () => {
     const selectedRow = segData.find((row) => row[idLevel] === `${id}`);
-
-    console.log("----------");
-    console.log(selectedRow);
 
     return (
       <TableRow>
