@@ -6,8 +6,8 @@ import {
   School,
   Feature,
   TrendData,
-  SegData,
-  LineData,
+  SegEntity,
+  LineDataAPI,
   ApiStatus,
   LocationSearchOption,
   SchoolInfo,
@@ -16,7 +16,7 @@ import {
 interface SegDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: SegData;
+    data: SegEntity[];
   };
 }
 
@@ -44,7 +44,7 @@ interface TrendDataCache {
 interface LineDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: LineData;
+    data: LineDataAPI[];
   };
 }
 
@@ -203,7 +203,7 @@ export const apiCacheSlice = createSlice({
     },
     setSegDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: SegData }>
+      action: PayloadAction<{ key: string; data: SegEntity[] }>
     ) {
       const { key, data } = action.payload;
 
@@ -239,7 +239,7 @@ export const apiCacheSlice = createSlice({
     },
     setLineDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: LineData }>
+      action: PayloadAction<{ key: string; data: LineDataAPI[] }>
     ) {
       const { key, data } = action.payload;
 

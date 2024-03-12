@@ -33,10 +33,9 @@ export type {
 } from "./locationSearchInterfaces";
 
 export type {
-  SegData,
   SegEntity,
   MeasureAccessor,
-  LineData,
+  LineDataAPI,
   Line,
   LineDataProcessed,
 } from "./segregationInterfaces";

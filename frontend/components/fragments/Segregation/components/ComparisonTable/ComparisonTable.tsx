@@ -17,13 +17,13 @@ import Pagination from "../Pagination";
 
 import { sortRows, filterRows } from "../../helpers";
 
-import { SegData, Line } from "interfaces";
+import { SegEntity, Line } from "interfaces";
 
 import { container } from "./ComparisonTable.module.scss";
 
 interface Props {
   id: string;
-  segData: SegData;
+  segData: SegEntity[];
   measure: {
     accessor: string;
     name: string;

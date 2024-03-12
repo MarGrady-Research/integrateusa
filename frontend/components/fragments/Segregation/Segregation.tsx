@@ -22,10 +22,16 @@ import {
 } from "store/apiCacheSlice";
 import { AppDispatch } from "store/store";
 
-import { SegData, Line, Level, MeasureAccessor, LineData } from "interfaces";
+import {
+  SegEntity,
+  Line,
+  Level,
+  MeasureAccessor,
+  LineDataAPI,
+} from "interfaces";
 
 interface Props {
-  segData: SegData;
+  segData: SegEntity[];
   isLoading: boolean;
   hasFailed: boolean;
 }
@@ -65,7 +71,7 @@ const options = [
 
 const defaultOption = options[1];
 
-const findFocus = (segData: SegData, id: string) => {
+const findFocus = (segData: SegEntity[], id: string) => {
   let idLevel: string;
 
   if (id.length === 7) {
@@ -152,7 +158,7 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get<LineData>(url, { signal: currentAbortController.signal })
+      .get<LineDataAPI[]>(url, { signal: currentAbortController.signal })
       .then((res) => {
         dispatch(setLineDataSuccess({ key: lineKey, data: res.data }));
       })
@@ -206,7 +212,7 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
     dispatch(setLineDataRequest(lineKey));
 
     axios
-      .get<LineData>(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
+      .get<LineDataAPI[]>(`/api/${table}/?grade=${grade}&${idLevel}=${id}`, {
         signal: abortController.signal,
       })
       .then((res) => {

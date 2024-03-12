@@ -24,7 +24,7 @@ import {
 import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 import { AppDispatch } from "store/store";
 
-import { ApiStatus, Level, SegData } from "interfaces";
+import { ApiStatus, Level, SegEntity } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
@@ -104,7 +104,7 @@ export default function SegregationPage() {
     dispatch(setSegDataRequest(segKey));
 
     axios
-      .get<SegData>(url, {
+      .get<SegEntity[]>(url, {
         signal: abortController.signal,
       })
       .then((res) => {
