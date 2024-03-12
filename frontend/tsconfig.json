@@ -17,7 +17,9 @@
       "jsx": "preserve",
       "paths": {
         "@/typography": ["./styles/typography"],
-        "@/colors": ["./styles/colors"]
+        "@/colors": ["./styles/colors"],
+        "@/constants": ["./constants"]
+
       }
     },
     "include": ["index.d.ts","next-env.d.ts", "**/*.ts", "**/*.tsx"],

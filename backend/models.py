@@ -1,9 +1,4 @@
-from dataclasses import field
 from django.db import models
-from django.db.models import UniqueConstraint
-from django.contrib.postgres.search import SearchVector, SearchVectorField
-from django.contrib.postgres.indexes import GinIndex
-
 
 # School Models
 
@@ -62,6 +57,9 @@ class CountyNames(models.Model):
 
     class Meta:
         db_table = 'county_names'
+        indexes = [
+            models.Index(fields=['county_name'], name='county_names_county_name_idx')
+        ]
 
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
@@ -74,6 +72,9 @@ class DistNames(models.Model):
 
     class Meta:
         db_table = 'district_names'
+        indexes = [
+            models.Index(fields=['dist_name'], name='district_names_dist_name_idx')
+        ]
 
     def __str__(self):
         return self.dist_name," (", self.dist_id, ")"
@@ -107,7 +108,9 @@ class SchoolNames(models.Model):
 
     class Meta:
         db_table = 'school_names'
-
+        indexes = [
+            models.Index(fields=['sch_name'], name='school_names_sch_name_index')
+        ]
 
 class StateNames(models.Model):
     state_abb = models.CharField(max_length = 2, primary_key=True)
@@ -120,6 +123,9 @@ class StateNames(models.Model):
 
     class Meta:
         db_table = 'state_names'
+        indexes = [
+            models.Index(fields=['state_name'], name='state_names_state_name_index')
+        ]
 
     def __str__(self):
         self.state_abb
