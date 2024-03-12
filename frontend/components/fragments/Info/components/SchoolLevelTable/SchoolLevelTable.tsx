@@ -10,17 +10,17 @@ import TableRow from "@mui/material/TableRow";
 import { Skeleton } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 
-import { InfoData, SchoolType } from "interfaces";
+import { School, SchoolType } from "interfaces";
 
 import { headRow, contentRow, footerRow } from "./SchoolLevelTable.module.scss";
 
 interface Props {
-  infoData: InfoData;
+  infoData: School[];
   isLoading: boolean;
   hasFailed: boolean;
 }
 
-const getSchoolLevel = (infoData: InfoData) => {
+const getSchoolLevel = (infoData: School[]) => {
   const schoolLevel = {
     ES: {
       schools: 0,

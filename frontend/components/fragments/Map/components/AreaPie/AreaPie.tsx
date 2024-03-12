@@ -17,19 +17,19 @@ import {
   otherColor,
 } from "@/colors";
 
-import { HoverInfoInterface, MapData } from "interfaces";
+import { HoverInfoInterface, Feature } from "interfaces";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
   hoverInfo: HoverInfoInterface;
-  mapData: MapData;
+  mapData: Feature[];
   small?: boolean;
 }
 
 const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 
-const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: MapData) => {
+const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: Feature[]) => {
   const { GEOID, STUSPS } = hoverInfo.feature.properties;
 
   let layerProp: string;

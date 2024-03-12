@@ -1,12 +1,12 @@
 import * as ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-import { InfoData, Level } from "interfaces";
+import { School, Level } from "interfaces";
 
 import { yearsData, gradesData } from "components/fragments/Selection/data";
 
 export const exportRaceBreakdown = async (
-  infoData: InfoData,
+  infoData: School[],
   year: number,
   grade: string,
   level: Level,

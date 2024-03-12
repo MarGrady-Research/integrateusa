@@ -1,7 +1,4 @@
-export type MapData = Feature[];
-export type ApiMapData = MapProperties[];
-
-interface Feature {
+export interface Feature {
   type: "Feature";
   geometry: {
     type: "Point";
@@ -10,7 +7,7 @@ interface Feature {
   properties: MapProperties;
 }
 
-interface MapProperties {
+export interface MapProperties {
   nces_id: string;
   dist_id: string;
   county_id: string;

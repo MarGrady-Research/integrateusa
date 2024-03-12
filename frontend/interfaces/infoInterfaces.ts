@@ -1,4 +1,3 @@
-export type InfoData = School[];
 export type TrendData = School[] | Trend[];
 
 export interface School {
@@ -15,7 +14,7 @@ export interface School {
 
 export type SchoolType = "ES" | "ESMS" | "MS" | "MSHS" | "HS" | "K12" | "Other";
 
-interface Trend {
+export interface Trend {
   year: number;
   grade: string;
   asian: number;

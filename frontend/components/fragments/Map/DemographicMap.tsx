@@ -40,10 +40,10 @@ import {
   MapLevel,
   MapStatus,
   DistrictType,
-  ApiMapData,
+  MapProperties,
   HoverInfoInterface,
   Bounds,
-  MapData,
+  Feature,
 } from "interfaces";
 import {
   defaultMapSchoolColor,
@@ -105,7 +105,7 @@ const setInitialMapLevel = (
   }
 };
 
-const processMapData = (mapData: ApiMapData): MapData => {
+const processMapData = (mapData: MapProperties[]): Feature[] => {
   return mapData.map((md) => ({
     type: "Feature",
     geometry: {
@@ -586,7 +586,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     const abortController = new AbortController();
 
     axios
-      .get<ApiMapData>("/api/mapschools/?q=2022", {
+      .get<MapProperties[]>("/api/mapschools/?q=2022", {
         signal: abortController.signal,
       })
       .then((res) => {

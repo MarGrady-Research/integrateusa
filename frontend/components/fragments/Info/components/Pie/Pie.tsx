@@ -20,19 +20,19 @@ import {
   otherColor,
 } from "@/colors";
 
-import { InfoData } from "interfaces";
+import { School } from "interfaces";
 
 import { pieLegendSkeleton } from "./Pie.module.scss";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  infoData: InfoData;
+  infoData: School[];
   isLoading: boolean;
   hasFailed: boolean;
 }
 
-const getPieData = (infoData: InfoData) => {
+const getPieData = (infoData: School[]) => {
   let studentsTotal = 0;
   let asianTotal = 0;
   let blackTotal = 0;

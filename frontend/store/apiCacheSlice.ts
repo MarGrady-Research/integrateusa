@@ -3,8 +3,8 @@ import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 
 import {
-  MapData,
-  InfoData,
+  School,
+  Feature,
   TrendData,
   SegData,
   LineData,
@@ -23,7 +23,7 @@ interface SegDataCache {
 interface InfoDataCache {
   [key: string]: {
     status: ApiStatus;
-    data: InfoData;
+    data: School[];
   };
 }
 
@@ -56,7 +56,7 @@ interface LocationSearchCache {
 }
 
 interface ApiCacheState {
-  mapData: MapData | null;
+  mapData: Feature[] | null;
   infoData: InfoDataCache;
   schoolInfo: SchoolInfoCache;
   trendData: TrendDataCache;
@@ -79,7 +79,7 @@ export const apiCacheSlice = createSlice({
   name: "apiCache",
   initialState,
   reducers: {
-    setMapData(state, action: PayloadAction<MapData>) {
+    setMapData(state, action: PayloadAction<Feature[]>) {
       state.mapData = action.payload;
     },
     setInfoDataRequest(state, action: PayloadAction<string>) {
@@ -95,7 +95,7 @@ export const apiCacheSlice = createSlice({
     },
     setInfoDataSuccess(
       state,
-      action: PayloadAction<{ key: string; data: InfoData }>
+      action: PayloadAction<{ key: string; data: School[] }>
     ) {
       const { key, data } = action.payload;
 

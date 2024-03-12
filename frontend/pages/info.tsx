@@ -34,7 +34,7 @@ import {
 import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 import { AppDispatch } from "store/store";
 
-import { Level, ApiStatus, InfoData, TrendData, SchoolInfo } from "interfaces";
+import { Level, ApiStatus, School, TrendData, SchoolInfo } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
@@ -157,7 +157,7 @@ export default function InfoPage() {
     dispatch(setInfoDataRequest(infoKey));
 
     axios
-      .get<InfoData>(infoUrl, { signal: abortController.signal })
+      .get<School[]>(infoUrl, { signal: abortController.signal })
       .then((res) => {
         dispatch(setInfoDataSuccess({ key: infoKey, data: res.data }));
       })
@@ -227,7 +227,7 @@ export default function InfoPage() {
   const infoDataFinal = isSchool
     ? (trendData.filter(
         (td) => td.grade === grade && td.year === year
-      ) as InfoData)
+      ) as School[])
     : infoData;
   const isInfoDataLoadingFinal = isSchool
     ? isTrendDataLoading
