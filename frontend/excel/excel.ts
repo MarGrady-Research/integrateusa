@@ -42,26 +42,27 @@ export const exportRaceBreakdown = async (
   sheet.columns = [
     { header: "Nces Id", key: "nces_id", width: 14 },
     { header: "School Name", key: "sch_name", width: 60 },
-    { header: "Asian Enrolment", key: "asian", width: 18 },
-    { header: "Black Enrolment", key: "black", width: 18 },
-    { header: "Hispanic Enrolment", key: "hispanic", width: 18 },
-    { header: "White Enrolment", key: "white", width: 18 },
-    { header: "Other Enrolment", key: "other", width: 18 },
-    { header: "Asian Proportion", key: "prop_as", width: 20, numFmt: "0.00" },
-    { header: "Black Proportion", key: "prop_bl", width: 20, numFmt: "0.00" },
+    { header: "School Level", key: "level", width: 14 },
+    { header: "Asian Enrollment", key: "asian", width: 17 },
+    { header: "Black Enrollment", key: "black", width: 17 },
+    { header: "Hispanic Enrollment", key: "hispanic", width: 20 },
+    { header: "White Enrollment", key: "white", width: 17 },
+    { header: "Other Enrollment", key: "other", width: 17 },
+    { header: "Asian Proportion", key: "prop_as", width: 18 },
+    { header: "Black Proportion", key: "prop_bl", width: 18 },
     {
       header: "Hispanic Proportion",
       key: "prop_hi",
       width: 20,
-      numFmt: "0.00",
     },
-    { header: "White Proportion", key: "prop_wh", width: 20, numFmt: "0.00" },
-    { header: "Other Proportion", key: "prop_or", width: 20, numFmt: "0.00" },
+    { header: "White Proportion", key: "prop_wh", width: 18 },
+    { header: "Other Proportion", key: "prop_or", width: 18 },
   ];
   sheet.getRow(1).font = { bold: true };
 
   for (const [index, school] of sortedData.entries()) {
-    const { asian, black, hispanic, white, other, sch_name, nces_id } = school;
+    const { asian, black, hispanic, white, other, sch_name, nces_id, level } =
+      school;
 
     const tot_enr = asian + black + hispanic + white + other;
 
@@ -74,6 +75,7 @@ export const exportRaceBreakdown = async (
     sheet.addRow({
       nces_id,
       sch_name,
+      level,
       asian,
       black,
       hispanic,
@@ -86,11 +88,11 @@ export const exportRaceBreakdown = async (
       prop_or,
     });
 
-    sheet.getCell(`H${index + 2}`).numFmt = "0.00";
     sheet.getCell(`I${index + 2}`).numFmt = "0.00";
     sheet.getCell(`J${index + 2}`).numFmt = "0.00";
     sheet.getCell(`K${index + 2}`).numFmt = "0.00";
     sheet.getCell(`L${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`M${index + 2}`).numFmt = "0.00";
   }
 
   const titleRow = sheet.insertRow(1, ["Race Breakdown By School"]);
