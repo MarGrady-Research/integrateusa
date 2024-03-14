@@ -26,14 +26,10 @@ function MyApp({ Component, ...rest }: AppProps) {
   const { props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
 
-  if (!store.__persistor) {
-    return null;
-  }
-
   return (
     <Provider store={store}>
       <PersistGate
-        persistor={store.__persistor}
+        persistor={(store as any).__persistor}
         loading={
           <div className="flex items-center justify-center h-screen">
             <Loader />
