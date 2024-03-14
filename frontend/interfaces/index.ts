@@ -34,8 +34,12 @@ export type {
 
 export type {
   SegEntity,
+  EntityName,
   MeasureAccessor,
+  MinMaxAccessor,
+  ColumnAccessor,
   LineDataAPI,
   Line,
   LineDataProcessed,
+  Filters,
 } from "./segregationInterfaces";

@@ -17,17 +17,28 @@ import Pagination from "../Pagination";
 
 import { sortRows, filterRows } from "../../helpers";
 
-import { SegEntity, Line } from "interfaces";
+import {
+  SegEntity,
+  Line,
+  MeasureAccessor,
+  ColumnAccessor,
+  Filters,
+} from "interfaces";
 
 import { container } from "./ComparisonTable.module.scss";
 import { selectedLineColor } from "@/constants";
+import {
+  EntityName,
+  MinMaxAccessor,
+  Sort,
+} from "interfaces/segregationInterfaces";
 
 interface Props {
   id: string;
   segData: SegEntity[];
   measure: {
-    accessor: string;
     name: string;
+    accessor: MeasureAccessor;
   };
   isLoading: boolean;
   hasFailed: boolean;
@@ -38,6 +49,8 @@ interface Props {
 
 const ROWS_PER_PAGE = 10;
 const ROW_HEIGHT = 55;
+
+const intRegex = /^[0-9]+$/;
 
 function TableHolder({ children }: { children: React.ReactNode }) {
   return (
@@ -58,7 +71,7 @@ export default function ComparisonTable({
   clearSelection,
 }: Props) {
   let idLevel: string;
-  let nameLevel: string;
+  let nameLevel: EntityName;
   let table: string;
 
   if (id.length === 7) {
@@ -85,16 +98,19 @@ export default function ComparisonTable({
     { accessor: "enr_prop_wh", label: "% White" },
     { accessor: "enr_prop_or", label: "% Other" },
     { accessor: measure.accessor, label: measure.name },
-  ];
+  ] as { accessor: "checkbox" | ColumnAccessor; label: string }[];
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({} as Filters);
 
   const [page, setPage] = useState(0);
   const handleChangePage = ({}, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleSearch = (value, accessor) => {
+  const handleSearch = (
+    value: string | [string, string],
+    accessor: ColumnAccessor
+  ) => {
     setPage(0);
 
     if (value) {
@@ -112,9 +128,12 @@ export default function ComparisonTable({
     }
   };
 
-  const [sort, setSort] = useState({ orderDesc: true, orderBy: "num_schools" });
+  const [sort, setSort] = useState({
+    orderDesc: true,
+    orderBy: "num_schools",
+  } as Sort);
 
-  const handleSort = (accessor) => {
+  const handleSort = (accessor: ColumnAccessor) => {
     setPage(0);
 
     setSort((prevSort) => ({
@@ -123,62 +142,56 @@ export default function ComparisonTable({
     }));
   };
 
-  const filteredRows = useMemo(
-    () => filterRows(segData, filters),
-    [segData, filters]
+  const sortedRows = useMemo(() => {
+    const filteredRows = filterRows(segData, filters);
+
+    return sortRows(filteredRows, sort);
+  }, [filters, segData, sort]);
+
+  const emptyRows = Math.max(0, (1 + page) * ROWS_PER_PAGE - sortedRows.length);
+
+  const visibleRows = sortedRows.slice(
+    page * ROWS_PER_PAGE,
+    page * ROWS_PER_PAGE + ROWS_PER_PAGE
   );
-
-  const emptyRows = Math.max(
-    0,
-    (1 + page) * ROWS_PER_PAGE - filteredRows.length
-  );
-
-  const visibleRows = useMemo(() => {
-    const sortedRows = sortRows(filteredRows, sort);
-
-    return sortedRows.slice(
-      page * ROWS_PER_PAGE,
-      page * ROWS_PER_PAGE + ROWS_PER_PAGE
-    );
-  }, [page, sort, filteredRows]);
 
   const maxSchools = Math.max(...segData.map((e) => e["num_schools"]));
   const minSchools = Math.min(...segData.map((e) => e["num_schools"]));
 
   const [min, setMin] = useState({
-    num_schools: minSchools,
-    enr_prop_as: 0,
-    enr_prop_bl: 0,
-    enr_prop_hi: 0,
-    enr_prop_or: 0,
-    enr_prop_wh: 0,
-    norm_exp_as: 0,
-    norm_exp_bl: 0,
-    norm_exp_hi: 0,
-    norm_exp_or: 0,
-    norm_exp_wh: 0,
+    num_schools: minSchools.toString(),
+    enr_prop_as: "0",
+    enr_prop_bl: "0",
+    enr_prop_hi: "0",
+    enr_prop_or: "0",
+    enr_prop_wh: "0",
+    norm_exp_as: "0",
+    norm_exp_bl: "0",
+    norm_exp_hi: "0",
+    norm_exp_or: "0",
+    norm_exp_wh: "0",
   });
 
   const [max, setMax] = useState({
-    num_schools: maxSchools,
-    enr_prop_as: 100,
-    enr_prop_bl: 100,
-    enr_prop_hi: 100,
-    enr_prop_or: 100,
-    enr_prop_wh: 100,
-    norm_exp_as: 100,
-    norm_exp_bl: 100,
-    norm_exp_hi: 100,
-    norm_exp_or: 100,
-    norm_exp_wh: 100,
+    num_schools: maxSchools.toString(),
+    enr_prop_as: "100",
+    enr_prop_bl: "100",
+    enr_prop_hi: "100",
+    enr_prop_or: "100",
+    enr_prop_wh: "100",
+    norm_exp_as: "100",
+    norm_exp_bl: "100",
+    norm_exp_hi: "100",
+    norm_exp_or: "100",
+    norm_exp_wh: "100",
   });
 
   useEffect(() => {
-    setMax((oldMax) => ({ ...oldMax, num_schools: maxSchools }));
+    setMax((oldMax) => ({ ...oldMax, num_schools: maxSchools.toString() }));
   }, [maxSchools]);
 
   useEffect(() => {
-    setMin((oldMin) => ({ ...oldMin, num_schools: minSchools }));
+    setMin((oldMin) => ({ ...oldMin, num_schools: minSchools.toString() }));
   }, [minSchools]);
 
   if (isLoading) {
@@ -220,6 +233,23 @@ export default function ComparisonTable({
             }
           };
 
+          const sortIconButton = (accessor: ColumnAccessor | "checkbox") => {
+            if (accessor !== "checkbox") {
+              return (
+                <IconButton
+                  onClick={() => handleSort(accessor)}
+                  size="small"
+                  className="!text-xs h-6 w-6"
+                  aria-label="sort"
+                >
+                  {sortIcon()}
+                </IconButton>
+              );
+            }
+
+            return null;
+          };
+
           return (
             <TableCell
               key={column.accessor}
@@ -233,16 +263,7 @@ export default function ComparisonTable({
                 })}
               >
                 <span className="px-1">{column.label}</span>
-                {column.accessor !== "checkbox" && (
-                  <IconButton
-                    onClick={() => handleSort(column.accessor)}
-                    size="small"
-                    className="!text-xs h-6 w-6"
-                    aria-label="sort"
-                  >
-                    {sortIcon()}
-                  </IconButton>
-                )}
+                {sortIconButton(column.accessor)}
               </div>
             </TableCell>
           );
@@ -290,35 +311,30 @@ export default function ComparisonTable({
     <TextField
       variant="standard"
       placeholder="Search Name"
-      value={filters[nameLevel]}
+      value={filters[nameLevel] || ""}
       onChange={(event) => handleSearch(event.target.value, nameLevel)}
       className="!min-w-max"
     />
   );
 
-  const tableSearchRowNameOther = (accessor: string) => {
+  const tableSearchRowNameOther = (accessor: MinMaxAccessor | EntityName) => {
     const minSearch = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
       const { value } = e.target;
 
-      const useDefaultValue = value === "" || value === undefined;
-
-      let newValue: number;
-
-      if (useDefaultValue) {
-        const isNumSchoolsAccessor = accessor === "num_schools";
-        newValue = isNumSchoolsAccessor ? minSchools : 0;
-      } else {
-        newValue = parseInt(value);
+      if (value != "") {
+        if (!intRegex.test(value)) {
+          return;
+        } else {
+          handleSearch([value, max[accessor]], accessor);
+        }
       }
 
       setMin((oldmin) => ({
         ...oldmin,
-        [accessor]: newValue,
+        [accessor]: value,
       }));
-
-      handleSearch([newValue, max[accessor]], accessor);
     };
 
     const maxSearch = (
@@ -326,23 +342,18 @@ export default function ComparisonTable({
     ) => {
       const { value } = e.target;
 
-      const useDefaultValue = value === "" || value === undefined;
-
-      let newValue: number;
-
-      if (useDefaultValue) {
-        const isNumSchoolsAccessor = accessor === "num_schools";
-        newValue = isNumSchoolsAccessor ? maxSchools : 100;
-      } else {
-        newValue = parseInt(value);
+      if (value != "") {
+        if (!intRegex.test(value)) {
+          return;
+        } else {
+          handleSearch([min[accessor], value], accessor);
+        }
       }
 
       setMax((oldmax) => ({
         ...oldmax,
-        [accessor]: newValue,
+        [accessor]: value,
       }));
-
-      handleSearch([min[accessor], newValue], accessor);
     };
 
     return (
@@ -350,7 +361,8 @@ export default function ComparisonTable({
         <TextField
           variant="outlined"
           className="w-10 !mr-2 "
-          placeholder={min[accessor].toString()}
+          value={min[accessor].toString()}
+          placeholder={accessor === "num_schools" ? minSchools.toString() : "0"}
           onChange={(e) => minSearch(e)}
           InputProps={{
             classes: {
@@ -361,7 +373,10 @@ export default function ComparisonTable({
         <TextField
           variant="outlined"
           className="w-10"
-          placeholder={max[accessor].toString()}
+          value={max[accessor].toString()}
+          placeholder={
+            accessor === "num_schools" ? maxSchools.toString() : "100"
+          }
           onChange={(e) => maxSearch(e)}
           InputProps={{
             classes: {
@@ -546,7 +561,7 @@ export default function ComparisonTable({
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={ROWS_PER_PAGE}
-          count={filteredRows.length}
+          count={sortedRows.length}
         />
       </div>
     </>
