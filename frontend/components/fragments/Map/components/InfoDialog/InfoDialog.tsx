@@ -13,7 +13,7 @@ import { paper } from "./InfoDialog.module.scss";
 interface Props {
   open: boolean;
   handleClose: () => void;
-  name: string;
+  name?: string;
   children: React.ReactNode;
   urlParams: string;
   hideSegLink?: boolean;

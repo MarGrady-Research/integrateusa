@@ -22,7 +22,7 @@ export default function GradeSelect({ labelPrefix }: Props) {
   };
 
   const selectedGrade = gradesData.find((g) => g.value === grade);
-  const selectedValue = selectedGrade.value;
+  const selectedValue = selectedGrade?.value || "";
 
   const options = gradesData.map((o) => ({
     value: o.value,

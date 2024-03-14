@@ -50,7 +50,7 @@ export interface LineDataAPI {
 }
 
 export interface LineDataProcessed {
-  seg: number;
+  seg: number | null;
   year: number;
 }
 

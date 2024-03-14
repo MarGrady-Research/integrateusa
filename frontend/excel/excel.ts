@@ -102,12 +102,12 @@ export const exportRaceBreakdown = async (
   sheet.insertRow(2, [name]);
 
   const selectedYear = yearsData.find((y) => y.value === year);
-  const selectedYearLabel = selectedYear.label;
+  const selectedYearLabel = selectedYear?.label || "-";
   const yearRow = `Year: ${selectedYearLabel}`;
   sheet.insertRow(3, [yearRow]);
 
   const selectedGrade = gradesData.find((g) => g.value === grade);
-  const selectedGradeLabel = selectedGrade.label;
+  const selectedGradeLabel = selectedGrade?.label || "-";
   const gradeRow = `Grade: ${selectedGradeLabel}`;
   sheet.insertRow(4, [gradeRow]);
 

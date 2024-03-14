@@ -260,13 +260,21 @@ export default function SearchSelect({ level }: Props) {
         latmax: newValue.latmax,
       })
     );
-    dispatch(
-      setSchoolCoordinates({
-        lat_new: newValue.lat_new,
-        lon_new: newValue.lon_new,
-      })
-    );
-    dispatch(setDistrictType(newValue.dist_type));
+    if (
+      typeof newValue.lat_new !== "undefined" &&
+      typeof newValue.lon_new !== "undefined"
+    ) {
+      dispatch(
+        setSchoolCoordinates({
+          lat_new: newValue.lat_new,
+          lon_new: newValue.lon_new,
+        })
+      );
+    }
+
+    if (typeof newValue.dist_type !== "undefined") {
+      dispatch(setDistrictType(newValue.dist_type));
+    }
   };
 
   const handleInputChange = (

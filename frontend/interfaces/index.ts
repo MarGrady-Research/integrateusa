@@ -3,6 +3,7 @@ export type {
   SchoolCoordinates,
   RacialProportion,
   HoverInfoInterface,
+  MapboxGeoJSONFeatureExtended,
 } from "./interfaces";
 
 export {

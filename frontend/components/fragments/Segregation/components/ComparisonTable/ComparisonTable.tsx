@@ -291,8 +291,10 @@ export default function ComparisonTable({
           const shouldRemove = isLineRendered && allVisibleSelected;
           const shouldChange = !isSelectedRow && (shouldAdd || shouldRemove);
 
-          if (shouldChange) {
-            updateLine(r[idLevel], r[nameLevel]);
+          const name = r[nameLevel];
+
+          if (shouldChange && typeof name !== "undefined") {
+            updateLine(r[idLevel], name);
           }
         });
       }}
@@ -437,7 +439,7 @@ export default function ComparisonTable({
         }}
         sx={{
           "&.Mui-checked": {
-            color: !isSelectedRow && selectedLineColor,
+            color: !isSelectedRow ? selectedLineColor : "inherit",
           },
         }}
       />
@@ -449,38 +451,47 @@ export default function ComparisonTable({
 
     return (
       <TableRow>
-        {columns.map((column) => {
-          switch (column.accessor) {
-            case "checkbox":
-              return (
-                <TableCell scope="row" key={column.accessor}>
-                  <Checkbox
-                    disabled={true}
-                    aria-hidden={true}
-                    className="opacity-0"
-                  />
-                </TableCell>
-              );
-            case nameLevel:
-              return (
-                <TableCell
-                  key={column.accessor}
-                  className="text-sm text-left !text-line-selected !font-semibold"
-                >
-                  {selectedRow[column.accessor]}
-                </TableCell>
-              );
-            default:
-              return (
-                <TableCell
-                  key={column.accessor}
-                  className="text-sm !text-center !text-line-selected !font-semibold"
-                >
-                  {selectedRow[column.accessor].toLocaleString("en-US")}
-                </TableCell>
-              );
-          }
-        })}
+        {selectedRow &&
+          columns.map((column) => {
+            switch (column.accessor) {
+              case "checkbox":
+                return (
+                  <TableCell scope="row" key={column.accessor}>
+                    <Checkbox
+                      disabled={true}
+                      aria-hidden={true}
+                      className="opacity-0"
+                    />
+                  </TableCell>
+                );
+              case nameLevel:
+                return (
+                  <TableCell
+                    key={column.accessor}
+                    className="text-sm text-left !text-line-selected !font-semibold"
+                  >
+                    {selectedRow[column.accessor]}
+                  </TableCell>
+                );
+              default:
+                const value = selectedRow[column.accessor];
+
+                let valueString = "";
+
+                if (typeof value !== "undefined") {
+                  valueString = value.toLocaleString("en-US");
+                }
+
+                return (
+                  <TableCell
+                    key={column.accessor}
+                    className="text-sm !text-center !text-line-selected !font-semibold"
+                  >
+                    {valueString}
+                  </TableCell>
+                );
+            }
+          })}
       </TableRow>
     );
   };
@@ -510,6 +521,14 @@ export default function ComparisonTable({
                 </TableCell>
               );
             default:
+              const value = row[column.accessor];
+
+              let valueString = "";
+
+              if (typeof value !== "undefined") {
+                valueString = value.toLocaleString("en-US");
+              }
+
               return (
                 <TableCell
                   key={column.accessor}
@@ -517,7 +536,7 @@ export default function ComparisonTable({
                     "!text-line-selected": isSelectedRow,
                   })}
                 >
-                  {row[column.accessor].toLocaleString("en-US")}
+                  {valueString}
                 </TableCell>
               );
           }

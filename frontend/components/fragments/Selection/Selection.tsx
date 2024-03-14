@@ -62,7 +62,7 @@ export default function Selection({ omitSchools }: Props) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded((e) => !e);
 
-  const topOffset = Math.max(0, navbarHeight - y);
+  const topOffset = Math.max(0, navbarHeight - (y || 0));
   const translateY = expanded ? 0 : -selectsHeight;
 
   const selects = (prefix = "") => (

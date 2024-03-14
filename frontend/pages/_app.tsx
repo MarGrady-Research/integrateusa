@@ -26,6 +26,10 @@ function MyApp({ Component, ...rest }: AppProps) {
   const { props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
 
+  if (!store.__persistor) {
+    return null;
+  }
+
   return (
     <Provider store={store}>
       <PersistGate

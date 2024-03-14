@@ -49,12 +49,12 @@ const sortTrendData = (trendData: TrendData, grade: string) =>
   trendData.filter((e) => e.grade === grade).sort((a, b) => a.year - b.year);
 
 const getBarData = (data: TrendData) => {
-  const asianData = [];
-  const blackData = [];
-  const hispanicData = [];
-  const whiteData = [];
-  const otherData = [];
-  const labels = [];
+  const asianData: number[] = [];
+  const blackData: number[] = [];
+  const hispanicData: number[] = [];
+  const whiteData: number[] = [];
+  const otherData: number[] = [];
+  const labels: number[] = [];
 
   for (const trend of data) {
     const { asian, black, hispanic, white, other, year } = trend;

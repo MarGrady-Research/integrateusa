@@ -13,10 +13,16 @@ export const sortRows = (rows: SegEntity[], sort: Sort) => {
   return [...rows].sort((a, b) => {
     const { orderDesc, orderBy } = sort;
 
+    const firstElem = a[orderBy];
+    const secondElem = b[orderBy];
+
+    if (typeof firstElem === "undefined") return !orderDesc ? 1 : -1;
+    if (typeof secondElem === "undefined") return !orderDesc ? -1 : 1;
+
     if (!orderDesc) {
-      return a[orderBy] < b[orderBy] ? -1 : a[orderBy] > b[orderBy] ? 1 : 0;
+      return firstElem < secondElem ? -1 : firstElem > secondElem ? 1 : 0;
     } else {
-      return a[orderBy] < b[orderBy] ? 1 : a[orderBy] > b[orderBy] ? -1 : 0;
+      return firstElem < secondElem ? 1 : firstElem > secondElem ? -1 : 0;
     }
   });
 };

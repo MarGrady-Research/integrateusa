@@ -25,7 +25,7 @@ interface Props {
     label: string;
   }[];
   title: string;
-  focus: SegEntity;
+  focus: SegEntity | null;
   isLoading: boolean;
   hasFailed: boolean;
   year: number;
@@ -84,19 +84,19 @@ export default function Info({
   const selectedIso = isLoading ? (
     <Skeleton variant="text" className="!inline-block w-12" />
   ) : (
-    <b>{focus[selected.iso].toFixed(1)}%</b>
+    <b>{focus && `${focus[selected.iso].toFixed(1)}%`}</b>
   );
 
   const selectedNon = isLoading ? (
     <Skeleton variant="text" className="!inline-block w-12" />
   ) : (
-    <b>{focus[selected.non].toFixed(1)}%</b>
+    <b>{focus && `${focus[selected.non].toFixed(1)}%`}</b>
   );
 
   const segValue = isLoading ? (
     <Skeleton variant="text" className="!inline-block w-12" />
   ) : (
-    <b>{focus[selected.value].toFixed(1)}%</b>
+    <b>{focus && `${focus[selected.value].toFixed(1)}%`}</b>
   );
 
   const selectedLabel = isLoading ? (

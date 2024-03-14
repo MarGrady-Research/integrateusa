@@ -53,8 +53,35 @@ export enum DistrictType {
   Secondary = "S",
 }
 
+export interface MapboxGeoJSONFeatureExtended extends MapboxGeoJSONFeature {
+  properties: {
+    nces_id: string;
+    GEOID: string;
+    STUSPS: string;
+    NAME: string;
+    sch_name: string;
+    dist_name: string;
+    county_name: string;
+    asian: number;
+    black: number;
+    hispanic: number;
+    white: number;
+    other: number;
+    latmin: string;
+    latmax: string;
+    lngmin: string;
+    lngmax: string;
+    xminimum: string;
+    xmaximum: string;
+    yminimum: string;
+    ymaximum: string;
+    lat_new: string;
+    lon_new: string;
+  };
+}
+
 export interface HoverInfoInterface {
-  feature: MapboxGeoJSONFeature;
+  feature: MapboxGeoJSONFeatureExtended;
   x: number;
   y: number;
   height: number;

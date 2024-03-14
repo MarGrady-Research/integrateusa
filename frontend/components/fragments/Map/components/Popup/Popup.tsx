@@ -6,16 +6,25 @@ import { root } from "./Popup.module.scss";
 interface Props {
   name: string;
   coordinates: {
-    x: number;
-    y: number;
-    height: number;
-    width: number;
+    x?: number;
+    y?: number;
+    height?: number;
+    width?: number;
   };
   children: React.ReactNode;
 }
 
 export default function Popup({ name, coordinates, children }: Props) {
   const { x, y, height, width } = coordinates;
+
+  if (
+    typeof x === "undefined" ||
+    typeof y === "undefined" ||
+    typeof height === "undefined" ||
+    typeof width === "undefined"
+  ) {
+    return null;
+  }
 
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -26,8 +35,8 @@ export default function Popup({ name, coordinates, children }: Props) {
   return (
     <div
       style={{
-        left: coordinates.x + left,
-        top: coordinates.y + top,
+        left: x + left,
+        top: y + top,
         zIndex: 10,
         position: "absolute",
         maxWidth: "300px",

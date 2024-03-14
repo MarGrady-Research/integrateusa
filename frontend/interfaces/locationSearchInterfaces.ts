@@ -37,7 +37,7 @@ export type LocationSearchResult =
 export interface LocationSearchOption extends Coordinates {
   value: string;
   label: string;
-  lat_new?: number;
-  lon_new?: number;
+  lat_new?: number | null;
+  lon_new?: number | null;
   dist_type?: DistrictType;
 }

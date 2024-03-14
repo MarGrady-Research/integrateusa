@@ -22,7 +22,7 @@ import { HoverInfoInterface, Feature } from "interfaces";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
-  hoverInfo: HoverInfoInterface;
+  hoverInfo: HoverInfoInterface | null;
   mapData: Feature[];
   small?: boolean;
 }
@@ -32,7 +32,7 @@ const labels = ["Asian", "Black", "Hispanic", "White", "Other Races"];
 const getAreaInfo = (hoverInfo: HoverInfoInterface, mapData: Feature[]) => {
   const { GEOID, STUSPS } = hoverInfo.feature.properties;
 
-  let layerProp: string;
+  let layerProp = "";
 
   let areaId = "";
 
@@ -127,6 +127,10 @@ const options = {
 };
 
 export default function AreaPie({ hoverInfo, mapData, small = false }: Props) {
+  if (!hoverInfo) {
+    return null;
+  }
+
   const {
     schoolsInArea,
     studentsEnrolled,
