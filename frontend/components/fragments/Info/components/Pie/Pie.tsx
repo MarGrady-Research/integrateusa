@@ -89,7 +89,7 @@ const options = {
 };
 
 export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
