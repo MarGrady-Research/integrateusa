@@ -42,8 +42,8 @@ export const exportRaceBreakdown = async (
   sheet.columns = [
     { header: "Nces Id", key: "nces_id", width: 14 },
     { header: "School Name", key: "sch_name", width: 50 },
-    { header: "District Name", key: "dist_name", width: 25 },
-    { header: "County Name", key: "county_name", width: 25 },
+    { header: "District Name", key: "dist_name", width: 35 },
+    { header: "County Name", key: "county_name", width: 35 },
     { header: "School Level", key: "level", width: 14 },
     { header: "Asian Enrollment", key: "asian", width: 17 },
     { header: "Black Enrollment", key: "black", width: 17 },
