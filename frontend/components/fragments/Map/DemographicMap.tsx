@@ -9,11 +9,7 @@ import Map, {
   FullscreenControl,
   MapRef,
 } from "react-map-gl";
-import mapboxgl, {
-  Expression,
-  MapboxGeoJSONFeature,
-  Visibility,
-} from "mapbox-gl";
+import mapboxgl, { Expression, Visibility } from "mapbox-gl";
 import { useDispatch, useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 
