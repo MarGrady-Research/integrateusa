@@ -41,6 +41,7 @@ const LoadingDialog = memo(({ open, mapStatus }: Props) => {
         paper,
       }}
       hideBackdrop
+      disableAutoFocus
       disableEnforceFocus
       PaperProps={{ title: "Loading Dialog" }}
     >

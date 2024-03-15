@@ -1,9 +1,8 @@
 import React from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { Level } from "interfaces";
 
 import Select from "components/atoms/Select";
-
-import { Level } from "interfaces";
 
 import { levelSelectData } from "../../data";
 

@@ -16,11 +16,13 @@ import { getPersistConfig } from "redux-deep-persist";
 import { selectSlice } from "./selectSlice";
 import { apiCacheSlice } from "./apiCacheSlice";
 import { mapSlice } from "./mapSlice";
+import { hydrateSlice } from "./hydrateSlice";
 
 const rootReducer = combineReducers({
   [selectSlice.name]: selectSlice.reducer,
   [apiCacheSlice.name]: apiCacheSlice.reducer,
   [mapSlice.name]: mapSlice.reducer,
+  [hydrateSlice.name]: hydrateSlice.reducer,
 });
 
 const makeConfiguredStore = () =>
@@ -42,7 +44,7 @@ export const makeStore = () => {
       key: "root",
       storage: createWebStorage("local"),
       version: 1,
-      blacklist: ["select.grade", "select.year", "apiCache", "map"],
+      blacklist: ["select.grade", "select.year", "apiCache", "map", "hydrate"],
       rootReducer,
     });
 

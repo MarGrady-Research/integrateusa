@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 import axios, { AxiosError } from "axios";
 
 import SegBar from "./components/Bar";
@@ -20,6 +21,8 @@ import {
   setLineDataSuccess,
   setLineDataFailure,
 } from "store/apiCacheSlice";
+import { selectRehydrated } from "store/hydrateSlice";
+
 import { AppDispatch } from "store/store";
 
 import {
@@ -246,9 +249,13 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
       break;
   }
 
+  const rehydrated = useSelector(selectRehydrated);
+
   return (
     <>
-      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">{name}</h1>
+      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">
+        {rehydrated ? name : <Skeleton width={150} />}
+      </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 lg:gap-y-0 lg:gap-x-5 mb-10">
         <Info
           focus={focus}
@@ -271,7 +278,9 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         year={year}
         grade={grade}
       />
-      <h2 className="text-2xl font-medium mb-4">{comparisonText}</h2>
+      <h2 className="text-2xl font-medium mb-4">
+        {rehydrated ? comparisonText : <Skeleton width={200} />}
+      </h2>
       <ComparisonTable
         id={id}
         segData={segData}

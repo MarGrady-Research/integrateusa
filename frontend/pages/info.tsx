@@ -6,8 +6,9 @@ import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
 import Info from "components/fragments/Info";
 import Trends from "components/fragments/Trends";
-import Page from "components/layouts/Page";
 import Footer from "components/fragments/Footer";
+import Page from "components/layouts/Page";
+import PersistorPage from "components/layouts/PersistorPage";
 
 import {
   selectYear,
@@ -38,11 +39,11 @@ import { Level, ApiStatus, School, TrendData, SchoolInfo } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
+const paramsInfo =
+  typeof window === "undefined" ? null : getParamsInfo(window.location.href);
+
 export default function InfoPage() {
   const dispatch = useDispatch<AppDispatch>();
-
-  const paramsInfo =
-    typeof window === undefined ? null : getParamsInfo(window.location.href);
 
   const [paramsChecked, setParamsChecked] = useState(false);
 
@@ -143,7 +144,7 @@ export default function InfoPage() {
     }
 
     setParamsChecked(true);
-  }, [dispatch, paramsChecked, paramsInfo]);
+  }, [dispatch, paramsChecked]);
 
   useEffect(() => {
     if (level == Level.School) {
@@ -237,7 +238,7 @@ export default function InfoPage() {
     : hasInfoDataFailed;
 
   return (
-    <>
+    <PersistorPage>
       <Head title="Info" desc="Demographic Information" />
       <Selection />
       <Page className="mt-12 lg:mt-0">
@@ -257,6 +258,6 @@ export default function InfoPage() {
         />
       </Page>
       <Footer />
-    </>
+    </PersistorPage>
   );
 }

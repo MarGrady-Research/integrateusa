@@ -4,9 +4,10 @@ import axios, { AxiosError } from "axios";
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
-import Page from "components/layouts/Page";
 import Segregation from "components/fragments/Segregation";
 import Footer from "components/fragments/Footer";
+import Page from "components/layouts/Page";
+import PersistorPage from "components/layouts/PersistorPage";
 
 import {
   selectYear,
@@ -28,11 +29,11 @@ import { ApiStatus, Level, SegEntity } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
+const paramsInfo =
+  typeof window === "undefined" ? null : getParamsInfo(window.location.href);
+
 export default function SegregationPage() {
   const dispatch = useDispatch<AppDispatch>();
-
-  const paramsInfo =
-    typeof window === undefined ? null : getParamsInfo(window.location.href);
 
   const [paramsChecked, setParamsChecked] = useState(false);
 
@@ -90,7 +91,7 @@ export default function SegregationPage() {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [dispatch, paramsChecked, paramsInfo]);
+  }, [dispatch, paramsChecked]);
 
   useEffect(() => {
     if (isSchoolLevel) {
@@ -122,7 +123,7 @@ export default function SegregationPage() {
   }, [isSchoolLevel, year, grade, dispatch, idlevel, segKey]);
 
   return (
-    <>
+    <PersistorPage>
       <Head title="Segregation" desc="Segregation Metrics" />
       <Selection omitSchools />
       <Page className="mt-12 lg:mt-0">
@@ -133,6 +134,6 @@ export default function SegregationPage() {
         />
       </Page>
       <Footer />
-    </>
+    </PersistorPage>
   );
 }
