@@ -91,7 +91,7 @@ export default function SegregationPage() {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [dispatch, paramsChecked, paramsInfo]);
+  }, [dispatch, paramsChecked]);
 
   useEffect(() => {
     if (isSchoolLevel) {
