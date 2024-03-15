@@ -10,7 +10,7 @@ import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 import { holder, section } from "./SectionIntegrationLine.module.scss";
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
-  let step: IntegrationLineStep;
+  let step: IntegrationLineStep = IntegrationLineStep.StepOne;
 
   switch (currentStepIndex) {
     case -1:

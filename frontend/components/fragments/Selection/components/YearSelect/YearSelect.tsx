@@ -27,7 +27,7 @@ export default function YearSelect({ labelPrefix }: Props) {
   };
 
   const selectedYear = yearsData.find((y) => y.value === year);
-  const selectedValue = selectedYear.value.toString();
+  const selectedValue = selectedYear?.value.toString() || "";
 
   const options = yearsData.map((o) => ({
     value: o.value.toString(),

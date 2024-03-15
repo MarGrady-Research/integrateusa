@@ -41,7 +41,9 @@ export const exportRaceBreakdown = async (
 
   sheet.columns = [
     { header: "Nces Id", key: "nces_id", width: 14 },
-    { header: "School Name", key: "sch_name", width: 60 },
+    { header: "School Name", key: "sch_name", width: 50 },
+    { header: "District Name", key: "dist_name", width: 25 },
+    { header: "County Name", key: "county_name", width: 25 },
     { header: "School Level", key: "level", width: 14 },
     { header: "Asian Enrollment", key: "asian", width: 17 },
     { header: "Black Enrollment", key: "black", width: 17 },
@@ -61,8 +63,18 @@ export const exportRaceBreakdown = async (
   sheet.getRow(1).font = { bold: true };
 
   for (const [index, school] of sortedData.entries()) {
-    const { asian, black, hispanic, white, other, sch_name, nces_id, level } =
-      school;
+    const {
+      asian,
+      black,
+      hispanic,
+      white,
+      other,
+      sch_name,
+      nces_id,
+      dist_name,
+      county_name,
+      level,
+    } = school;
 
     const tot_enr = asian + black + hispanic + white + other;
 
@@ -75,6 +87,8 @@ export const exportRaceBreakdown = async (
     sheet.addRow({
       nces_id,
       sch_name,
+      dist_name,
+      county_name,
       level,
       asian,
       black,
@@ -88,11 +102,11 @@ export const exportRaceBreakdown = async (
       prop_or,
     });
 
-    sheet.getCell(`I${index + 2}`).numFmt = "0.00";
-    sheet.getCell(`J${index + 2}`).numFmt = "0.00";
     sheet.getCell(`K${index + 2}`).numFmt = "0.00";
     sheet.getCell(`L${index + 2}`).numFmt = "0.00";
     sheet.getCell(`M${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`N${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`O${index + 2}`).numFmt = "0.00";
   }
 
   const titleRow = sheet.insertRow(1, ["Race Breakdown By School"]);
@@ -102,12 +116,12 @@ export const exportRaceBreakdown = async (
   sheet.insertRow(2, [name]);
 
   const selectedYear = yearsData.find((y) => y.value === year);
-  const selectedYearLabel = selectedYear.label;
+  const selectedYearLabel = selectedYear?.label || "-";
   const yearRow = `Year: ${selectedYearLabel}`;
   sheet.insertRow(3, [yearRow]);
 
   const selectedGrade = gradesData.find((g) => g.value === grade);
-  const selectedGradeLabel = selectedGrade.label;
+  const selectedGradeLabel = selectedGrade?.label || "-";
   const gradeRow = `Grade: ${selectedGradeLabel}`;
   sheet.insertRow(4, [gradeRow]);
 

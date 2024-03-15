@@ -13,14 +13,16 @@ class SchoolInfo(models.Model):
     class Meta:
         db_table = 'school_info'
         indexes = [
-            models.Index(fields=['nces_id'], name='school_info_idx')
+            models.Index(fields=['nces_id'], name='nces_school_info_idx')
         ]
 
 class SchoolTrends(models.Model):
     school_key = models.TextField(primary_key=True)
     nces_id = models.TextField()
     dist_id = models.TextField()
+    dist_name = models.TextField()
     county_id = models.TextField()
+    county_name = models.TextField()
     cod_id = models.TextField()
     state_abb = models.TextField()
     year = models.IntegerField()
@@ -37,12 +39,12 @@ class SchoolTrends(models.Model):
     class Meta: 
         db_table = 'school_trends'
         indexes = [
-            models.Index(fields=['year'], name ='year_sch_trends_idx'),
-            models.Index(fields=['grade'], name='grade_sch_trends_idx'),
-            models.Index(fields=['dist_id'], name='dist_sch_trends_idx'),
-            models.Index(fields=['county_id'], name='county_sch_trends_idx'),
-            models.Index(fields=['state_abb'], name='state_sch_trends_idx'),
-            models.Index(fields=['nces_id'], name='school_sch_trends_idx')
+            models.Index(fields=['year'], name ='year_school_trends_idx'),
+            models.Index(fields=['grade'], name='grade_school_trends_idx'),
+            models.Index(fields=['dist_id'], name='dist_school_trends_idx'),
+            models.Index(fields=['county_id'], name='county_school_trends_idx'),
+            models.Index(fields=['state_abb'], name='state_abb_school_trends_idx'),
+            models.Index(fields=['nces_id'], name='nces_school_trends_idx')
         ]
 
 # Name Models
@@ -147,7 +149,7 @@ class DistrictTrends(models.Model):
     class Meta:
         db_table = 'dist_trends'
         indexes = [
-            models.Index(fields=['dist_id'], name='dist_trends_idx'),
+            models.Index(fields=['dist_id'], name='dist_trends_id_idx'),
         ]
 
 class DistrictTrendsAlt(models.Model):
@@ -180,7 +182,7 @@ class CountyTrends(models.Model):
     class Meta:
         db_table = 'county_trends'
         indexes = [
-            models.Index(fields=['county_id'], name='county_trends_idx'),
+            models.Index(fields=['county_id'], name='county_trends_id_idx'),
         ]
 
 
@@ -197,10 +199,6 @@ class StateTrends(models.Model):
 
     class Meta:
         db_table = 'state_trends'
-        indexes = [
-            models.Index(fields=['state_abb'], name='state_trends_idx'),
-        ]
-
 
 # Segregation Models
 
@@ -262,9 +260,9 @@ class CountySegSchools(models.Model):
     class Meta:
         db_table = 'county_seg_schools'
         indexes = [
-            models.Index(fields=['year'], name ='year_county_seg_idx'),
-            models.Index(fields=['grade'], name='grade_county_seg_idx'),
-            models.Index(fields=['county_id'], name='county_id_county_seg_idx'),
+            models.Index(fields=['year'], name ='county_seg_year_idx'),
+            models.Index(fields=['grade'], name='county_seg_grade_idx'),
+            models.Index(fields=['county_id'], name='county_seg_id_idx'),
         ]
 
     def __str__(self):
@@ -341,9 +339,9 @@ class DistSeg(models.Model):
     class Meta:
         db_table = 'dist_seg'
         indexes = [
-            models.Index(fields=['year'], name ='year_dist_seg_idx'),
-            models.Index(fields=['grade'], name='grade_dist_seg_idx'),
-            models.Index(fields=['dist_id'], name='dist_id_dist_seg_idx'),
+            models.Index(fields=['year'], name ='dist_seg_year_idx'),
+            models.Index(fields=['grade'], name='dist_seg_grade_idx'),
+            models.Index(fields=['dist_id'], name='dist_seg_id_idx'),
         ]
 
     def __str__(self):
@@ -406,16 +404,9 @@ class StateSeg(models.Model):
 
     class Meta:
         db_table = 'state_seg'
-        indexes = [
-            models.Index(fields=['year'], name ='year_state_seg_idx'),
-            models.Index(fields=['grade'], name='grade_state_seg_idx'),
-            models.Index(fields=['state_abb'], name='state_abb_state_seg_idx'),
-        ]
 
     def __str__(self):
         return self.year, self.state_abb, self.grade
-
-
 
 # Geographic Data
 

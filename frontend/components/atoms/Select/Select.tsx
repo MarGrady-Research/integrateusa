@@ -65,7 +65,9 @@ export default function SelectComponent({
         SelectDisplayProps={
           selectLabel
             ? { "aria-labelledby": selectLabel }
-            : ariaLabel && { "aria-label": ariaLabel }
+            : ariaLabel
+            ? { "aria-label": ariaLabel }
+            : {}
         }
       >
         {selectOptions}

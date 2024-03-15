@@ -29,7 +29,7 @@ function MyApp({ Component, ...rest }: AppProps) {
   return (
     <Provider store={store}>
       <PersistGate
-        persistor={store.__persistor}
+        persistor={(store as any).__persistor}
         loading={
           <div className="flex items-center justify-center h-screen">
             <Loader />

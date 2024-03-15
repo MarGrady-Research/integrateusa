@@ -126,7 +126,12 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
     },
   };
 
-  const graphData = [];
+  const graphData: {
+    label: string;
+    data: (number | null)[];
+    borderColor: string;
+    backgroundColor: string;
+  }[] = [];
 
   lines.forEach((line) => {
     const lineKey = `${grade}-${line.id}`;

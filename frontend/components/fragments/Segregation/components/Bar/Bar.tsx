@@ -27,7 +27,7 @@ import { container } from "./Bar.module.scss";
 ChartJS.register(LinearScale, BarElement, CategoryScale, Tooltip, Legend);
 
 interface Props {
-  focus: SegEntity;
+  focus: SegEntity | null;
   isLoading: boolean;
   hasFailed: boolean;
 }
@@ -98,6 +98,20 @@ export default function SegBar({ focus, isLoading, hasFailed }: Props) {
     return (
       <div className={container}>
         <Skeleton className="!h-full w-full" variant="rectangular" />
+      </div>
+    );
+  }
+
+  if (!focus) {
+    return (
+      <div
+        className={clsx(
+          "flex flex-col items-center justify-center shadow border border-gray-200",
+          container
+        )}
+      >
+        <ErrorIcon color="error" fontSize="medium" className="mb-1" />
+        Error loading data
       </div>
     );
   }

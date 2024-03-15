@@ -3,6 +3,7 @@ export type {
   SchoolCoordinates,
   RacialProportion,
   HoverInfoInterface,
+  MapboxGeoJSONFeatureExtended,
 } from "./interfaces";
 
 export {
@@ -34,8 +35,12 @@ export type {
 
 export type {
   SegEntity,
+  EntityName,
   MeasureAccessor,
+  MinMaxAccessor,
+  ColumnAccessor,
   LineDataAPI,
   Line,
   LineDataProcessed,
+  Filters,
 } from "./segregationInterfaces";

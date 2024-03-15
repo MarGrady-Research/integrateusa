@@ -53,8 +53,16 @@ const labels = [
 
 const distAlt = "1500000";
 
-const getLineData = (data) => {
-  const ld = {};
+const getLineData = (
+  data: {
+    year: number;
+    dist_id_alt: string;
+    dist_name_alt: string;
+    norm_exp_wh?: number;
+    norm_exp_wh_19?: number;
+  }[]
+) => {
+  const ld = {} as { [key: string]: number[] };
 
   for (const id of ids) {
     ld[id.dist_id_alt] = [];
@@ -62,9 +70,9 @@ const getLineData = (data) => {
 
   for (const item of data) {
     if (ld[item.dist_id_alt]) {
-      if (item.hasOwnProperty("norm_exp_wh")) {
+      if (typeof item.norm_exp_wh !== "undefined") {
         ld[item.dist_id_alt].push(item.norm_exp_wh);
-      } else if (item.hasOwnProperty("norm_exp_wh_19")) {
+      } else if (typeof item.norm_exp_wh_19 !== "undefined") {
         ld[item.dist_id_alt].push(item.norm_exp_wh_19);
       }
     }
@@ -86,7 +94,7 @@ const compDataDistrictPreIntegrationObj = {
   [distAlt]: compDataDistrictPreIntegration,
 };
 
-const getLines = (data, lineWidth = 1) =>
+const getLines = (data: { [key: string]: number[] }, lineWidth = 1) =>
   ids.map((id) => ({
     label: id.dist_name_alt,
     data: data[id.dist_id_alt] || [],
@@ -104,7 +112,14 @@ export default function IntegrationLine({ step, onTablet }: Props) {
 
   const lineWidth = onTablet ? 1 : 2;
 
-  let lineData = [];
+  let lineData: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    borderWidth: number;
+    backgroundColor: string;
+    order: number;
+  }[] = [];
 
   switch (step) {
     case IntegrationLineStep.StepOne:

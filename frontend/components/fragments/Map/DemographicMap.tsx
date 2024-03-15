@@ -44,6 +44,7 @@ import {
   HoverInfoInterface,
   Bounds,
   Feature,
+  MapboxGeoJSONFeatureExtended,
 } from "interfaces";
 import {
   defaultMapSchoolColor,
@@ -135,7 +136,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   );
   const mapRenderingComplete = mapStatus === MapStatus.Complete;
 
-  const mapRef = useRef<MapRef>();
+  const mapRef = useRef<MapRef>(null);
 
   const [hasMapLoaded, setHasMapLoaded] = useState(false);
 
@@ -144,8 +145,16 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [hoverInfo, setHoverInfo] = useState(null as HoverInfoInterface | null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const [hoveredFeatureData, setHoveredFeatureData] = useState(null);
-  const [hoveredSchoolData, setHoveredSchoolData] = useState(null);
+  const [hoveredFeatureData, setHoveredFeatureData] = useState(
+    null as {
+      source: string;
+      sourceLayer: string;
+      id: string | number | undefined;
+    } | null
+  );
+  const [hoveredSchoolData, setHoveredSchoolData] = useState(
+    null as { source: string; id: string | number | undefined } | null
+  );
 
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const toggleInfoDialog = () => {
@@ -156,7 +165,7 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
   const [cursor, setCursor] = useState("auto");
 
   const [renderedFeatures, setRenderedFeatures] = useState(
-    [] as MapboxGeoJSONFeature[]
+    [] as MapboxGeoJSONFeatureExtended[]
   );
 
   const stateVisibility = (
@@ -460,15 +469,13 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
 
       if (hoveredFeature) {
         setCursor("pointer");
-        setHoverInfo(
-          hoveredFeature && {
-            feature: hoveredFeature,
-            x,
-            y,
-            height,
-            width,
-          }
-        );
+        setHoverInfo({
+          feature: hoveredFeature as MapboxGeoJSONFeatureExtended,
+          x,
+          y,
+          height,
+          width,
+        });
         setIsHovering(true);
 
         const hoveringOnSchool = hoveredFeature.source === schoolsSourceId;
@@ -619,21 +626,21 @@ export default function DemographicMap({ onSmallerScreen }: Props) {
     }
 
     if (mapRef.current) {
-      const features = mapRef.current.queryRenderedFeatures(null, {
+      const features = mapRef.current.queryRenderedFeatures(undefined, {
         layers: ["schools"],
       });
 
-      setRenderedFeatures(features);
+      setRenderedFeatures(features as MapboxGeoJSONFeatureExtended[]);
     }
   };
 
   const querySchoolsInitial = () => {
     if (mapRef.current) {
-      const features = mapRef.current.queryRenderedFeatures(null, {
+      const features = mapRef.current.queryRenderedFeatures(undefined, {
         layers: ["schools"],
       });
 
-      setRenderedFeatures(features);
+      setRenderedFeatures(features as MapboxGeoJSONFeatureExtended[]);
     }
   };
 

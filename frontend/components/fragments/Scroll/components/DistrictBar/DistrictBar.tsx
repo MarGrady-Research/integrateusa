@@ -28,13 +28,13 @@ ChartJS.register(
   annotationPlugin
 );
 
-const getBarData = (data) => {
-  const asianData = [];
-  const blackData = [];
-  const hispanicData = [];
-  const whiteData = [];
-  const otherData = [];
-  const labels = [];
+const getBarData = (data: typeof schoolData) => {
+  const asianData: number[] = [];
+  const blackData: number[] = [];
+  const hispanicData: number[] = [];
+  const whiteData: number[] = [];
+  const otherData: number[] = [];
+  const labels: string[] = [];
 
   for (const school of data) {
     const { prop_as, prop_bl, prop_hi, prop_wh, prop_or, sch_name } = school;

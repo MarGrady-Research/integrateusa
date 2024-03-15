@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function InsetMap({ id, bounds, level, coordinates }: Props) {
-  const mapRef = useRef<MapRef>();
+  const mapRef = useRef<MapRef>(null);
 
   const { latmin, latmax, lngmin, lngmax } = bounds;
 

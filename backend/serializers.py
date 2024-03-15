@@ -9,7 +9,7 @@ class SchoolInfoSerializer(serializers.ModelSerializer):
 class SchoolTrendsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolTrends
-        fields = ['sch_name', 'nces_id', 'year', 'grade', 'level', 'asian', 'black', 'hispanic', 'other', 'white']
+        fields = ['sch_name', 'nces_id', 'dist_name','county_name','year', 'grade', 'level', 'asian', 'black', 'hispanic', 'other', 'white']
 
 # Name Serializers
 class DistNameSerializer(serializers.ModelSerializer):

@@ -24,6 +24,20 @@ export interface SegEntity {
   exp_hi_or: number;
   exp_or_or: number;
   exp_wh_or: number;
+  norm_exp_as: number;
+  norm_exp_bl: number;
+  norm_exp_hi: number;
+  norm_exp_or: number;
+  norm_exp_wh: number;
+  num_schools: number;
+  enr_prop_as: number;
+  enr_prop_bl: number;
+  enr_prop_hi: number;
+  enr_prop_wh: number;
+  enr_prop_or: number;
+  dist_name?: string;
+  county_name?: string;
+  state_name?: string;
 }
 
 export interface LineDataAPI {
@@ -36,7 +50,7 @@ export interface LineDataAPI {
 }
 
 export interface LineDataProcessed {
-  seg: number;
+  seg: number | null;
   year: number;
 }
 
@@ -51,3 +65,25 @@ export type MeasureAccessor =
   | "norm_exp_hi"
   | "norm_exp_or"
   | "norm_exp_wh";
+
+export type EntityName = "dist_name" | "county_name" | "state_name";
+
+export type MinMaxAccessor =
+  | MeasureAccessor
+  | "num_schools"
+  | "enr_prop_as"
+  | "enr_prop_bl"
+  | "enr_prop_hi"
+  | "enr_prop_wh"
+  | "enr_prop_or";
+
+export type ColumnAccessor = EntityName | MinMaxAccessor;
+
+export type Filters =
+  | { [key in EntityName]: string }
+  | { [key in MinMaxAccessor]: [string, string] };
+
+export type Sort = {
+  orderDesc: boolean;
+  orderBy: ColumnAccessor;
+};

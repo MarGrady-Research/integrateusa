@@ -1,74 +1,73 @@
-import { SegEntity } from "interfaces";
+import { Filters, MinMaxAccessor, EntityName, SegEntity } from "interfaces";
+import { Sort } from "interfaces/segregationInterfaces";
 
-export function isEmpty(obj = {}) {
+export function isEmpty(obj: Filters) {
   return Object.keys(obj).length === 0;
 }
 
-export function isString(value) {
-  return typeof value === "string" || value instanceof String;
-}
-
-export function isNumber(value) {
+export function isNumber(value: number | string) {
   return typeof value == "number" && !isNaN(value);
 }
 
-export function toLower(value) {
-  if (isString(value)) {
-    return value.toLowerCase();
-  }
-  return value;
-}
-
-export function isNil(value) {
-  return typeof value === "undefined" || value === null;
-}
-
-export function convertType(value) {
-  if (isNumber(value)) {
-    return value.toString();
-  }
-
-  return value;
-}
-
-export const sortRows = (rows: SegEntity[], sort) => {
+export const sortRows = (rows: SegEntity[], sort: Sort) => {
   return [...rows].sort((a, b) => {
     const { orderDesc, orderBy } = sort;
 
-    if (isNil(a[orderBy])) return 1;
-    if (isNil(b[orderBy])) return -1;
+    const firstElem = a[orderBy];
+    const secondElem = b[orderBy];
 
-    const alocale = convertType(a[orderBy]);
-    const blocale = convertType(b[orderBy]);
+    if (typeof firstElem === "undefined") return !orderDesc ? 1 : -1;
+    if (typeof secondElem === "undefined") return !orderDesc ? -1 : 1;
 
     if (!orderDesc) {
-      return alocale.localeCompare(blocale, "en", {
-        numeric: isNumber(b[orderBy]),
-      });
+      return firstElem < secondElem ? -1 : firstElem > secondElem ? 1 : 0;
     } else {
-      return blocale.localeCompare(alocale, "en", {
-        numeric: isNumber(a[orderBy]),
-      });
+      return firstElem < secondElem ? 1 : firstElem > secondElem ? -1 : 0;
     }
   });
 };
 
-export const filterRows = (rows: SegEntity[], filters) => {
+export const filterRows = (rows: SegEntity[], filters: Filters) => {
   if (isEmpty(filters)) return [...rows];
 
   return rows.filter((row) => {
-    return Object.keys(filters).every((accessor) => {
-      const value = row[accessor];
-      const searchValue = filters[accessor];
+    return Object.keys(filters).every(
+      (accessor: EntityName | MinMaxAccessor) => {
+        const value = row[accessor];
+        const searchValue: string | [string, string] = filters[accessor];
 
-      if (isString(value)) {
-        return toLower(value).includes(toLower(searchValue));
-      }
-      if (isNumber(value)) {
-        return value <= searchValue[1] && value >= searchValue[0];
-      }
+        const isValueString = typeof value === "string";
+        const isSearchValueString = typeof searchValue === "string";
 
-      return false;
-    });
+        if (isValueString && isSearchValueString) {
+          return value.toLowerCase().includes(searchValue.toLowerCase());
+        } else {
+          const isValueNumber = typeof value === "number";
+          const isSearchValueNumbers = Array.isArray(searchValue);
+          const isMinNumber =
+            isSearchValueNumbers &&
+            searchValue[0] &&
+            !isNaN(parseInt(searchValue[0]));
+          const isMaxNumber =
+            isSearchValueNumbers &&
+            searchValue[1] &&
+            !isNaN(parseInt(searchValue[1]));
+
+          if (
+            isValueNumber &&
+            isSearchValueNumbers &&
+            isMinNumber &&
+            isMaxNumber
+          ) {
+            return (
+              value <= parseInt(searchValue[1]) &&
+              value >= parseInt(searchValue[0])
+            );
+          }
+        }
+
+        return false;
+      }
+    );
   });
 };

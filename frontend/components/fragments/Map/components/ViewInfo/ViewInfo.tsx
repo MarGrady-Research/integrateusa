@@ -5,13 +5,13 @@ import clsx from "clsx";
 import SummaryPie from "../SummaryPie";
 
 import { root } from "./ViewInfo.module.scss";
-import { MapboxGeoJSONFeature } from "mapbox-gl";
+import { MapboxGeoJSONFeatureExtended } from "interfaces";
 
 interface Props {
-  renderedFeatures: MapboxGeoJSONFeature[];
+  renderedFeatures: MapboxGeoJSONFeatureExtended[];
 }
 
-const getViewInfo = (renderedFeatures: MapboxGeoJSONFeature[]) => {
+const getViewInfo = (renderedFeatures: MapboxGeoJSONFeatureExtended[]) => {
   let studentsTotal = 0;
   let asianTotal = 0;
   let blackTotal = 0;
