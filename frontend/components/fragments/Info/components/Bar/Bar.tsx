@@ -61,16 +61,31 @@ interface SortButtonProps {
   className: string;
 }
 
+interface SchoolData {
+  prop: number;
+  county_name: string;
+  dist_name: string;
+}
+
 const getBarData = (data: School[]) => {
-  const asianData: number[] = [];
-  const blackData: number[] = [];
-  const hispanicData: number[] = [];
-  const whiteData: number[] = [];
-  const otherData: number[] = [];
+  const asianData: SchoolData[] = [];
+  const blackData: SchoolData[] = [];
+  const hispanicData: SchoolData[] = [];
+  const whiteData: SchoolData[] = [];
+  const otherData: SchoolData[] = [];
   const labels: string[] = [];
 
   for (const school of data) {
-    const { asian, black, hispanic, white, other, sch_name } = school;
+    const {
+      asian,
+      black,
+      hispanic,
+      white,
+      other,
+      sch_name,
+      county_name,
+      dist_name,
+    } = school;
 
     const tot_enr = asian + black + hispanic + white + other;
 
@@ -80,11 +95,11 @@ const getBarData = (data: School[]) => {
     const prop_wh = (white * 100) / tot_enr;
     const prop_or = (other * 100) / tot_enr;
 
-    asianData.push(prop_as);
-    blackData.push(prop_bl);
-    hispanicData.push(prop_hi);
-    whiteData.push(prop_wh);
-    otherData.push(prop_or);
+    asianData.push({ prop: prop_as, county_name, dist_name });
+    blackData.push({ prop: prop_bl, county_name, dist_name });
+    hispanicData.push({ prop: prop_hi, county_name, dist_name });
+    whiteData.push({ prop: prop_wh, county_name, dist_name });
+    otherData.push({ prop: prop_or, county_name, dist_name });
     labels.push(sch_name);
   }
 
@@ -127,6 +142,10 @@ const getPropData = (school: School, sortBy: RacialProportion): number => {
 };
 
 const options = {
+  parsing: {
+    xAxisKey: "prop",
+    yAxisKey: "prop",
+  },
   plugins: {
     legend: {
       display: false,
@@ -135,10 +154,17 @@ const options = {
       enabled: true,
       display: true,
       callbacks: {
-        label: (context: TooltipItem<any>) => {
-          const label = context.dataset.data[context.dataIndex];
+        afterTitle: (tooltipItems: TooltipItem<any>[]) => {
+          const { dist_name, county_name } = tooltipItems[0].raw as {
+            dist_name: string;
+            county_name: string;
+          };
+          return `${dist_name}\n${county_name}`;
+        },
+        label: (tooltipItem: TooltipItem<any>) => {
+          const label = tooltipItem.dataset.data[tooltipItem.dataIndex].prop;
           return (
-            context.dataset.label + " " + parseFloat(label).toFixed(1) + "%"
+            tooltipItem.dataset.label + " " + parseFloat(label).toFixed(1) + "%"
           );
         },
       },

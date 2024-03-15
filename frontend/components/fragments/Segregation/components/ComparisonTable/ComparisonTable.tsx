@@ -439,7 +439,7 @@ export default function ComparisonTable({
         }}
         sx={{
           "&.Mui-checked": {
-            color: !isSelectedRow ? selectedLineColor : "inherit",
+            color: !isSelectedRow ? selectedLineColor : "",
           },
         }}
       />
@@ -514,7 +514,7 @@ export default function ComparisonTable({
                 <TableCell
                   key={column.accessor}
                   className={clsx("text-sm text-left", {
-                    "!text-line-selected": isSelectedRow,
+                    "!text-line-selected !font-semibold": isSelectedRow,
                   })}
                 >
                   {row[column.accessor]}
@@ -533,7 +533,7 @@ export default function ComparisonTable({
                 <TableCell
                   key={column.accessor}
                   className={clsx("text-sm !text-center", {
-                    "!text-line-selected": isSelectedRow,
+                    "!text-line-selected !font-semibold": isSelectedRow,
                   })}
                 >
                   {valueString}
