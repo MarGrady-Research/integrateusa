@@ -18,7 +18,7 @@ import { useBreakpointRegion } from "hooks";
 
 import { Level } from "interfaces";
 
-import { animate, skeleton } from "./Selection.module.scss";
+import { animate } from "./Selection.module.scss";
 
 import constants from "styles/_constants.module.scss";
 
@@ -80,28 +80,28 @@ export default function Selection({ omitSchools }: Props) {
             labelPrefix={prefix}
           />
         ) : (
-          <Skeleton variant="rounded" className={skeleton} />
+          <Skeleton variant="rounded" height={39} />
         )}
       </div>
       <div className="w-full mb-3 lg:mb-0">
         {rehydrated ? (
           <SearchSelect level={level} />
         ) : (
-          <Skeleton variant="rounded" className={skeleton} />
+          <Skeleton variant="rounded" height={39} />
         )}
       </div>
       <div className="w-full mb-3 lg:mb-0">
         {rehydrated ? (
           <YearSelect labelPrefix={prefix} />
         ) : (
-          <Skeleton variant="rounded" className={skeleton} />
+          <Skeleton variant="rounded" height={39} />
         )}
       </div>
       <div className="w-full mb-0">
         {rehydrated ? (
           <GradeSelect labelPrefix={prefix} />
         ) : (
-          <Skeleton variant="rounded" className={skeleton} />
+          <Skeleton variant="rounded" height={39} />
         )}
       </div>
     </>
