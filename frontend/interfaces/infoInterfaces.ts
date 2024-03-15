@@ -2,6 +2,8 @@ export type TrendData = School[] | Trend[];
 
 export interface School {
   sch_name: string;
+  dist_name: string;
+  county_name: string;
   nces_id: string;
   asian: number;
   black: number;
