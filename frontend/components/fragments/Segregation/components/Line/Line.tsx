@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import { Line as LineChart } from "react-chartjs-2";
 import CircularProgress from "@mui/material/CircularProgress";
+import Skeleton from "@mui/material/Skeleton";
 import ErrorIcon from "@mui/icons-material/Error";
 import clsx from "clsx";
 
@@ -32,6 +33,7 @@ import {
 } from "interfaces";
 
 import { selectLineData } from "store/apiCacheSlice";
+import { selectRehydrated } from "store/hydrateSlice";
 
 import { container } from "./Line.module.scss";
 
@@ -158,6 +160,8 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
     datasets: graphData,
   };
 
+  const rehydrated = useSelector(selectRehydrated);
+
   const legend = (
     <div className="flex flex-wrap justify-center text-sm">
       {lines.map((l) => {
@@ -191,7 +195,7 @@ const LineGraph = memo(({ lines, id, year, grade, measure }: Props) => {
               {isLoading && <CircularProgress color="inherit" size={14} />}
               {hasFailed && <ErrorIcon color="error" fontSize="medium" />}
             </div>
-            {l.name}
+            {rehydrated ? l.name : <Skeleton width={50} />}
           </div>
         );
       })}

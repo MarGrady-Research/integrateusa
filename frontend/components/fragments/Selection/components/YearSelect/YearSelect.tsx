@@ -2,14 +2,14 @@ import React from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useDispatch, useSelector } from "react-redux";
 
-import Select from "components/atoms/Select";
-
-import { yearsData } from "../../data";
-
 import { selectLevel, selectYear, setYear } from "store/selectSlice";
 import { AppDispatch } from "store/store";
 
 import { Level } from "interfaces";
+
+import Select from "components/atoms/Select";
+
+import { yearsData } from "../../data";
 
 interface Props {
   labelPrefix?: string;

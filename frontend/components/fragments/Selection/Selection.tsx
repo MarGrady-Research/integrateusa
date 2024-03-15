@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
 import { useSelector } from "react-redux";
 import { useWindowScroll } from "@uidotdev/usehooks";
 import clsx from "clsx";
@@ -11,12 +12,13 @@ import YearSelect from "./components/YearSelect";
 import GradeSelect from "./components/GradeSelect";
 
 import { selectLevel } from "store/selectSlice";
+import { selectRehydrated } from "store/hydrateSlice";
 
 import { useBreakpointRegion } from "hooks";
 
 import { Level } from "interfaces";
 
-import { animate } from "./Selection.module.scss";
+import { animate, skeleton } from "./Selection.module.scss";
 
 import constants from "styles/_constants.module.scss";
 
@@ -65,24 +67,42 @@ export default function Selection({ omitSchools }: Props) {
   const topOffset = Math.max(0, navbarHeight - (y || 0));
   const translateY = expanded ? 0 : -selectsHeight;
 
+  const rehydrated = useSelector(selectRehydrated);
+
   const selects = (prefix = "") => (
     <>
       <div className="w-full mb-3 lg:mb-0">
-        <LevelSelect
-          omitSchools={omitSchools}
-          level={level}
-          handleLevelChange={handleLevelChange}
-          labelPrefix={prefix}
-        />
+        {rehydrated ? (
+          <LevelSelect
+            omitSchools={omitSchools}
+            level={level}
+            handleLevelChange={handleLevelChange}
+            labelPrefix={prefix}
+          />
+        ) : (
+          <Skeleton variant="rounded" className={skeleton} />
+        )}
       </div>
       <div className="w-full mb-3 lg:mb-0">
-        <SearchSelect level={level} />
+        {rehydrated ? (
+          <SearchSelect level={level} />
+        ) : (
+          <Skeleton variant="rounded" className={skeleton} />
+        )}
       </div>
       <div className="w-full mb-3 lg:mb-0">
-        <YearSelect labelPrefix={prefix} />
+        {rehydrated ? (
+          <YearSelect labelPrefix={prefix} />
+        ) : (
+          <Skeleton variant="rounded" className={skeleton} />
+        )}
       </div>
       <div className="w-full mb-0">
-        <GradeSelect labelPrefix={prefix} />
+        {rehydrated ? (
+          <GradeSelect labelPrefix={prefix} />
+        ) : (
+          <Skeleton variant="rounded" className={skeleton} />
+        )}
       </div>
     </>
   );

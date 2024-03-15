@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
+import Skeleton from "@mui/material/Skeleton";
 import Alert from "@mui/material/Alert";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import RotateRightRoundedIcon from "@mui/icons-material/RotateRightRounded";
@@ -26,6 +27,8 @@ import {
   selectGrade,
   selectSelectedName,
 } from "store/selectSlice";
+import { selectRehydrated } from "store/hydrateSlice";
+
 import { Level, School, SchoolInfo } from "interfaces";
 
 import { exportRaceBreakdown } from "excel";
@@ -92,6 +95,8 @@ export default function Info({
     setSnackbarOpen(false);
   };
 
+  const rehydrated = useSelector(selectRehydrated);
+
   return (
     <>
       <Snackbar
@@ -109,7 +114,9 @@ export default function Info({
           There was an error downloading the data. Please try again.
         </Alert>
       </Snackbar>
-      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">{title}</h1>
+      <h1 className="text-3xl lg:text-4xl font-semibold mb-5">
+        {rehydrated ? title : <Skeleton width={150} />}
+      </h1>
       <h2 className="text-2xl font-medium mb-4">Overview</h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-10 lg:gap-5 mb-10">
         <div className={clsx("hidden lg:block", container)}>

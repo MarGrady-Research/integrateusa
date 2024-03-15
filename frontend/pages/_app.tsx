@@ -1,15 +1,12 @@
 import React from "react";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { Chart as ChartJS } from "chart.js";
 import axios from "axios";
 
 import { wrapper, makeStore } from "../store/store";
 import { theme } from "../styles/materialTheme";
-
-import Loader from "../components/fragments/Loader";
 
 import "../styles/global.scss";
 import Header from "components/fragments/Header";
@@ -28,21 +25,12 @@ function MyApp({ Component, ...rest }: AppProps) {
 
   return (
     <Provider store={store}>
-      <PersistGate
-        persistor={(store as any).__persistor}
-        loading={
-          <div className="flex items-center justify-center h-screen">
-            <Loader />
-          </div>
-        }
-      >
-        <ThemeProvider theme={theme}>
-          <main className="flex flex-col min-h-screen">
-            <Header />
-            <Component {...pageProps} />
-          </main>
-        </ThemeProvider>
-      </PersistGate>
+      <ThemeProvider theme={theme}>
+        <main className="flex flex-col min-h-screen">
+          <Header />
+          <Component {...pageProps} />
+        </main>
+      </ThemeProvider>
     </Provider>
   );
 }
