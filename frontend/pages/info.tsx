@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios, { AxiosError } from "axios";
 
@@ -39,13 +39,17 @@ import { Level, ApiStatus, School, TrendData, SchoolInfo } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
-const paramsInfo =
-  typeof window === "undefined" ? null : getParamsInfo(window.location.href);
-
 export default function InfoPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   const [paramsChecked, setParamsChecked] = useState(false);
+
+  const paramsInfo = useMemo(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    return getParamsInfo(window.location.href);
+  }, []);
 
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
@@ -138,6 +142,8 @@ export default function InfoPage() {
     if (paramsChecked) {
       return;
     }
+
+    const paramsInfo = getParamsInfo(window.location.href);
 
     if (paramsInfo) {
       dispatch(setStateFromParams(paramsInfo));

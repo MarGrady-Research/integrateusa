@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios, { AxiosError } from "axios";
 
@@ -29,13 +29,18 @@ import { ApiStatus, Level, SegEntity } from "interfaces";
 
 import { getParamsInfo } from "utils";
 
-const paramsInfo =
-  typeof window === "undefined" ? null : getParamsInfo(window.location.href);
-
 export default function SegregationPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   const [paramsChecked, setParamsChecked] = useState(false);
+
+  const paramsInfo = useMemo(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    return getParamsInfo(window.location.href);
+  }, []);
 
   const level = useSelector(selectLevel);
   const year = useSelector(selectYear);
@@ -91,7 +96,7 @@ export default function SegregationPage() {
       dispatch(setStateFromParams(paramsInfo));
     }
     setParamsChecked(true);
-  }, [dispatch, paramsChecked]);
+  }, [dispatch, paramsChecked, paramsInfo]);
 
   useEffect(() => {
     if (isSchoolLevel) {
