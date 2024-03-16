@@ -55,37 +55,37 @@ export default function SchoolInfo({
   }
 
   const schoolName = isSchoolInfoLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <>{school_name}</>
   );
 
   const districtName = isSchoolInfoLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <>{district_name}</>
   );
 
   const stateName = isSchoolInfoLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <>{state}</>
   );
 
   const schoolLevel = isInfoDataLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <> {level_str}</>
   );
 
   const enrollment = isInfoDataLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <> {tot_enr_str}</>
   );
 
   const enrollmentYears = isSchoolInfoLoading ? (
-    <Skeleton variant="text" className="!inline-block w-32" />
+    <Skeleton className="!inline-block w-32" />
   ) : (
     <> {years}</>
   );

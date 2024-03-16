@@ -78,6 +78,7 @@ export default function Header() {
                 src={IntegrateUSALogo}
                 alt="IntegrateUSA logo"
                 width={200}
+                priority
               />
               <span className="text-sm sm:text-base absolute bottom-1 sm:bottom-0 right-0.5 sm:right-0 text-red-600">
                 beta
@@ -93,6 +94,7 @@ export default function Header() {
                 src={MarGradyLogoText}
                 alt="MarGrady Logo"
                 width={250}
+                priority
                 style={{ height: "auto", width: "auto" }}
               />
             </a>

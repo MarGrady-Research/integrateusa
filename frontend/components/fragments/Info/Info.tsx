@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
-import Snackbar from "@mui/material/Snackbar";
 import Skeleton from "@mui/material/Skeleton";
-import Alert from "@mui/material/Alert";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import RotateRightRoundedIcon from "@mui/icons-material/RotateRightRounded";
 import clsx from "clsx";
+
+const Snackbar = dynamic(() => import("@mui/material/Snackbar"));
+const Alert = dynamic(() => import("@mui/material/Alert"));
 
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
@@ -128,7 +129,9 @@ export default function Info({
           />
         </div>
         <div className={clsx(tableContainer, "col-span-2")}>
-          {isSchool ? (
+          {!rehydrated ? (
+            <Skeleton variant="rectangular" className="h-full" />
+          ) : isSchool ? (
             <SchoolInfoComponent
               infoData={infoData}
               isInfoDataLoading={isInfoDataLoading}
@@ -152,7 +155,7 @@ export default function Info({
           />
         </div>
       </div>
-      {!isSchool && (
+      {rehydrated && !isSchool && (
         <div className="mb-10">
           <div className="mb-4 flex items-center">
             <h2 className="text-2xl font-medium mr-2">
