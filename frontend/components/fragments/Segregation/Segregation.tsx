@@ -2,7 +2,16 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
+import dynamic from "next/dynamic";
 import axios, { AxiosError } from "axios";
+
+const IconButton = dynamic(() => import("@mui/material/IconButton"));
+const DownloadRoundedIcon = dynamic(
+  () => import("@mui/icons-material/DownloadRounded")
+);
+const RotateRightRoundedIcon = dynamic(
+  () => import("@mui/icons-material/RotateRightRounded")
+);
 
 import SegBar from "./components/Bar";
 import Info from "./components/Info";
@@ -20,9 +29,9 @@ import {
   setLineDataRequest,
   setLineDataSuccess,
   setLineDataFailure,
+  selectLineData,
 } from "store/apiCacheSlice";
 import { selectRehydrated } from "store/hydrateSlice";
-
 import { AppDispatch } from "store/store";
 
 import {
@@ -31,12 +40,16 @@ import {
   Level,
   MeasureAccessor,
   LineDataAPI,
+  ApiStatus,
 } from "interfaces";
+
+import { exportSegregationTrends, exportComparisonEntities } from "excel/excel";
 
 interface Props {
   segData: SegEntity[];
   isLoading: boolean;
   hasFailed: boolean;
+  setSnackbarOpen: (open: boolean) => void;
 }
 
 const options = [
@@ -94,7 +107,12 @@ const findFocus = (segData: SegEntity[], id: string) => {
   return null;
 };
 
-export default function Segregation({ segData, isLoading, hasFailed }: Props) {
+export default function Segregation({
+  segData,
+  isLoading,
+  hasFailed,
+  setSnackbarOpen,
+}: Props) {
   const dispatch = useDispatch<AppDispatch>();
 
   const grade = useSelector(selectGrade);
@@ -102,6 +120,36 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
   const id = useSelector(selectId);
   const name = useSelector(selectSelectedName);
   const level = useSelector(selectLevel);
+
+  const [downloadingSegregationTrends, setDownloadingSegregationTrends] =
+    useState(false);
+
+  const downloadSegregationTrends = async () => {
+    setDownloadingSegregationTrends(true);
+
+    const downloaded = await exportSegregationTrends();
+
+    setDownloadingSegregationTrends(false);
+
+    if (!downloaded) {
+      setSnackbarOpen(true);
+    }
+  };
+
+  const [downloadingComparisonEntities, setDownloadingComparisonEntities] =
+    useState(false);
+
+  const downloadComparisonEntities = async () => {
+    setDownloadingComparisonEntities(true);
+
+    const downloaded = await exportComparisonEntities();
+
+    setDownloadingComparisonEntities(false);
+
+    if (!downloaded) {
+      setSnackbarOpen(true);
+    }
+  };
 
   const [selected, setSelected] = useState(defaultOption);
 
@@ -249,6 +297,23 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
       break;
   }
 
+  const lineDataStore = useSelector(selectLineData);
+
+  const linesLoadingArray = lines.map((l) => {
+    const lineKey = `${grade}-${l.id}`;
+    const lineKeyCache = lineDataStore[lineKey];
+    const isLineKeyCached = typeof lineKeyCache !== "undefined";
+    const lineDataCache = isLineKeyCached ? lineKeyCache.data : null;
+    const isLineDataCached = typeof lineDataCache !== "undefined";
+
+    const isLoading =
+      !isLineKeyCached ||
+      (!isLineDataCached && lineKeyCache.status !== ApiStatus.Failure);
+
+    return isLoading;
+  });
+  const linesLoading = linesLoadingArray.every(Boolean);
+
   const rehydrated = useSelector(selectRehydrated);
 
   return (
@@ -270,7 +335,25 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         />
         <SegBar focus={focus} isLoading={isLoading} hasFailed={hasFailed} />
       </div>
-      <h2 className="text-2xl font-medium mb-4">Segregation Trends</h2>
+      <div className="mb-4 flex items-center">
+        <h2 className="text-2xl font-medium mr-2">Segregation Trends</h2>
+        {!linesLoading && (
+          <IconButton
+            size="small"
+            aria-label="Download Segregation Trends data"
+            onClick={downloadSegregationTrends}
+          >
+            {downloadingSegregationTrends ? (
+              <RotateRightRoundedIcon
+                fontSize="inherit"
+                className="animate-spin"
+              />
+            ) : (
+              <DownloadRoundedIcon fontSize="inherit" />
+            )}
+          </IconButton>
+        )}
+      </div>
       <LineGraph
         lines={lines}
         measure={measure}
@@ -278,9 +361,27 @@ export default function Segregation({ segData, isLoading, hasFailed }: Props) {
         year={year}
         grade={grade}
       />
-      <h2 className="text-2xl font-medium mb-4">
-        {rehydrated ? comparisonText : <Skeleton width={200} />}
-      </h2>
+      <div className="mb-4 flex items-center">
+        <h2 className="text-2xl font-medium mr-2">
+          {rehydrated ? comparisonText : <Skeleton width={200} />}
+        </h2>
+        {!isLoading && (
+          <IconButton
+            size="small"
+            aria-label={`Download ${comparisonText} data`}
+            onClick={downloadComparisonEntities}
+          >
+            {downloadingComparisonEntities ? (
+              <RotateRightRoundedIcon
+                fontSize="inherit"
+                className="animate-spin"
+              />
+            ) : (
+              <DownloadRoundedIcon fontSize="inherit" />
+            )}
+          </IconButton>
+        )}
+      </div>
       <ComparisonTable
         id={id}
         segData={segData}

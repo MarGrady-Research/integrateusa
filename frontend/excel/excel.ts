@@ -355,3 +355,11 @@ export const exportTrendsByGrade = async (
     return false;
   }
 };
+
+export const exportSegregationTrends = async () => {
+  return false;
+};
+
+export const exportComparisonEntities = async () => {
+  return false;
+};
