@@ -146,3 +146,7 @@ export const exportRaceBreakdown = async (
     return false;
   }
 };
+
+export const exportTrendsByRace = async () => {
+  return false;
+};
