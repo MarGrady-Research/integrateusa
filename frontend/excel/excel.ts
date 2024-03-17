@@ -1,10 +1,12 @@
 import * as ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-import { School, Level, Trend } from "interfaces";
+import { School, Level, Trend, MeasureAccessor, LineDataAPI } from "interfaces";
 
 import { yearsData, gradesData } from "components/fragments/Selection/data";
 import { gradesTableData } from "components/fragments/Trends/data";
+
+import { selectedLineColor } from "constants/constants";
 
 export const exportRaceBreakdown = async (
   infoData: School[],
@@ -302,11 +304,7 @@ export const exportTrendsByGrade = async (
   sheet.getRow(1).font = { bold: true };
 
   yearsData.map((year) => {
-    const row = {} as {
-      year: string;
-    };
-
-    row.year = year.label;
+    const row = { year: year.label };
 
     gradesTableData.map((grade) => {
       let content = "-";
@@ -356,8 +354,111 @@ export const exportTrendsByGrade = async (
   }
 };
 
-export const exportSegregationTrends = async () => {
-  return false;
+export const exportSegregationTrends = async (
+  linesData: (LineDataAPI[] | null)[],
+  grade: string,
+  level: Level,
+  selectedName: string,
+  measure: {
+    name: string;
+    accessor: MeasureAccessor;
+  }
+) => {
+  const workbook = new ExcelJS.Workbook();
+
+  const date = new Date();
+
+  workbook.creator = "Margrady Research";
+  workbook.created = date;
+  workbook.modified = date;
+
+  workbook.views = [
+    {
+      x: 0,
+      y: 0,
+      width: 10000,
+      height: 20000,
+      firstSheet: 0,
+      activeTab: 1,
+      visibility: "visible",
+    },
+  ];
+
+  const sheet = workbook.addWorksheet("Segregation Trends");
+
+  sheet.columns = [{ header: "Name", key: "name", width: 40 }].concat(
+    yearsData.reverse().map((y) => ({
+      header: y.value.toString(),
+      key: y.value.toString(),
+      width: 14,
+    }))
+  );
+
+  sheet.getRow(1).font = { bold: true };
+
+  const rowBase = {};
+
+  yearsData.reverse().forEach((y) => {
+    rowBase[y.value.toString()] = "-";
+  });
+
+  linesData.forEach((ld) => {
+    if (ld && ld[0]) {
+      console.log(ld);
+      const row = {
+        name: ld[0]?.county_name || ld[0]?.dist_name || ld[0]?.state_name,
+        ...rowBase,
+      };
+
+      if (typeof row.name === "undefined") {
+        return;
+      }
+
+      ld?.forEach((line) => {
+        row[line.year.toString()] = line[measure.accessor];
+      });
+
+      const lineRow = sheet.addRow(row);
+      if (row.name === selectedName) {
+        lineRow.font = { color: { argb: selectedLineColor.slice(1) } };
+      }
+    }
+  });
+
+  const titleRow = sheet.insertRow(1, ["Segregation Trends"]);
+  titleRow.font = { size: 16, bold: true };
+
+  const name = `${Level[level]}: ${selectedName}`;
+  sheet.insertRow(2, [name]);
+
+  const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedGradeLabel = selectedGrade?.label || "-";
+  const gradeRow = `Grade: ${selectedGradeLabel}`;
+  sheet.insertRow(3, [gradeRow]);
+
+  const measureRow = `Measure: ${measure.name}`;
+  sheet.insertRow(4, [measureRow]);
+
+  sheet.insertRow(5, [
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+  ]);
+
+  sheet.insertRow(6, []);
+
+  const fileName = `Segregation Trends for ${Level[level]} ${selectedName} for ${measure.name} for ${selectedGradeLabel}`;
+
+  try {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const EXCEL_EXTENSION = ".xlsx";
+    const blob = new Blob([buffer], { type: fileType });
+
+    saveAs(blob, fileName + EXCEL_EXTENSION);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 export const exportComparisonEntities = async () => {

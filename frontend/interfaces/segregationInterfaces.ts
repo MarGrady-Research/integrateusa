@@ -47,6 +47,9 @@ export interface LineDataAPI {
   norm_exp_or: number;
   norm_exp_wh: number;
   year: number;
+  dist_name?: string;
+  county_name?: string;
+  state_name?: string;
 }
 
 export interface LineDataProcessed {

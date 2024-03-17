@@ -121,36 +121,6 @@ export default function Segregation({
   const name = useSelector(selectSelectedName);
   const level = useSelector(selectLevel);
 
-  const [downloadingSegregationTrends, setDownloadingSegregationTrends] =
-    useState(false);
-
-  const downloadSegregationTrends = async () => {
-    setDownloadingSegregationTrends(true);
-
-    const downloaded = await exportSegregationTrends();
-
-    setDownloadingSegregationTrends(false);
-
-    if (!downloaded) {
-      setSnackbarOpen(true);
-    }
-  };
-
-  const [downloadingComparisonEntities, setDownloadingComparisonEntities] =
-    useState(false);
-
-  const downloadComparisonEntities = async () => {
-    setDownloadingComparisonEntities(true);
-
-    const downloaded = await exportComparisonEntities();
-
-    setDownloadingComparisonEntities(false);
-
-    if (!downloaded) {
-      setSnackbarOpen(true);
-    }
-  };
-
   const [selected, setSelected] = useState(defaultOption);
 
   const handleChange = (e: SelectChangeEvent) => {
@@ -283,6 +253,56 @@ export default function Segregation({
     setLines([{ id, name }]);
   };
 
+  const [downloadingSegregationTrends, setDownloadingSegregationTrends] =
+    useState(false);
+
+  const downloadSegregationTrends = async () => {
+    setDownloadingSegregationTrends(true);
+
+    const linesData = lines.map((line) => {
+      const lineKey = `${grade}-${line.id}`;
+      const lineKeyCache = lineDataStore[lineKey];
+      const isLineKeyCached = typeof lineKeyCache !== "undefined";
+      const lineDataCache = isLineKeyCached ? lineKeyCache.data : null;
+      const isLineDataCached = typeof lineDataCache !== "undefined";
+
+      if (isLineDataCached && lineDataCache) {
+        return lineDataCache;
+      }
+
+      return null;
+    });
+
+    const downloaded = await exportSegregationTrends(
+      linesData,
+      grade,
+      level,
+      name,
+      measure
+    );
+
+    setDownloadingSegregationTrends(false);
+
+    if (!downloaded) {
+      setSnackbarOpen(true);
+    }
+  };
+
+  const [downloadingComparisonEntities, setDownloadingComparisonEntities] =
+    useState(false);
+
+  const downloadComparisonEntities = async () => {
+    setDownloadingComparisonEntities(true);
+
+    const downloaded = await exportComparisonEntities();
+
+    setDownloadingComparisonEntities(false);
+
+    if (!downloaded) {
+      setSnackbarOpen(true);
+    }
+  };
+
   let comparisonText = "";
 
   switch (level) {
@@ -312,7 +332,8 @@ export default function Segregation({
 
     return isLoading;
   });
-  const linesLoading = linesLoadingArray.every(Boolean);
+
+  const linesLoading = linesLoadingArray.some(Boolean);
 
   const rehydrated = useSelector(selectRehydrated);
 
