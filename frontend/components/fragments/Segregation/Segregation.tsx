@@ -78,7 +78,7 @@ const options = [
     non: "exp_non_or_or",
   },
   {
-    value: "norm_exp_wh",
+    value: "",
     label: "White",
     iso: "exp_wh_wh",
     non: "exp_non_wh_wh",
@@ -294,7 +294,13 @@ export default function Segregation({
   const downloadComparisonEntities = async () => {
     setDownloadingComparisonEntities(true);
 
-    const downloaded = await exportComparisonEntities();
+    const downloaded = await exportComparisonEntities(
+      segData,
+      year,
+      grade,
+      level,
+      name
+    );
 
     setDownloadingComparisonEntities(false);
 
