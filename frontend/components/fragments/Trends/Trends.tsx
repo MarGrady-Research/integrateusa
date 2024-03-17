@@ -8,7 +8,12 @@ import BarChart from "./components/Bar";
 import BarChart100 from "./components/Bar100";
 import TableYearGrade from "./components/TableYearGrade";
 
-import { selectGrade, selectYear } from "store/selectSlice";
+import {
+  selectGrade,
+  selectLevel,
+  selectSelectedName,
+  selectYear,
+} from "store/selectSlice";
 
 import { TrendData } from "interfaces";
 
@@ -29,13 +34,20 @@ export default function Trends({
 }: Props) {
   const grade = useSelector(selectGrade);
   const year = useSelector(selectYear);
+  const level = useSelector(selectLevel);
+  const selectedName = useSelector(selectSelectedName);
 
   const [downloadingTrendsByRace, setDownloadingTrendsByRace] = useState(false);
 
   const downloadTrendsByRace = async () => {
     setDownloadingTrendsByRace(true);
 
-    const downloaded = await exportTrendsByRace();
+    const downloaded = await exportTrendsByRace(
+      trendData,
+      grade,
+      level,
+      selectedName
+    );
 
     setDownloadingTrendsByRace(false);
 

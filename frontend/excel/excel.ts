@@ -1,7 +1,7 @@
 import * as ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-import { School, Level } from "interfaces";
+import { School, Level, Trend } from "interfaces";
 
 import { yearsData, gradesData } from "components/fragments/Selection/data";
 
@@ -73,7 +73,7 @@ export const exportRaceBreakdown = async (
       nces_id,
       dist_name,
       county_name,
-      level,
+      level: schoolLevel,
     } = school;
 
     const tot_enr = asian + black + hispanic + white + other;
@@ -89,7 +89,7 @@ export const exportRaceBreakdown = async (
       sch_name,
       dist_name,
       county_name,
-      level,
+      level: schoolLevel,
       asian,
       black,
       hispanic,
@@ -147,6 +147,118 @@ export const exportRaceBreakdown = async (
   }
 };
 
-export const exportTrendsByRace = async () => {
-  return false;
+export const exportTrendsByRace = async (
+  trendData: Trend[],
+  grade: string,
+  level: Level,
+  selectedName: string
+) => {
+  const sortedData = trendData
+    .filter((e) => e.grade === grade)
+    .sort((a, b) => a.year - b.year);
+
+  const workbook = new ExcelJS.Workbook();
+
+  const date = new Date();
+
+  workbook.creator = "Margrady Research";
+  workbook.created = date;
+  workbook.modified = date;
+
+  workbook.views = [
+    {
+      x: 0,
+      y: 0,
+      width: 10000,
+      height: 20000,
+      firstSheet: 0,
+      activeTab: 1,
+      visibility: "visible",
+    },
+  ];
+
+  const sheet = workbook.addWorksheet("Enrollment Trends by Race");
+
+  sheet.columns = [
+    { header: "Year", key: "year", width: 14 },
+    { header: "Asian Enrollment", key: "asian", width: 17 },
+    { header: "Black Enrollment", key: "black", width: 17 },
+    { header: "Hispanic Enrollment", key: "hispanic", width: 20 },
+    { header: "White Enrollment", key: "white", width: 17 },
+    { header: "Other Enrollment", key: "other", width: 17 },
+    { header: "Asian Proportion", key: "prop_as", width: 18 },
+    { header: "Black Proportion", key: "prop_bl", width: 18 },
+    {
+      header: "Hispanic Proportion",
+      key: "prop_hi",
+      width: 20,
+    },
+    { header: "White Proportion", key: "prop_wh", width: 18 },
+    { header: "Other Proportion", key: "prop_or", width: 18 },
+  ];
+  sheet.getRow(1).font = { bold: true };
+
+  for (const [index, trend] of sortedData.entries()) {
+    const { year, asian, black, hispanic, white, other } = trend;
+
+    const tot_enr = asian + black + hispanic + white + other;
+
+    const prop_as = (asian * 100) / tot_enr;
+    const prop_bl = (black * 100) / tot_enr;
+    const prop_hi = (hispanic * 100) / tot_enr;
+    const prop_wh = (white * 100) / tot_enr;
+    const prop_or = (other * 100) / tot_enr;
+
+    sheet.addRow({
+      year,
+      asian,
+      black,
+      hispanic,
+      white,
+      other,
+      prop_as,
+      prop_bl,
+      prop_hi,
+      prop_wh,
+      prop_or,
+    });
+
+    sheet.getCell(`G${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`H${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`I${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`J${index + 2}`).numFmt = "0.00";
+    sheet.getCell(`K${index + 2}`).numFmt = "0.00";
+  }
+
+  const titleRow = sheet.insertRow(1, ["Enrollment Trends by Race"]);
+  titleRow.font = { size: 16, bold: true };
+
+  const name = `${Level[level]}: ${selectedName}`;
+  sheet.insertRow(2, [name]);
+
+  const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedGradeLabel = selectedGrade?.label || "-";
+  const gradeRow = `Grade: ${selectedGradeLabel}`;
+  sheet.insertRow(3, [gradeRow]);
+
+  sheet.insertRow(4, [
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+  ]);
+
+  sheet.insertRow(5, []);
+
+  const fileName = `Enrollment Trends by Race for ${Level[level]} ${selectedName} for ${selectedGradeLabel}`;
+
+  try {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const EXCEL_EXTENSION = ".xlsx";
+    const blob = new Blob([buffer], { type: fileType });
+
+    saveAs(blob, fileName + EXCEL_EXTENSION);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
