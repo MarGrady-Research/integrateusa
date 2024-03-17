@@ -10,9 +10,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import ErrorIcon from "@mui/icons-material/Error";
 
+import { TrendData } from "interfaces";
+
 import { yearsData } from "../../../Selection/data";
 import { gradesTableData } from "../../data";
-import { TrendData } from "interfaces";
 
 import { headRow, contentRow, container } from "./TableYearGrade.module.scss";
 
@@ -63,7 +64,7 @@ export default function TableYearGrade({
 
   const toggleExpanded = () => setExpanded((e) => !e);
 
-  const tableHeader = (grades) => (
+  const tableHeader = (grades: { value: string; label: string }[]) => (
     <TableRow className={headRow}>
       <TableCell scope="col" />
       {grades.map((grade) => (
@@ -74,7 +75,7 @@ export default function TableYearGrade({
     </TableRow>
   );
 
-  const renderCell = (grade, year) => {
+  const renderCell = (grade: string, year: number) => {
     let content = "-";
 
     const trend = trendData.find((t) => t.year === year && t.grade === grade);

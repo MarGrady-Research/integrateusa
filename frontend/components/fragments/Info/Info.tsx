@@ -7,9 +7,6 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import RotateRightRoundedIcon from "@mui/icons-material/RotateRightRounded";
 import clsx from "clsx";
 
-const Snackbar = dynamic(() => import("@mui/material/Snackbar"));
-const Alert = dynamic(() => import("@mui/material/Alert"));
-
 import PieChart from "./components/Pie";
 import InsetMap from "./components/InsetMap";
 import SchoolLevelTable from "./components/SchoolLevelTable";
@@ -44,6 +41,7 @@ interface Props {
   schoolInfo: SchoolInfo[];
   isSchoolInfoLoading: boolean;
   hasSchoolInfoFailed: boolean;
+  setSnackbarOpen: (open: boolean) => void;
 }
 
 export default function Info({
@@ -54,6 +52,7 @@ export default function Info({
   schoolInfo,
   isSchoolInfoLoading,
   hasSchoolInfoFailed,
+  setSnackbarOpen,
 }: Props) {
   const id = useSelector(selectId);
   const bounds = useSelector(selectBounds);
@@ -64,8 +63,6 @@ export default function Info({
   const selectedName = useSelector(selectSelectedName);
 
   const isSchool = level === Level.School;
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const [downloadingRaceBreakdown, setDownloadingRaceBreakdown] =
     useState(false);
@@ -88,33 +85,10 @@ export default function Info({
     }
   };
 
-  const handleSnackbarClose = ({}, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackbarOpen(false);
-  };
-
   const rehydrated = useSelector(selectRehydrated);
 
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          There was an error downloading the data. Please try again.
-        </Alert>
-      </Snackbar>
       <h1 className="text-3xl lg:text-4xl font-semibold mb-5">
         {rehydrated ? title : <Skeleton width={150} />}
       </h1>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios, { AxiosError } from "axios";
+import dynamic from "next/dynamic";
+import Alert from "@mui/material/Alert";
+
+const Snackbar = dynamic(() => import("@mui/material/Snackbar"));
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
@@ -243,9 +247,29 @@ export default function InfoPage() {
     ? hasTrendDataFailed
     : hasInfoDataFailed;
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleSnackbarClose = (event: any, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
     <PersistorPage>
       <Head title="Info" desc="Demographic Information" />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error" variant="filled">
+          There was an error downloading the data. Please try again.
+        </Alert>
+      </Snackbar>
       <Selection />
       <Page className="mt-12 lg:mt-0">
         <Info
@@ -256,11 +280,13 @@ export default function InfoPage() {
           schoolInfo={schoolInfo}
           isSchoolInfoLoading={isSchoolInfoLoading}
           hasSchoolInfoFailed={hasSchoolInfoFailed}
+          setSnackbarOpen={setSnackbarOpen}
         />
         <Trends
           trendData={trendData || []}
           isLoading={isTrendDataLoading}
           hasFailed={hasTrendDataFailed}
+          setSnackbarOpen={setSnackbarOpen}
         />
       </Page>
       <Footer />
