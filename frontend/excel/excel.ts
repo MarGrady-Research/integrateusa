@@ -1,10 +1,19 @@
 import * as ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
-import { School, Level, Trend } from "interfaces";
+import {
+  School,
+  Level,
+  Trend,
+  MeasureAccessor,
+  LineDataAPI,
+  SegEntity,
+} from "interfaces";
 
 import { yearsData, gradesData } from "components/fragments/Selection/data";
 import { gradesTableData } from "components/fragments/Trends/data";
+
+import { selectedLineColor } from "constants/constants";
 
 export const exportRaceBreakdown = async (
   infoData: School[],
@@ -61,7 +70,6 @@ export const exportRaceBreakdown = async (
     { header: "White Proportion", key: "prop_wh", width: 18 },
     { header: "Other Proportion", key: "prop_or", width: 18 },
   ];
-  sheet.getRow(1).font = { bold: true };
 
   for (const [index, school] of sortedData.entries()) {
     const {
@@ -197,7 +205,6 @@ export const exportTrendsByRace = async (
     { header: "White Proportion", key: "prop_wh", width: 18 },
     { header: "Other Proportion", key: "prop_or", width: 18 },
   ];
-  sheet.getRow(1).font = { bold: true };
 
   for (const [index, trend] of sortedData.entries()) {
     const { year, asian, black, hispanic, white, other } = trend;
@@ -299,14 +306,8 @@ export const exportTrendsByGrade = async (
     }))
   );
 
-  sheet.getRow(1).font = { bold: true };
-
   yearsData.map((year) => {
-    const row = {} as {
-      year: string;
-    };
-
-    row.year = year.label;
+    const row = { year: year.label };
 
     gradesTableData.map((grade) => {
       let content = "-";
@@ -341,6 +342,264 @@ export const exportTrendsByGrade = async (
   sheet.insertRow(4, []);
 
   const fileName = `Enrollment Trends by Grade for ${Level[level]} ${selectedName}`;
+
+  try {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const EXCEL_EXTENSION = ".xlsx";
+    const blob = new Blob([buffer], { type: fileType });
+
+    saveAs(blob, fileName + EXCEL_EXTENSION);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const exportSegregationTrends = async (
+  linesData: (LineDataAPI[] | null)[],
+  grade: string,
+  level: Level,
+  selectedName: string,
+  measure: {
+    name: string;
+    accessor: MeasureAccessor;
+  }
+) => {
+  const workbook = new ExcelJS.Workbook();
+
+  const date = new Date();
+
+  workbook.creator = "Margrady Research";
+  workbook.created = date;
+  workbook.modified = date;
+
+  workbook.views = [
+    {
+      x: 0,
+      y: 0,
+      width: 10000,
+      height: 20000,
+      firstSheet: 0,
+      activeTab: 1,
+      visibility: "visible",
+    },
+  ];
+
+  const sheet = workbook.addWorksheet("Segregation Trends");
+
+  sheet.columns = [{ header: "Name", key: "name", width: 40 }].concat(
+    yearsData.reverse().map((y) => ({
+      header: y.value.toString(),
+      key: y.value.toString(),
+      width: 14,
+    }))
+  );
+
+  const rowBase = {};
+
+  yearsData.reverse().forEach((y) => {
+    rowBase[y.value.toString()] = "-";
+  });
+
+  linesData.forEach((ld) => {
+    if (ld && ld[0]) {
+      const row = {
+        name: ld[0]?.county_name || ld[0]?.dist_name || ld[0]?.state_name,
+        ...rowBase,
+      };
+
+      if (typeof row.name === "undefined") {
+        return;
+      }
+
+      ld?.forEach((line) => {
+        row[line.year.toString()] = line[measure.accessor];
+      });
+
+      const lineRow = sheet.addRow(row);
+      if (row.name === selectedName) {
+        lineRow.font = {
+          color: { argb: selectedLineColor.slice(1) },
+          bold: true,
+        };
+      }
+    }
+  });
+
+  const titleRow = sheet.insertRow(1, ["Segregation Trends"]);
+  titleRow.font = { size: 16, bold: true };
+
+  const name = `${Level[level]}: ${selectedName}`;
+  sheet.insertRow(2, [name]);
+
+  const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedGradeLabel = selectedGrade?.label || "-";
+  const gradeRow = `Grade: ${selectedGradeLabel}`;
+  sheet.insertRow(3, [gradeRow]);
+
+  const measureRow = `Measure: ${measure.name}`;
+  sheet.insertRow(4, [measureRow]);
+
+  sheet.insertRow(5, [
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+  ]);
+
+  sheet.insertRow(6, []);
+
+  const fileName = `Segregation Trends for ${Level[level]} ${selectedName} for ${measure.name} for ${selectedGradeLabel}`;
+
+  try {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const EXCEL_EXTENSION = ".xlsx";
+    const blob = new Blob([buffer], { type: fileType });
+
+    saveAs(blob, fileName + EXCEL_EXTENSION);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const exportComparisonEntities = async (
+  segData: SegEntity[],
+  year: number,
+  grade: string,
+  level: Level,
+  selectedName: string
+) => {
+  const workbook = new ExcelJS.Workbook();
+
+  const date = new Date();
+
+  workbook.creator = "Margrady Research";
+  workbook.created = date;
+  workbook.modified = date;
+
+  workbook.views = [
+    {
+      x: 0,
+      y: 0,
+      width: 10000,
+      height: 20000,
+      firstSheet: 0,
+      activeTab: 1,
+      visibility: "visible",
+    },
+  ];
+
+  let comparisonText = "";
+
+  switch (level) {
+    case Level.County:
+      comparisonText = "Comparison Counties";
+      break;
+    case Level.State:
+      comparisonText = "Comparison States";
+      break;
+    case Level.District:
+      comparisonText = "Comparison Districts";
+      break;
+  }
+
+  const sheet = workbook.addWorksheet(comparisonText);
+
+  sheet.columns = [
+    { header: "Name", key: "name", width: 50 },
+    { header: "Number of Schools", key: "num_schools", width: 20 },
+    { header: "Asian Proportion", key: "enr_prop_as", width: 18 },
+    { header: "Black Proportion", key: "enr_prop_bl", width: 18 },
+    {
+      header: "Hispanic Proportion",
+      key: "enr_prop_hi",
+      width: 20,
+    },
+    { header: "White Proportion", key: "enr_prop_wh", width: 18 },
+    { header: "Other Proportion", key: "enr_prop_or", width: 18 },
+    { header: "Asian Normalized Exposure", key: "norm_exp_as", width: 25 },
+    { header: "Black Normalized Exposure", key: "norm_exp_bl", width: 25 },
+    {
+      header: "Hispanic Normalized Exposure",
+      key: "norm_exp_hi",
+      width: 25,
+    },
+    { header: "White Normalized Exposure", key: "norm_exp_wh", width: 25 },
+    { header: "Other Normalized Exposure", key: "norm_exp_or", width: 25 },
+  ];
+
+  for (const segEntity of segData) {
+    const {
+      enr_prop_as,
+      enr_prop_bl,
+      enr_prop_hi,
+      enr_prop_wh,
+      enr_prop_or,
+      norm_exp_as,
+      norm_exp_bl,
+      norm_exp_hi,
+      norm_exp_wh,
+      norm_exp_or,
+      num_schools,
+      state_name,
+      county_name,
+      dist_name,
+    } = segEntity;
+
+    const name = state_name || county_name || dist_name;
+
+    if (typeof name === "undefined") {
+      continue;
+    }
+
+    const lineRow = sheet.addRow({
+      name,
+      num_schools,
+      enr_prop_as,
+      enr_prop_bl,
+      enr_prop_hi,
+      enr_prop_wh,
+      enr_prop_or,
+      norm_exp_as,
+      norm_exp_bl,
+      norm_exp_hi,
+      norm_exp_wh,
+      norm_exp_or,
+    });
+
+    if (name === selectedName) {
+      lineRow.font = {
+        color: { argb: selectedLineColor.slice(1) },
+        bold: true,
+      };
+    }
+  }
+
+  const titleRow = sheet.insertRow(1, [comparisonText]);
+  titleRow.font = { size: 16, bold: true };
+
+  const name = `${Level[level]}: ${selectedName}`;
+  sheet.insertRow(2, [name]);
+
+  const selectedYear = yearsData.find((y) => y.value === year);
+  const selectedYearLabel = selectedYear?.label || "-";
+  const yearRow = `Year: ${selectedYearLabel}`;
+  sheet.insertRow(3, [yearRow]);
+
+  const selectedGrade = gradesData.find((g) => g.value === grade);
+  const selectedGradeLabel = selectedGrade?.label || "-";
+  const gradeRow = `Grade: ${selectedGradeLabel}`;
+  sheet.insertRow(4, [gradeRow]);
+
+  sheet.insertRow(5, [
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+  ]);
+
+  sheet.insertRow(6, []);
+
+  const fileName = `${comparisonText} for ${Level[level]} ${selectedName} for ${selectedYearLabel} for ${selectedGradeLabel}`;
 
   try {
     const buffer = await workbook.xlsx.writeBuffer();

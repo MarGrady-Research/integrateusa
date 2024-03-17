@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios, { AxiosError } from "axios";
+import dynamic from "next/dynamic";
+import Alert from "@mui/material/Alert";
+
+const Snackbar = dynamic(() => import("@mui/material/Snackbar"));
 
 import Head from "components/fragments/Head";
 import Selection from "components/fragments/Selection";
@@ -127,15 +131,36 @@ export default function SegregationPage() {
     };
   }, [isSchoolLevel, year, grade, dispatch, idlevel, segKey]);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleSnackbarClose = (event: any, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
     <PersistorPage>
       <Head title="Segregation" desc="Segregation Metrics" />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error" variant="filled">
+          There was an error downloading the data. Please try again.
+        </Alert>
+      </Snackbar>
       <Selection omitSchools />
       <Page className="mt-12 lg:mt-0">
         <Segregation
           segData={segData}
           isLoading={isLoading}
           hasFailed={hasFailed}
+          setSnackbarOpen={setSnackbarOpen}
         />
       </Page>
       <Footer />
