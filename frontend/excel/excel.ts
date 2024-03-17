@@ -519,15 +519,15 @@ export const exportComparisonEntities = async (
     },
     { header: "White Proportion", key: "enr_prop_wh", width: 18 },
     { header: "Other Proportion", key: "enr_prop_or", width: 18 },
-    { header: "Asian Normalized Exposure", key: "norm_exp_as", width: 25 },
-    { header: "Black Normalized Exposure", key: "norm_exp_bl", width: 25 },
+    { header: "Asian Normalized Exposure", key: "norm_exp_as", width: 30 },
+    { header: "Black Normalized Exposure", key: "norm_exp_bl", width: 30 },
     {
       header: "Hispanic Normalized Exposure",
       key: "norm_exp_hi",
-      width: 25,
+      width: 30,
     },
-    { header: "White Normalized Exposure", key: "norm_exp_wh", width: 25 },
-    { header: "Other Normalized Exposure", key: "norm_exp_or", width: 25 },
+    { header: "White Normalized Exposure", key: "norm_exp_wh", width: 30 },
+    { header: "Other Normalized Exposure", key: "norm_exp_or", width: 30 },
   ];
 
   for (const segEntity of segData) {
