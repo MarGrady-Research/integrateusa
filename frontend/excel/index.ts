@@ -1,1 +1,5 @@
-export { exportRaceBreakdown, exportTrendsByRace } from "./excel";
+export {
+  exportRaceBreakdown,
+  exportTrendsByRace,
+  exportTrendsByGrade,
+} from "./excel";

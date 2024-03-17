@@ -17,7 +17,7 @@ import {
 
 import { TrendData } from "interfaces";
 
-import { exportTrendsByRace } from "excel";
+import { exportTrendsByGrade, exportTrendsByRace } from "excel";
 
 interface Props {
   trendData: TrendData;
@@ -50,6 +50,25 @@ export default function Trends({
     );
 
     setDownloadingTrendsByRace(false);
+
+    if (!downloaded) {
+      setSnackbarOpen(true);
+    }
+  };
+
+  const [downloadingTrendsByGrade, setDownloadingTrendsByGrade] =
+    useState(false);
+
+  const downloadTrendsByGrade = async () => {
+    setDownloadingTrendsByGrade(true);
+
+    const downloaded = await exportTrendsByGrade(
+      trendData,
+      level,
+      selectedName
+    );
+
+    setDownloadingTrendsByGrade(false);
 
     if (!downloaded) {
       setSnackbarOpen(true);
@@ -101,7 +120,27 @@ export default function Trends({
           </div>
         </div>
       </div>
-      <h2 className="text-2xl font-medium mb-4">Enrollment Trends by Grade</h2>
+      <div className="mb-4 flex items-center">
+        <h2 className="text-2xl font-medium mr-2">
+          Enrollment Trends by Grade
+        </h2>
+        {!isLoading && (
+          <IconButton
+            size="small"
+            aria-label="Download Enrollment Trends by Grade data"
+            onClick={downloadTrendsByGrade}
+          >
+            {downloadingTrendsByGrade ? (
+              <RotateRightRoundedIcon
+                fontSize="inherit"
+                className="animate-spin"
+              />
+            ) : (
+              <DownloadRoundedIcon fontSize="inherit" />
+            )}
+          </IconButton>
+        )}
+      </div>
       <TableYearGrade
         trendData={trendData}
         selectedGrade={grade}

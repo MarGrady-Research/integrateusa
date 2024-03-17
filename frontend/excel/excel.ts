@@ -4,6 +4,7 @@ import { saveAs } from "file-saver";
 import { School, Level, Trend } from "interfaces";
 
 import { yearsData, gradesData } from "components/fragments/Selection/data";
+import { gradesTableData } from "components/fragments/Trends/data";
 
 export const exportRaceBreakdown = async (
   infoData: School[],
@@ -248,6 +249,98 @@ export const exportTrendsByRace = async (
   sheet.insertRow(5, []);
 
   const fileName = `Enrollment Trends by Race for ${Level[level]} ${selectedName} for ${selectedGradeLabel}`;
+
+  try {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const EXCEL_EXTENSION = ".xlsx";
+    const blob = new Blob([buffer], { type: fileType });
+
+    saveAs(blob, fileName + EXCEL_EXTENSION);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const exportTrendsByGrade = async (
+  trendData: Trend[],
+  level: Level,
+  selectedName: string
+) => {
+  const workbook = new ExcelJS.Workbook();
+
+  const date = new Date();
+
+  workbook.creator = "Margrady Research";
+  workbook.created = date;
+  workbook.modified = date;
+
+  workbook.views = [
+    {
+      x: 0,
+      y: 0,
+      width: 10000,
+      height: 20000,
+      firstSheet: 0,
+      activeTab: 1,
+      visibility: "visible",
+    },
+  ];
+
+  const sheet = workbook.addWorksheet("Enrollment Trends by Grade");
+
+  sheet.columns = [{ header: "Year", key: "year", width: 14 }].concat(
+    gradesTableData.map((g) => ({
+      header: g.label,
+      key: g.value,
+      width: 14,
+    }))
+  );
+
+  sheet.getRow(1).font = { bold: true };
+
+  yearsData.map((year) => {
+    const row = {} as {
+      year: string;
+    };
+
+    row.year = year.label;
+
+    gradesTableData.map((grade) => {
+      let content = "-";
+
+      const trend = trendData.find(
+        (t) => t.year === year.value && t.grade === grade.value
+      );
+
+      if (trend) {
+        const { asian, black, hispanic, white, other } = trend;
+        const total = asian + black + hispanic + white + other;
+
+        content = total.toLocaleString();
+      }
+
+      row[grade.value] = content;
+    });
+
+    sheet.addRow(row);
+  });
+
+  const titleRow = sheet.insertRow(1, ["Enrollment Trends by Grade"]);
+  titleRow.font = { size: 16, bold: true };
+
+  const name = `${Level[level]}: ${selectedName}`;
+  sheet.insertRow(2, [name]);
+
+  sheet.insertRow(3, [
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+  ]);
+
+  sheet.insertRow(4, []);
+
+  const fileName = `Enrollment Trends by Grade for ${Level[level]} ${selectedName}`;
 
   try {
     const buffer = await workbook.xlsx.writeBuffer();
