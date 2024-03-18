@@ -217,8 +217,11 @@ export const exportTrendsByRace = async (
     const prop_wh = (white * 100) / tot_enr;
     const prop_or = (other * 100) / tot_enr;
 
+    const selectedYear = yearsData.find((y) => y.value === year);
+    const selectedYearLabel = selectedYear?.label || "-";
+
     sheet.addRow({
-      year,
+      year: selectedYearLabel,
       asian,
       black,
       hispanic,
@@ -391,7 +394,7 @@ export const exportSegregationTrends = async (
 
   sheet.columns = [{ header: "Name", key: "name", width: 40 }].concat(
     yearsData.reverse().map((y) => ({
-      header: y.value.toString(),
+      header: y.label.toString(),
       key: y.value.toString(),
       width: 14,
     }))
