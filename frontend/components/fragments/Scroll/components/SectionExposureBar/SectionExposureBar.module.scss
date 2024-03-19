@@ -1,15 +1,7 @@
-$sectionHeight: 70vh;
-
 .holder {
   height: 2 * 100vh;
-  @screen md {
-    height: 2 * $sectionHeight;
-  }
 }
 
 .section {
   height: 100vh;
-  @screen md {
-    height: $sectionHeight;
-  }
 }

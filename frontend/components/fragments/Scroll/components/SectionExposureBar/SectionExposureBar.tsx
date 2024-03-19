@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { Scrollama, Step } from "react-scrollama";
 
-import { useBreakpointRegion } from "hooks";
-
 import Info from "../Info";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
-import { holder, section } from "./SectionExposureBar.module.scss";
+import { holder } from "./SectionExposureBar.module.scss";
 
 const charts = (currentStepIndex: number) => {
   const step: ExposureBarStep =
@@ -29,11 +27,7 @@ export default function SectionExposureBar() {
     data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
   };
 
-  const breakpointRegion = useBreakpointRegion();
-
-  const onMobile = breakpointRegion === "xs" || breakpointRegion === "sm";
-
-  const SCROLL_OFFSET = onMobile ? 0.8 : 0.7;
+  const SCROLL_OFFSET = 0.8;
 
   return (
     <>
@@ -61,13 +55,8 @@ export default function SectionExposureBar() {
         student&#39;s school.
       </p>
       <div className={clsx("relative w-full", holder)}>
-        <div
-          className={clsx(
-            "w-full top-0 flex justify-center items-start sticky",
-            section
-          )}
-        >
-          <div className="w-full h-full max-h-96 mt-12">
+        <div className="w-full h-screen top-0 flex justify-center items-center sticky">
+          <div className="w-full h-full max-h-96">
             {charts(currentStepIndex)}
           </div>
         </div>
@@ -78,15 +67,10 @@ export default function SectionExposureBar() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className={clsx("w-full", section)} />
+              <div className="w-full h-screen" />
             </Step>
             <Step data={1}>
-              <div
-                className={clsx(
-                  "w-full flex items-start justify-center",
-                  section
-                )}
-              >
+              <div className="w-full flex items-start justify-center h-screen">
                 <Info>
                   <p className="mb-3">
                     In District 15 in 2019, the average White student&#39;s
