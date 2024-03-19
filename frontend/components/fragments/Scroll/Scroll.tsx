@@ -27,9 +27,15 @@ function EndScreen() {
           in different areas over time.
         </p>
       </div>
-      <Link href="/" className="hover:text-primary inline-flex items-center ">
+      <Link
+        href="/"
+        className="hover:text-primary inline-flex flex-col md:flex-row items-center "
+      >
         Explore the dashboard
-        <KeyboardDoubleArrowRightIcon className="mx-2" fontSize="large" />
+        <KeyboardDoubleArrowRightIcon
+          className="mx-2 hidden md:block"
+          fontSize="large"
+        />
         <Image
           src={IntegrateUSALogo}
           alt="IntegrateUSA logo"
