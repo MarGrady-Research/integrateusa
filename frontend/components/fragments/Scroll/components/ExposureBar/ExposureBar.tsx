@@ -20,7 +20,6 @@ import {
 
 interface Props {
   step: ExposureBarStep;
-  onTablet: boolean;
 }
 
 ChartJS.register(
@@ -37,20 +36,15 @@ export enum ExposureBarStep {
 }
 
 const labels = [
-  "Demographics of Avg White Student's School",
-  "Demograpics of Avg Non-White Student's school",
-];
-
-const mobileLabels = [
   ["Demographics of", "Avg White Student's", "School"],
   ["Demographics of", "Avg Non-White Student's", "School"],
 ];
 
-const asianData = [8.99, 8.79];
-const blackData = [14.85, 17.11];
-const hispanicData = [28.86, 46.64];
-const whiteData = [41.99, 24.08];
-const otherData = [5.3, 3.38];
+const asianData = [11.4, 13.4];
+const blackData = [12.6, 13.1];
+const hispanicData = [27.7, 46.3];
+const whiteData = [43.3, 24.1];
+const otherData = [5.0, 3.1];
 
 const barData = [
   {
@@ -85,7 +79,7 @@ const barData = [
   },
 ];
 
-export default function ExposureBar({ step, onTablet }: Props) {
+export default function ExposureBar({ step }: Props) {
   const isOnFirstStep = step === ExposureBarStep.StepOne;
 
   const barDataFiltered = isOnFirstStep
@@ -106,8 +100,6 @@ export default function ExposureBar({ step, onTablet }: Props) {
     datasets: barDataFiltered,
   };
 
-  const chartLabels = onTablet ? mobileLabels : labels;
-
   const options = {
     plugins: {
       legend: {
@@ -117,6 +109,7 @@ export default function ExposureBar({ step, onTablet }: Props) {
         enabled: isOnFirstStep,
         display: isOnFirstStep,
         callbacks: {
+          title: () => undefined,
           label: (context: TooltipItem<any>) => {
             const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
@@ -134,9 +127,11 @@ export default function ExposureBar({ step, onTablet }: Props) {
         stacked: true,
         barPercentage: 1,
         ticks: {
-          crossAlign: "far" as "far",
+          font: {
+            size: 14,
+          },
           callback: (value: string) => {
-            return chartLabels[value];
+            return labels[value];
           },
         },
       },
@@ -154,18 +149,18 @@ export default function ExposureBar({ step, onTablet }: Props) {
         type: "label",
         xValue: 0,
         yValue: 21,
-        content: isOnFirstStep ? [] : ["42%"],
+        content: isOnFirstStep ? [] : ["43.3%"],
         font: {
-          size: 18,
+          size: 24,
         },
       },
       label2: {
         type: "label",
         xValue: 1,
         yValue: 12,
-        content: isOnFirstStep ? [] : ["24%"],
+        content: isOnFirstStep ? [] : ["24.1%"],
         font: {
-          size: 18,
+          size: 24,
         },
       },
     },

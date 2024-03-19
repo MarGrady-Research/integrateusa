@@ -9,13 +9,13 @@ import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
 import { holder, section } from "./SectionExposureBar.module.scss";
 
-const charts = (currentStepIndex: number, onTablet: boolean) => {
+const charts = (currentStepIndex: number) => {
   const step: ExposureBarStep =
     currentStepIndex === 0 || currentStepIndex === -1
       ? ExposureBarStep.StepOne
       : ExposureBarStep.StepTwo;
 
-  return <ExposureBar step={step} onTablet={onTablet} />;
+  return <ExposureBar step={step} />;
 };
 
 export default function SectionExposureBar() {
@@ -32,8 +32,6 @@ export default function SectionExposureBar() {
   const breakpointRegion = useBreakpointRegion();
 
   const onMobile = breakpointRegion === "xs" || breakpointRegion === "sm";
-
-  const onTablet = onMobile || breakpointRegion === "md";
 
   const SCROLL_OFFSET = onMobile ? 0.8 : 0.7;
 
@@ -70,10 +68,10 @@ export default function SectionExposureBar() {
           )}
         >
           <div className="w-full h-full max-h-96 mt-12">
-            {charts(currentStepIndex, onTablet)}
+            {charts(currentStepIndex)}
           </div>
         </div>
-        <div className="absolute top-0 w-full">
+        <div className="absolute top-0 w-full pointer-events-none">
           <Scrollama
             onStepEnter={onStepEnter}
             onStepExit={onStepExit}
@@ -92,15 +90,15 @@ export default function SectionExposureBar() {
                 <Info>
                   <p className="mb-3">
                     In District 15 in 2019, the average White student&#39;s
-                    school had <b>42%</b> White students
+                    school had <b>43%</b> White students.
                   </p>
                   <p className="mb-3">
                     The average non-White student&#39;s school had <b>24%</b>{" "}
-                    White students
+                    White students.
                   </p>
                   <p>
-                    The difference of these shares is the{" "}
-                    <b>Normalized Exposure</b> rate: <b>18%</b>
+                    The difference of these percentages is the{" "}
+                    <b>normalized exposure</b> rate: <b>19%</b>.
                   </p>
                 </Info>
               </div>
