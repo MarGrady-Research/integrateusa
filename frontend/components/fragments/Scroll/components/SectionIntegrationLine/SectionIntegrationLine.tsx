@@ -67,7 +67,7 @@ export default function SectionIntegrationLine() {
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
-        <div className="absolute top-0 w-full">
+        <div className="absolute top-0 w-full pointer-events-none">
           <Scrollama
             onStepEnter={onStepEnter}
             onStepExit={onStepExit}
@@ -89,11 +89,12 @@ export default function SectionIntegrationLine() {
                     <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
-                    implemented an integration plan
+                    implemented an integration plan.
                   </p>
                   <p>
-                    After the plan&#39;s implementation, we see a dropoff in
-                    Normalized Exposure rates for White students in the District
+                    After the plan&#39;s implementation, we see a decline in
+                    normalized exposure rates for White students in the
+                    district.
                   </p>
                 </Info>
               </div>
@@ -107,19 +108,28 @@ export default function SectionIntegrationLine() {
               >
                 <Info>
                   <p className="mb-3">
-                    We can compare{" "}
+                    Using IntegrateUSA.org, we can find comparison districts
+                    that are demographically similar to{" "}
                     <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
-                    to demographically similar districts without integration
-                    plans
+                    and have a similar baseline level of segregation. The graph
+                    includes all districts with at least 10 schools that had
+                    between 20% and 40% White students, 10% or more Black
+                    students, 10% or more Hispanic students, and a 2018-19
+                    normalized exposure index for White students within 3 points
+                    of{" "}
+                    <span className="text-line-selected">
+                      <b>District 15</b>
+                    </span>
+                    .
                   </p>
                   <p>
-                    The Normalized Exposure for White students in{" "}
+                    The normalized exposure for White students in{" "}
                     <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
-                    shows a steep drop compared to other districts
+                    shows a steep drop compared to other districts.
                   </p>
                 </Info>
               </div>
@@ -132,16 +142,15 @@ export default function SectionIntegrationLine() {
                 )}
               >
                 <Info>
-                  <p className="mb-3">
-                    We can also normalize these rates using the 2019 values for
-                    each district
-                  </p>
                   <p>
+                    Normalizing these rates using the 2018-2019 values for each
+                    district shows that{" "}
                     <span className="text-line-selected">
                       <b>District 15</b>
                     </span>{" "}
-                    has the largest drop in White Normalized Exposure rates of
-                    any comparable district after 2019
+                    had the largest decline in segregation of any comparable
+                    district in the years following the implementation of the
+                    integration plan.
                   </p>
                 </Info>
               </div>

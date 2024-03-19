@@ -90,15 +90,15 @@ export default function SectionExposureBar() {
                 <Info>
                   <p className="mb-3">
                     In District 15 in 2019, the average White student&#39;s
-                    school had <b>43%</b> White students
+                    school had <b>43%</b> White students.
                   </p>
                   <p className="mb-3">
                     The average non-White student&#39;s school had <b>24%</b>{" "}
-                    White students
+                    White students.
                   </p>
                   <p>
                     The difference of these percentages is the{" "}
-                    <b>normalized exposure</b> rate: <b>19%</b>
+                    <b>normalized exposure</b> rate: <b>19%</b>.
                   </p>
                 </Info>
               </div>

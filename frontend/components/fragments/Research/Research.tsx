@@ -22,9 +22,9 @@ export default function Research() {
           objectFit="contain"
           alt=""
           height={240}
-          style={{ width: "auto" }}
           className="h-40 lg:h-60 border border-black group-hover:border-primary"
           placeholder="blur"
+          priority
         />
         <div className="mt-4 md:mt-0 md:ml-4">
           <h3 className="text-lg lg:text-xl font-semibold group-hover:text-primary">

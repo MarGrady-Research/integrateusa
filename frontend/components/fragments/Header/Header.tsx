@@ -95,7 +95,6 @@ export default function Header() {
                 alt="MarGrady Logo"
                 width={250}
                 priority
-                style={{ height: "auto", width: "auto" }}
               />
             </a>
           </div>

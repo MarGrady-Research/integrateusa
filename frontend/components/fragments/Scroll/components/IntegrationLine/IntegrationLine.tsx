@@ -12,7 +12,7 @@ import { Line } from "react-chartjs-2";
 
 import { selectedLineColor, unselectedLineColor } from "constants/";
 
-import { fullCompData, compDataNormalized, ids } from "./data";
+import { compData } from "./data";
 
 interface Props {
   step: IntegrationLineStep;
@@ -36,75 +36,48 @@ export enum IntegrationLineStep {
 }
 
 const labels = [
-  2010,
-  2011,
-  2012,
-  2013,
-  2014,
-  2015,
-  2016,
-  2017,
-  2018,
-  2019,
-  2020,
-  2021,
+  "2016-17",
+  "2017-18",
+  "2018-19",
+  "2019-20",
+  "2020-21",
+  "2021-22",
+  "2022-23",
   "",
 ];
 
-const distAlt = "1500000";
+const distName = "NYC Geographic District #15 (NY)";
 
-const getLineData = (
-  data: {
-    year: number;
-    dist_id_alt: string;
-    dist_name_alt: string;
-    norm_exp_wh?: number;
-    norm_exp_wh_19?: number;
-  }[]
-) => {
-  const ld = {} as { [key: string]: number[] };
+const compDataNormalized = compData.map((d) => ({
+  dist_name: d.dist_name,
+  data: d.norm_data,
+}));
 
-  for (const id of ids) {
-    ld[id.dist_id_alt] = [];
-  }
+const compDataDistrict = compData.filter((d) => d.dist_name === distName);
 
-  for (const item of data) {
-    if (ld[item.dist_id_alt]) {
-      if (typeof item.norm_exp_wh !== "undefined") {
-        ld[item.dist_id_alt].push(item.norm_exp_wh);
-      } else if (typeof item.norm_exp_wh_19 !== "undefined") {
-        ld[item.dist_id_alt].push(item.norm_exp_wh_19);
-      }
-    }
-  }
+const compDataDistrictPreIntegration = compDataDistrict.map((d) => ({
+  dist_name: d.dist_name,
+  data: d.data.slice(0, -2),
+}));
 
-  return ld;
-};
+const getLines = (
+  districtsData: { dist_name: string; data: number[] }[],
+  lineWidth = 1
+) =>
+  districtsData.map((d) => {
+    const isSelectedDistrict = d.dist_name === distName;
 
-const compData = getLineData(fullCompData);
-const normalizedCompData = getLineData(compDataNormalized);
-
-const compDataDistrict = compData[distAlt];
-const compDataDistrictPreIntegration = compDataDistrict.slice(0, -2);
-
-const compDataDistrictObj = {
-  [distAlt]: compDataDistrict,
-};
-const compDataDistrictPreIntegrationObj = {
-  [distAlt]: compDataDistrictPreIntegration,
-};
-
-const getLines = (data: { [key: string]: number[] }, lineWidth = 1) =>
-  ids.map((id) => ({
-    label: id.dist_name_alt,
-    data: data[id.dist_id_alt] || [],
-    borderColor:
-      id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
-    borderWidth: lineWidth,
-    backgroundColor:
-      id.dist_id_alt === distAlt ? selectedLineColor : unselectedLineColor,
-    order: id.dist_id_alt === distAlt ? 0 : 1,
-  }));
+    return {
+      label: d.dist_name,
+      data: d.data,
+      borderColor: isSelectedDistrict ? selectedLineColor : unselectedLineColor,
+      borderWidth: lineWidth,
+      backgroundColor: isSelectedDistrict
+        ? selectedLineColor
+        : unselectedLineColor,
+      order: isSelectedDistrict ? 0 : 1,
+    };
+  });
 
 export default function IntegrationLine({ step, onTablet }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
@@ -123,16 +96,16 @@ export default function IntegrationLine({ step, onTablet }: Props) {
 
   switch (step) {
     case IntegrationLineStep.StepOne:
-      lineData = getLines(compDataDistrictPreIntegrationObj, lineWidth);
+      lineData = getLines(compDataDistrictPreIntegration, lineWidth);
       break;
     case IntegrationLineStep.StepTwo:
-      lineData = getLines(compDataDistrictObj, lineWidth);
+      lineData = getLines(compDataDistrict, lineWidth);
       break;
     case IntegrationLineStep.StepThree:
       lineData = getLines(compData, lineWidth);
       break;
     case IntegrationLineStep.StepFour:
-      lineData = getLines(normalizedCompData, lineWidth);
+      lineData = getLines(compDataNormalized, lineWidth);
       break;
   }
 
@@ -148,6 +121,11 @@ export default function IntegrationLine({ step, onTablet }: Props) {
       legend: {
         display: false,
       },
+      tooltip: {
+        callbacks: {
+          title: () => undefined,
+        },
+      },
     },
     scales: {
       x: {
@@ -157,8 +135,8 @@ export default function IntegrationLine({ step, onTablet }: Props) {
       },
       y: {
         position: "right" as "right",
-        min: isOnFourthStep ? -0.2 : 0,
-        max: isOnFourthStep ? 0.2 : 0.5,
+        min: isOnFourthStep ? -12 : 0,
+        max: isOnFourthStep ? 6 : 25,
         grid: {
           display: false,
         },
@@ -174,10 +152,10 @@ export default function IntegrationLine({ step, onTablet }: Props) {
     annotations: {
       line1: {
         type: "line",
-        xMin: 9,
-        xMax: 9,
-        yMin: isOnFourthStep ? -0.2 : 0,
-        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 0.12 : 0.4,
+        xMin: 4,
+        xMax: 4,
+        yMin: isOnFourthStep ? -12 : 0,
+        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 3 : 23,
         borderColor: "#000",
         borderDash: [3, 4],
         borderCapStyle: "round",
@@ -185,8 +163,8 @@ export default function IntegrationLine({ step, onTablet }: Props) {
       },
       label1: {
         type: "label",
-        xValue: 9,
-        yValue: isOnFourthStep ? 0.15 : 0.4375,
+        xValue: 4,
+        yValue: isOnFourthStep ? 4 : 24,
         content: isOnFirstStep ? [] : ["Integration Plan", "Implemented"],
         font: {
           size: 12,

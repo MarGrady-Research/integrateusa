@@ -10,6 +10,7 @@ import SectionExposureBar from "./components/SectionExposureBar";
 import SectionIntegrationLine from "./components/SectionIntegrationLine";
 
 import MarGradyLogo from "public/MarGradyLogo.png";
+import IntegrateUSALogo from "public/IntegrateUSALogo.png";
 
 import { header, section } from "./Scroll.module.scss";
 
@@ -19,27 +20,25 @@ function EndScreen() {
       <div className="px-4 text-center">
         <p className="mb-4">
           IntegrateUSA was built to explore segregation in districts, counties
-          and states nationwide
+          and states nationwide.
         </p>
         <p>
           Use the dashboard to visualize demographics and understand segregation
-          levels in different areas over time
+          in different areas over time.
         </p>
       </div>
-      <Link
-        href="/info"
-        className="hover:text-primary inline-flex items-center"
-      >
+      <Link href="/" className="hover:text-primary inline-flex items-center ">
         Explore the dashboard
-        <KeyboardDoubleArrowRightIcon className="ml-2" fontSize="large" />
+        <KeyboardDoubleArrowRightIcon className="mx-2" fontSize="large" />
+        <Image
+          src={IntegrateUSALogo}
+          alt="IntegrateUSA logo"
+          width={250}
+          priority
+        />
       </Link>
       <Link href="https://www.margrady.com/">
-        <Image
-          src={MarGradyLogo}
-          alt="MarGrady Logo"
-          width={350}
-          style={{ height: "auto", width: "auto" }}
-        />
+        <Image src={MarGradyLogo} alt="MarGrady Logo" width={350} />
       </Link>
     </div>
   );
