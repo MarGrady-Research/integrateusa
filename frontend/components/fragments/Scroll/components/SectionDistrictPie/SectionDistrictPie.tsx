@@ -6,10 +6,12 @@ export default function SectionDistrictPie() {
   return (
     <>
       <p>
-        In 2019, New York City&#39;s School District 15 was a racially diverse
-        district.
+        In 2018-19, New York City&rsquo;s School District 15 was a racially
+        diverse district.
       </p>
-      <p className="mb-3">The 6th graders in the district were:</p>
+      <p className="mb-3">
+        The 6<sup>th</sup> graders in the district were:
+      </p>
       <div className="w-fit mx-auto">
         <div className="flex items-center">
           <div className="background-hispanic w-4 h-4 mr-1" />

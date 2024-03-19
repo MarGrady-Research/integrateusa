@@ -34,8 +34,26 @@ export default function Research() {
           <h4 className="text-base lg:text-lg font-medium">Jesse Margolis</h4>
           <h4 className="text-base lg:text-lg font-medium mb-2">March 2024</h4>
           <p className="text-base lg:text-lg">
-            Using data from IntegrateUSA, this case study documents the impact
-            of a middle school integration plan in District 15 in New York City.
+            In 2019, New York City&rsquo;s District 15 implemented an
+            integration plan for rising 6<sup>th</sup> graders. The district
+            removed all academic screens and gave economically disadvantaged
+            students priority for 52% of seats.{" "}
+            <a
+              href="https://margrady.com/integration/"
+              target="_blank"
+              rel="noreferer"
+              className="text-primary hover:underline underline-offset-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Prior research
+            </a>{" "}
+            has shown that this plan led to a 55% decline in economic
+            segregation and a 38% decline in racial segregation in the first
+            year. That research used New York state data, which limited
+            comparison districts to those in New York. In this case study, we
+            replicate a portion of that study using national comparison
+            districts selected using IntegrateUSA and illustrate one use case
+            for the new dashboard.
           </p>
         </div>
       </Link>
