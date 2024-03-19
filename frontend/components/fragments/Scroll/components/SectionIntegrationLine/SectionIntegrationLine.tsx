@@ -7,7 +7,7 @@ import { useBreakpointRegion } from "hooks";
 import Info from "../Info";
 import IntegrationLine, { IntegrationLineStep } from "../IntegrationLine";
 
-import { holder, section } from "./SectionIntegrationLine.module.scss";
+import { holder } from "./SectionIntegrationLine.module.scss";
 
 const charts = (currentStepIndex: number, onTablet: boolean) => {
   let step: IntegrationLineStep = IntegrationLineStep.StepOne;
@@ -48,7 +48,7 @@ export default function SectionIntegrationLine() {
 
   const onTablet = onMobile || breakpointRegion === "md";
 
-  const SCROLL_OFFSET = onMobile ? 0.8 : 0.7;
+  const SCROLL_OFFSET = 0.8;
 
   return (
     <>
@@ -57,13 +57,8 @@ export default function SectionIntegrationLine() {
         district over time.
       </p>
       <div className={clsx("relative w-full", holder)}>
-        <div
-          className={clsx(
-            "w-full top-0 flex justify-center items-start sticky",
-            section
-          )}
-        >
-          <div className="w-full h-full max-h-96 mt-12">
+        <div className="w-full h-screen top-0 flex justify-center items-center sticky">
+          <div className="w-full h-full max-h-96">
             {charts(currentStepIndex, onTablet)}
           </div>
         </div>
@@ -74,15 +69,10 @@ export default function SectionIntegrationLine() {
             offset={SCROLL_OFFSET}
           >
             <Step data={0}>
-              <div className={clsx("w-full", section)} />
+              <div className="w-full h-screen" />
             </Step>
             <Step data={1}>
-              <div
-                className={clsx(
-                  "w-full flex items-start justify-center",
-                  section
-                )}
-              >
+              <div className="w-full flex items-start justify-center h-screen">
                 <Info>
                   <p className="mb-3">
                     In 2019,{" "}
@@ -100,12 +90,7 @@ export default function SectionIntegrationLine() {
               </div>
             </Step>
             <Step data={2}>
-              <div
-                className={clsx(
-                  "w-full flex items-start justify-center",
-                  section
-                )}
-              >
+              <div className="w-full flex items-start justify-center h-screen">
                 <Info>
                   <p className="mb-3">
                     Using IntegrateUSA.org, we can find comparison districts
@@ -135,12 +120,7 @@ export default function SectionIntegrationLine() {
               </div>
             </Step>
             <Step data={3}>
-              <div
-                className={clsx(
-                  "w-full flex items-start justify-center",
-                  section
-                )}
-              >
+              <div className="w-full flex items-start justify-center h-screen">
                 <Info>
                   <p>
                     Normalizing these rates using the 2018-2019 values for each

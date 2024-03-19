@@ -123,7 +123,7 @@ export default function IntegrationLine({ step, onTablet }: Props) {
       },
       tooltip: {
         callbacks: {
-          title: () => undefined,
+          title: () => "",
         },
       },
     },

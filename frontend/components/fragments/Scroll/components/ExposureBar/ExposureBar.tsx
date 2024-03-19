@@ -109,7 +109,7 @@ export default function ExposureBar({ step }: Props) {
         enabled: isOnFirstStep,
         display: isOnFirstStep,
         callbacks: {
-          title: () => undefined,
+          title: () => "",
           label: (context: TooltipItem<any>) => {
             const label = context.dataset.data[context.dataIndex];
             return context.dataset.label + " " + label + "%";
