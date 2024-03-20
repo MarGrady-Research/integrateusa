@@ -137,36 +137,42 @@ export default function SchoolLevelTable({
   };
 
   return (
-    <TableContainer component={TableHolder}>
-      <Table>
-        <TableHead className="bg-gray-200">
-          <TableRow className={headRow}>
-            <TableCell>School Type</TableCell>
-            <TableCell># of Schools</TableCell>
-            <TableCell>% of Schools</TableCell>
-            <TableCell># of Students</TableCell>
-            <TableCell>% of Students</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tableRow("ES")}
-          {tableRow("ESMS")}
-          {tableRow("MS")}
-          {tableRow("MSHS")}
-          {tableRow("HS")}
-          {tableRow("K12")}
-          {tableRow("Other")}
-        </TableBody>
-        <TableFooter>
-          <TableRow className={clsx(contentRow, footerRow)}>
-            <TableCell>Total</TableCell>
-            <TableCell>{totalSchoolsString}</TableCell>
-            <TableCell>100</TableCell>
-            <TableCell>{totalStudentsString}</TableCell>
-            <TableCell>100</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer component={TableHolder}>
+        <Table>
+          <TableHead className="bg-gray-200">
+            <TableRow className={headRow}>
+              <TableCell>School Type</TableCell>
+              <TableCell># of Schools</TableCell>
+              <TableCell>% of Schools</TableCell>
+              <TableCell># of Students</TableCell>
+              <TableCell>% of Students</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tableRow("ES")}
+            {tableRow("ESMS")}
+            {tableRow("MS")}
+            {tableRow("MSHS")}
+            {tableRow("HS")}
+            {tableRow("K12")}
+            {tableRow("Other")}
+          </TableBody>
+          <TableFooter>
+            <TableRow className={clsx(contentRow, footerRow)}>
+              <TableCell>Total</TableCell>
+              <TableCell>{totalSchoolsString}</TableCell>
+              <TableCell>100</TableCell>
+              <TableCell>{totalStudentsString}</TableCell>
+              <TableCell>100</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+      <p className="text-sm mt-1">
+        Note: Figures only include students for whom race/ethnicity data was
+        reported.
+      </p>
+    </>
   );
 }
