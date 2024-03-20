@@ -13,7 +13,7 @@ import {
 import { yearsData, gradesData } from "components/fragments/Selection/data";
 import { gradesTableData } from "components/fragments/Trends/data";
 
-import { selectedLineColor } from "constants/constants";
+import { primaryColor, selectedLineColor } from "constants/constants";
 
 export const exportRaceBreakdown = async (
   infoData: School[],
@@ -135,10 +135,23 @@ export const exportRaceBreakdown = async (
   sheet.insertRow(4, [gradeRow]);
 
   sheet.insertRow(5, [
-    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data). Data only include students for whom race/ethnicity was reported.",
   ]);
 
   sheet.insertRow(6, []);
+
+  sheet.getCell("A6").value = {
+    text: "See CCD Data Files for documentation on data irregularities.",
+    hyperlink: "https://nces.ed.gov/ccd/files.asp",
+    tooltip: "https://nces.ed.gov/ccd/files.asp",
+  };
+
+  sheet.getCell("A6").font = {
+    color: { argb: primaryColor.slice(1) },
+    underline: "single",
+  };
+
+  sheet.insertRow(7, []);
 
   const fileName = `Race Breakdown By School for ${Level[level]} ${selectedName} for ${selectedYearLabel} for ${selectedGradeLabel}`;
 
@@ -253,10 +266,23 @@ export const exportTrendsByRace = async (
   sheet.insertRow(3, [gradeRow]);
 
   sheet.insertRow(4, [
-    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data). Data only include students for whom race/ethnicity was reported.",
   ]);
 
   sheet.insertRow(5, []);
+
+  sheet.getCell("A5").value = {
+    text: "See CCD Data Files for documentation on data irregularities.",
+    hyperlink: "https://nces.ed.gov/ccd/files.asp",
+    tooltip: "https://nces.ed.gov/ccd/files.asp",
+  };
+
+  sheet.getCell("A5").font = {
+    color: { argb: primaryColor.slice(1) },
+    underline: "single",
+  };
+
+  sheet.insertRow(6, []);
 
   const fileName = `Enrollment Trends by Race for ${Level[level]} ${selectedName} for ${selectedGradeLabel}`;
 
@@ -339,10 +365,23 @@ export const exportTrendsByGrade = async (
   sheet.insertRow(2, [name]);
 
   sheet.insertRow(3, [
-    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data). Data only include students for whom race/ethnicity was reported.",
   ]);
 
   sheet.insertRow(4, []);
+
+  sheet.getCell("A4").value = {
+    text: "See CCD Data Files for documentation on data irregularities.",
+    hyperlink: "https://nces.ed.gov/ccd/files.asp",
+    tooltip: "https://nces.ed.gov/ccd/files.asp",
+  };
+
+  sheet.getCell("A4").font = {
+    color: { argb: primaryColor.slice(1) },
+    underline: "single",
+  };
+
+  sheet.insertRow(5, []);
 
   const fileName = `Enrollment Trends by Grade for ${Level[level]} ${selectedName}`;
 
@@ -446,10 +485,23 @@ export const exportSegregationTrends = async (
   sheet.insertRow(4, [measureRow]);
 
   sheet.insertRow(5, [
-    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data). Data only include students for whom race/ethnicity was reported.",
   ]);
 
   sheet.insertRow(6, []);
+
+  sheet.getCell("A6").value = {
+    text: "See CCD Data Files for documentation on data irregularities.",
+    hyperlink: "https://nces.ed.gov/ccd/files.asp",
+    tooltip: "https://nces.ed.gov/ccd/files.asp",
+  };
+
+  sheet.getCell("A6").font = {
+    color: { argb: primaryColor.slice(1) },
+    underline: "single",
+  };
+
+  sheet.insertRow(7, []);
 
   const fileName = `Segregation Trends for ${Level[level]} ${selectedName} for ${measure.name} for ${selectedGradeLabel}`;
 
@@ -597,10 +649,23 @@ export const exportComparisonEntities = async (
   sheet.insertRow(4, [gradeRow]);
 
   sheet.insertRow(5, [
-    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data)",
+    "Source: IntegrateUSA.org (based on data from the NCES Common Core of Data). Data only include students for whom race/ethnicity was reported.",
   ]);
 
   sheet.insertRow(6, []);
+
+  sheet.getCell("A6").value = {
+    text: "See CCD Data Files for documentation on data irregularities.",
+    hyperlink: "https://nces.ed.gov/ccd/files.asp",
+    tooltip: "https://nces.ed.gov/ccd/files.asp",
+  };
+
+  sheet.getCell("A6").font = {
+    color: { argb: primaryColor.slice(1) },
+    underline: "single",
+  };
+
+  sheet.insertRow(7, []);
 
   const fileName = `${comparisonText} for ${Level[level]} ${selectedName} for ${selectedYearLabel} for ${selectedGradeLabel}`;
 

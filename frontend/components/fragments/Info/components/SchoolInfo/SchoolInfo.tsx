@@ -91,30 +91,36 @@ export default function SchoolInfo({
   );
 
   return (
-    <div className="h-full shadow border border-gray-200 px-4 py-3">
-      <p>
-        <b>Name: </b>
-        {schoolName}
-      </p>
-      <p>
-        <b>District: </b>
-        {districtName}
-      </p>
-      <p>
-        <b>State: </b>
-        {stateName}
-      </p>
-      <p>
-        <b>Level: </b>
-        {schoolLevel}
-      </p>
-      <p>
-        <b>Enrollment: </b>
-        {enrollment}
-      </p>
-      <p>
-        <b>Enrollment Years: </b>
-        {enrollmentYears}
+    <div className="h-full flex flex-col">
+      <div className="flex-1 shadow border border-gray-200 px-4 py-3">
+        <p>
+          <b>Name: </b>
+          {schoolName}
+        </p>
+        <p>
+          <b>District: </b>
+          {districtName}
+        </p>
+        <p>
+          <b>State: </b>
+          {stateName}
+        </p>
+        <p>
+          <b>Level: </b>
+          {schoolLevel}
+        </p>
+        <p>
+          <b>Enrollment: </b>
+          {enrollment}
+        </p>
+        <p>
+          <b>Enrollment Years: </b>
+          {enrollmentYears}
+        </p>
+      </div>
+      <p className="text-sm mt-1">
+        Note: Figures only include students for whom race/ethnicity data was
+        reported.
       </p>
     </div>
   );

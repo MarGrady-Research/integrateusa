@@ -91,6 +91,21 @@ export default function Control({
         </RadioGroup>
       </FormControl>
       <Search mapLevel={mapLevel} handleBounds={handleBounds} />
+      <div className="flex-1 flex items-end ">
+        <p className="text-sm">
+          Source: NCES Common Core of Data. Figures only include students for
+          whom race/ethnicity data was reported. See{" "}
+          <a
+            href="https://nces.ed.gov/ccd/files.asp"
+            target="_blank"
+            rel="noreferer"
+            className="text-primary hover:underline underline-offset-2"
+          >
+            CCD Data Files
+          </a>{" "}
+          for documentation on data irregularities.
+        </p>
+      </div>
     </>
   );
 

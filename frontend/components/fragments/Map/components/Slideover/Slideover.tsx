@@ -52,7 +52,7 @@ export default function Slideover({
           },
         }}
         classes={{
-          paper: drawerPaper,
+          paper: clsx(drawerPaper, "flex flex-col"),
         }}
         variant="persistent"
       >
@@ -66,7 +66,7 @@ export default function Slideover({
           </button>
         </div>
         <Divider />
-        <div className="p-4 pt-2.5">
+        <div className="p-4 pt-2.5 flex-1 flex flex-col">
           <h1 className="text-xl mb-3">Map Options</h1>
           <Control
             mapLevel={mapLevel}
