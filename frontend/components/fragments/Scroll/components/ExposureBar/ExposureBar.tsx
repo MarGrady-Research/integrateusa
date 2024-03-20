@@ -8,7 +8,7 @@ import {
   TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import annotationPlugin from "chartjs-plugin-annotation";
+import annotationPlugin, { AnnotationElement } from "chartjs-plugin-annotation";
 
 import {
   asianColor,
@@ -148,8 +148,8 @@ export default function ExposureBar({ step }: Props) {
       label1: {
         type: "label",
         xValue: 0,
-        yValue: 21,
-        content: isOnFirstStep ? [] : ["43.3%"],
+        yValue: 21.65,
+        content: isOnFirstStep ? [] : "43.3%",
         font: {
           size: 24,
         },
@@ -157,10 +157,41 @@ export default function ExposureBar({ step }: Props) {
       label2: {
         type: "label",
         xValue: 1,
-        yValue: 12,
-        content: isOnFirstStep ? [] : ["24.1%"],
+        yValue: 12.05,
+        content: isOnFirstStep ? [] : "24.1%",
         font: {
           size: 24,
+        },
+      },
+      label3: {
+        type: "label",
+        xValue: 0.85,
+        yValue: 33,
+        content: isOnFirstStep ? null : "19.2%",
+        font: {
+          size: 24,
+        },
+        init: ({ properties }: { properties: AnnotationElement }) => {
+          return {
+            ...properties,
+            x: properties.x + 7,
+          };
+        },
+      },
+      label4: {
+        type: "label",
+        xValue: 0.67,
+        yValue: 33.7,
+        content: isOnFirstStep ? null : "}",
+        font: {
+          size: 62,
+          weight: 400,
+        },
+        init: ({ properties }: { properties: AnnotationElement }) => {
+          return {
+            ...properties,
+            x: properties.x + 7,
+          };
         },
       },
     },

@@ -57,7 +57,7 @@ const compDataDistrict = compData.filter((d) => d.dist_name === distName);
 
 const compDataDistrictPreIntegration = compDataDistrict.map((d) => ({
   dist_name: d.dist_name,
-  data: d.data.slice(0, -2),
+  data: d.data.slice(0, 3),
 }));
 
 const getLines = (
@@ -81,6 +81,7 @@ const getLines = (
 
 export default function IntegrationLine({ step, onTablet }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
+  const isOnSecondStep = step === IntegrationLineStep.StepTwo;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
   const lineWidth = onTablet ? 1 : 2;
@@ -152,10 +153,10 @@ export default function IntegrationLine({ step, onTablet }: Props) {
     annotations: {
       line1: {
         type: "line",
-        xMin: 4,
-        xMax: 4,
+        xMin: 2,
+        xMax: 2,
         yMin: isOnFourthStep ? -12 : 0,
-        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 3 : 23,
+        yMax: isOnFirstStep ? 0 : isOnFourthStep ? 4.632 : 23.1,
         borderColor: "#000",
         borderDash: [3, 4],
         borderCapStyle: "round",
@@ -163,11 +164,20 @@ export default function IntegrationLine({ step, onTablet }: Props) {
       },
       label1: {
         type: "label",
-        xValue: 4,
-        yValue: isOnFourthStep ? 4 : 24,
-        content: isOnFirstStep ? [] : ["Integration Plan", "Implemented"],
+        xValue: 2.05,
+        yValue: isOnFourthStep ? 5.352 : 24.1,
+        content: isOnFirstStep ? null : ["Integration Plan", "Implemented"],
         font: {
           size: 12,
+        },
+      },
+      label2: {
+        type: "label",
+        xValue: 1.7,
+        yValue: 20,
+        content: isOnFirstStep || isOnSecondStep ? "19.2" : null,
+        font: {
+          size: 16,
         },
       },
     },
