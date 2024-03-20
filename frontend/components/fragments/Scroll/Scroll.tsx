@@ -16,8 +16,8 @@ import { header, section } from "./Scroll.module.scss";
 
 function EndScreen() {
   return (
-    <div className="h-screen flex flex-col py-10 items-center justify-between text-lg lg:text-xl">
-      <div className="px-4 text-center">
+    <div className="flex flex-col items-center text-lg lg:text-xl">
+      <div className="px-4 text-center mb-4">
         <p className="mb-4">
           IntegrateUSA was built to explore segregation in districts, counties
           and states nationwide.
@@ -28,17 +28,12 @@ function EndScreen() {
         </p>
       </div>
       <Link href="/" className="hover:text-primary inline-flex items-center ">
-        Explore the dashboard
-        <KeyboardDoubleArrowRightIcon className="mx-2" fontSize="large" />
         <Image
           src={IntegrateUSALogo}
           alt="IntegrateUSA logo"
           width={250}
           priority
         />
-      </Link>
-      <Link href="https://www.margrady.com/">
-        <Image src={MarGradyLogo} alt="MarGrady Logo" width={350} />
       </Link>
     </div>
   );
