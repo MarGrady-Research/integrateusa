@@ -23,7 +23,7 @@ export default function SectionDistrictBar() {
         <span className="decoration-whitestudents decoration-2 underline underline-offset-4 font-semibold">
           White
         </span>{" "}
-        students made up more than <b>50%</b> of the population at four schools
+        students made up more than <b>50%</b> of the population at three schools
         and less than <b>5%</b> of the population at four other schools.
       </p>
       <div className="w-full h-96 mt-6 lg:mt-12">
