@@ -17,11 +17,11 @@ function EndScreen() {
     <div className="flex flex-col items-center text-lg lg:text-xl">
       <div className="px-4 text-center mb-4">
         <p className="mb-4">
-          IntegrateUSA was built to explore segregation in districts, counties
-          and states nationwide.
+          IntegrateUSA was built to visualize segregation in districts,
+          counties, and states nationwide.
         </p>
         <p>
-          Use the dashboard to visualize demographics and understand segregation
+          Use the dashboard to explore demographics and understand segregation
           in different areas over time.
         </p>
       </div>

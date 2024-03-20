@@ -19,7 +19,7 @@ export default function Research() {
       >
         <Image
           src={district15Img}
-          objectFit="contain"
+          style={{ objectFit: "contain" }}
           alt=""
           height={240}
           className="h-40 lg:h-60 border border-black group-hover:border-primary"
