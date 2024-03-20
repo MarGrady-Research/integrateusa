@@ -19,7 +19,7 @@ export default function Research() {
       >
         <Image
           src={district15Img}
-          objectFit="contain"
+          style={{ objectFit: "contain" }}
           alt=""
           height={240}
           className="h-40 lg:h-60 border border-black group-hover:border-primary"
@@ -50,10 +50,9 @@ export default function Research() {
             has shown that this plan led to a 55% decline in economic
             segregation and a 38% decline in racial segregation in the first
             year. That research used New York state data, which limited
-            comparison districts to those in New York. In this case study, we
-            replicate a portion of that study using national comparison
-            districts selected using IntegrateUSA and illustrate one use case
-            for the new dashboard.
+            comparison districts to those in New York. This case study
+            replicates a portion of that study using national comparison
+            districts selected using IntegrateUSA.
           </p>
         </div>
       </Link>
