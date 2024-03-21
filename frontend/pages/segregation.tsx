@@ -26,7 +26,6 @@ import {
   setSegDataSuccess,
   setSegDataFailure,
 } from "store/apiCacheSlice";
-import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 import { AppDispatch } from "store/store";
 
 import { ApiStatus, Level, SegEntity } from "interfaces";
@@ -50,7 +49,6 @@ export default function SegregationPage() {
   const year = useSelector(selectYear);
   const grade = useSelector(selectGrade);
   const segDataStore = useSelector(selectSegData);
-  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let idlevel = "";
 
@@ -84,12 +82,6 @@ export default function SegregationPage() {
     isSchoolLevel;
   const hasFailed =
     !isSegDataCached && segKeyCache.status === ApiStatus.Failure;
-
-  useEffect(() => {
-    if (!zoomOnMap) {
-      dispatch(activateZoomOnMap());
-    }
-  }, [dispatch, zoomOnMap]);
 
   useEffect(() => {
     if (paramsChecked) {

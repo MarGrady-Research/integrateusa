@@ -16,7 +16,7 @@ import { compData } from "./data";
 
 interface Props {
   step: IntegrationLineStep;
-  onTablet: boolean;
+  onMobile: boolean;
 }
 
 ChartJS.register(
@@ -79,12 +79,12 @@ const getLines = (
     };
   });
 
-export default function IntegrationLine({ step, onTablet }: Props) {
+export default function IntegrationLine({ step, onMobile }: Props) {
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
   const isOnSecondStep = step === IntegrationLineStep.StepTwo;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
-  const lineWidth = onTablet ? 1 : 2;
+  const lineWidth = onMobile ? 1 : 2;
 
   let lineData: {
     label: string;

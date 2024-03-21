@@ -1,10 +1,17 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 import district15Img from "./images/district-15.png";
 
 export default function Research() {
+  const router = useRouter();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    router.push("/research/district15");
+  };
+
   return (
     <>
       <h1 className="text-3xl lg:text-4xl font-semibold border-b border-primary pb-1 mb-4">
@@ -13,9 +20,9 @@ export default function Research() {
       <h2 className="text-base lg:text-lg mb-4 lg:mb-10">
         Publications, projects, and other resources appear below.
       </h2>
-      <Link
-        href="/research/district15"
-        className="group border-2 border-black hover:border-primary hover:bg-slate-50 duration-300 p-5 flex flex-col items-center md:flex-row md:items-start"
+      <div
+        onClick={handleClick}
+        className="cursor-pointer group border-2 border-black hover:border-primary hover:bg-slate-50 duration-300 p-5 flex flex-col items-center md:flex-row md:items-start"
       >
         <Image
           src={district15Img}
@@ -55,7 +62,7 @@ export default function Research() {
             districts selected using IntegrateUSA.
           </p>
         </div>
-      </Link>
+      </div>
     </>
   );
 }

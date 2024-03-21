@@ -6,6 +6,7 @@ import {
   selectRehydrated,
   activateRehydrated,
 } from "store/hydrateSlice";
+import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 import { AppDispatch } from "store/store";
 
 interface Props {
@@ -23,6 +24,14 @@ export default function Page({ children }: Props) {
       dispatch(activateRehydrated());
     }
   }, [rehydrated, persistorRehydrated, dispatch]);
+
+  const zoomOnMap = useSelector(selectZoomOnMap);
+
+  useEffect(() => {
+    if (!zoomOnMap) {
+      dispatch(activateZoomOnMap());
+    }
+  }, [dispatch, zoomOnMap]);
 
   return <>{children}</>;
 }
