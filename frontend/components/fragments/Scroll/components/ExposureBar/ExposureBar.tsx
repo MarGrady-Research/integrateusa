@@ -10,6 +10,8 @@ import {
 import { Bar } from "react-chartjs-2";
 import annotationPlugin, { AnnotationElement } from "chartjs-plugin-annotation";
 
+import { useBreakpointRegion } from "hooks";
+
 import {
   asianColor,
   blackColor,
@@ -80,6 +82,10 @@ const barData = [
 ];
 
 export default function ExposureBar({ step }: Props) {
+  const breakpointRegion = useBreakpointRegion();
+
+  const onMobile = breakpointRegion === "xs";
+
   const isOnFirstStep = step === ExposureBarStep.StepOne;
 
   const barDataFiltered = isOnFirstStep
@@ -165,7 +171,7 @@ export default function ExposureBar({ step }: Props) {
       },
       label3: {
         type: "label",
-        xValue: 0.85,
+        xValue: onMobile ? 0.95 : 0.85,
         yValue: 33,
         content: isOnFirstStep ? null : "19.2%",
         font: {
@@ -180,7 +186,7 @@ export default function ExposureBar({ step }: Props) {
       },
       label4: {
         type: "label",
-        xValue: 0.67,
+        xValue: onMobile ? 0.69 : 0.67,
         yValue: 33.7,
         content: isOnFirstStep ? null : "}",
         font: {

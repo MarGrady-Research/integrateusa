@@ -11,7 +11,7 @@ import { holder } from "./SectionIntegrationLine.module.scss";
 
 const SCROLL_OFFSET = 0.8;
 
-const charts = (currentStepIndex: number, onMobile: boolean) => {
+const charts = (currentStepIndex: number) => {
   let step: IntegrationLineStep = IntegrationLineStep.StepOne;
 
   switch (currentStepIndex) {
@@ -30,7 +30,7 @@ const charts = (currentStepIndex: number, onMobile: boolean) => {
       break;
   }
 
-  return <IntegrationLine step={step} onMobile={onMobile} />;
+  return <IntegrationLine step={step} />;
 };
 
 export default function SectionIntegrationLine() {
