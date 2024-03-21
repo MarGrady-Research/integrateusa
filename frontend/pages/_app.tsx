@@ -1,15 +1,17 @@
 import React from "react";
 import type { AppProps } from "next/app";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import { Chart as ChartJS } from "chart.js";
 import axios from "axios";
 
+import Header from "components/fragments/Header";
+
 import { wrapper, makeStore } from "../store/store";
 import { theme } from "../styles/materialTheme";
 
 import "../styles/global.scss";
-import Header from "components/fragments/Header";
 
 ChartJS.defaults.font.family = "Libre Franklin";
 ChartJS.defaults.font.weight = "500";
@@ -24,14 +26,17 @@ function MyApp({ Component, ...rest }: AppProps) {
   const { pageProps } = props;
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <main className="flex flex-col min-h-screen">
-          <Header />
-          <Component {...pageProps} />
-        </main>
-      </ThemeProvider>
-    </Provider>
+    <>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <main className="flex flex-col min-h-screen">
+            <Header />
+            <Component {...pageProps} />
+          </main>
+        </ThemeProvider>
+      </Provider>
+      <GoogleAnalytics gaId="G-8RN3G0ED" />
+    </>
   );
 }
 
