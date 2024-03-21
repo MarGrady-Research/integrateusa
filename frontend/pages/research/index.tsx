@@ -8,7 +8,10 @@ import Footer from "components/fragments/Footer";
 export default function Home() {
   return (
     <>
-      <Head title="IntegrateUSA" desc="Research" />
+      <Head
+        title="Integrate USA | Research"
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+      />
       <Page>
         <Research />
       </Page>

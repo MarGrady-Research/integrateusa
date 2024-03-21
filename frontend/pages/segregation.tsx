@@ -135,7 +135,10 @@ export default function SegregationPage() {
 
   return (
     <PersistorPage>
-      <Head title="Segregation" desc="Segregation Metrics" />
+      <Head
+        title="Integrate USA | Segregation"
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+      />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={snackbarOpen}
