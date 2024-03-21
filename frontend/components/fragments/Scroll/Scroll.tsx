@@ -55,14 +55,27 @@ export default function Scroll() {
         <SectionDistrictPie />
       </div>
       <div
-        className={clsx(section, "mx-auto mb-10 lg:mb-20 text-lg lg:text-xl")}
+        className={clsx(
+          section,
+          "mx-auto mb-10 lg:mb-20 text-lg lg:text-xl relative z-30"
+        )}
       >
         <SectionDistrictBar />
       </div>
-      <div className={clsx(section, "mx-auto text-lg lg:text-xl")}>
+      <div
+        className={clsx(
+          section,
+          "mx-auto mb-10 lg:mb-20 text-lg lg:text-xl relative z-20"
+        )}
+      >
         <SectionExposureBar />
       </div>
-      <div className={clsx(section, "mx-auto text-lg lg:text-xl")}>
+      <div
+        className={clsx(
+          section,
+          "mx-auto mb-10 lg:mb-20 text-lg lg:text-xl relative z-10"
+        )}
+      >
         <SectionIntegrationLine />
       </div>
       <EndScreen />

@@ -10,13 +10,14 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+import { useBreakpointRegion } from "hooks";
+
 import { selectedLineColor, unselectedLineColor } from "constants/";
 
 import { compData } from "./data";
 
 interface Props {
   step: IntegrationLineStep;
-  onTablet: boolean;
 }
 
 ChartJS.register(
@@ -79,12 +80,19 @@ const getLines = (
     };
   });
 
-export default function IntegrationLine({ step, onTablet }: Props) {
+export default function IntegrationLine({ step }: Props) {
+  const breakpointRegion = useBreakpointRegion();
+
+  const onMobile =
+    breakpointRegion === "xs" ||
+    breakpointRegion === "sm" ||
+    breakpointRegion === "md";
+
   const isOnFirstStep = step === IntegrationLineStep.StepOne;
   const isOnSecondStep = step === IntegrationLineStep.StepTwo;
   const isOnFourthStep = step === IntegrationLineStep.StepFour;
 
-  const lineWidth = onTablet ? 1 : 2;
+  const lineWidth = onMobile ? 1 : 2;
 
   let lineData: {
     label: string;
@@ -168,16 +176,16 @@ export default function IntegrationLine({ step, onTablet }: Props) {
         yValue: isOnFourthStep ? 5.352 : 24.1,
         content: isOnFirstStep ? null : ["Integration Plan", "Implemented"],
         font: {
-          size: 12,
+          size: onMobile ? 11 : 12,
         },
       },
       label2: {
         type: "label",
-        xValue: 1.7,
+        xValue: onMobile ? 1.6 : 1.7,
         yValue: 20,
         content: isOnFirstStep || isOnSecondStep ? "19.2" : null,
         font: {
-          size: 16,
+          size: onMobile ? 15 : 16,
         },
       },
     },

@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Scrollama, Step } from "react-scrollama";
+
+import { useBreakpointRegion } from "hooks";
 
 import Info from "../Info";
 import ExposureBar, { ExposureBarStep } from "../ExposureBar";
 
 import { holder } from "./SectionExposureBar.module.scss";
+
+const SCROLL_OFFSET = 0.8;
 
 const charts = (currentStepIndex: number) => {
   const step: ExposureBarStep =
@@ -17,6 +21,48 @@ const charts = (currentStepIndex: number) => {
 };
 
 export default function SectionExposureBar() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const breakpointRegion = useBreakpointRegion();
+
+  const onMobile =
+    breakpointRegion === "xs" ||
+    breakpointRegion === "sm" ||
+    breakpointRegion === "md";
+
+  const [margin, setMargin] = useState(0);
+
+  const modifyMargin = useCallback(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const windowHeight = window.innerHeight;
+    const chartHeight = ref.current.clientHeight;
+
+    const offset = onMobile ? 12 : 24;
+
+    const excess = (windowHeight - chartHeight) / 2 - offset;
+
+    setMargin(-excess);
+  }, [onMobile]);
+
+  useEffect(() => {
+    modifyMargin();
+  }, [modifyMargin]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      modifyMargin();
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, [modifyMargin]);
+
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
 
   const onStepEnter = ({ data }) => {
@@ -26,8 +72,6 @@ export default function SectionExposureBar() {
   const onStepExit = ({ data, direction }) => {
     data === 0 && direction === "up" ? setCurrentStepIndex(-1) : null;
   };
-
-  const SCROLL_OFFSET = 0.8;
 
   return (
     <>
@@ -55,8 +99,11 @@ export default function SectionExposureBar() {
         student&#39;s school.
       </p>
       <div className={clsx("relative w-full", holder)}>
-        <div className="w-full h-screen top-0 flex justify-center items-center sticky">
-          <div className="w-full h-full max-h-96">
+        <div
+          className="w-full h-screen top-0 flex justify-center items-center sticky"
+          style={{ marginTop: margin, marginBottom: margin }}
+        >
+          <div className="w-full h-full max-h-96 mt-6 lg:mt-12" ref={ref}>
             {charts(currentStepIndex)}
           </div>
         </div>

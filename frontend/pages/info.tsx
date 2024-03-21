@@ -36,7 +36,6 @@ import {
   setSchoolInfoSuccess,
   setSchoolInfoFailure,
 } from "store/apiCacheSlice";
-import { activateZoomOnMap, selectZoomOnMap } from "store/mapSlice";
 import { AppDispatch } from "store/store";
 
 import { Level, ApiStatus, School, TrendData, SchoolInfo } from "interfaces";
@@ -63,7 +62,6 @@ export default function InfoPage() {
   const infoDataStore = useSelector(selectInfoData);
   const schoolInfoStore = useSelector(selectSchoolInfo);
   const trendDataStore = useSelector(selectTrendData);
-  const zoomOnMap = useSelector(selectZoomOnMap);
 
   let levelTable = "";
   let levelId = "";
@@ -135,12 +133,6 @@ export default function InfoPage() {
     !isTrendDataCached && trendKeyCache.status === ApiStatus.Failure;
 
   const isSchool = level == Level.School;
-
-  useEffect(() => {
-    if (!zoomOnMap) {
-      dispatch(activateZoomOnMap());
-    }
-  }, [dispatch, zoomOnMap]);
 
   useEffect(() => {
     if (paramsChecked) {
