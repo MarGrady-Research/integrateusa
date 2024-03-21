@@ -18,7 +18,10 @@ export default function Map() {
 
   return (
     <>
-      <Head title="Integrate USA" desc="Mapping segregation" />
+      <Head
+        title="Integrate USA"
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+      />
       <div className={clsx("absolute w-full", mapHolder)}>
         <DemographicMap onSmallerScreen={onSmallerScreen} />
       </div>

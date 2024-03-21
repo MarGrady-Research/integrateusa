@@ -7,7 +7,10 @@ import Page from "components/layouts/Page";
 export default function About() {
   return (
     <>
-      <Head title="About" desc="About IntegrateUSA" />
+      <Head
+        title="Integrate USA | About"
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+      />
       <Page>
         <h1 className="text-3xl lg:text-4xl text-center mb-6 font-semibold">
           About

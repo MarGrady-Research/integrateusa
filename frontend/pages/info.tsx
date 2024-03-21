@@ -251,7 +251,10 @@ export default function InfoPage() {
 
   return (
     <PersistorPage>
-      <Head title="Info" desc="Demographic Information" />
+      <Head
+        title="Integrate USA | Info"
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+      />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={snackbarOpen}
