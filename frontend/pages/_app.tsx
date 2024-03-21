@@ -21,6 +21,8 @@ axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 const store = makeStore();
 
+const gaId = process.env.NEXT_PUBLIC_GAID;
+
 function MyApp({ Component, ...rest }: AppProps) {
   const { props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
@@ -35,7 +37,7 @@ function MyApp({ Component, ...rest }: AppProps) {
           </main>
         </ThemeProvider>
       </Provider>
-      <GoogleAnalytics gaId="G-8RN3G0ED" />
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </>
   );
 }

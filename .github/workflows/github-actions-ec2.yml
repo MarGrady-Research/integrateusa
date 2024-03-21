@@ -22,6 +22,7 @@ jobs:
           cd frontend
           touch .env
           echo NEXT_PUBLIC_MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN}} >> .env
+          echo NEXT_PUBLIC_MAPBOX_TOKEN=${{ secrets.GAID }} >> .env
           cat .env
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
