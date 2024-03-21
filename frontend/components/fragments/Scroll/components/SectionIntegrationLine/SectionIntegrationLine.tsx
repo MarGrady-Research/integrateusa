@@ -98,7 +98,7 @@ export default function SectionIntegrationLine() {
           style={{ marginTop: margin, marginBottom: margin }}
         >
           <div className="w-full h-full max-h-96 mt-6 lg:mt-12" ref={ref}>
-            {charts(currentStepIndex, onMobile)}
+            {charts(currentStepIndex)}
           </div>
         </div>
         <div className="absolute top-0 w-full pointer-events-none">
