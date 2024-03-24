@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -94,7 +100,7 @@ export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  useLayoutEffect(() => {
+  const setDimensions = useCallback(() => {
     if (!ref.current) {
       return;
     }
@@ -104,13 +110,12 @@ export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
   }, []);
 
   useEffect(() => {
-    const handleWindowResize = () => {
-      if (!ref.current) {
-        return;
-      }
+    setDimensions();
+  }, [setDimensions]);
 
-      setWidth(ref.current.clientWidth);
-      setHeight(ref.current.clientHeight);
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setDimensions();
     };
 
     window.addEventListener("resize", handleWindowResize);
@@ -118,7 +123,7 @@ export default function PieChart({ infoData, isLoading, hasFailed }: Props) {
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, []);
+  }, [setDimensions]);
 
   if (isLoading) {
     const circleDiameter = Math.min(height, width);
