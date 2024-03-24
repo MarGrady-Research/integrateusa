@@ -1,7 +1,12 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import withPWA from "next-pwa";
+import runtimeCaching from "next-pwa/cache.js";
+
+const isProduction = process.env.NODE_ENV === "production";
+const analyze = process.env.ANALYZE === "true";
 
 const bundleAnalyzer = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
+  enabled: analyze,
 });
 
 /** @type {import('next').NextConfig} */
@@ -9,7 +14,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: isProduction,
   },
   webpack: (config) => {
     config.watchOptions = {
@@ -20,4 +25,8 @@ const nextConfig = {
   },
 };
 
-export default bundleAnalyzer(nextConfig);
+export default withPWA({
+  dest: "public",
+  disable: !isProduction,
+  runtimeCaching,
+})(bundleAnalyzer(nextConfig));
