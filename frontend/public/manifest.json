@@ -9,21 +9,9 @@
     "description": "IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects.",
     "icons": [
       {
-        "purpose": "maskable",
-        "sizes": "512x512",
-        "src": "icon512_maskable.png",
-        "type": "image/png"
-      },
-      {
         "purpose": "any",
         "sizes": "512x512",
         "src": "icon512_rounded.png",
-        "type": "image/png"
-      },
-      {
-        "purpose": "maskable",
-        "sizes": "384x384",
-        "src": "icon384_maskable.png",
         "type": "image/png"
       },
       {
@@ -33,21 +21,9 @@
         "type": "image/png"
       },
       {
-        "purpose": "maskable",
-        "sizes": "256x256",
-        "src": "icon256_maskable.png",
-        "type": "image/png"
-      },
-      {
         "purpose": "any",
         "sizes": "256x256",
         "src": "icon256_rounded.png",
-        "type": "image/png"
-      },
-      {
-        "purpose": "maskable",
-        "sizes": "192x192",
-        "src": "icon192_maskable.png",
         "type": "image/png"
       },
       {
