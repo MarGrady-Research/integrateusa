@@ -183,7 +183,7 @@ export default function ExposureBar({ step }: Props) {
       },
       label3: {
         type: "label",
-        xValue: onMobile ? 0.92 : 0.85,
+        xValue: onMobile ? 0.96 : 0.85,
         yValue: 33,
         content: isOnFirstStep ? null : "19.2%",
         font: {
