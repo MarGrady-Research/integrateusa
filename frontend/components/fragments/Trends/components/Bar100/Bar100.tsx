@@ -56,7 +56,7 @@ const getBarData = (data: TrendData) => {
   const hispanicData: number[] = [];
   const whiteData: number[] = [];
   const otherData: number[] = [];
-  const labels: number[] = [];
+  const labels: string[] = [];
 
   for (const trend of data) {
     const { asian, black, hispanic, white, other, year } = trend;
@@ -74,7 +74,7 @@ const getBarData = (data: TrendData) => {
     hispanicData.push(hispanicPercentage);
     whiteData.push(whitePercentage);
     otherData.push(otherPercentage);
-    labels.push(year);
+    labels.push(year.toString());
   }
 
   return {
@@ -173,6 +173,11 @@ export default function BarChart100({
         min: 0,
         max: 100,
         stacked: true,
+        ticks: {
+          callback: (val: string) => {
+            return "   " + val;
+          },
+        },
       },
       x: {
         stacked: true,

@@ -153,7 +153,7 @@ export default function IntegrationLine({ step }: Props) {
           callback: (value: number) => {
             const prepend = value >= 0 ? "  " : "";
 
-            return prepend + value.toFixed(2);
+            return prepend + value.toFixed(2) + "  ";
           },
         },
       },
