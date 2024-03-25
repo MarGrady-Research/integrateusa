@@ -7,7 +7,7 @@ import district15Img from "./images/district-15.png";
 export default function Research() {
   const router = useRouter();
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     router.push("/research/district15");
   };
@@ -26,10 +26,10 @@ export default function Research() {
       >
         <Image
           src={district15Img}
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "cover" }}
           alt=""
           height={240}
-          className="h-40 lg:h-60 border border-black group-hover:border-primary"
+          className="h-60 border border-black group-hover:border-primary"
           placeholder="blur"
           priority
         />
