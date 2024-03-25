@@ -118,7 +118,9 @@ export default function Selection({ omitSchools }: Props) {
         className={clsx("lg:hidden shadow bg-white fixed w-full z-10", animate)}
         style={{ top: topOffset, transform: `translateY(${translateY}px)` }}
       >
-        <div className="p-3 pt-5">{selects("mobile-")}</div>
+        <div className={clsx("p-3 pt-5", { "opacity-0": !expanded }, animate)}>
+          {selects("mobile-")}
+        </div>
         <div className="flex justify-center p-1">
           <IconButton
             onClick={toggleExpanded}
@@ -127,7 +129,7 @@ export default function Selection({ omitSchools }: Props) {
             }
           >
             <ExpandMoreIcon
-              className={clsx({ "rotate-180": expanded, [animate]: true })}
+              className={clsx({ "rotate-180": expanded }, animate)}
             />
           </IconButton>
         </div>
