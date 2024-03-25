@@ -134,6 +134,11 @@ const options = {
         display: false,
       },
       position: "right" as "right",
+      ticks: {
+        callback: (val: string) => {
+          return val + "  ";
+        },
+      },
     },
   },
 };

@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Tick,
 } from "chart.js";
 import clsx from "clsx";
 import { Bar } from "react-chartjs-2";
@@ -54,7 +55,7 @@ const getBarData = (data: TrendData) => {
   const hispanicData: number[] = [];
   const whiteData: number[] = [];
   const otherData: number[] = [];
-  const labels: number[] = [];
+  const labels: string[] = [];
 
   for (const trend of data) {
     const { asian, black, hispanic, white, other, year } = trend;
@@ -64,7 +65,7 @@ const getBarData = (data: TrendData) => {
     hispanicData.push(hispanic);
     whiteData.push(white);
     otherData.push(other);
-    labels.push(year);
+    labels.push(year.toString());
   }
 
   return {
@@ -153,19 +154,24 @@ export default function BarChart({
       y: {
         min: 0,
         stacked: true,
+        ticks: {
+          callback: (val: string) => {
+            return "   " + val.toLocaleString();
+          },
+        },
       },
       x: {
         stacked: true,
         ticks: {
           font: {
-            weight: (c) => {
-              if (c.tick.label === year) {
+            weight: (c: { tick: Tick }) => {
+              if (c.tick.label === year.toString()) {
                 return "bold";
               }
             },
           },
-          color: (c) => {
-            if (c.tick.label === year) {
+          color: (c: { tick: Tick }) => {
+            if (c.tick.label === year.toString()) {
               return primaryColor;
             }
           },

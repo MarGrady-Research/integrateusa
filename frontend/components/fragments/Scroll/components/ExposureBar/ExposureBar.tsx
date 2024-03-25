@@ -148,6 +148,11 @@ export default function ExposureBar({ step }: Props) {
           display: false,
         },
         position: "right" as "right",
+        ticks: {
+          callback: (val: string) => {
+            return val + "  ";
+          },
+        },
       },
     },
     annotations: {
