@@ -37,9 +37,14 @@ export enum ExposureBarStep {
   StepTwo,
 }
 
-const labels = [
+const desktopLabels = [
   ["Demographics of", "Avg White Student's", "School"],
   ["Demographics of", "Avg Non-White Student's", "School"],
+];
+
+const mobileLabels = [
+  ["Demographics of", "Avg White", " Student'sSchool"],
+  ["Demographics of", "Avg Non-White", "Student's School"],
 ];
 
 const asianData = [11.4, 13.4];
@@ -85,6 +90,8 @@ export default function ExposureBar({ step }: Props) {
   const breakpointRegion = useBreakpointRegion();
 
   const onMobile = breakpointRegion === "xs";
+
+  const labels = onMobile ? mobileLabels : desktopLabels;
 
   const isOnFirstStep = step === ExposureBarStep.StepOne;
 
@@ -162,7 +169,7 @@ export default function ExposureBar({ step }: Props) {
         yValue: 21.65,
         content: isOnFirstStep ? [] : "43.3%",
         font: {
-          size: 24,
+          size: onMobile ? 20 : 24,
         },
       },
       label2: {
@@ -171,16 +178,16 @@ export default function ExposureBar({ step }: Props) {
         yValue: 12.05,
         content: isOnFirstStep ? [] : "24.1%",
         font: {
-          size: 24,
+          size: onMobile ? 20 : 24,
         },
       },
       label3: {
         type: "label",
-        xValue: onMobile ? 0.95 : 0.85,
+        xValue: onMobile ? 0.92 : 0.85,
         yValue: 33,
         content: isOnFirstStep ? null : "19.2%",
         font: {
-          size: 24,
+          size: onMobile ? 20 : 24,
         },
         init: ({ properties }: { properties: AnnotationElement }) => {
           return {

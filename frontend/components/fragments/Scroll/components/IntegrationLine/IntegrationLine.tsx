@@ -181,11 +181,11 @@ export default function IntegrationLine({ step }: Props) {
       },
       label2: {
         type: "label",
-        xValue: onMobile ? 1.6 : 1.7,
+        xValue: onMobile ? 1.5 : 1.7,
         yValue: 20,
         content: isOnFirstStep || isOnSecondStep ? "19.2" : null,
         font: {
-          size: onMobile ? 15 : 16,
+          size: onMobile ? 14 : 16,
         },
       },
     },
