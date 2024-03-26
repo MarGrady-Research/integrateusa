@@ -14,7 +14,7 @@ import { header, section } from "./Scroll.module.scss";
 
 function EndScreen() {
   return (
-    <div className="flex flex-col items-center text-lg lg:text-xl">
+    <div className="flex flex-col items-center text-lg lg:text-xl z-40 relative">
       <div className="px-4 text-center mb-4">
         <p className="mb-4">
           IntegrateUSA was built to visualize segregation in districts,
