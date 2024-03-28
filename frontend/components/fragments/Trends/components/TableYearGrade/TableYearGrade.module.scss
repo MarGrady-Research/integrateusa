@@ -1,0 +1,17 @@
+@import "styles/common.scss";
+
+.headRow {
+  th {
+    @extend .headCell;
+  }
+}
+
+.contentRow {
+  td {
+    @extend .contentCell;
+  }
+}
+
+.container {
+  height: 389px !important;
+}

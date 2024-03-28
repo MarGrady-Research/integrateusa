@@ -1,0 +1,19 @@
+@import "styles/common.scss";
+@import "styles/constants.module.scss";
+
+.button {
+  @extend .mapControlButton;
+  width: 48px;
+  height: 48px;
+}
+
+.drawerPaper {
+  width: 100%;
+
+  padding-top: $navbarMobileHeight;
+
+  @screen sm {
+    width: $drawerWidth;
+    padding-top: $navbarDesktopHeight;
+  }
+}

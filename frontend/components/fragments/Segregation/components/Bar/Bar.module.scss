@@ -1,0 +1,8 @@
+.container {
+  height: 300px;
+
+  @screen lg {
+    min-height: 320.75px;
+    height: auto;
+  }
+}

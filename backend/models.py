@@ -1,43 +1,50 @@
-from dataclasses import field
 from django.db import models
-from django.db.models import UniqueConstraint
-from django.contrib.postgres.search import SearchVector, SearchVectorField
-from django.contrib.postgres.indexes import GinIndex
-
 
 # School Models
 
-class Schools(models.Model):
-    school_key = models.TextField(primary_key=True)
-    year = models.IntegerField()
-    grade = models.TextField()
-    nces_id = models.TextField()
-    sch_name = models.TextField(null=True)
-    level = models.TextField()
-    dist_id = models.TextField()
-    dist_id_alt = models.TextField()
-    county_id = models.TextField()
-    state_abb = models.CharField(max_length = 2)
-    asian = models.IntegerField(blank=True, null=True)
-    black = models.IntegerField(blank=True, null=True)
-    hispanic = models.IntegerField(blank=True, null=True)
-    other = models.IntegerField(blank=True, null=True)
-    white = models.IntegerField(blank=True, null=True)
-    tot_enr = models.IntegerField(blank=True, null=True)
-    prop_as = models.FloatField(null=True)
-    prop_bl = models.FloatField(null=True)
-    prop_hi = models.FloatField(null=True)
-    prop_or = models.FloatField(null=True)
-    prop_wh = models.FloatField(null=True)
+class SchoolInfo(models.Model):
+    nces_id = models.TextField(primary_key=True)
+    sch_name = models.TextField()
+    dist_name = models.TextField()
+    state_abb = models.TextField()
+    year_open = models.IntegerField()
+    year_close = models.TextField()
 
     class Meta:
-        db_table = 'schools'
+        db_table = 'school_info'
         indexes = [
-            models.Index(fields=['year'], name ='year_idx'),
-            models.Index(fields=['grade'], name='grade_idx'),
-            models.Index(fields=['dist_id'], name='dist_idx'),
-            models.Index(fields=['county_id'], name='county_idx'),
-            models.Index(fields=['state_abb'], name='state_idx')
+            models.Index(fields=['nces_id'], name='nces_school_info_idx')
+        ]
+
+class SchoolTrends(models.Model):
+    school_key = models.TextField(primary_key=True)
+    nces_id = models.TextField()
+    dist_id = models.TextField()
+    dist_name = models.TextField()
+    county_id = models.TextField()
+    county_name = models.TextField()
+    cod_id = models.TextField()
+    state_abb = models.TextField()
+    year = models.IntegerField()
+    grade = models.TextField()
+    sch_name = models.TextField()
+    level = models.TextField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+    tot_enr = models.IntegerField()
+
+    class Meta: 
+        db_table = 'school_trends'
+        indexes = [
+            models.Index(fields=['year'], name ='year_school_trends_idx'),
+            models.Index(fields=['grade'], name='grade_school_trends_idx'),
+            models.Index(fields=['dist_id'], name='dist_school_trends_idx'),
+            models.Index(fields=['county_id'], name='county_school_trends_idx'),
+            models.Index(fields=['state_abb'], name='state_abb_school_trends_idx'),
+            models.Index(fields=['nces_id'], name='nces_school_trends_idx')
         ]
 
 # Name Models
@@ -52,10 +59,14 @@ class CountyNames(models.Model):
 
     class Meta:
         db_table = 'county_names'
+        indexes = [
+            models.Index(fields=['county_name'], name='county_names_county_name_idx')
+        ]
 
 class DistNames(models.Model):
     dist_id = models.TextField(primary_key=True)
     dist_name = models.TextField()
+    dist_type = models.TextField()
     lngmin = models.FloatField()
     latmin = models.FloatField()
     lngmax = models.FloatField()
@@ -63,6 +74,9 @@ class DistNames(models.Model):
 
     class Meta:
         db_table = 'district_names'
+        indexes = [
+            models.Index(fields=['dist_name'], name='district_names_dist_name_idx')
+        ]
 
     def __str__(self):
         return self.dist_name," (", self.dist_id, ")"
@@ -91,10 +105,14 @@ class SchoolNames(models.Model):
     latmin = models.FloatField()
     lngmax = models.FloatField()
     latmax = models.FloatField()
+    lat_new = models.FloatField()
+    lon_new = models.FloatField()
 
     class Meta:
         db_table = 'school_names'
-
+        indexes = [
+            models.Index(fields=['sch_name'], name='school_names_sch_name_index')
+        ]
 
 class StateNames(models.Model):
     state_abb = models.CharField(max_length = 2, primary_key=True)
@@ -107,21 +125,21 @@ class StateNames(models.Model):
 
     class Meta:
         db_table = 'state_names'
+        indexes = [
+            models.Index(fields=['state_name'], name='state_names_state_name_index')
+        ]
 
     def __str__(self):
         self.state_abb
-
-
 
 
 # Trend Models
 
 class DistrictTrends(models.Model):
     dist_key = models.TextField(primary_key=True)
+    dist_id = models.TextField()
     year = models.IntegerField()
     grade = models.TextField()
-    dist_id = models.TextField()
-    dist_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
     hispanic = models.IntegerField()
@@ -130,6 +148,9 @@ class DistrictTrends(models.Model):
 
     class Meta:
         db_table = 'dist_trends'
+        indexes = [
+            models.Index(fields=['dist_id'], name='dist_trends_id_idx'),
+        ]
 
 class DistrictTrendsAlt(models.Model):
     dist_key = models.TextField(primary_key=True)
@@ -148,9 +169,9 @@ class DistrictTrendsAlt(models.Model):
 
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
+    county_id = models.TextField()
     year = models.IntegerField()
     grade = models.TextField()
-    county_id = models.TextField()
     county_name = models.TextField()
     asian = models.IntegerField()
     black = models.IntegerField()
@@ -160,13 +181,16 @@ class CountyTrends(models.Model):
 
     class Meta:
         db_table = 'county_trends'
+        indexes = [
+            models.Index(fields=['county_id'], name='county_trends_id_idx'),
+        ]
 
 
 class StateTrends(models.Model):
     state_key = models.TextField(primary_key=True)
+    state_abb = models.CharField(max_length=2)
     year = models.IntegerField()
     grade = models.TextField()
-    state_abb = models.CharField(max_length=2)
     asian = models.IntegerField()
     black = models.IntegerField()
     hispanic = models.IntegerField()
@@ -175,7 +199,6 @@ class StateTrends(models.Model):
 
     class Meta:
         db_table = 'state_trends'
-
 
 # Segregation Models
 
@@ -236,6 +259,11 @@ class CountySegSchools(models.Model):
 
     class Meta:
         db_table = 'county_seg_schools'
+        indexes = [
+            models.Index(fields=['year'], name ='county_seg_year_idx'),
+            models.Index(fields=['grade'], name='county_seg_grade_idx'),
+            models.Index(fields=['county_id'], name='county_seg_id_idx'),
+        ]
 
     def __str__(self):
         return self.year, self.county_id, self.grade
@@ -310,6 +338,11 @@ class DistSeg(models.Model):
 
     class Meta:
         db_table = 'dist_seg'
+        indexes = [
+            models.Index(fields=['year'], name ='dist_seg_year_idx'),
+            models.Index(fields=['grade'], name='dist_seg_grade_idx'),
+            models.Index(fields=['dist_id'], name='dist_seg_id_idx'),
+        ]
 
     def __str__(self):
         return self.year, self.dist_id, self.grade
@@ -320,6 +353,7 @@ class StateSeg(models.Model):
     year = models.IntegerField()
     grade = models.CharField(max_length = 2)
     state_abb = models.CharField(max_length=2)
+    state_name = models.TextField()
     num_schools = models.IntegerField(blank=True, null=True)
     enr_prop_as = models.FloatField(blank=True, null=True)
     enr_prop_bl = models.FloatField(blank=True, null=True)
@@ -374,12 +408,28 @@ class StateSeg(models.Model):
     def __str__(self):
         return self.year, self.state_abb, self.grade
 
-
-
 # Geographic Data
 
 class MapSchools(models.Model):
-    map_data = models.JSONField(primary_key=True)
+    nces_id = models.TextField(primary_key = True)
+    dist_id = models.TextField()
+    county_id = models.TextField()
+    state_abb = models.TextField()
+    sch_name = models.TextField()
+    dist_name = models.TextField()
+    county_name = models.TextField()
+    lon_new = models.FloatField()
+    lat_new = models.FloatField()
+    xminimum = models.FloatField()
+    yminimum = models.FloatField()
+    xmaximum = models.FloatField()
+    ymaximum = models.FloatField()
+    asian = models.IntegerField()
+    black = models.IntegerField()
+    hispanic = models.IntegerField()
+    other = models.IntegerField()
+    white = models.IntegerField()
+    charter = models.IntegerField()
 
     class Meta:
-        db_table = 'map_schools' 
+        db_table = 'map' 

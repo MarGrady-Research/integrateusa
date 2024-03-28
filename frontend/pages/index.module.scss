@@ -1,0 +1,16 @@
+@import "styles/constants.module.scss";
+
+.mapHolder {
+  top: $navbarMobileHeight;
+  height: calc(100vh - $navbarMobileHeight);
+
+  :global(.mapboxgl-ctrl-group button) {
+    height: 48px;
+    width: 48px;
+  }
+
+  @screen sm {
+    top: $navbarDesktopHeight;
+    height: calc(100vh - $navbarDesktopHeight);
+  }
+}

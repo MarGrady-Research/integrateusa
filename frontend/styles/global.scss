@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "styles/colors.module.scss";
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.text {
+  &-blackstudents {
+    color: $blackColor;
+  }
+
+  &-asian {
+    color: $asianColor;
+  }
+
+  &-hispanic {
+    color: $hispanicColor;
+  }
+
+  &-whitestudents {
+    color: $whiteColor;
+  }
+
+  &-other {
+    color: $otherColor;
+  }
+}
+
+.decoration {
+  &-blackstudents {
+    text-decoration-color: $blackColor;
+  }
+
+  &-asian {
+    text-decoration-color: $asianColor;
+  }
+
+  &-hispanic {
+    text-decoration-color: $hispanicColor;
+  }
+
+  &-whitestudents {
+    text-decoration-color: $whiteColor;
+  }
+
+  &-other {
+    text-decoration-color: $otherColor;
+  }
+}
+
+.background {
+  &-blackstudents {
+    background-color: $blackColor;
+  }
+
+  &-asian {
+    background-color: $asianColor;
+  }
+
+  &-hispanic {
+    background-color: $hispanicColor;
+  }
+
+  &-whitestudents {
+    background-color: $whiteColor;
+  }
+
+  &-other {
+    background-color: $otherColor;
+  }
+}

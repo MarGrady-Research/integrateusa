@@ -1,0 +1,7 @@
+.container {
+  height: 812.5px !important;
+
+  @screen md {
+    height: 751px !important;
+  }
+}

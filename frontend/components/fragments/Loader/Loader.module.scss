@@ -1,0 +1,22 @@
+$duration: 1.2s;
+
+.container {
+  path {
+    animation: spinner $duration linear infinite;
+  }
+
+  @for $i from 1 through 8 {
+    path:nth-child(#{$i}) {
+      animation-delay: $i * $duration/8 - $duration;
+    }
+  }
+}
+
+@keyframes spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}

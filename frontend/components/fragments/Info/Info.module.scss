@@ -1,0 +1,21 @@
+.containerBase {
+  @screen lg {
+    height: 395px !important;
+  }
+
+  @screen 2xl {
+    height: 379px !important;
+  }
+}
+
+.tableContainer {
+  height: auto;
+
+  @extend .containerBase;
+}
+
+.container {
+  height: 355px;
+
+  @extend .containerBase;
+}

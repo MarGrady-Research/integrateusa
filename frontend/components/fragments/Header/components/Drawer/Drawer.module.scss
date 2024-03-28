@@ -1,0 +1,14 @@
+@import "styles/constants.module.scss";
+
+.drawerPaper {
+  z-index: $drawerZIndex + 1 !important;
+  width: 100%;
+
+  top: $navbarMobileHeight !important;
+  height: calc(100vh - $navbarMobileHeight) !important;
+
+  @screen sm {
+    top: $navbarDesktopHeight !important;
+    height: calc(100vh - $navbarDesktopHeight) !important;
+  }
+}
