@@ -252,7 +252,7 @@ export default function InfoPage() {
   return (
     <PersistorPage>
       <Head
-        title="Integrate USA | Info"
+        title="IntegrateUSA | Info"
         desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
       />
       <Snackbar

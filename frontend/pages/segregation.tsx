@@ -136,7 +136,7 @@ export default function SegregationPage() {
   return (
     <PersistorPage>
       <Head
-        title="Integrate USA | Segregation"
+        title="IntegrateUSA | Segregation"
         desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
       />
       <Snackbar

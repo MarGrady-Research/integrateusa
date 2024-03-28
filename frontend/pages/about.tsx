@@ -8,7 +8,7 @@ export default function About() {
   return (
     <>
       <Head
-        title="Integrate USA | About"
+        title="IntegrateUSA | About"
         desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
       />
       <Page>
