@@ -1,10 +1,4 @@
-import React, {
-  useLayoutEffect,
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
