@@ -18,7 +18,7 @@ export default function Map() {
   return (
     <>
       <Head
-        title="Integrate USA"
+        title="IntegrateUSA"
         desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
       />
       <div className={clsx("absolute w-full", mapHolder)}>
