@@ -6,7 +6,7 @@ import clsx from "clsx";
 
 import { SegEntity } from "interfaces";
 
-import { yearsData, gradesData } from "../../../Selection/data";
+import { yearsData, gradesData, raceOptions } from "../../../Selection/data";
 
 import Select from "components/atoms/Select";
 
@@ -20,10 +20,6 @@ interface Props {
     non: string;
   };
   handleChange: (e: SelectChangeEvent) => void;
-  options: {
-    value: string;
-    label: string;
-  }[];
   title: string;
   focus: SegEntity | null;
   isLoading: boolean;
@@ -35,7 +31,6 @@ interface Props {
 export default function Info({
   selected,
   handleChange,
-  options,
   title,
   focus,
   isLoading,
@@ -65,7 +60,7 @@ export default function Info({
     <Select
       value={selectedValue}
       onChange={handleChange}
-      options={options}
+      options={raceOptions}
       ariaLabel="Change Race"
       variant="standard"
       classes={{
