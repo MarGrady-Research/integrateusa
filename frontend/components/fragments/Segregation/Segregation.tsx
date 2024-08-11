@@ -45,6 +45,8 @@ import {
 
 import { exportSegregationTrends, exportComparisonEntities } from "excel/excel";
 
+import { raceOptions } from "../Selection/data";
+
 interface Props {
   segData: SegEntity[];
   isLoading: boolean;
@@ -52,40 +54,7 @@ interface Props {
   setSnackbarOpen: (open: boolean) => void;
 }
 
-const options = [
-  {
-    value: "norm_exp_as",
-    label: "Asian",
-    iso: "exp_as_as",
-    non: "exp_non_as_as",
-  },
-  {
-    value: "norm_exp_bl",
-    label: "Black",
-    iso: "exp_bl_bl",
-    non: "exp_non_bl_bl",
-  },
-  {
-    value: "norm_exp_hi",
-    label: "Hispanic",
-    iso: "exp_hi_hi",
-    non: "exp_non_hi_hi",
-  },
-  {
-    value: "norm_exp_or",
-    label: "Other Race",
-    iso: "exp_or_or",
-    non: "exp_non_or_or",
-  },
-  {
-    value: "",
-    label: "White",
-    iso: "exp_wh_wh",
-    non: "exp_non_wh_wh",
-  },
-];
-
-const defaultOption = options[1];
+const defaultOption = raceOptions[1];
 
 const findFocus = (segData: SegEntity[], id: string) => {
   let idLevel: string;
@@ -126,7 +95,7 @@ export default function Segregation({
   const handleChange = (e: SelectChangeEvent) => {
     const selectedValue = e.target.value;
 
-    const option = options.find((o) => o.value === selectedValue);
+    const option = raceOptions.find((o) => o.value === selectedValue);
 
     if (option) {
       setSelected(option);
@@ -353,7 +322,6 @@ export default function Segregation({
           focus={focus}
           selected={selected}
           handleChange={handleChange}
-          options={options}
           title={name}
           isLoading={isLoading}
           hasFailed={hasFailed}

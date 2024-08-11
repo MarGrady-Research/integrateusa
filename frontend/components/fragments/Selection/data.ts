@@ -1,5 +1,38 @@
 import { Level } from "../../../interfaces";
 
+export const raceOptions = [
+  {
+    value: "norm_exp_as",
+    label: "Asian",
+    iso: "exp_as_as",
+    non: "exp_non_as_as",
+  },
+  {
+    value: "norm_exp_bl",
+    label: "Black",
+    iso: "exp_bl_bl",
+    non: "exp_non_bl_bl",
+  },
+  {
+    value: "norm_exp_hi",
+    label: "Hispanic",
+    iso: "exp_hi_hi",
+    non: "exp_non_hi_hi",
+  },
+  {
+    value: "norm_exp_or",
+    label: "Other Race",
+    iso: "exp_or_or",
+    non: "exp_non_or_or",
+  },
+  {
+    value: "norm_exp_wh",
+    label: "White",
+    iso: "exp_wh_wh",
+    non: "exp_non_wh_wh",
+  },
+];
+
 export const levelSelectData = [
   {
     value: Level.School,
