@@ -38,7 +38,7 @@ function NavLink({ url, title }: NavLinkProps) {
         }
       )}
     >
-      {title}
+      <i>{title}</i>
     </Link>
   );
 }
