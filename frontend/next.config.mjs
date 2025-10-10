@@ -27,6 +27,6 @@ const nextConfig = {
 
 export default withPWA({
   dest: "public",
-  disable: !isProduction,
+  disable: true,
   runtimeCaching,
 })(bundleAnalyzer(nextConfig));
