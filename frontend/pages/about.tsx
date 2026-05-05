@@ -66,15 +66,15 @@ export default function About() {
             (e.g. district, county, or state) to the average demographics of a
             school for a student who is not of that race or ethnicty within that
             same geographic area. This measure is adapted from a measure
-            described by researchers from the University of Southern California
+            described by researchers from UCLA
             and Stanford as part of the{" "}
             <a
-              href="https://socialinnovation.usc.edu/segregation/"
+              href="https://edopportunity.org/segregation/"
               className="text-primary hover:underline underline-offset-4"
               target="_blank"
               rel="noreferrer"
             >
-              Segregation Index project
+              Segregation Tracking Project
             </a>
             .
           </p>
@@ -85,10 +85,10 @@ export default function About() {
           <p className="mb-3">
             If you have any questions, please contact MarGrady Research at{" "}
             <a
-              href="mailto:integrateusa@margrady.com"
+              href="mailto:jesse@margrady.com"
               className="text-primary hover:underline underline-offset-4"
             >
-              integrateusa@margrady.com
+              jesse@margrady.com
             </a>
             .
           </p>
