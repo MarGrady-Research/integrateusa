@@ -9,7 +9,7 @@ export default function About() {
     <>
       <Head
         title="IntegrateUSA | About"
-        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in education projects."
+        desc="IntegrateUSA is a project by MarGrady Research, a mission-driven consulting firm specializing in quantitative analysis of education data."
       />
       <Page>
         <h1 className="text-3xl lg:text-4xl text-center mb-6 font-semibold">
