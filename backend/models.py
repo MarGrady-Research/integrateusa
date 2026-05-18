@@ -269,17 +269,17 @@ class CountySegSchools(models.Model):
         return self.year, self.county_id, self.grade
 
 
-class DistDirectory(models.Model):
-    year = models.IntegerField(primary_key=True)
-    dist_id = models.IntegerField()
-    cod_id = models.IntegerField(blank=True, null=True)
-    state_abb = models.CharField(max_length=2, blank=True, null=True)
+# class DistDirectory(models.Model):
+#     year = models.IntegerField(primary_key=True)
+#     dist_id = models.IntegerField()
+#     cod_id = models.IntegerField(blank=True, null=True)
+#     state_abb = models.CharField(max_length=2, blank=True, null=True)
 
-    class Meta:
-        db_table = 'dist_directory'
+#     class Meta:
+#         db_table = 'dist_directory'
 
-    def __str__(self):
-        return self.dist_id, " (", self.year, ")"
+#     def __str__(self):
+#         return self.dist_id, " (", self.year, ")"
 
 
 class DistSeg(models.Model):
