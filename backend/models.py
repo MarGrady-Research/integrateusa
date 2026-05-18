@@ -81,19 +81,19 @@ class DistNames(models.Model):
     def __str__(self):
         return self.dist_name," (", self.dist_id, ")"
 
-class DistNamesAlt(models.Model):
-    dist_id = models.TextField(primary_key=True)
-    dist_name = models.TextField()
-    lngmin = models.FloatField()
-    latmin = models.FloatField()
-    lngmax = models.FloatField()
-    latmax = models.FloatField()
+# class DistNamesAlt(models.Model):
+#     dist_id = models.TextField(primary_key=True)
+#     dist_name = models.TextField()
+#     lngmin = models.FloatField()
+#     latmin = models.FloatField()
+#     lngmax = models.FloatField()
+#     latmax = models.FloatField()
 
-    class Meta:
-        db_table = 'district_names_alt'
+#     class Meta:
+#         db_table = 'district_names_alt'
 
-    def __str__(self):
-        return self.dist_name," (", self.dist_id, ")"
+#     def __str__(self):
+#         return self.dist_name," (", self.dist_id, ")"
 
 class SchoolNames(models.Model):
     nces_id  = models.TextField(primary_key=True)
@@ -152,20 +152,20 @@ class DistrictTrends(models.Model):
             models.Index(fields=['dist_id'], name='dist_trends_id_idx'),
         ]
 
-class DistrictTrendsAlt(models.Model):
-    dist_key = models.TextField(primary_key=True)
-    year = models.IntegerField()
-    grade = models.TextField()
-    dist_id = models.TextField()
-    dist_name = models.TextField()
-    asian = models.IntegerField()
-    black = models.IntegerField()
-    hispanic = models.IntegerField()
-    other = models.IntegerField()
-    white = models.IntegerField()
+# class DistrictTrendsAlt(models.Model):
+#     dist_key = models.TextField(primary_key=True)
+#     year = models.IntegerField()
+#     grade = models.TextField()
+#     dist_id = models.TextField()
+#     dist_name = models.TextField()
+#     asian = models.IntegerField()
+#     black = models.IntegerField()
+#     hispanic = models.IntegerField()
+#     other = models.IntegerField()
+#     white = models.IntegerField()
 
-    class Meta:
-        db_table = 'dist_trends_alt'
+#     class Meta:
+#         db_table = 'dist_trends_alt'
 
 class CountyTrends(models.Model):
     county_key = models.TextField(primary_key=True)
