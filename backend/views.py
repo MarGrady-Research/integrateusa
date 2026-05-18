@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from backend.models import  SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
+from backend.models import  SchoolInfo, SchoolTrends, StateSeg, DistSeg, CountySegSchools, DistNames, CountyNames, SchoolNames, StateNames, DistrictTrends, DistrictTrendsAlt, CountyTrends, StateTrends, MapSchools
 from rest_framework import generics, filters
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.contrib.postgres import search
-from backend.serializers import  SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, DistNameAltSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
+from backend.serializers import  SchoolInfoSerializer, SchoolTrendsSerializer, StateSerializer, DistrictSerializer, CountySchoolsSerializer, DistNameSerializer, CountyNameSerializer, SchoolNameSerializer, StateNameSerializer, DistrictTrendSerializer, DistrictTrendAltSerializer, CountyTrendSerializer, StateTrendSerializer, MapSchoolsSerializer
 
 # Schools view 
 
@@ -35,13 +35,13 @@ class districtNameList(generics.ListAPIView):
         query = self.request.GET.get("q")
         return DistNames.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
 
-class districtNameAltList(generics.ListAPIView):
-    queryset = DistNamesAlt.objects.all()
-    serializer_class = DistNameAltSerializer
+# class districtNameAltList(generics.ListAPIView):
+#     queryset = DistNamesAlt.objects.all()
+#     serializer_class = DistNameAltSerializer
 
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        return DistNamesAlt.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
+#     def get_queryset(self):
+#         query = self.request.GET.get("q")
+#         return DistNamesAlt.objects.annotate(similarity = search.TrigramSimilarity('dist_name', query)).filter(similarity__gte = 0.10).filter(dist_name__icontains = query).order_by('-similarity')
 
 class countyNameList(generics.ListAPIView):
     queryset = CountyNames.objects.all()
