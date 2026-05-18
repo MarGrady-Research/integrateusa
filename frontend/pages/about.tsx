@@ -26,8 +26,8 @@ export default function About() {
             >
               MarGrady Research
             </a>
-            , a mission-driven consulting firm specializing in education
-            projects. The project collects, standardizes and visualizes publicly
+            , a mission-driven consulting firm specializing in quantitative analysis of 
+            education data. The project collects, standardizes and visualizes publicly
             available enrollment data across the US from 2000 to present,
             providing a demographic overview of school districts, counties, and
             states, as well as measures of segregation at each level.
