@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models import SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
+from backend.models import SchoolInfo, SchoolTrends, CountySegSchools, DistSeg, StateSeg, DistNames, DistNamesAlt, CountyNames, SchoolNames, StateNames, CountyTrends, DistrictTrends, DistrictTrendsAlt, StateTrends, MapSchools
 
 class SchoolInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,10 +17,10 @@ class DistNameSerializer(serializers.ModelSerializer):
         model = DistNames
         fields = '__all__'
 
-# class DistNameAltSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = DistNamesAlt
-#         fields = '__all__'
+class DistNameAltSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DistNamesAlt
+        fields = '__all__'
 
 class CountyNameSerializer(serializers.ModelSerializer):
     class Meta:
