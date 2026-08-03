@@ -47,7 +47,7 @@ export default function About() {
             over time and exclude correctional facilities, district offices,
             hospital/homebound students, and schools that have fewer than 25
             students in all years. Charter schools have been assigned to local
-            school districts based on their geographic location. Figures only
+            school districts based on their location. Figures only
             include students for whom race/ethnicity data was reported. See{" "}
             <a
               href="https://nces.ed.gov/ccd/files.asp"
